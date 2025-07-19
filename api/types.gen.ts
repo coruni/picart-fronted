@@ -462,6 +462,48 @@ export type ArticleLikeDto = {
     reactionType: 'like' | 'love' | 'haha' | 'wow' | 'sad' | 'angry' | 'dislike';
 };
 
+export type BaseResponseDto = {
+    /**
+     * 业务状态码
+     */
+    code: number;
+    /**
+     * 提示信息
+     */
+    message: string;
+    /**
+     * 数据体
+     */
+    data?: {
+        [key: string]: unknown;
+    };
+    /**
+     * 时间戳
+     */
+    timestamp: number;
+    /**
+     * 路径
+     */
+    path: string;
+};
+
+export type PaginatedResponseDto = {
+    /**
+     * 业务状态码
+     */
+    code: number;
+    /**
+     * 提示信息
+     */
+    message: string;
+    /**
+     * 数据列表
+     */
+    data: {
+        [key: string]: unknown;
+    };
+};
+
 export type CreateInviteDto = {
     /**
      * 邀请类型
@@ -486,6 +528,27 @@ export type UseInviteDto = {
      * 邀请码
      */
     inviteCode: string;
+};
+
+export type ListResponseDto = {
+    /**
+     * 业务状态码
+     */
+    code: number;
+    /**
+     * 提示信息
+     */
+    message: string;
+    /**
+     * 数据列表
+     */
+    data: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * 时间戳
+     */
+    timestamp: number;
 };
 
 export type CreateUploadDto = {
@@ -1214,41 +1277,8 @@ export type UserControllerGetProfileResponses = {
     /**
      * 获取成功
      */
-    200: {
-        code: number;
-        message: string;
-        data: {
-            id: number;
-            username: string;
-            nickname: string;
-            email: string;
-            phone: unknown;
-            status: string;
-            avatar: unknown;
-            address: unknown;
-            followerCount: number;
-            followingCount: number;
-            roles: Array<{
-                id?: number;
-                name?: string;
-                displayName?: unknown;
-                description?: string;
-                permissions?: Array<{
-                    id: number;
-                    name: string;
-                    description: string;
-                }>;
-                createdAt?: string;
-                updatedAt?: string;
-            }>;
-            config: unknown;
-            createdAt: string;
-            updatedAt: string;
-        };
-    };
+    200: unknown;
 };
-
-export type UserControllerGetProfileResponse = UserControllerGetProfileResponses[keyof UserControllerGetProfileResponses];
 
 export type UserControllerGetFollowerCountData = {
     body?: never;
@@ -1698,7 +1728,7 @@ export type ArticleControllerFindAllData = {
         'Device-Type'?: string;
     };
     path?: never;
-    query?: {
+    query: {
         /**
          * 页码
          */
@@ -1707,7 +1737,7 @@ export type ArticleControllerFindAllData = {
          * 每页数量
          */
         limit?: number;
-        title?: string;
+        title: string;
     };
     url: '/article';
 };
@@ -1716,19 +1746,7 @@ export type ArticleControllerFindAllResponses = {
     /**
      * 获取成功
      */
-    200: {
-        code: number;
-        message: string;
-        data: {
-            data: Array<string>;
-            meta: {
-                total: number;
-                page: number;
-                limit: number;
-                totalPages: number;
-            };
-        };
-    };
+    200: PaginatedResponseDto;
 };
 
 export type ArticleControllerFindAllResponse = ArticleControllerFindAllResponses[keyof ArticleControllerFindAllResponses];
@@ -1750,8 +1768,10 @@ export type ArticleControllerCreateResponses = {
     /**
      * 创建成功
      */
-    201: unknown;
+    201: BaseResponseDto;
 };
+
+export type ArticleControllerCreateResponse = ArticleControllerCreateResponses[keyof ArticleControllerCreateResponses];
 
 export type ArticleControllerRemoveData = {
     body?: never;
@@ -1772,23 +1792,27 @@ export type ArticleControllerRemoveErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerRemoveError = ArticleControllerRemoveErrors[keyof ArticleControllerRemoveErrors];
 
 export type ArticleControllerRemoveResponses = {
     /**
      * 删除成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerRemoveResponse = ArticleControllerRemoveResponses[keyof ArticleControllerRemoveResponses];
 
 export type ArticleControllerFindOneData = {
     body?: never;
@@ -1809,15 +1833,19 @@ export type ArticleControllerFindOneErrors = {
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerFindOneError = ArticleControllerFindOneErrors[keyof ArticleControllerFindOneErrors];
 
 export type ArticleControllerFindOneResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerFindOneResponse = ArticleControllerFindOneResponses[keyof ArticleControllerFindOneResponses];
 
 export type ArticleControllerUpdateData = {
     body?: UpdateArticleDto;
@@ -1838,27 +1866,31 @@ export type ArticleControllerUpdateErrors = {
     /**
      * 请求参数错误
      */
-    400: unknown;
+    400: BaseResponseDto;
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerUpdateError = ArticleControllerUpdateErrors[keyof ArticleControllerUpdateErrors];
 
 export type ArticleControllerUpdateResponses = {
     /**
      * 更新成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerUpdateResponse = ArticleControllerUpdateResponses[keyof ArticleControllerUpdateResponses];
 
 export type ArticleControllerGetLikeStatusData = {
     body?: never;
@@ -1879,19 +1911,23 @@ export type ArticleControllerGetLikeStatusErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerGetLikeStatusError = ArticleControllerGetLikeStatusErrors[keyof ArticleControllerGetLikeStatusErrors];
 
 export type ArticleControllerGetLikeStatusResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerGetLikeStatusResponse = ArticleControllerGetLikeStatusResponses[keyof ArticleControllerGetLikeStatusResponses];
 
 export type ArticleControllerGetLikeCountData = {
     body?: never;
@@ -1912,15 +1948,19 @@ export type ArticleControllerGetLikeCountErrors = {
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerGetLikeCountError = ArticleControllerGetLikeCountErrors[keyof ArticleControllerGetLikeCountErrors];
 
 export type ArticleControllerGetLikeCountResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerGetLikeCountResponse = ArticleControllerGetLikeCountResponses[keyof ArticleControllerGetLikeCountResponses];
 
 export type ArticleControllerLikeData = {
     body?: ArticleLikeDto;
@@ -1941,19 +1981,23 @@ export type ArticleControllerLikeErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 文章不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type ArticleControllerLikeError = ArticleControllerLikeErrors[keyof ArticleControllerLikeErrors];
 
 export type ArticleControllerLikeResponses = {
     /**
      * 操作成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type ArticleControllerLikeResponse = ArticleControllerLikeResponses[keyof ArticleControllerLikeResponses];
 
 export type CommentControllerFindAllData = {
     body?: never;
@@ -2041,8 +2085,10 @@ export type CommentControllerRemoveResponses = {
     /**
      * 删除成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type CommentControllerRemoveResponse = CommentControllerRemoveResponses[keyof CommentControllerRemoveResponses];
 
 export type CommentControllerFindOneData = {
     body?: never;
@@ -2175,8 +2221,10 @@ export type CommentControllerGetRepliesResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: PaginatedResponseDto;
 };
+
+export type CommentControllerGetRepliesResponse = CommentControllerGetRepliesResponses[keyof CommentControllerGetRepliesResponses];
 
 export type CommentControllerGetUserCommentsData = {
     body?: never;
@@ -2209,8 +2257,10 @@ export type CommentControllerGetUserCommentsResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: PaginatedResponseDto;
 };
+
+export type CommentControllerGetUserCommentsResponse = CommentControllerGetUserCommentsResponses[keyof CommentControllerGetUserCommentsResponses];
 
 export type CommentControllerGetCommentCountData = {
     body?: never;
@@ -2338,8 +2388,10 @@ export type TagControllerFindAllResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: ListResponseDto;
 };
+
+export type TagControllerFindAllResponse = TagControllerFindAllResponses[keyof TagControllerFindAllResponses];
 
 export type TagControllerCreateData = {
     body?: CreateTagDto;
@@ -2358,23 +2410,27 @@ export type TagControllerCreateErrors = {
     /**
      * 请求参数错误
      */
-    400: unknown;
+    400: BaseResponseDto;
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
 };
+
+export type TagControllerCreateError = TagControllerCreateErrors[keyof TagControllerCreateErrors];
 
 export type TagControllerCreateResponses = {
     /**
      * 创建成功
      */
-    201: unknown;
+    201: BaseResponseDto;
 };
+
+export type TagControllerCreateResponse = TagControllerCreateResponses[keyof TagControllerCreateResponses];
 
 export type TagControllerRemoveData = {
     body?: never;
@@ -2395,23 +2451,27 @@ export type TagControllerRemoveErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 标签不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type TagControllerRemoveError = TagControllerRemoveErrors[keyof TagControllerRemoveErrors];
 
 export type TagControllerRemoveResponses = {
     /**
      * 删除成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type TagControllerRemoveResponse = TagControllerRemoveResponses[keyof TagControllerRemoveResponses];
 
 export type TagControllerFindOneData = {
     body?: never;
@@ -2432,15 +2492,19 @@ export type TagControllerFindOneErrors = {
     /**
      * 标签不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type TagControllerFindOneError = TagControllerFindOneErrors[keyof TagControllerFindOneErrors];
 
 export type TagControllerFindOneResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type TagControllerFindOneResponse = TagControllerFindOneResponses[keyof TagControllerFindOneResponses];
 
 export type TagControllerUpdateData = {
     body?: UpdateTagDto;
@@ -2461,27 +2525,31 @@ export type TagControllerUpdateErrors = {
     /**
      * 请求参数错误
      */
-    400: unknown;
+    400: BaseResponseDto;
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 标签不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type TagControllerUpdateError = TagControllerUpdateErrors[keyof TagControllerUpdateErrors];
 
 export type TagControllerUpdateResponses = {
     /**
      * 更新成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type TagControllerUpdateResponse = TagControllerUpdateResponses[keyof TagControllerUpdateResponses];
 
 export type TagControllerUnfollowData = {
     body?: never;
@@ -2502,19 +2570,23 @@ export type TagControllerUnfollowErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 标签不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type TagControllerUnfollowError = TagControllerUnfollowErrors[keyof TagControllerUnfollowErrors];
 
 export type TagControllerUnfollowResponses = {
     /**
      * 取消关注成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type TagControllerUnfollowResponse = TagControllerUnfollowResponses[keyof TagControllerUnfollowResponses];
 
 export type TagControllerFollowData = {
     body?: never;
@@ -2535,19 +2607,23 @@ export type TagControllerFollowErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 标签不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type TagControllerFollowError = TagControllerFollowErrors[keyof TagControllerFollowErrors];
 
 export type TagControllerFollowResponses = {
     /**
      * 关注成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type TagControllerFollowResponse = TagControllerFollowResponses[keyof TagControllerFollowResponses];
 
 export type CategoryControllerFindAllData = {
     body?: never;
@@ -2575,8 +2651,10 @@ export type CategoryControllerFindAllResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: PaginatedResponseDto;
 };
+
+export type CategoryControllerFindAllResponse = CategoryControllerFindAllResponses[keyof CategoryControllerFindAllResponses];
 
 export type CategoryControllerCreateData = {
     body?: CreateCategoryDto;
@@ -2595,23 +2673,27 @@ export type CategoryControllerCreateErrors = {
     /**
      * 请求参数错误
      */
-    400: unknown;
+    400: BaseResponseDto;
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
 };
+
+export type CategoryControllerCreateError = CategoryControllerCreateErrors[keyof CategoryControllerCreateErrors];
 
 export type CategoryControllerCreateResponses = {
     /**
      * 创建成功
      */
-    201: unknown;
+    201: BaseResponseDto;
 };
+
+export type CategoryControllerCreateResponse = CategoryControllerCreateResponses[keyof CategoryControllerCreateResponses];
 
 export type CategoryControllerRemoveData = {
     body?: never;
@@ -2632,23 +2714,27 @@ export type CategoryControllerRemoveErrors = {
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 分类不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type CategoryControllerRemoveError = CategoryControllerRemoveErrors[keyof CategoryControllerRemoveErrors];
 
 export type CategoryControllerRemoveResponses = {
     /**
      * 删除成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type CategoryControllerRemoveResponse = CategoryControllerRemoveResponses[keyof CategoryControllerRemoveResponses];
 
 export type CategoryControllerFindOneData = {
     body?: never;
@@ -2669,15 +2755,19 @@ export type CategoryControllerFindOneErrors = {
     /**
      * 分类不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type CategoryControllerFindOneError = CategoryControllerFindOneErrors[keyof CategoryControllerFindOneErrors];
 
 export type CategoryControllerFindOneResponses = {
     /**
      * 获取成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type CategoryControllerFindOneResponse = CategoryControllerFindOneResponses[keyof CategoryControllerFindOneResponses];
 
 export type CategoryControllerUpdateData = {
     body?: UpdateCategoryDto;
@@ -2698,27 +2788,31 @@ export type CategoryControllerUpdateErrors = {
     /**
      * 请求参数错误
      */
-    400: unknown;
+    400: BaseResponseDto;
     /**
      * 未授权
      */
-    401: unknown;
+    401: BaseResponseDto;
     /**
      * 权限不足
      */
-    403: unknown;
+    403: BaseResponseDto;
     /**
      * 分类不存在
      */
-    404: unknown;
+    404: BaseResponseDto;
 };
+
+export type CategoryControllerUpdateError = CategoryControllerUpdateErrors[keyof CategoryControllerUpdateErrors];
 
 export type CategoryControllerUpdateResponses = {
     /**
      * 更新成功
      */
-    200: unknown;
+    200: BaseResponseDto;
 };
+
+export type CategoryControllerUpdateResponse = CategoryControllerUpdateResponses[keyof CategoryControllerUpdateResponses];
 
 export type PermissionControllerFindAllData = {
     body?: never;
