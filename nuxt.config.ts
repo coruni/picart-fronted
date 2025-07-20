@@ -96,11 +96,16 @@ export default defineNuxtConfig({
       __DEV__: process.env.NODE_ENV === "development",
     },
     plugins: [tailwindcss()],
+    server:{
+      allowedHosts:true
+    }
   },
 
   // SEO优化
   app: {
     head: {
+      title: "PicArt",
+      titleTemplate: "%s - PicArt",
       viewport: "width=device-width, initial-scale=1",
       charset: "utf-8",
       meta: [

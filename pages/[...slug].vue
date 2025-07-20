@@ -1,14 +1,6 @@
 <template>
-  <div class="default-layout">
-    <header>
-      <h1>Welcome to the Default Layout</h1>
-    </header>
-    <main>
-      <slot></slot>
-    </main>
-    <footer>
-      <p>&copy; 2023 Your Company</p>
-    </footer>
+  <div class="flex-1 items-center justify-center">
+    <span>网站正在重构升级中，下载压缩包请前往https://drive.cosfan.cc</span>
   </div>
 </template>
 
