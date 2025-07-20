@@ -2412,8 +2412,224 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "登录成功，返回JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "null"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "banned": {
+                          "type": "null"
+                        },
+                        "banReason": {
+                          "type": "null"
+                        },
+                        "avatar": {
+                          "type": "null"
+                        },
+                        "description": {
+                          "type": "null"
+                        },
+                        "address": {
+                          "type": "null"
+                        },
+                        "gender": {
+                          "type": "string"
+                        },
+                        "birthDate": {
+                          "type": "null"
+                        },
+                        "articleCount": {
+                          "type": "integer"
+                        },
+                        "followerCount": {
+                          "type": "integer"
+                        },
+                        "followingCount": {
+                          "type": "integer"
+                        },
+                        "level": {
+                          "type": "integer"
+                        },
+                        "experience": {
+                          "type": "integer"
+                        },
+                        "score": {
+                          "type": "integer"
+                        },
+                        "wallet": {
+                          "type": "integer"
+                        },
+                        "membershipLevel": {
+                          "type": "integer"
+                        },
+                        "membershipLevelName": {
+                          "type": "string"
+                        },
+                        "membershipStatus": {
+                          "type": "string"
+                        },
+                        "membershipStartDate": {
+                          "type": "null"
+                        },
+                        "membershipEndDate": {
+                          "type": "null"
+                        },
+                        "lastLoginAt": {
+                          "type": "null"
+                        },
+                        "lastActiveAt": {
+                          "type": "null"
+                        },
+                        "refreshToken": {
+                          "type": "string"
+                        },
+                        "inviterId": {
+                          "type": "null"
+                        },
+                        "inviteCode": {
+                          "type": "null"
+                        },
+                        "inviteEarnings": {
+                          "type": "string"
+                        },
+                        "inviteCount": {
+                          "type": "integer"
+                        },
+                        "roles": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "null"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "username",
+                        "nickname",
+                        "email",
+                        "phone",
+                        "status",
+                        "banned",
+                        "banReason",
+                        "avatar",
+                        "description",
+                        "address",
+                        "gender",
+                        "birthDate",
+                        "articleCount",
+                        "followerCount",
+                        "followingCount",
+                        "level",
+                        "experience",
+                        "score",
+                        "wallet",
+                        "membershipLevel",
+                        "membershipLevelName",
+                        "membershipStatus",
+                        "membershipStartDate",
+                        "membershipEndDate",
+                        "lastLoginAt",
+                        "lastActiveAt",
+                        "refreshToken",
+                        "inviterId",
+                        "inviteCode",
+                        "inviteEarnings",
+                        "inviteCount",
+                        "roles",
+                        "createdAt",
+                        "updatedAt",
+                        "token"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "401": {
@@ -3104,6 +3320,7 @@
             "in": "query",
             "description": "页码",
             "required": false,
+            "example": 1,
             "schema": {
               "minimum": 1,
               "default": 1,
@@ -3115,6 +3332,7 @@
             "in": "query",
             "description": "每页数量",
             "required": false,
+            "example": 10,
             "schema": {
               "minimum": 1,
               "maximum": 100,
@@ -3126,7 +3344,7 @@
             "name": "title",
             "in": "query",
             "description": "",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -3178,7 +3396,223 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "requireLogin": {
+                                "type": "boolean"
+                              },
+                              "requireFollow": {
+                                "type": "boolean"
+                              },
+                              "requirePayment": {
+                                "type": "boolean"
+                              },
+                              "viewPrice": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "images": {
+                                "type": "null"
+                              },
+                              "summary": {
+                                "type": "null"
+                              },
+                              "views": {
+                                "type": "integer"
+                              },
+                              "likes": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "cover": {
+                                "type": "null"
+                              },
+                              "authorId": {
+                                "type": "integer"
+                              },
+                              "author": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "nickname": {
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "type": "null"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "null"
+                                  },
+                                  "followerCount": {
+                                    "type": "integer"
+                                  },
+                                  "followingCount": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "username",
+                                  "nickname",
+                                  "avatar",
+                                  "status",
+                                  "createdAt",
+                                  "updatedAt",
+                                  "description",
+                                  "followerCount",
+                                  "followingCount"
+                                ]
+                              },
+                              "category": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "parentId": {
+                                    "type": "null"
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "background": {
+                                    "type": "string"
+                                  },
+                                  "cover": {
+                                    "type": "string"
+                                  },
+                                  "sort": {
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "articleCount": {
+                                    "type": "integer"
+                                  },
+                                  "followCount": {
+                                    "type": "integer"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "description",
+                                  "parentId",
+                                  "avatar",
+                                  "background",
+                                  "cover",
+                                  "sort",
+                                  "status",
+                                  "articleCount",
+                                  "followCount",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -3249,13 +3683,6 @@
         "responses": {
           "201": {
             "description": "创建成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3326,24 +3753,10 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3421,57 +3834,22 @@
         "responses": {
           "200": {
             "description": "更新成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
             "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3540,46 +3918,18 @@
         "responses": {
           "200": {
             "description": "删除成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3650,35 +4000,14 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3749,24 +4078,10 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -3846,35 +4161,14 @@
         "responses": {
           "200": {
             "description": "操作成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "文章不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -4780,13 +5074,6 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -4854,46 +5141,18 @@
         "responses": {
           "201": {
             "description": "创建成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
             "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -4964,24 +5223,10 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "标签不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5059,57 +5304,22 @@
         "responses": {
           "200": {
             "description": "更新成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
             "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "标签不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5178,46 +5388,18 @@
         "responses": {
           "200": {
             "description": "删除成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "标签不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5288,35 +5470,14 @@
         "responses": {
           "200": {
             "description": "关注成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "标签不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5385,35 +5546,14 @@
         "responses": {
           "200": {
             "description": "取消关注成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "标签不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5500,7 +5640,146 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "parentId": {
+                                "type": "null"
+                              },
+                              "children": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "parentId": {
+                                      "type": "integer"
+                                    },
+                                    "avatar": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string"
+                                    },
+                                    "cover": {
+                                      "type": "string"
+                                    },
+                                    "sort": {
+                                      "type": "integer"
+                                    },
+                                    "status": {
+                                      "type": "string"
+                                    },
+                                    "articleCount": {
+                                      "type": "integer"
+                                    },
+                                    "followCount": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "avatar": {
+                                "type": "string"
+                              },
+                              "background": {
+                                "type": "string"
+                              },
+                              "cover": {
+                                "type": "string"
+                              },
+                              "sort": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "articleCount": {
+                                "type": "integer"
+                              },
+                              "followCount": {
+                                "type": "integer"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -5574,7 +5853,79 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "parentId": {
+                          "type": "integer"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "background": {
+                          "type": "string"
+                        },
+                        "cover": {
+                          "type": "string"
+                        },
+                        "sort": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "articleCount": {
+                          "type": "integer"
+                        },
+                        "followCount": {
+                          "type": "integer"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "parentId",
+                        "avatar",
+                        "background",
+                        "cover",
+                        "sort",
+                        "status",
+                        "articleCount",
+                        "followCount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -5582,35 +5933,14 @@
           },
           "400": {
             "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5684,7 +6014,127 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "parentId": {
+                          "type": "null"
+                        },
+                        "children": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "parentId": {
+                                "type": "integer"
+                              },
+                              "avatar": {
+                                "type": "string"
+                              },
+                              "background": {
+                                "type": "string"
+                              },
+                              "cover": {
+                                "type": "string"
+                              },
+                              "sort": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "articleCount": {
+                                "type": "integer"
+                              },
+                              "followCount": {
+                                "type": "integer"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "background": {
+                          "type": "string"
+                        },
+                        "cover": {
+                          "type": "string"
+                        },
+                        "sort": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "articleCount": {
+                          "type": "integer"
+                        },
+                        "followCount": {
+                          "type": "integer"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "parentId",
+                        "children",
+                        "avatar",
+                        "background",
+                        "cover",
+                        "sort",
+                        "status",
+                        "articleCount",
+                        "followCount",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -5692,13 +6142,6 @@
           },
           "404": {
             "description": "分类不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5776,57 +6219,22 @@
         "responses": {
           "200": {
             "description": "更新成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
             "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "分类不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },
@@ -5895,46 +6303,18 @@
         "responses": {
           "200": {
             "description": "删除成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
             "description": "未授权",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "403": {
             "description": "权限不足",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           },
           "404": {
             "description": "分类不存在",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BaseResponseDto"
-                }
-              }
-            },
             "headers": {}
           }
         },

@@ -4,7 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-
   modules: [
     "@nuxt/eslint",
     "@nuxt/icon",
@@ -20,7 +19,6 @@ export default defineNuxtConfig({
     bundle: {
       optimizeTranslationDirective: false,
     },
-    // 支持的语言列表
     locales: [
       {
         code: "zh",
@@ -126,5 +124,8 @@ export default defineNuxtConfig({
   experimental: {
     // 禁用payload提取，防止敏感数据泄露
     payloadExtraction: false,
+  },
+  features: {
+    inlineStyles: false,
   },
 });

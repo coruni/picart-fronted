@@ -13,6 +13,10 @@ export const createClientConfig: CreateClientConfig = (config) => {
       //   }
       return req;
     },
+    onRequestError: (error) => {
+      //   console.error('Request Error:', error);
+      return error;
+    },
     onResponse: (res) => {
       //   if (res.status >= 400) {
       //     console.error('API Error:', res);

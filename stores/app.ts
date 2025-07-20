@@ -2,12 +2,12 @@
 export const useAppStore = defineStore('app', {
   state: () => ({
     theme: 'light' as 'light' | 'dark',
-    language: 'zh-CN' as string,
+    language: 'zh' as string,
     loading: false as boolean,
     error: null as string | null,
     // i18n相关状态
     i18n: {
-      availableLocales: ['zh-CN', 'en', 'ja'] as string[],
+      availableLocales: ['zh', 'en', 'ja'] as string[],
       dateFormat: 'default' as string,
       numberFormat: 'default' as string,
       currencyFormat: 'default' as string
@@ -25,6 +25,14 @@ export const useAppStore = defineStore('app', {
   actions: {
     setTheme(newTheme: 'light' | 'dark') {
       this.theme = newTheme
+      if (import.meta.client) {
+        const html = document.documentElement
+        if (newTheme === 'dark') {
+          html.classList.add('dark')
+        } else {
+          html.classList.remove('dark')
+        }
+      }
     },
 
     toggleTheme() {
@@ -63,7 +71,5 @@ export const useAppStore = defineStore('app', {
     key: 'picart-app-settings',
     // 只持久化必要的状态，不包含敏感信息
     pick: ['theme', 'language', 'i18n'],
-    // 使用localStorage（客户端专用）
-    storage: import.meta.client ? localStorage : undefined
   }
-}) 
+})

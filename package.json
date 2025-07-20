@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.78.3",
+    "@iconify-json/mynaui": "^1.2.13",
     "@nuxtjs/i18n": "^9.5.6"
   }
 }
