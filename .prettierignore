@@ -1,0 +1,13 @@
+**/*.svg
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+package.json
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+dist
+node_modules
+.nuxt
+.output

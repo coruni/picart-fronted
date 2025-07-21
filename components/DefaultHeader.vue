@@ -48,12 +48,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { Category } from "~~/types/category";
+  import type { Category } from '~~/types/category'
 
-defineProps({
-  categories: {
-    type: Array as PropType<Category[]>,
-    default: () => [],
-  },
-});
+  defineProps({
+    categories: {
+      type: Array as PropType<Category[]>,
+      default: () => []
+    }
+  })
 </script>
