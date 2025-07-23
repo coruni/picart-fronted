@@ -3,7 +3,7 @@ export type { QuerySerializerOptions } from '../core/bodySerializer';
 export {
   formDataBodySerializer,
   jsonBodySerializer,
-  urlSearchParamsBodySerializer,
+  urlSearchParamsBodySerializer
 } from '../core/bodySerializer';
 export { buildClientParams } from '../core/params';
 export { createClient } from './client';
@@ -17,6 +17,6 @@ export type {
   OptionsLegacyParser,
   RequestOptions,
   RequestResult,
-  TDataShape,
+  TDataShape
 } from './types';
 export { createConfig } from './utils';

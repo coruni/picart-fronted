@@ -1352,6 +1352,149 @@
         "security": []
       }
     },
+    "/config/public": {
+      "get": {
+        "summary": "获取公共配置",
+        "deprecated": false,
+        "description": "",
+        "operationId": "ConfigController_getPublic",
+        "tags": [
+          "系统配置"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "site_name": {
+                          "type": "string"
+                        },
+                        "site_description": {
+                          "type": "string"
+                        },
+                        "site_keywords": {
+                          "type": "string"
+                        },
+                        "site_logo": {
+                          "type": "string"
+                        },
+                        "site_favicon": {
+                          "type": "string"
+                        },
+                        "user_registration_enabled": {
+                          "type": "boolean"
+                        },
+                        "user_email_verification": {
+                          "type": "boolean"
+                        },
+                        "comment_approval_required": {
+                          "type": "boolean"
+                        },
+                        "article_approval_required": {
+                          "type": "boolean"
+                        },
+                        "maintenance_mode": {
+                          "type": "boolean"
+                        },
+                        "maintenance_message": {
+                          "type": "string"
+                        },
+                        "invite_code_required": {
+                          "type": "boolean"
+                        },
+                        "invite_code_enabled": {
+                          "type": "boolean"
+                        },
+                        "site_subname": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "site_name",
+                        "site_description",
+                        "site_keywords",
+                        "site_logo",
+                        "site_favicon",
+                        "user_registration_enabled",
+                        "user_email_verification",
+                        "comment_approval_required",
+                        "article_approval_required",
+                        "maintenance_mode",
+                        "maintenance_message",
+                        "invite_code_required",
+                        "invite_code_enabled",
+                        "site_subname"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/user": {
       "get": {
         "summary": "获取用户列表",
@@ -2412,224 +2555,8 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "登录成功，返回JWT token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "username": {
-                          "type": "string"
-                        },
-                        "nickname": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "null"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "banned": {
-                          "type": "null"
-                        },
-                        "banReason": {
-                          "type": "null"
-                        },
-                        "avatar": {
-                          "type": "null"
-                        },
-                        "description": {
-                          "type": "null"
-                        },
-                        "address": {
-                          "type": "null"
-                        },
-                        "gender": {
-                          "type": "string"
-                        },
-                        "birthDate": {
-                          "type": "null"
-                        },
-                        "articleCount": {
-                          "type": "integer"
-                        },
-                        "followerCount": {
-                          "type": "integer"
-                        },
-                        "followingCount": {
-                          "type": "integer"
-                        },
-                        "level": {
-                          "type": "integer"
-                        },
-                        "experience": {
-                          "type": "integer"
-                        },
-                        "score": {
-                          "type": "integer"
-                        },
-                        "wallet": {
-                          "type": "integer"
-                        },
-                        "membershipLevel": {
-                          "type": "integer"
-                        },
-                        "membershipLevelName": {
-                          "type": "string"
-                        },
-                        "membershipStatus": {
-                          "type": "string"
-                        },
-                        "membershipStartDate": {
-                          "type": "null"
-                        },
-                        "membershipEndDate": {
-                          "type": "null"
-                        },
-                        "lastLoginAt": {
-                          "type": "null"
-                        },
-                        "lastActiveAt": {
-                          "type": "null"
-                        },
-                        "refreshToken": {
-                          "type": "string"
-                        },
-                        "inviterId": {
-                          "type": "null"
-                        },
-                        "inviteCode": {
-                          "type": "null"
-                        },
-                        "inviteEarnings": {
-                          "type": "string"
-                        },
-                        "inviteCount": {
-                          "type": "integer"
-                        },
-                        "roles": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "integer"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "displayName": {
-                                "type": "null"
-                              },
-                              "description": {
-                                "type": "string"
-                              },
-                              "permissions": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "integer"
-                                    },
-                                    "name": {
-                                      "type": "string"
-                                    },
-                                    "description": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "id",
-                                    "name",
-                                    "description"
-                                  ]
-                                }
-                              },
-                              "createdAt": {
-                                "type": "string"
-                              },
-                              "updatedAt": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        },
-                        "createdAt": {
-                          "type": "string"
-                        },
-                        "updatedAt": {
-                          "type": "string"
-                        },
-                        "token": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "username",
-                        "nickname",
-                        "email",
-                        "phone",
-                        "status",
-                        "banned",
-                        "banReason",
-                        "avatar",
-                        "description",
-                        "address",
-                        "gender",
-                        "birthDate",
-                        "articleCount",
-                        "followerCount",
-                        "followingCount",
-                        "level",
-                        "experience",
-                        "score",
-                        "wallet",
-                        "membershipLevel",
-                        "membershipLevelName",
-                        "membershipStatus",
-                        "membershipStartDate",
-                        "membershipEndDate",
-                        "lastLoginAt",
-                        "lastActiveAt",
-                        "refreshToken",
-                        "inviterId",
-                        "inviteCode",
-                        "inviteEarnings",
-                        "inviteCount",
-                        "roles",
-                        "createdAt",
-                        "updatedAt",
-                        "token"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "message",
-                    "data"
-                  ]
-                }
-              }
-            },
             "headers": {}
           },
           "401": {
@@ -3320,7 +3247,6 @@
             "in": "query",
             "description": "页码",
             "required": false,
-            "example": 1,
             "schema": {
               "minimum": 1,
               "default": 1,
@@ -3332,7 +3258,6 @@
             "in": "query",
             "description": "每页数量",
             "required": false,
-            "example": 10,
             "schema": {
               "minimum": 1,
               "maximum": 100,
@@ -3344,7 +3269,7 @@
             "name": "title",
             "in": "query",
             "description": "",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -5850,85 +5775,6 @@
         "responses": {
           "201": {
             "description": "创建成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "description": {
-                          "type": "string"
-                        },
-                        "parentId": {
-                          "type": "integer"
-                        },
-                        "avatar": {
-                          "type": "string"
-                        },
-                        "background": {
-                          "type": "string"
-                        },
-                        "cover": {
-                          "type": "string"
-                        },
-                        "sort": {
-                          "type": "integer"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "articleCount": {
-                          "type": "integer"
-                        },
-                        "followCount": {
-                          "type": "integer"
-                        },
-                        "createdAt": {
-                          "type": "string"
-                        },
-                        "updatedAt": {
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "name",
-                        "description",
-                        "parentId",
-                        "avatar",
-                        "background",
-                        "cover",
-                        "sort",
-                        "status",
-                        "articleCount",
-                        "followCount",
-                        "createdAt",
-                        "updatedAt"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "message",
-                    "data"
-                  ]
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
@@ -6754,7 +6600,7 @@
         "security": []
       }
     },
-    "/order": {
+    "/order/list": {
       "get": {
         "summary": "获取用户订单列表",
         "deprecated": false,
@@ -6830,72 +6676,6 @@
           }
         },
         "security": []
-      },
-      "post": {
-        "summary": "创建订单（包含抽成计算）",
-        "deprecated": false,
-        "description": "",
-        "operationId": "OrderController_createOrder",
-        "tags": [
-          "订单管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "创建成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
-            "headers": {}
-          }
-        },
-        "security": []
       }
     },
     "/order/{id}": {
@@ -6962,6 +6742,86 @@
         "responses": {
           "200": {
             "description": "获取成功",
+            "headers": {}
+          },
+          "404": {
+            "description": "订单不存在",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "支付订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_payOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "支付成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
             "headers": {}
           },
           "404": {
@@ -7110,26 +6970,16 @@
         "security": []
       }
     },
-    "/order/{id}/pay": {
+    "/order": {
       "post": {
-        "summary": "支付订单",
+        "summary": "创建订单（包含抽成计算）",
         "deprecated": false,
         "description": "",
-        "operationId": "OrderController_payOrder",
+        "operationId": "OrderController_createOrder",
         "tags": [
           "订单管理"
         ],
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "example": "",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "Authorization",
             "in": "header",
@@ -7172,8 +7022,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "支付成功",
+          "201": {
+            "description": "创建成功",
             "headers": {}
           },
           "400": {
@@ -7182,10 +7032,6 @@
           },
           "401": {
             "description": "未授权",
-            "headers": {}
-          },
-          "404": {
-            "description": "订单不存在",
             "headers": {}
           }
         },

@@ -8,7 +8,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "openapi-ts": "openapi-ts"
+    "openapi-ts": "openapi-ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@hey-api/nuxt": "^0.2.0",
@@ -21,6 +23,7 @@
     "@tailwindcss/vite": "^4.1.11",
     "@unhead/vue": "^2.0.12",
     "nuxt": "^3.17.6",
+    "nuxt-swiper": "2.0.1",
     "pinia": "^3.0.3",
     "tailwindcss": "^4.1.11",
     "vue": "^3.5.17",
@@ -30,12 +33,14 @@
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.78.3",
     "@iconify-json/mynaui": "^1.2.13",
+    "@nuxt/eslint-config": "^1.7.0",
     "@nuxtjs/i18n": "^9.5.6",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
     "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.3",
-    "prettier": "^3.1.0",
-    "prettier-eslint": "^16.4.2",
-    "vue-eslint-parser": "^8.3.0"
-  }
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-vue": "^10.3.0",
+    "prettier": "^3.1.0"
+  },
+  "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
 }

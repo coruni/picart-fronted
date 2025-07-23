@@ -5,7 +5,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { categoryControllerFindAll, configControllerFindByGroup } from '~~/api'
+  import { categoryControllerFindAll } from '~~/api';
 
   const fetchCategory = await categoryControllerFindAll({
     composable: '$fetch',
@@ -13,15 +13,5 @@
       page: 1,
       limit: 10
     }
-  })
-
-  // 请求网站配置
-  const fetchConfig = await configControllerFindByGroup({
-    composable: '$fetch',
-    path: {
-      group: 'site'
-    }
-  })
-
-  console.log(fetchConfig)
+  });
 </script>

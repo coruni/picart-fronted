@@ -1,3 +1,3 @@
 export default defineAppConfig({
-  apiBaseUrl: 'https://picend.cosfan.cc/api/v1'
+  apiBaseUrl: 'http://picend.cosfan.cc/api/v1'
 })

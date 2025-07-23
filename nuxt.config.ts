@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/i18n",
+    "nuxt-swiper",
   ],
 
   // i18n 国际化配置
@@ -96,8 +97,8 @@ export default defineNuxtConfig({
       __DEV__: process.env.NODE_ENV === "development",
     },
     plugins: [tailwindcss()],
-    server:{
-      allowedHosts:true
+    server: {
+      allowedHosts: true
     }
   },
 

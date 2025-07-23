@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm h-16 dark:bg-black/80"
+    class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 dark:bg-black/80 backdrop-blur-md"
   >
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
       <div class="flex items-center space-x-2">
@@ -9,7 +9,7 @@
 
       <!-- 修改为使用动画过渡 -->
       <div
-        class="md:flex items-center space-x-8 transition-all duration-300 transform md:translate-y-0 -translate-y-full md:opacity-100 opacity-0 md:static absolute left-0 right-0 top-full bg-white/80 backdrop-blur-md dark:bg-black/80 md:bg-transparent md:backdrop-blur-0 md:dark:bg-transparent"
+        class="md:flex items-center space-x-8 transition-all duration-300 transform md:translate-y-0 -translate-y-full md:opacity-100 opacity-0 md:static absolute left-0 right-0 top-full bg-white/80 dark:bg-black/80 md:bg-transparent md:dark:bg-transparent"
       >
         <NuxtLinkLocale to="/">{{ $t('header.nav.home') }}</NuxtLinkLocale>
         <template v-for="item in categories" :key="item.id">
@@ -39,7 +39,7 @@
 
       <!-- 修改为使用动画过渡 -->
       <div
-        class="md:flex items-center space-x-4 transition-all duration-300 transform md:translate-y-0 -translate-y-full md:opacity-100 opacity-0 md:static absolute left-0 right-0 top-full bg-white/80 backdrop-blur-md dark:bg-black/80 md:bg-transparent md:backdrop-blur-0 md:dark:bg-transparent"
+        class="md:flex items-center space-x-4 transition-all duration-300 transform md:translate-y-0 -translate-y-full md:opacity-100 opacity-0 md:static absolute left-0 right-0 top-full bg-white/80 dark:bg-black/80 md:bg-transparent md:dark:bg-transparent"
       >
         <div class="relative">
           <input
@@ -72,12 +72,12 @@
   </nav>
 </template>
 <script lang="ts" setup>
-  import type { Category } from '~~/types/category'
+  import type { Category } from '~~/types/category';
 
   defineProps({
     categories: {
       type: Array as PropType<Category[]>,
       default: () => []
     }
-  })
+  });
 </script>
