@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
   ],
 
+
   // i18n 国际化配置
   i18n: {
     bundle: {
@@ -131,7 +132,35 @@ export default defineNuxtConfig({
     // 禁用payload提取，防止敏感数据泄露
     payloadExtraction: false,
   },
-  features: {
-    inlineStyles: false,
-  },
+  webpack: {
+    extractCSS: true,
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        maxSize: 244 * 1024, // 244KB
+        cacheGroups: {
+          styles: {
+            name: 'styles',
+            test: /\.(css|vue)$/,
+            chunks: 'all',
+            enforce: true,
+            priority: 20
+          },
+          vendors: {
+            name: 'chunk-vendors',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            chunks: 'initial'
+          },
+          common: {
+            name: 'chunk-common',
+            minChunks: 2,
+            priority: 5,
+            chunks: 'initial',
+            reuseExistingChunk: true
+          }
+        }
+      }
+    }
+  }
 });

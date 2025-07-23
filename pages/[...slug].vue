@@ -1,6 +1,6 @@
 <template>
-  <SwiperClient />
-  <span>网站正在重构升级中，本页面为开发版本。下载压缩包请前往https://drive,cosfan.cc</span>
+  <CommonSwiperClient />
+  <span>网站正在重构升级中，本页面为开发版本。下载压缩包请前往https://drive.cosfan.cc</span>
   <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Tab切换 -->
     <div class="flex justify-end mb-8">
@@ -27,7 +27,7 @@
         :key="item.id"
         class="transform transition-transform hover:scale-105 duration-300"
       >
-        <ArticleCard :data="item" />
+        <CommonArticleCard :data="item" />
       </div>
     </div>
   </div>
