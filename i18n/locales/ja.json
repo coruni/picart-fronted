@@ -2,7 +2,22 @@
   "header": {
     "nav": {
       "home": "ホーム",
-      "search": "検索"
+      "search": "検索",
+      "login": "ログイン",
+      "register": "登録",
+      "profile": "ユーザー中心",
+      "logout": "ログアウト",
+      "admin": "管理者中心",
+      "message": "メッセージ中心",
+      "setting": "設定"
+    }
+  },
+  "home": {
+    "tab": {
+      "all": "すべて",
+      "popular": "人気の作品",
+      "latest": "最新の作品",
+      "following": "フォロー中の作品"
     }
   }
 }

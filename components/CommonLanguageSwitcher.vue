@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // 使用i18n功能
-const { locale: currentLocale, locales } = useI18n()
+const { locale: currentLocale, locales } = useCustomI18n()
 const { switchLanguage } = useLanguageSwitcher()
 
 // 响应式状态
@@ -282,4 +282,4 @@ onUnmounted(() => {
     padding: 0.75rem 1rem;
   }
 }
-</style> 
+</style>

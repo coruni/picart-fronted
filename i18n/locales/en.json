@@ -2,7 +2,22 @@
   "header": {
     "nav": {
       "home": "Home",
-      "search": "Search"
+      "search": "Search",
+      "login": "Login",
+      "register": "Register",
+      "profile": "Profile",
+      "logout": "Logout",
+      "admin": "Admin Center",
+      "message": "Message Center",
+      "setting": "Setting"
+    }
+  },
+  "home": {
+    "tab": {
+      "all": "All",
+      "popular": "Popular",
+      "latest": "Latest",
+      "following": "Following"
     }
   }
 }

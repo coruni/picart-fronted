@@ -34,7 +34,7 @@ export interface I18nComposable {
  * i18n 国际化组合式函数
  * 提供完整的国际化功能支持
  */
-export const useI18n = (): I18nComposable => {
+export const useCustomI18n = (): I18nComposable => {
   const { $i18n } = useNuxtApp()
   
   // 当前语言
@@ -147,7 +147,7 @@ export const useI18n = (): I18nComposable => {
  * 提供语言切换的状态管理
  */
 export const useLanguageSwitcher = () => {
-  const { locale, locales, setLocale, switchLocalePath } = useI18n()
+  const { locale, locales, setLocale, switchLocalePath } = useCustomI18n()
   const router = useRouter()
   
   // 切换语言并跳转
@@ -180,7 +180,7 @@ export const useLanguageSwitcher = () => {
  * 提供国际化的表单验证消息
  */
 export const useFormValidationI18n = () => {
-  const { t } = useI18n()
+  const { t } = useCustomI18n()
   
   const getValidationMessage = (rule: string, params?: Record<string, any>): string => {
     const key = `form.validation.${rule}`
@@ -201,4 +201,4 @@ export const useFormValidationI18n = () => {
     getValidationMessage,
     validationRules
   }
-} 
+}

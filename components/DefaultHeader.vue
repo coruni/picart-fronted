@@ -1,10 +1,10 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 dark:bg-black/80 backdrop-blur-md"
+    class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 dark:bg-gray-900/80 backdrop-blur-md"
   >
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
       <div class="flex items-center space-x-2">
-        <span class="text-xl font-bold text-gray-700">PicArt</span>
+        <span class="text-xl font-bold text-gray-700 dark:text-white">PicArt</span>
       </div>
 
       <!-- 修改为使用动画过渡 -->
@@ -27,7 +27,7 @@
                   v-for="child in item.children"
                   :key="child.id"
                   :to="`/category/${child.id}`"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-purple-400"
                 >
                   {{ child.name }}
                 </NuxtLinkLocale>
@@ -45,7 +45,7 @@
           <input
             type="text"
             :placeholder="$t('header.nav.search')"
-            class="px-4 py-2 rounded-full bg-gray-100 text-sm focus:outline-none border-none"
+            class="px-4 py-2 rounded-full bg-gray-100 text-sm focus:outline-none border-none dark:bg-gray-800"
           />
           <Icon
             name="mynaui:search"
@@ -53,16 +53,16 @@
           />
         </div>
         <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
-          <img alt="用户头像" class="w-full h-full object-cover" />
+          <NuxtImg alt="user avatar" class="w-full h-full object-cover" />
           <div
             class="absolute top-full right-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
           >
             <div class="py-1">
               <NuxtLinkLocale
                 to="/profile"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-purple-400"
               >
-                <span>个人中心</span>
+                <span>{{ $t('header.nav.profile') }}</span>
               </NuxtLinkLocale>
             </div>
           </div>

@@ -2,7 +2,22 @@
   "header": {
     "nav": {
       "home": "首页",
-      "search": "搜索"
+      "search": "搜索",
+      "login": "登录",
+      "register": "注册",
+      "profile": "个人中心",
+      "logout": "退出登录",
+      "admin": "管理员中心",
+      "message": "消息中心",
+      "setting": "设置"
+    }
+  },
+  "home": {
+    "tab": {
+      "all": "全部",
+      "popular": "人气推荐",
+      "latest": "最新发布",
+      "following": "关注作品"
     }
   }
 }

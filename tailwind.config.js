@@ -7,5 +7,4 @@ module.exports = {
     './app.vue',
     './error.vue'
   ]
-  // ...其他配置
 };
