@@ -45,7 +45,7 @@
           <input
             type="text"
             :placeholder="$t('header.nav.search')"
-            class="px-4 py-2 rounded-full bg-gray-100 text-sm focus:outline-none border-none dark:bg-gray-800"
+            class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-sm focus:outline-none border-none"
           />
           <Icon
             name="mynaui:search"
@@ -55,12 +55,12 @@
         <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
           <NuxtImg alt="user avatar" class="w-full h-full object-cover" />
           <div
-            class="absolute top-full right-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+            class="absolute top-full right-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 dark:bg-gray-800 dark:text-white"
           >
             <div class="py-1">
               <NuxtLinkLocale
                 to="/profile"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-purple-400"
+                class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-purple-400"
               >
                 <span>{{ $t('header.nav.profile') }}</span>
               </NuxtLinkLocale>

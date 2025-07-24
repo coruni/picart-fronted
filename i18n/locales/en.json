@@ -19,5 +19,47 @@
       "latest": "Latest",
       "following": "Following"
     }
+  },
+  "admin": {
+    "menu": {
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "articles": "Articles",
+      "categories": "Categories",
+      "orders": "Orders",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "comments": "Comments",
+      "tags": "Tags"
+    },
+    "categories": {
+      "name": "Name",
+      "description": "Description",
+      "avatar": "Avatar",
+      "parent": "Parent",
+      "createdAt": "Created At",
+      "edit": "Edit"
+    }
+  },
+  "common": {
+    "table": {
+      "actions": "Actions",
+      "delete": "Delete",
+      "name": "Name",
+      "description": "Description",
+      "avatar": "Avatar",
+      "parent": "Parent",
+      "createdAt": "Created At",
+      "edit": "Edit",
+      "articleCount": "Articles",
+      "sort": "Sort",
+      "title": "Title",
+      "summary": "Summary",
+      "author": "Author",
+      "collections": "Collections",
+      "likes": "Likes",
+      "status": "Status",
+      "views": "Views"
+    }
   }
 }

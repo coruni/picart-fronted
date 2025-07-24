@@ -12,8 +12,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
-    'nuxt-swiper'
+    'nuxt-swiper',
+    '@nuxt/ui'
   ],
+  ui: {
+    fonts: false
+  },
 
   // i18n 国际化配置
   i18n: {

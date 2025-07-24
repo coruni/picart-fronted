@@ -1,8 +1,10 @@
 <template>
-  <NuxtLoadingIndicator />
-  <div class="flex flex-col min-h-screen">
-    <NuxtLayout />
-  </div>
+  <UApp>
+    <NuxtLoadingIndicator />
+    <div class="flex flex-col min-h-screen">
+      <NuxtLayout />
+    </div>
+  </UApp>
 </template>
 
 <script lang="ts" setup>

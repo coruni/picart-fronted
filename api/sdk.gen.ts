@@ -39,6 +39,7 @@ import type {
   UserControllerSetUserCommissionConfigData,
   UserControllerGetWalletData,
   UserControllerLoginData,
+  UserControllerLoginResponse,
   UserControllerRegisterUserData,
   UserControllerRefreshTokenData,
   UserControllerLogoutData,
@@ -659,19 +660,25 @@ export const userControllerGetWallet = <TComposable extends Composable, DefaultT
 /**
  * 用户登录
  */
-export const userControllerLogin = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerLoginData, unknown, DefaultT>
+export const userControllerLogin = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerLoginResponse = UserControllerLoginResponse
+>(
+  options: Options<TComposable, UserControllerLoginData, UserControllerLoginResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/user/login',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    UserControllerLoginResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/user/login',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**

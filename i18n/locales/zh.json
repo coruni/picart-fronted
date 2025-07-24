@@ -19,5 +19,47 @@
       "latest": "最新发布",
       "following": "关注作品"
     }
+  },
+  "admin": {
+    "menu": {
+      "dashboard": "仪表盘",
+      "users": "用户管理",
+      "articles": "文章管理",
+      "categories": "分类管理",
+      "orders": "订单管理",
+      "analytics": "数据分析",
+      "settings": "系统设置",
+      "comments": "评论管理",
+      "tags": "标签管理"
+    },
+    "categories": {
+      "name": "名称",
+      "description": "描述",
+      "avatar": "头像",
+      "parent": "上级分类",
+      "createdAt": "创建时间",
+      "edit": "编辑"
+    }
+  },
+  "common": {
+    "table": {
+      "actions": "操作",
+      "delete": "删除",
+      "avatar": "头像",
+      "createdAt": "创建时间",
+      "name": "名称",
+      "description": "描述",
+      "parent": "上级分类",
+      "edit": "编辑",
+      "articleCount": "文章",
+      "sort": "排序",
+      "title": "标题",
+      "summary": "概括",
+      "author": "作者",
+      "collections": "收藏",
+      "likes": "喜欢",
+      "status": "状态",
+      "views": "浏览"
+    }
   }
 }

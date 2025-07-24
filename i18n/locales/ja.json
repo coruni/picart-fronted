@@ -19,5 +19,46 @@
       "latest": "最新の作品",
       "following": "フォロー中の作品"
     }
+  },
+  "admin": {
+    "menu": {
+      "dashboard": "ダッシュボード",
+      "users": "ユーザー管理",
+      "articles": "記事管理",
+      "categories": "カテゴリー管理",
+      "orders": "注文管理",
+      "analytics": "分析データ",
+      "settings": "システム設定",
+      "comments": "コメント管理",
+      "tags": "タグ管理"
+    },
+    "categories": {
+      "name": "カテゴリー名",
+      "description": "説明",
+      "avatar": "アバター",
+      "parent": "親",
+      "createdAt": "作成日時",
+      "edit": "編集"
+    }
+  },
+  "common": {
+    "table": {
+      "actions": "アクション",
+      "delete": "消去",
+      "avatar": "アバター",
+      "createdAt": "で作成されました",
+      "name": "名前",
+      "description": "説明",
+      "parent": "親",
+      "edit": "編集",
+      "articleCount": "記事",
+      "sort": "選別",
+      "title": "タイトル",
+      "summary": "まとめ",
+      "author": "著者",
+      "collections": "コレクション",
+      "likes": "いいね",
+      "status": "状態"
+    }
   }
 }

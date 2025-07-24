@@ -1526,8 +1526,64 @@ export type UserControllerLoginResponses = {
   /**
    * 登录成功，返回JWT token
    */
-  200: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      username: string;
+      nickname: string;
+      email: string;
+      phone: string;
+      status: string;
+      banned: unknown;
+      banReason: unknown;
+      avatar: string;
+      description: unknown;
+      address: unknown;
+      gender: string;
+      birthDate: unknown;
+      articleCount: number;
+      followerCount: number;
+      followingCount: number;
+      level: number;
+      experience: number;
+      score: number;
+      wallet: number;
+      membershipLevel: number;
+      membershipLevelName: string;
+      membershipStatus: string;
+      membershipStartDate: unknown;
+      membershipEndDate: unknown;
+      lastLoginAt: unknown;
+      lastActiveAt: unknown;
+      refreshToken: string;
+      inviterId: unknown;
+      inviteCode: string;
+      inviteEarnings: string;
+      inviteCount: number;
+      roles: Array<{
+        id?: number;
+        name?: string;
+        displayName?: unknown;
+        description?: string;
+        permissions?: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      createdAt: string;
+      updatedAt: string;
+      token: string;
+    };
+  };
 };
+
+export type UserControllerLoginResponse =
+  UserControllerLoginResponses[keyof UserControllerLoginResponses];
 
 export type UserControllerRegisterUserData = {
   body?: CreateUserDto;
@@ -1771,7 +1827,7 @@ export type ArticleControllerFindAllData = {
     'Device-Type'?: string;
   };
   path?: never;
-  query: {
+  query?: {
     /**
      * 页码
      */
@@ -1780,7 +1836,7 @@ export type ArticleControllerFindAllData = {
      * 每页数量
      */
     limit?: number;
-    title: string;
+    title?: string;
   };
   url: '/article';
 };
@@ -2712,7 +2768,7 @@ export type CategoryControllerFindAllResponses = {
         id?: number;
         name?: string;
         description?: string;
-        parentId?: unknown;
+        parentId?: number;
         children?: Array<{
           id?: number;
           name?: string;
@@ -2856,7 +2912,7 @@ export type CategoryControllerFindOneResponses = {
       id: number;
       name: string;
       description: string;
-      parentId: unknown;
+      parentId: number;
       children: Array<{
         id?: number;
         name?: string;

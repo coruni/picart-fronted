@@ -1,18 +1,35 @@
 export interface Category {
-  id?: number
-  name?: string
-  description?: string
-  parentId?: unknown | number
-  parent?: Category
-  children?: Category[]
-  avatar?: string
-  background?: string
-  cover?: string
-  sort?: number
-  status?: string
-  articleCount?: number
-  followCount?: number
-  createdAt?: string
-  updatedAt?: string
-  [key: string]: unknown
+  parent: any;
+  id?: number;
+  name?: string;
+  description?: string;
+  parentId?: unknown;
+  parent?: {
+    id?: number;
+    name?: string;
+  };
+  children?: Array<{
+    id?: number;
+    name?: string;
+    description?: string;
+    parentId?: number;
+    avatar?: string;
+    background?: string;
+    cover?: string;
+    sort?: number;
+    status?: string;
+    articleCount?: number;
+    followCount?: number;
+    createdAt?: string;
+    updatedAt?: string;
+  }>;
+  avatar?: string;
+  background?: string;
+  cover?: string;
+  sort?: number;
+  status?: string;
+  articleCount?: number;
+  followCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

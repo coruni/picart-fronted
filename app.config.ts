@@ -1,3 +1,6 @@
 export default defineAppConfig({
-  apiBaseUrl: 'http://picend.cosfan.cc/api/v1'
-})
+  apiBaseUrl:
+    process.env.NODE_ENV === 'production'
+      ? 'https://picend.cosfan.cc/api/v1'
+      : 'http://picend.cosfan.cc/api/v1'
+});

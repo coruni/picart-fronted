@@ -2555,8 +2555,224 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "登录成功，返回JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "banned": {
+                          "type": "null"
+                        },
+                        "banReason": {
+                          "type": "null"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "null"
+                        },
+                        "address": {
+                          "type": "null"
+                        },
+                        "gender": {
+                          "type": "string"
+                        },
+                        "birthDate": {
+                          "type": "null"
+                        },
+                        "articleCount": {
+                          "type": "integer"
+                        },
+                        "followerCount": {
+                          "type": "integer"
+                        },
+                        "followingCount": {
+                          "type": "integer"
+                        },
+                        "level": {
+                          "type": "integer"
+                        },
+                        "experience": {
+                          "type": "integer"
+                        },
+                        "score": {
+                          "type": "integer"
+                        },
+                        "wallet": {
+                          "type": "integer"
+                        },
+                        "membershipLevel": {
+                          "type": "integer"
+                        },
+                        "membershipLevelName": {
+                          "type": "string"
+                        },
+                        "membershipStatus": {
+                          "type": "string"
+                        },
+                        "membershipStartDate": {
+                          "type": "null"
+                        },
+                        "membershipEndDate": {
+                          "type": "null"
+                        },
+                        "lastLoginAt": {
+                          "type": "null"
+                        },
+                        "lastActiveAt": {
+                          "type": "null"
+                        },
+                        "refreshToken": {
+                          "type": "string"
+                        },
+                        "inviterId": {
+                          "type": "null"
+                        },
+                        "inviteCode": {
+                          "type": "string"
+                        },
+                        "inviteEarnings": {
+                          "type": "string"
+                        },
+                        "inviteCount": {
+                          "type": "integer"
+                        },
+                        "roles": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "null"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "username",
+                        "nickname",
+                        "email",
+                        "phone",
+                        "status",
+                        "banned",
+                        "banReason",
+                        "avatar",
+                        "description",
+                        "address",
+                        "gender",
+                        "birthDate",
+                        "articleCount",
+                        "followerCount",
+                        "followingCount",
+                        "level",
+                        "experience",
+                        "score",
+                        "wallet",
+                        "membershipLevel",
+                        "membershipLevelName",
+                        "membershipStatus",
+                        "membershipStartDate",
+                        "membershipEndDate",
+                        "lastLoginAt",
+                        "lastActiveAt",
+                        "refreshToken",
+                        "inviterId",
+                        "inviteCode",
+                        "inviteEarnings",
+                        "inviteCount",
+                        "roles",
+                        "createdAt",
+                        "updatedAt",
+                        "token"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "401": {
@@ -3269,7 +3485,7 @@
             "name": "title",
             "in": "query",
             "description": "",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -5591,7 +5807,7 @@
                                 "type": "string"
                               },
                               "parentId": {
-                                "type": "null"
+                                "type": "integer"
                               },
                               "children": {
                                 "type": "array",
@@ -5881,7 +6097,7 @@
                           "type": "string"
                         },
                         "parentId": {
-                          "type": "null"
+                          "type": "integer"
                         },
                         "children": {
                           "type": "array",
