@@ -50,6 +50,7 @@
       "avatar": "Avatar",
       "parent": "Parent",
       "createdAt": "Created At",
+      "updatedAt": "Updated At",
       "edit": "Edit",
       "articleCount": "Articles",
       "sort": "Sort",
@@ -59,7 +60,19 @@
       "collections": "Collections",
       "likes": "Likes",
       "status": "Status",
-      "views": "Views"
+      "views": "Views",
+      "roles": "Roles"
+    },
+    "message": {
+      "deleteSuccess": "Delete Successful",
+      "deleteFailed": "Delete Failed"
+    },
+    "modal": {
+      "confirmDelete": "Confirm Delete"
+    },
+    "button": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     }
   }
 }

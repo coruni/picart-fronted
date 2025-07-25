@@ -26,6 +26,7 @@ import type {
   ConfigControllerGetPublicData,
   ConfigControllerGetPublicResponse,
   UserControllerFindAllData,
+  UserControllerFindAllResponse,
   UserControllerCreateData,
   UserControllerRemoveData,
   UserControllerFindOneData,
@@ -71,9 +72,11 @@ import type {
   CommentControllerLikeData,
   CommentControllerCreateData,
   TagControllerFindAllData,
+  TagControllerFindAllResponse,
   TagControllerCreateData,
   TagControllerRemoveData,
   TagControllerFindOneData,
+  TagControllerFindOneResponse,
   TagControllerUpdateData,
   TagControllerUnfollowData,
   TagControllerFollowData,
@@ -466,10 +469,18 @@ export const configControllerGetPublic = <
 /**
  * 获取用户列表
  */
-export const userControllerFindAll = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerFindAllData, unknown, DefaultT>
+export const userControllerFindAll = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerFindAllResponse = UserControllerFindAllResponse
+>(
+  options: Options<TComposable, UserControllerFindAllData, UserControllerFindAllResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    UserControllerFindAllResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/user',
     ...options
   });
@@ -1138,10 +1149,18 @@ export const commentControllerCreate = <TComposable extends Composable, DefaultT
 /**
  * 获取所有标签
  */
-export const tagControllerFindAll = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, TagControllerFindAllData, unknown, DefaultT>
+export const tagControllerFindAll = <
+  TComposable extends Composable,
+  DefaultT extends TagControllerFindAllResponse = TagControllerFindAllResponse
+>(
+  options: Options<TComposable, TagControllerFindAllData, TagControllerFindAllResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    TagControllerFindAllResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/tag',
     ...options
   });
@@ -1185,10 +1204,18 @@ export const tagControllerRemove = <TComposable extends Composable, DefaultT = u
 /**
  * 获取标签详情
  */
-export const tagControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, TagControllerFindOneData, unknown, DefaultT>
+export const tagControllerFindOne = <
+  TComposable extends Composable,
+  DefaultT extends TagControllerFindOneResponse = TagControllerFindOneResponse
+>(
+  options: Options<TComposable, TagControllerFindOneData, TagControllerFindOneResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    TagControllerFindOneResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/tag/{id}',
     ...options
   });

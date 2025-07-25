@@ -46,7 +46,8 @@
       "actions": "アクション",
       "delete": "消去",
       "avatar": "アバター",
-      "createdAt": "で作成されました",
+      "createdAt": "作成日時",
+      "updatedAt": "更新日時",
       "name": "名前",
       "description": "説明",
       "parent": "親",
@@ -58,7 +59,15 @@
       "author": "著者",
       "collections": "コレクション",
       "likes": "いいね",
-      "status": "状態"
+      "status": "状態",
+      "views": "ビュー",
+      "roles": "ロール"
+    },
+    "message": {
+      "deleteSuccess": ""
+    },
+    "modal": {
+      "confirmDeleteMessage": ""
     }
   }
 }

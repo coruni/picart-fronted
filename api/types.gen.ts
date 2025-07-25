@@ -1151,7 +1151,7 @@ export type UserControllerFindAllData = {
     'Device-Type'?: string;
   };
   path?: never;
-  query: {
+  query?: {
     /**
      * 页码
      */
@@ -1160,7 +1160,7 @@ export type UserControllerFindAllData = {
      * 每页数量
      */
     limit?: number;
-    username: string;
+    username?: string;
   };
   url: '/user';
 };
@@ -1169,8 +1169,46 @@ export type UserControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        username?: string;
+        nickname?: string;
+        status?: string;
+        avatar?: string;
+        description?: unknown;
+        roles?: Array<{
+          id?: number;
+          name?: string;
+          displayName?: unknown;
+          description?: string;
+          permissions?: Array<{
+            id: number;
+            name: string;
+            description: string;
+          }>;
+          createdAt?: string;
+          updatedAt?: string;
+        }>;
+        config?: unknown;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type UserControllerFindAllResponse =
+  UserControllerFindAllResponses[keyof UserControllerFindAllResponses];
 
 export type UserControllerCreateData = {
   body?: CreateUserDto;
@@ -2523,8 +2561,35 @@ export type TagControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        name?: string;
+        description?: string;
+        avatar?: string;
+        background?: string;
+        cover?: string;
+        sort?: number;
+        articleCount?: number;
+        followCount?: number;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type TagControllerFindAllResponse =
+  TagControllerFindAllResponses[keyof TagControllerFindAllResponses];
 
 export type TagControllerCreateData = {
   body?: CreateTagDto;
@@ -2624,8 +2689,27 @@ export type TagControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      name: string;
+      description: string;
+      avatar: string;
+      background: string;
+      cover: string;
+      sort: number;
+      articleCount: number;
+      followCount: number;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type TagControllerFindOneResponse =
+  TagControllerFindOneResponses[keyof TagControllerFindOneResponses];
 
 export type TagControllerUpdateData = {
   body?: UpdateTagDto;

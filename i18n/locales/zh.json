@@ -47,6 +47,7 @@
       "delete": "删除",
       "avatar": "头像",
       "createdAt": "创建时间",
+      "updatedAt": "更新时间",
       "name": "名称",
       "description": "描述",
       "parent": "上级分类",
@@ -59,7 +60,20 @@
       "collections": "收藏",
       "likes": "喜欢",
       "status": "状态",
-      "views": "浏览"
+      "views": "浏览",
+      "roles": "角色"
+    },
+    "message": {
+      "deleteSuccess": "删除成功",
+      "deleteFailed": "删除失败"
+    },
+    "modal": {
+      "confirmDelete": "确认删除",
+      "confirmDeleteMessage": "删除后无法恢复"
+    },
+    "button": {
+      "cancel": "取消",
+      "confirm": "确认"
     }
   }
 }

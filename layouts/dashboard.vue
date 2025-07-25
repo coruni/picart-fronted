@@ -1,69 +1,22 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="min-h-screen flex">
     <!-- 左侧导航栏 -->
-    <aside
-      :class="[
-        'bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out',
-        sidebarCollapsed ? 'w-16' : 'w-64'
-      ]"
-    >
-      <!-- Logo 区域 -->
-      <div class="h-16 flex items-center justify-center border-b border-gray-200 relative">
-        <h1
-          v-show="!sidebarCollapsed"
-          class="text-xl font-bold text-gray-800 transition-opacity duration-200"
-        >
-          {{ $t('admin.menu.dashboard') }}
-        </h1>
-        <Icon v-show="sidebarCollapsed" name="mynaui:dashboard" class="w-6 h-6 text-gray-800" />
-
-        <!-- 收起/展开按钮 -->
-        <button
-          @click="toggleSidebar"
-          class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
-        >
-          <Icon
-            :name="sidebarCollapsed ? 'mynaui:chevron-right' : 'mynaui:chevron-left'"
-            class="w-3 h-3 text-gray-600"
-          />
-        </button>
-      </div>
-
-      <!-- 导航菜单 -->
-      <nav class="flex-1 p-4">
-        <ul class="space-y-2">
-          <li v-for="item in menuItems" :key="item.path">
-            <NuxtLink
-              :to="item.path"
-              :class="[
-                'flex items-center px-3 py-2 text-gray-700 rounded-md hover:bg-gray-100 hover:text-purple-400 transition-all duration-200 group',
-                sidebarCollapsed ? 'justify-center' : ''
-              ]"
-              active-class="bg-gray-100 text-purple-400"
-              :title="sidebarCollapsed ? $t(item.text) : ''"
-            >
-              <Icon
-                :name="item.icon"
-                class="w-5 h-5 flex-shrink-0"
-                :class="sidebarCollapsed ? '' : 'mr-3'"
-              />
-              <span v-show="!sidebarCollapsed" class="transition-opacity duration-200">{{
-                $t(item.text)
-              }}</span>
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    <DashboardSidebar
+      :sidebar-collapsed="sidebarCollapsed"
+      :menu-items="menuItems"
+      @toggle="toggleSidebar"
+    />
 
     <!-- 右侧内容区域 -->
     <main class="flex-1 flex flex-col">
       <!-- 顶部导航栏 -->
       <header
-        class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6"
+        class="bg-white shadow-sm border-b border-gray-200 dark:border-gray-600 h-16 dark:bg-gray-800 flex items-center justify-between px-6"
       >
         <div class="flex items-center">
-          <h2 class="text-lg font-semibold text-gray-800">{{ $t(pageTitle) }}</h2>
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-white/80">
+            {{ $t(pageTitle) }}
+          </h2>
         </div>
 
         <div class="flex items-center space-x-4">
@@ -88,7 +41,7 @@
             <!-- 下拉菜单 -->
             <div
               v-show="showUserMenu"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50 border border-gray-100"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg py-2 z-50 border border-gray-100"
             >
               <a
                 href="#"
@@ -113,7 +66,9 @@
 
       <!-- 页面内容 -->
       <div class="flex-1 p-6 overflow-auto flex flex-col">
-        <div class="bg-white rounded-xl shadow-sm p-6 min-h-full flex-1 flex flex-col">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-6 min-h-full flex-1 flex flex-col"
+        >
           <NuxtPage />
         </div>
       </div>
@@ -122,7 +77,6 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue';
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
