@@ -20,6 +20,7 @@
         :items-per-page="table?.tableApi?.getState().pagination.pageSize"
         :total="table?.tableApi?.getFilteredRowModel().rows.length"
         @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
+        color="neutral"
       />
     </div>
   </div>
@@ -81,7 +82,7 @@
       accessorKey: 'author',
       header: t('common.table.author'),
       cell: ({ row }) => {
-        return row.original.author.nickname || row.original.author.name || '-';
+        return row.original.author?.nickname || row.original.author?.name || '-';
       }
     },
     {

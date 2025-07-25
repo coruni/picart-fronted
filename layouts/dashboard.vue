@@ -36,10 +36,10 @@
             <NuxtLink
               :to="item.path"
               :class="[
-                'flex items-center px-3 py-2 text-gray-700 rounded-md hover:bg-gray-100 hover:text-purple-400 transition-all duration-200 group',
+                'flex items-center px-3 py-2 text-muted rounded-md hover:bg-gray-100 hover:text-primary transition-all duration-200 group',
                 sidebarCollapsed ? 'justify-center' : ''
               ]"
-              active-class="bg-gray-100 text-purple-400"
+              active-class="bg-gray-100 text-primary"
               :title="sidebarCollapsed ? $t(item.text) : ''"
             >
               <Icon
@@ -113,7 +113,7 @@
 
       <!-- 页面内容 -->
       <div class="flex-1 p-6 overflow-auto flex flex-col">
-        <div class="bg-white rounded-xl shadow-sm p-6 min-h-full flex-1 flex flex-col">
+        <div class="bg-white rounded-md shadow-sm p-6 min-h-full flex-1 flex flex-col">
           <NuxtPage />
         </div>
       </div>

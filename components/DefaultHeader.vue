@@ -27,7 +27,7 @@
                   v-for="child in item.children"
                   :key="child.id"
                   :to="`/category/${child.id}`"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-purple-400"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-indigo-400"
                 >
                   {{ child.name }}
                 </NuxtLinkLocale>
@@ -60,7 +60,7 @@
             <div class="py-1">
               <NuxtLinkLocale
                 to="/profile"
-                class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-purple-400"
+                class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-indigo-400"
               >
                 <span>{{ $t('header.nav.profile') }}</span>
               </NuxtLinkLocale>

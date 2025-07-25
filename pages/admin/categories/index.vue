@@ -166,7 +166,7 @@
   // 计算属性：表格数据
   const tableData = computed(() => {
     const data = categories.data.value?.data?.data || [];
-    return data;
+    return data as Category[];
   });
 
   // 监听分页变化

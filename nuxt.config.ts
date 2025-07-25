@@ -15,9 +15,7 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     '@nuxt/ui'
   ],
-  ui: {
-    fonts: false
-  },
+
 
   // i18n 国际化配置
   i18n: {

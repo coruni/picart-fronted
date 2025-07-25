@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-white rounded-2xl shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-pink-100/50 dark:hover:shadow-purple-900/30 group border border-pink-100/50 dark:border-purple-900/30"
+    class="bg-white rounded-2xl shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-pink-100/50 dark:hover:shadow-indigo-900/30 group border border-pink-100/50 dark:border-indigo-900/30"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
       <NuxtImg
