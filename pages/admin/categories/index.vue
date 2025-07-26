@@ -56,6 +56,9 @@
   const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
+  definePageMeta({
+    layout: 'dashboard'
+  });
 
   // 分页状态 - 注意这里使用 pageIndex 从 0 开始
   const pagination = ref({
@@ -66,10 +69,6 @@
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentCategoryId = ref<number | null>(null);
-
-  definePageMeta({
-    layout: 'dashboard'
-  });
 
   const columns: TableColumn<Category>[] = [
     {

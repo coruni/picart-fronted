@@ -75,5 +75,32 @@
       "cancel": "取消",
       "confirm": "确认"
     }
+  },
+  "form": {
+    "title": {
+      "name": "标题",
+      "placeholder": "请输入标题"
+    },
+    "content": {
+      "name": "内容",
+      "placeholder": "请输入内容"
+    },
+    "category": {
+      "name": "分类",
+      "placeholder": "请选择分类",
+      "searchPlaceholder": "搜索分类..."
+    },
+    "tag": {
+      "name": "标签",
+      "placeholder": "请选择标签"
+    },
+    "parentCategory": {
+      "placeholder": "请选择主分类",
+      "searchPlaceholder": "输入关键词搜索"
+    },
+    "image": {
+      "placeholder": "请上传图片",
+      "name": "图片"
+    }
   }
 }

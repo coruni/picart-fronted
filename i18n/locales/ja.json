@@ -69,5 +69,20 @@
     "modal": {
       "confirmDeleteMessage": ""
     }
+  },
+  "form": {
+    "title": {
+      "name": "タイトル",
+      "placeholder": "タイトルを入力してください"
+    },
+    "content": {
+      "name": "コンテンツ",
+      "placeholder": "コンテンツを入力してください"
+    },
+    "category": {
+      "name": "カテゴリー",
+      "placeholder": "カテゴリーを選択してください",
+      "searchPlaceholder": "カテゴリーを検索..."
+    }
   }
 }

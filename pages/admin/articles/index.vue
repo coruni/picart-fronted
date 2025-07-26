@@ -58,17 +58,15 @@
   const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
-
+  definePageMeta({
+    layout: 'dashboard'
+  });
   // 分页状态
   const pagination = ref({ pageIndex: 0, pageSize: 20 });
 
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentArticleId = ref<number | null>(null);
-
-  definePageMeta({
-    layout: 'dashboard'
-  });
 
   const columns: TableColumn<Article>[] = [
     {
@@ -184,27 +182,27 @@
 
     try {
       await articleControllerRemove({
-        composable:'$fetch',
-        path:{
-          id:currentArticleId.value.toString()
+        composable: '$fetch',
+        path: {
+          id: currentArticleId.value.toString()
         }
       });
       toast.add({
-        title:t('common.message.deleteSuccess'),
-        color:'success'
+        title: t('common.message.deleteSuccess'),
+        color: 'success'
       });
       articles.refresh?.();
     } catch (error) {
       toast.add({
-        title:t('common.message.deleteFailed'),
-        color:'error'
+        title: t('common.message.deleteFailed'),
+        color: 'error'
       });
       console.error('Failed to delete article:', error);
     } finally {
       showDeleteModal.value = false;
       currentArticleId.value = null;
     }
-  }
+  };
 
   const articles = await articleControllerFindAll({
     composable: 'useAsyncData',

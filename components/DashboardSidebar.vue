@@ -33,7 +33,7 @@
     <nav class="flex-1 p-4 bg-gay-800">
       <ul class="space-y-2">
         <li v-for="item in menuItems" :key="item.path">
-          <NuxtLink
+          <NuxtLinkLocale
             :to="item.path"
             :class="[
               'flex items-center px-3 py-2 text-gray-800 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 hover:text-primary transition-all duration-200 group',
@@ -50,7 +50,7 @@
             <span v-show="!sidebarCollapsed" class="transition-opacity duration-200">{{
               $t(item.text)
             }}</span>
-          </NuxtLink>
+          </NuxtLinkLocale>
         </li>
       </ul>
     </nav>

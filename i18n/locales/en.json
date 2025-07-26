@@ -74,5 +74,31 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     }
+  },
+  "form": {
+    "title": {
+      "name": "Title",
+      "placeholder": "Please input title"
+    },
+    "content": {
+      "name": "Content",
+      "placeholder": "Please input content"
+    },
+    "category": {
+      "name": "Category",
+      "placeholder": "Please select category",
+      "searchPlaceholder": "Search categories..."
+    },
+    "tag": {
+      "name": "Tag",
+      "placeholder": "Please select tags"
+    },
+    "parentCategory": {
+      "placeholder": "Please select parent category"
+    },
+    "image": {
+      "placeholder": "Please upload  images",
+      "name": "Images"
+    }
   }
 }
