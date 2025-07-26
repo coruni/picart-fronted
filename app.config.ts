@@ -6,6 +6,9 @@ export default defineAppConfig({
   ui: {
     colors: {
       primary: 'indigo'
+    },
+    icons: {
+      check: 'mynaui:check-solid'
     }
   }
 });

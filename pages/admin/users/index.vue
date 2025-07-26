@@ -23,19 +23,38 @@
       />
     </div>
   </div>
+  <!-- 删除确认模态框 -->
+  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <template #header>
+      {{ t('common.modal.confirmDelete') }}
+    </template>
+    <template #body>
+      {{ t('common.modal.confirmDeleteMessage') }}
+    </template>
+    <template #footer>
+      <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
+        {{ t('common.button.cancel') }}
+      </UButton>
+      <UButton color="error" class="cursor-pointer" @click="confirmDelete">
+        {{ t('common.button.confirm') }}
+      </UButton>
+    </template>
+  </UModal>
 </template>
 
 <script setup lang="ts">
   import { getPaginationRowModel } from '@tanstack/vue-table';
   import type { TableColumn } from '@nuxt/ui';
   import { useI18n } from 'vue-i18n';
-  import { userControllerFindAll } from '~~/api';
+  import { userControllerFindAll, userControllerRemove } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
   import type { Role, Status, User } from '~~/types/user';
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
   const UBadge = resolveComponent('UBadge');
+  const UModal = resolveComponent('UModal');
+  const toast = useToast();
   const table = useTemplateRef('table');
 
   const { t } = useI18n();
@@ -45,6 +64,10 @@
     pageIndex: 0,
     pageSize: 20
   });
+
+  // 删除确认模态框状态
+  const showDeleteModal = ref(false);
+  const currentUserId = ref<number | null>(null);
 
   definePageMeta({
     layout: 'dashboard'
@@ -154,10 +177,39 @@
         class: 'cursor-pointer',
         color: 'error',
         onClick: () => {
-          console.log('Delete row:', row.original);
+          currentUserId.value = row.original.id!;
+          showDeleteModal.value = true;
         }
       }
     ];
+  };
+
+  // 确认删除用户
+  const confirmDelete = async () => {
+    if (!currentUserId.value) return;
+
+    try {
+      await userControllerRemove({
+        composable: '$fetch',
+        path: {
+          id: currentUserId.value.toString()
+        }
+      });
+      toast.add({
+        title: t('common.message.deleteSuccess'),
+        color: 'success'
+      });
+      users.refresh?.();
+    } catch (error) {
+      toast.add({
+        title: t('common.message.deleteFailed'),
+        color: 'error'
+      });
+      console.error('Failed to delete user:', error);
+    } finally {
+      showDeleteModal.value = false;
+      currentUserId.value = null;
+    }
   };
 
   const users = await userControllerFindAll({
@@ -184,6 +236,4 @@
     { deep: true }
   );
 
-  // 调试信息
-  onMounted(() => {});
 </script>

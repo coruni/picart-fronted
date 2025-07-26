@@ -23,18 +23,37 @@
       />
     </div>
   </div>
+  <!-- 删除确认模态框 -->
+  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <template #header>
+      {{ t('common.modal.confirmDelete') }}
+    </template>
+    <template #body>
+      {{ t('common.modal.confirmDeleteMessage') }}
+    </template>
+    <template #footer>
+      <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
+        {{ t('common.button.cancel') }}
+      </UButton>
+      <UButton color="error" class="cursor-pointer" @click="confirmDelete">
+        {{ t('common.button.confirm') }}
+      </UButton>
+    </template>
+  </UModal>
 </template>
 
 <script setup lang="ts">
   import { getPaginationRowModel } from '@tanstack/vue-table';
   import type { TableColumn } from '@nuxt/ui';
   import { useI18n } from 'vue-i18n';
-  import { tagControllerFindAll } from '~~/api';
+  import { tagControllerFindAll, tagControllerRemove } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
   import type { Tag } from '~~/types/tag';
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
+  const UModal = resolveComponent('UModal');
+  const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
 
@@ -43,6 +62,10 @@
     pageIndex: 0,
     pageSize: 20
   });
+
+  // 删除确认模态框状态
+  const showDeleteModal = ref(false);
+  const currentTagId = ref<number | null>(null);
 
   definePageMeta({
     layout: 'dashboard'
@@ -114,7 +137,7 @@
                 icon: 'mynaui:dots-vertical-solid',
                 color: 'neutral',
                 variant: 'ghost',
-                class: 'ml-auto text-2xl',
+                class: 'ml-auto text-2xl cursor-pointer',
                 'aria-label': 'Actions dropdown'
               })
           )
@@ -141,10 +164,39 @@
         class: 'cursor-pointer',
         color: 'error',
         onClick: () => {
-          console.log('Delete row:', row.original);
+          currentTagId.value = row.original.id!;
+          showDeleteModal.value = true;
         }
       }
     ];
+  };
+
+  // 确认删除标签
+  const confirmDelete = async () => {
+    if (!currentTagId.value) return;
+
+    try {
+      await tagControllerRemove({
+        composable: '$fetch',
+        path: {
+          id: currentTagId.value.toString()
+        }
+      });
+      toast.add({
+        title: t('common.message.deleteSuccess'),
+        color: 'success'
+      });
+      tags.refresh?.();
+    } catch (error) {
+      toast.add({
+        title: t('common.message.deleteFailed'),
+        color: 'error'
+      });
+      console.error('Failed to delete tag:', error);
+    } finally {
+      showDeleteModal.value = false;
+      currentTagId.value = null;
+    }
   };
 
   const tags = await tagControllerFindAll({
@@ -169,7 +221,4 @@
     },
     { deep: true }
   );
-
-  // 调试信息
-  onMounted(() => {});
 </script>

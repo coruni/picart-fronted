@@ -70,6 +70,9 @@
       "confirmDeleteMessage": ""
     }
   },
+  "filter": {
+    "title": "フィルター"
+  },
   "form": {
     "title": {
       "name": "タイトル",

@@ -1,5 +1,34 @@
 <template>
   <div class="flex flex-col min-h-full relative z-10">
+    <!-- 筛选面板 -->
+    <UCollapsible class="mb-4" v-model:open="showFilters">
+      <UButton
+        :label="$t('common.table.filter')"
+        color="neutral"
+        variant="soft"
+        trailing-icon="i-mynaui-chevron-down"
+        block
+      />
+      <template #content>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+          <UInput
+            v-model="filters.title"
+            :placeholder="t('common.table.title')"
+            @update:model-value="onFilterChange"
+          />
+          <USelectMenu
+            v-model="filters.categoryId"
+            :items="categoryOptions"
+            value-key="value"
+            clearable
+            option-attribute="label"
+            :placeholder="t('common.table.category')"
+            @update:model-value="onFilterChange"
+          />
+        </div>
+      </template>
+    </UCollapsible>
+
     <UTable
       ref="table"
       v-model:pagination="pagination"
@@ -24,7 +53,7 @@
     </div>
   </div>
   <!-- 删除确认模态框 -->
-  <UModal v-model="showDeleteModal" :close-on-backdrop="false">
+  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
     <template #header>
       {{ t('common.modal.confirmDelete') }}
     </template>
@@ -32,10 +61,10 @@
       {{ t('common.modal.confirmDeleteMessage') }}
     </template>
     <template #footer>
-      <UButton variant="outline" @click="showDeleteModal = false">
+      <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
         {{ t('common.button.cancel') }}
       </UButton>
-      <UButton color="error" @click="confirmDelete">
+      <UButton color="error" @click="confirmDelete" class="cursor-pointer">
         {{ t('common.button.confirm') }}
       </UButton>
     </template>
@@ -44,11 +73,17 @@
 
 <script setup lang="ts">
   import { getPaginationRowModel } from '@tanstack/vue-table';
+  import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
   import type { Article, ArticleStatus } from '~~/types/article';
   import { useI18n } from 'vue-i18n';
-  import { articleControllerFindAll, articleControllerRemove } from '~~/api';
+  import {
+    articleControllerFindAll,
+    articleControllerRemove,
+    categoryControllerFindAll
+  } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
+  import type { Category } from '~~/types/category';
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
@@ -61,6 +96,14 @@
   definePageMeta({
     layout: 'dashboard'
   });
+
+  // 筛选状态
+  const showFilters = ref(false);
+  const filters = ref({
+    title: '',
+    categoryId: null as number | null
+  });
+
   // 分页状态
   const pagination = ref({ pageIndex: 0, pageSize: 20 });
 
@@ -204,12 +247,57 @@
     }
   };
 
+  // 获取分类数据
+  const { data: categories } = await categoryControllerFindAll({
+    composable: 'useAsyncData',
+    key: 'article-categories',
+    query: computed(() => ({
+      page: 1,
+      limit: 100
+    }))
+  });
+
+  // 分类选项
+  import type { SelectMenuItem } from '@nuxt/ui';
+
+  const categoryOptions = computed<SelectMenuItem[]>(() => {
+    const allCategories = categories.value?.data.data || [];
+    // 展平分类树结构
+    const flattened: SelectMenuItem[] = [];
+
+    const flattenCategories = (cats: Category[], prefix = '') => {
+      cats.forEach(cat => {
+        flattened.push({
+          value: cat.id,
+          label: `${prefix}${cat.name}`,
+          children: cat.children
+        });
+
+        if (cat.children && cat.children.length > 0) {
+          flattenCategories(cat.children, `${prefix}${cat.name} > `);
+        }
+      });
+    };
+
+    flattenCategories(allCategories);
+    return flattened;
+  });
+
+  const onFilterChange = debounce(() => {
+    // 重置到第一页
+    pagination.value.pageIndex = 0;
+    // 刷新数据
+    articles.refresh?.();
+  }, 300);
+
   const articles = await articleControllerFindAll({
     composable: 'useAsyncData',
     key: 'articles',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
-      limit: pagination.value.pageSize
+      limit: pagination.value.pageSize,
+      title: filters.value.title || undefined,
+      categoryId: filters.value.categoryId || undefined
     }))
   });
 

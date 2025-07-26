@@ -61,7 +61,9 @@
       "likes": "Likes",
       "status": "Status",
       "views": "Views",
-      "roles": "Roles"
+      "roles": "Roles",
+      "category": "Category",
+      "filter": "Filter"
     },
     "message": {
       "deleteSuccess": "Delete Successful",
@@ -74,6 +76,9 @@
       "confirm": "Confirm",
       "cancel": "Cancel"
     }
+  },
+  "filter": {
+    "title": "Filter"
   },
   "form": {
     "title": {
