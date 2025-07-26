@@ -94,11 +94,16 @@
       "placeholder": "Please select tags"
     },
     "parentCategory": {
-      "placeholder": "Please select parent category"
+      "placeholder": "Please select parent category",
+      "searchPlaceholder": "Please enter keyword to search"
     },
     "image": {
       "placeholder": "Please upload  images",
       "name": "Images"
+    },
+    "submit": "Submit",
+    "type": {
+      "placeholder": "Please select type"
     }
   }
 }

@@ -83,6 +83,9 @@
       "name": "カテゴリー",
       "placeholder": "カテゴリーを選択してください",
       "searchPlaceholder": "カテゴリーを検索..."
+    },
+    "parentCategory": {
+      "searchPlaceholder": ""
     }
   }
 }

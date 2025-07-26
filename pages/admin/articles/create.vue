@@ -14,7 +14,7 @@
         <UTextarea
           v-model="state.content"
           size="xl"
-          :rows="24"
+          :rows="16"
           :placeholder="$t('form.content.placeholder')"
           variant="soft"
           class="w-full"
@@ -28,12 +28,12 @@
           accept="images/*"
           :placeholder="$t('form.image.placeholder')"
           multiple
-          :ui="{files:'md:grid-cols-6'}"
+          :ui="{ files: 'md:grid-cols-6' }"
         />
       </UFormField>
       <div class="flex items-center space-x-2">
-        <UFormField name="parentCategory" class="flex-1" :label="$t('form.category.name')">
-          <UInputMenu
+        <UFormField name="parentCategory" class="flex-1">
+          <USelectMenu
             v-model="state.parentCategory"
             :items="parentCategoriesOptions"
             :placeholder="$t('form.parentCategory.placeholder')"
@@ -46,7 +46,7 @@
           />
         </UFormField>
         <UFormField name="category" v-if="state.parentCategory" class="flex-1">
-          <UInputMenu
+          <USelectMenu
             v-model="state.category"
             :items="subCategoriesOptions"
             :placeholder="$t('form.category.placeholder')"
@@ -61,31 +61,46 @@
       </div>
       <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
         <USelectMenu
+          v-model="state.tagIds"
           :items="tagsOptions"
           size="lg"
           class="w-full"
           variant="soft"
           multiple
+          creatable
           :placeholder="$t('form.tag.placeholder')"
+          :createItem="{ when: 'empty', position: 'top' }"
+          @create="onCreate"
         />
       </UFormField>
+      <UButton
+        type="submit"
+        icon="i-mynaui-save"
+        class="w-full cursor-pointer justify-center"
+        size="lg"
+        >{{ $t('form.submit') }}</UButton
+      >
     </UForm>
   </div>
 </template>
 <script lang="ts" setup>
   import * as z from 'zod';
   import { categoryControllerFindAll, tagControllerFindAll } from '~~/api';
-  import type { InputMenuItem, SelectMenuItem } from '#ui/types';
+  import type { SelectMenuItem } from '#ui/types';
+  const { t } = useI18n();
 
   definePageMeta({
     layout: 'dashboard'
   });
   const schema = z.object({
-    title: z.string().min(12, 'common.validData.title'),
-    content: z.string().min(10, 'common.validData.content'),
-    parentCategory: z.number().min(1, 'common.validData.parentCategory'),
-    category: z.number().min(1, 'common.validData.category'),
-    images: z.any()
+    title: z.string().min(12, t('form.title.placeholder')),
+    content: z.string().min(10, t('form.content.placeholder')),
+    parentCategory: z.number().min(1, t('form.parentCategory.placeholder')),
+    category: z.number().min(1, t('form.category.placeholder')),
+    images: z.any().optional(),
+    type: z.enum(['mixed', 'image'], t('form.type.placeholder')),
+    tagIds: z.array(z.number()).optional(),
+    tagNames: z.array(z.string()).optional()
   });
 
   type Schema = z.output<typeof schema>;
@@ -95,11 +110,14 @@
     content: '',
     parentCategory: undefined,
     category: undefined,
-    images: ''
+    images: '',
+    type: 'mixed',
+    tagIds: [],
+    tagNames: []
   });
 
   const onSubmit = async () => {
-    console.log(123);
+    console.log(state);
   };
 
   // 获取分类数据
@@ -109,7 +127,7 @@
     query: computed(() => ({}))
   });
 
-  const parentCategoriesOptions = computed<InputMenuItem[]>(() => {
+  const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
     return (
       categories?.value?.data.data.map(item => ({
         id: item.id,
@@ -122,7 +140,7 @@
     );
   });
 
-  const subCategoriesOptions = computed<InputMenuItem[]>(() => {
+  const subCategoriesOptions = computed<SelectMenuItem[]>(() => {
     if (!state.parentCategory) return [];
 
     // 找到选中的主分类
@@ -166,4 +184,8 @@
       state.category = undefined;
     }
   );
+
+  const onCreate = (item: string) => {
+    console.log(item);
+  };
 </script>
