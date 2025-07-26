@@ -65,6 +65,7 @@
           :items="tagsOptions"
           size="lg"
           class="w-full"
+          value-key="id"
           variant="soft"
           multiple
           creatable
@@ -117,7 +118,8 @@
   });
 
   const onSubmit = async () => {
-    console.log(state);
+    console.log(state.tagIds?.toString());
+    console.log(123123);
   };
 
   // 获取分类数据
@@ -186,6 +188,15 @@
   );
 
   const onCreate = (item: string) => {
-    console.log(item);
+    // 构建临时标签
+    const tag = {
+      id: Date.now(),
+      name: item,
+      label: item,
+      value: item,
+      avatar: { src: '' }
+    };
+    // 加入列表中
+    tagsOptions.value.push(tag);
   };
 </script>
