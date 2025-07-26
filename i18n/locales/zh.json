@@ -105,6 +105,14 @@
     "submit": "提交",
     "type": {
       "placeholder": "请选择类型"
-    }
+    },
+    "advancedOptions": "高级设置",
+    "requireFollow": "需要关注",
+    "requirePayment": "付费查看",
+    "viewPrice": {
+      "placeholder": "请输入价格",
+      "name": "付费金额"
+    },
+    "requireLogin": "登录查看"
   }
 }

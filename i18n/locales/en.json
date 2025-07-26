@@ -104,6 +104,11 @@
     "submit": "Submit",
     "type": {
       "placeholder": "Please select type"
-    }
+    },
+    "advancedOptions": "Advance Options",
+    "requireLogin": "Require Login",
+    "requireFollow": "Require Follow",
+    "requirePayment": "Requie Payment",
+    "viewPrice": "View Price"
   }
 }

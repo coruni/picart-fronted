@@ -9281,7 +9281,7 @@
             "description": "标签ID数组（与tagNames二选一）",
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "number"
             },
             "example": [
               1,

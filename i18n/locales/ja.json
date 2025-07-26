@@ -86,6 +86,9 @@
     },
     "parentCategory": {
       "searchPlaceholder": ""
-    }
+    },
+    "advancedOptions": "高度な設定",
+    "requireLogin": "",
+    "viewPrice": "查看价格"
   }
 }

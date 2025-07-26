@@ -47,7 +47,7 @@
         </UFormField>
         <UFormField name="category" v-if="state.parentCategory" class="flex-1">
           <USelectMenu
-            v-model="state.category"
+            v-model="state.categoryId"
             :items="subCategoriesOptions"
             :placeholder="$t('form.category.placeholder')"
             value-key="id"
@@ -68,12 +68,56 @@
           value-key="id"
           variant="soft"
           multiple
-          creatable
+          create-item
           :placeholder="$t('form.tag.placeholder')"
-          :createItem="{ when: 'empty', position: 'top' }"
           @create="onCreate"
         />
       </UFormField>
+      <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
+        <template #advanced>
+          <div class="space-y-4 mt-4">
+            <UFormField
+              name="requireLogin"
+              :label="$t('form.requireLogin')"
+              class="flex items-center justify-between"
+            >
+              <USwitch v-model="state.requireLogin" />
+            </UFormField>
+
+            <UFormField
+              name="requireFollow"
+              :label="$t('form.requireFollow')"
+              class="flex items-center justify-between"
+            >
+              <USwitch v-model="state.requireFollow" />
+            </UFormField>
+
+            <UFormField
+              name="requirePayment"
+              :label="$t('form.requirePayment')"
+              class="flex items-center justify-between"
+            >
+              <USwitch v-model="state.requirePayment" />
+            </UFormField>
+
+            <UFormField
+              name="viewPrice"
+              :label="$t('form.viewPrice.name')"
+              v-if="state.requirePayment"
+              class="flex items-center justify-between"
+            >
+              <UInput
+                v-model="state.viewPrice"
+                type="number"
+                variant="soft"
+                :min="1"
+                :placeholder="$t('form.viewPrice.placeholder')"
+              />
+            </UFormField>
+          </div>
+        </template>
+      </UAccordion>
+
       <UButton
         type="submit"
         icon="i-mynaui-save"
@@ -84,24 +128,36 @@
     </UForm>
   </div>
 </template>
+
 <script lang="ts" setup>
   import * as z from 'zod';
-  import { categoryControllerFindAll, tagControllerFindAll } from '~~/api';
+  import { articleControllerCreate, categoryControllerFindAll, tagControllerFindAll } from '~~/api';
+
+  // 导入正确的类型
   import type { SelectMenuItem } from '#ui/types';
+
   const { t } = useI18n();
 
   definePageMeta({
     layout: 'dashboard'
   });
+
   const schema = z.object({
-    title: z.string().min(12, t('form.title.placeholder')),
+    title: z.string().min(8, t('form.title.placeholder')),
     content: z.string().min(10, t('form.content.placeholder')),
     parentCategory: z.number().min(1, t('form.parentCategory.placeholder')),
-    category: z.number().min(1, t('form.category.placeholder')),
+    categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
-    type: z.enum(['mixed', 'image'], t('form.type.placeholder')),
-    tagIds: z.array(z.number()).optional(),
-    tagNames: z.array(z.string()).optional()
+    type: z.enum(['mixed', 'image']).optional().default('mixed'),
+
+    tagIds: z
+      .array(z.union([z.string(), z.number()]))
+      .optional()
+      .default([]),
+    requireLogin: z.boolean().default(false),
+    requireFollow: z.boolean().default(false),
+    requirePayment: z.boolean().default(false),
+    viewPrice: z.number().min(0).default(0)
   });
 
   type Schema = z.output<typeof schema>;
@@ -110,93 +166,172 @@
     title: '',
     content: '',
     parentCategory: undefined,
-    category: undefined,
+    categoryId: undefined,
     images: '',
     type: 'mixed',
-    tagIds: [],
-    tagNames: []
+    tagIds: []
   });
 
   const onSubmit = async () => {
-    console.log(state.tagIds?.toString());
-    console.log(123123);
+    try {
+      const { parentCategory, ...data } = await schema.parseAsync(state);
+      // 删除不需要的数据
+      // 分离现有标签ID和新标签名称
+      const existingTagIds: number[] = [];
+      const newTagNames: string[] = [];
+
+      state.tagIds?.forEach(id => {
+        const tag = tagsOptions.value.find((t: TagMenuItem) => t.id === id);
+        if (tag?.flag) {
+          // 临时标签，使用名称
+          newTagNames.push(tag.label as string);
+        } else {
+          // 现有标签，使用ID
+          const numericId = typeof id === 'string' ? parseInt(id) : id;
+          if (!isNaN(numericId)) {
+            existingTagIds.push(numericId);
+          }
+        }
+      });
+
+      await articleControllerCreate({
+        composable: '$fetch',
+        body: {
+          ...data,
+          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
+          tagNames: newTagNames.length > 0 ? newTagNames : undefined
+        }
+      });
+
+      console.log('文章创建成功');
+    } catch (error) {
+      console.error('提交失败:', error);
+    }
   };
 
   // 获取分类数据
-  const { data: categories, refresh } = await categoryControllerFindAll({
+  const { data: categories } = await categoryControllerFindAll({
     composable: 'useAsyncData',
     key: 'categories',
     query: computed(() => ({}))
   });
 
+  // 定义正确的 SelectMenuItem 类型的分类选项
   const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
     return (
-      categories?.value?.data.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        label: item.name,
-        value: item.id,
-        ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
-        ...(item.description ? { description: item.description } : {})
-      })) || []
+      categories?.value?.data.data.map(
+        item =>
+          ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
+            ...(item.description ? { description: item.description } : {})
+          }) as SelectMenuItem
+      ) || []
     );
   });
 
   const subCategoriesOptions = computed<SelectMenuItem[]>(() => {
     if (!state.parentCategory) return [];
 
-    // 找到选中的主分类
     const parentCategory = categories?.value?.data.data.find(
       item => item.id === state.parentCategory
     );
 
-    // 返回该主分类的children数据
     return (
-      parentCategory?.children?.map(item => ({
-        id: item.id,
-        name: item.name,
-        label: item.name,
-        value: item.id,
-        ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
-        ...(item.description ? { description: item.description } : {})
-      })) || []
+      parentCategory?.children?.map(
+        item =>
+          ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
+            ...(item.description ? { description: item.description } : {})
+          }) as SelectMenuItem
+      ) || []
     );
   });
 
-  const tags = tagControllerFindAll({
+  // 获取标签数据
+  const { data: tagsData } = await tagControllerFindAll({
     composable: 'useAsyncData',
+    key: 'tags',
     query: {}
   });
 
-  const tagsOptions = computed<SelectMenuItem[]>(() => {
-    return (
-      tags?.data.value?.data.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        label: item.name,
-        value: item.id,
-        avatar: { src: item.avatar }
-      })) || []
-    );
-  });
+  // 简化 TagMenuItem 类型定义
+  interface TagMenuItem {
+    id: string | number;
+    label: string;
+    value: string | number;
+    avatar?: { src: string };
+    flag?: boolean;
+  }
 
+  // 替换原有的复杂类型定义
+  const tagsOptions = ref<TagMenuItem[]>([]);
+
+  // 初始化标签选项
+  watch(
+    () => tagsData?.value?.data.data,
+    newTags => {
+      if (newTags) {
+        tagsOptions.value = newTags.map(
+          item =>
+            ({
+              id: item.id,
+              label: item.name,
+              value: item.id,
+              ...(item.avatar ? { avatar: { src: item.avatar } } : {})
+            }) as TagMenuItem
+        );
+      }
+    },
+    { immediate: true }
+  );
+
+  // 监听父分类变化，重置子分类
   watch(
     () => state.parentCategory,
     () => {
-      state.category = undefined;
+      state.categoryId = undefined;
     }
   );
 
+  // 创建新标签的函数
   const onCreate = (item: string) => {
-    // 构建临时标签
-    const tag = {
-      id: Date.now(),
-      name: item,
+    // 生成唯一的临时ID
+    const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // 检查是否已存在相同名称的标签
+    const existingTag = tagsOptions.value.find(t => t.label === item);
+    if (existingTag) {
+      // 如果已存在，直接选中
+      if (!state.tagIds) {
+        state.tagIds = [];
+      }
+      if (!state.tagIds.includes(existingTag.id)) {
+        state.tagIds.push(existingTag.id);
+      }
+      return;
+    }
+
+    // 构建临时标签，确保符合 SelectMenuItem 接口
+    const tag: TagMenuItem = {
+      id: tempId,
       label: item,
-      value: item,
-      avatar: { src: '' }
+      value: tempId,
+      flag: true // 标记为临时标签
     };
-    // 加入列表中
+
+    // 添加到选项列表
     tagsOptions.value.push(tag);
+
+    // 自动选中新创建的标签
+    if (!state.tagIds) {
+      state.tagIds = [];
+    }
+    state.tagIds.push(tempId);
   };
 </script>

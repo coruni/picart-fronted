@@ -170,7 +170,7 @@ export type CreateArticleDto = {
   /**
    * 标签ID数组（与tagNames二选一）
    */
-  tagIds?: Array<string>;
+  tagIds?: Array<number>;
   /**
    * 文章状态
    */
