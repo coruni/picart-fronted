@@ -2030,8 +2030,73 @@ export type ArticleControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      title: string;
+      requireLogin: boolean;
+      requireFollow: boolean;
+      requirePayment: boolean;
+      viewPrice: string;
+      type: string;
+      content: string;
+      images: string;
+      summary: unknown;
+      views: number;
+      likes: number;
+      status: string;
+      cover: unknown;
+      authorId: number;
+      author: {
+        id: number;
+        username: string;
+        nickname: string;
+        avatar: string;
+        status: string;
+        createdAt: string;
+        updatedAt: string;
+        description: unknown;
+        followerCount: number;
+        followingCount: number;
+      };
+      category: {
+        id: number;
+        name: string;
+        description: string;
+        parentId: number;
+        avatar: string;
+        background: string;
+        cover: string;
+        sort: number;
+        status: string;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+      tags: Array<{
+        id: number;
+        name: string;
+        description: string;
+        avatar: string;
+        background: string;
+        cover: string;
+        sort: number;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type ArticleControllerFindOneResponse =
+  ArticleControllerFindOneResponses[keyof ArticleControllerFindOneResponses];
 
 export type ArticleControllerUpdateData = {
   body?: UpdateArticleDto;
@@ -2623,8 +2688,27 @@ export type TagControllerCreateResponses = {
   /**
    * 创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      name: string;
+      description: string;
+      avatar: string;
+      background: string;
+      cover: string;
+      sort: number;
+      articleCount: number;
+      followCount: number;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type TagControllerCreateResponse =
+  TagControllerCreateResponses[keyof TagControllerCreateResponses];
 
 export type TagControllerRemoveData = {
   body?: never;

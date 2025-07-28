@@ -74,7 +74,8 @@
     },
     "button": {
       "confirm": "Confirm",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "create": "Create"
     }
   },
   "filter": {

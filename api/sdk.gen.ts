@@ -55,6 +55,7 @@ import type {
   ArticleControllerCreateData,
   ArticleControllerRemoveData,
   ArticleControllerFindOneData,
+  ArticleControllerFindOneResponse,
   ArticleControllerUpdateData,
   ArticleControllerGetLikeStatusData,
   ArticleControllerGetLikeCountData,
@@ -74,6 +75,7 @@ import type {
   TagControllerFindAllData,
   TagControllerFindAllResponse,
   TagControllerCreateData,
+  TagControllerCreateResponse,
   TagControllerRemoveData,
   TagControllerFindOneData,
   TagControllerFindOneResponse,
@@ -903,10 +905,23 @@ export const articleControllerRemove = <TComposable extends Composable, DefaultT
 /**
  * 获取文章详情
  */
-export const articleControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, ArticleControllerFindOneData, unknown, DefaultT>
+export const articleControllerFindOne = <
+  TComposable extends Composable,
+  DefaultT extends ArticleControllerFindOneResponse = ArticleControllerFindOneResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerFindOneData,
+    ArticleControllerFindOneResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerFindOneResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/article/{id}',
     ...options
   });
@@ -1169,19 +1184,25 @@ export const tagControllerFindAll = <
 /**
  * 创建标签
  */
-export const tagControllerCreate = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, TagControllerCreateData, unknown, DefaultT>
+export const tagControllerCreate = <
+  TComposable extends Composable,
+  DefaultT extends TagControllerCreateResponse = TagControllerCreateResponse
+>(
+  options: Options<TComposable, TagControllerCreateData, TagControllerCreateResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/tag',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    TagControllerCreateResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/tag',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**

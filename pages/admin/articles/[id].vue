@@ -131,12 +131,21 @@
 
 <script lang="ts" setup>
   import * as z from 'zod';
-  import { articleControllerCreate, categoryControllerFindAll, tagControllerFindAll } from '~~/api';
+
+  import {
+    categoryControllerFindAll,
+    tagControllerFindAll,
+    articleControllerFindOne,
+    articleControllerUpdate
+  } from '~~/api';
+  import { useRoute } from 'vue-router'; // 导入 useRoute
 
   // 导入正确的类型
   import type { SelectMenuItem } from '#ui/types';
 
   const { t } = useI18n();
+  const route = useRoute(); // 获取当前路由
+  const articleId = route.params.id as string; // 获取文章 id
 
   definePageMeta({
     layout: 'dashboard'
@@ -172,11 +181,41 @@
     tagIds: []
   });
 
+  // 若 articleId 存在，请求文章详情数据
+  if (articleId) {
+    try {
+      const { data: articleData } = await articleControllerFindOne({
+        composable: 'useAsyncData',
+        key: 'articleDetail',
+        path: { id: articleId }
+      });
+
+      if (articleData.value) {
+        // 使用可选链操作符确保安全访问
+        Object.assign(state, {
+          title: articleData.value?.data?.title ?? '',
+          content: articleData.value?.data?.content ?? '',
+          // parentCategory: articleData.value?.data?.parentCategory,
+          categoryId: articleData.value?.data?.category.id,
+          images: articleData.value?.data?.images ?? '',
+          type: articleData.value?.data?.type ?? 'mixed',
+          tagIds: articleData.value?.data?.tags.map(tag => tag.id) ?? [],
+          requireLogin: articleData.value?.data?.requireLogin ?? false,
+          requireFollow: articleData.value?.data?.requireFollow ?? false,
+          requirePayment: articleData.value?.data?.requirePayment ?? false,
+          viewPrice: articleData.value?.data?.viewPrice ?? 0
+        });
+      }
+    } catch (error) {
+      console.error('获取文章详情失败:', error);
+    }
+  }
+
   const onSubmit = async () => {
     try {
       const { parentCategory, ...data } = await schema.parseAsync(state);
-      // 删除不需要的数据
-      // 分离现有标签ID和新标签名称
+
+      // 分离现有标签 ID 和新标签名称
       const existingTagIds: number[] = [];
       const newTagNames: string[] = [];
 
@@ -186,7 +225,7 @@
           // 临时标签，使用名称
           newTagNames.push(tag.label as string);
         } else {
-          // 现有标签，使用ID
+          // 现有标签，使用 ID
           const numericId = typeof id === 'string' ? parseInt(id) : id;
           if (!isNaN(numericId)) {
             existingTagIds.push(numericId);
@@ -194,8 +233,10 @@
         }
       });
 
-      await articleControllerCreate({
+      // 编辑文章
+      await articleControllerUpdate({
         composable: '$fetch',
+        path: { id: articleId },
         body: {
           ...data,
           tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
@@ -203,7 +244,7 @@
         }
       });
 
-      console.log('文章创建成功');
+      console.log('文章编辑成功');
     } catch (error) {
       console.error('提交失败:', error);
     }
@@ -301,7 +342,7 @@
 
   // 创建新标签的函数
   const onCreate = (item: string) => {
-    // 生成唯一的临时ID
+    // 生成唯一的临时 ID
     const tempId = `temp_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 
     // 检查是否已存在相同名称的标签

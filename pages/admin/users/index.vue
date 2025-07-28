@@ -150,7 +150,7 @@
                 icon: 'mynaui:dots-vertical-solid',
                 color: 'neutral',
                 variant: 'ghost',
-                class: 'ml-auto text-2xl',
+                class: 'ml-auto text-2xl cursor-pointer',
                 'aria-label': 'Actions dropdown'
               })
           )
@@ -235,5 +235,4 @@
     },
     { deep: true }
   );
-
 </script>

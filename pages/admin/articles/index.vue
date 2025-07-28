@@ -28,6 +28,9 @@
         </div>
       </template>
     </UCollapsible>
+    <UButton @click="onCreate()">
+      {{ t('common.button.create') }}
+    </UButton>
 
     <UTable
       ref="table"
@@ -89,7 +92,7 @@
   const UDropdownMenu = resolveComponent('UDropdownMenu');
   const UBadge = resolveComponent('UBadge');
   const UModal = resolveComponent('UModal');
-
+  const router = useRouter();
   const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
@@ -315,4 +318,8 @@
     },
     { deep: true }
   );
+
+  const onCreate = () => {
+    router.push('articles/create');
+  };
 </script>
