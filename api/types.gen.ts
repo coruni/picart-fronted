@@ -170,7 +170,7 @@ export type CreateArticleDto = {
   /**
    * 标签ID数组（与tagNames二选一）
    */
-  tagIds?: Array<string>;
+  tagIds?: Array<number>;
   /**
    * 文章状态
    */
@@ -1151,7 +1151,7 @@ export type UserControllerFindAllData = {
     'Device-Type'?: string;
   };
   path?: never;
-  query: {
+  query?: {
     /**
      * 页码
      */
@@ -1160,7 +1160,7 @@ export type UserControllerFindAllData = {
      * 每页数量
      */
     limit?: number;
-    username: string;
+    username?: string;
   };
   url: '/user';
 };
@@ -1169,8 +1169,46 @@ export type UserControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        username?: string;
+        nickname?: string;
+        status?: string;
+        avatar?: string;
+        description?: unknown;
+        roles?: Array<{
+          id?: number;
+          name?: string;
+          displayName?: unknown;
+          description?: string;
+          permissions?: Array<{
+            id: number;
+            name: string;
+            description: string;
+          }>;
+          createdAt?: string;
+          updatedAt?: string;
+        }>;
+        config?: unknown;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type UserControllerFindAllResponse =
+  UserControllerFindAllResponses[keyof UserControllerFindAllResponses];
 
 export type UserControllerCreateData = {
   body?: CreateUserDto;
@@ -1992,8 +2030,73 @@ export type ArticleControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      title: string;
+      requireLogin: boolean;
+      requireFollow: boolean;
+      requirePayment: boolean;
+      viewPrice: string;
+      type: string;
+      content: string;
+      images: string;
+      summary: unknown;
+      views: number;
+      likes: number;
+      status: string;
+      cover: unknown;
+      authorId: number;
+      author: {
+        id: number;
+        username: string;
+        nickname: string;
+        avatar: string;
+        status: string;
+        createdAt: string;
+        updatedAt: string;
+        description: unknown;
+        followerCount: number;
+        followingCount: number;
+      };
+      category: {
+        id: number;
+        name: string;
+        description: string;
+        parentId: number;
+        avatar: string;
+        background: string;
+        cover: string;
+        sort: number;
+        status: string;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+      tags: Array<{
+        id: number;
+        name: string;
+        description: string;
+        avatar: string;
+        background: string;
+        cover: string;
+        sort: number;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type ArticleControllerFindOneResponse =
+  ArticleControllerFindOneResponses[keyof ArticleControllerFindOneResponses];
 
 export type ArticleControllerUpdateData = {
   body?: UpdateArticleDto;
@@ -2523,8 +2626,35 @@ export type TagControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        name?: string;
+        description?: string;
+        avatar?: string;
+        background?: string;
+        cover?: string;
+        sort?: number;
+        articleCount?: number;
+        followCount?: number;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type TagControllerFindAllResponse =
+  TagControllerFindAllResponses[keyof TagControllerFindAllResponses];
 
 export type TagControllerCreateData = {
   body?: CreateTagDto;
@@ -2558,8 +2688,27 @@ export type TagControllerCreateResponses = {
   /**
    * 创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      name: string;
+      description: string;
+      avatar: string;
+      background: string;
+      cover: string;
+      sort: number;
+      articleCount: number;
+      followCount: number;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type TagControllerCreateResponse =
+  TagControllerCreateResponses[keyof TagControllerCreateResponses];
 
 export type TagControllerRemoveData = {
   body?: never;
@@ -2624,8 +2773,27 @@ export type TagControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      name: string;
+      description: string;
+      avatar: string;
+      background: string;
+      cover: string;
+      sort: number;
+      articleCount: number;
+      followCount: number;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type TagControllerFindOneResponse =
+  TagControllerFindOneResponses[keyof TagControllerFindOneResponses];
 
 export type TagControllerUpdateData = {
   body?: UpdateTagDto;

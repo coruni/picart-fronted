@@ -46,7 +46,8 @@
       "actions": "アクション",
       "delete": "消去",
       "avatar": "アバター",
-      "createdAt": "で作成されました",
+      "createdAt": "作成日時",
+      "updatedAt": "更新日時",
       "name": "名前",
       "description": "説明",
       "parent": "親",
@@ -58,7 +59,39 @@
       "author": "著者",
       "collections": "コレクション",
       "likes": "いいね",
-      "status": "状態"
+      "status": "状態",
+      "views": "ビュー",
+      "roles": "ロール"
+    },
+    "message": {
+      "deleteSuccess": ""
+    },
+    "modal": {
+      "confirmDeleteMessage": ""
     }
+  },
+  "filter": {
+    "title": "フィルター"
+  },
+  "form": {
+    "title": {
+      "name": "タイトル",
+      "placeholder": "タイトルを入力してください"
+    },
+    "content": {
+      "name": "コンテンツ",
+      "placeholder": "コンテンツを入力してください"
+    },
+    "category": {
+      "name": "カテゴリー",
+      "placeholder": "カテゴリーを選択してください",
+      "searchPlaceholder": "カテゴリーを検索..."
+    },
+    "parentCategory": {
+      "searchPlaceholder": ""
+    },
+    "advancedOptions": "高度な設定",
+    "requireLogin": "",
+    "viewPrice": "查看价格"
   }
 }

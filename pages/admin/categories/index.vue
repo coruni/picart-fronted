@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-full">
+  <div class="flex flex-col min-h-full relative z-10">
     <UTable
       ref="table"
       v-model:pagination="pagination"
@@ -23,6 +23,23 @@
       />
     </div>
   </div>
+  <!-- 删除确认模态框 -->
+  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <template #header>
+      {{ t('common.modal.confirmDelete') }}
+    </template>
+    <template #body>
+      {{ t('common.modal.confirmDeleteMessage') }}
+    </template>
+    <template #footer>
+      <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
+        {{ t('common.button.cancel') }}
+      </UButton>
+      <UButton color="error" class="cursor-pointer" @click="confirmDelete">
+        {{ t('common.button.confirm') }}
+      </UButton>
+    </template>
+  </UModal>
 </template>
 
 <script setup lang="ts">
@@ -30,13 +47,18 @@
   import type { TableColumn } from '@nuxt/ui';
   import type { Category } from '~~/types/category';
   import { useI18n } from 'vue-i18n';
-  import { categoryControllerFindAll } from '~~/api';
+  import { categoryControllerFindAll, categoryControllerRemove } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
+  const UModal = resolveComponent('UModal');
+  const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
+  definePageMeta({
+    layout: 'dashboard'
+  });
 
   // 分页状态 - 注意这里使用 pageIndex 从 0 开始
   const pagination = ref({
@@ -44,9 +66,9 @@
     pageSize: 20
   });
 
-  definePageMeta({
-    layout: 'dashboard'
-  });
+  // 删除确认模态框状态
+  const showDeleteModal = ref(false);
+  const currentCategoryId = ref<number | null>(null);
 
   const columns: TableColumn<Category>[] = [
     {
@@ -122,7 +144,7 @@
                 icon: 'mynaui:dots-vertical-solid',
                 color: 'neutral',
                 variant: 'ghost',
-                class: 'ml-auto text-2xl',
+                class: 'ml-auto text-2xl cursor-pointer',
                 'aria-label': 'Actions dropdown'
               })
           )
@@ -149,14 +171,43 @@
         class: 'cursor-pointer',
         color: 'error',
         onClick: () => {
-          console.log('Delete row:', row.original);
+          currentCategoryId.value = row.original.id!;
+          showDeleteModal.value = true;
         }
       }
     ];
   };
 
+  // 确认删除分类
+  const confirmDelete = async () => {
+    if (!currentCategoryId.value) return;
+
+    try {
+      await categoryControllerRemove({
+        composable: '$fetch',
+        path: {
+          id: currentCategoryId.value.toString()
+        }
+      });
+      toast.add({
+        title: t('common.message.deleteSuccess'),
+        color: 'success'
+      });
+      categories.refresh?.();
+    } catch (error) {
+      toast.add({
+        title: t('common.message.deleteFailed'),
+        color: 'error'
+      });
+      console.error('Failed to delete category:', error);
+    } finally {
+      showDeleteModal.value = false;
+      currentCategoryId.value = null;
+    }
+  };
   const categories = await categoryControllerFindAll({
     composable: 'useAsyncData',
+    key: 'categories',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
       limit: pagination.value.pageSize

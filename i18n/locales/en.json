@@ -50,6 +50,7 @@
       "avatar": "Avatar",
       "parent": "Parent",
       "createdAt": "Created At",
+      "updatedAt": "Updated At",
       "edit": "Edit",
       "articleCount": "Articles",
       "sort": "Sort",
@@ -59,7 +60,61 @@
       "collections": "Collections",
       "likes": "Likes",
       "status": "Status",
-      "views": "Views"
+      "views": "Views",
+      "roles": "Roles",
+      "category": "Category",
+      "filter": "Filter"
+    },
+    "message": {
+      "deleteSuccess": "Delete Successful",
+      "deleteFailed": "Delete Failed"
+    },
+    "modal": {
+      "confirmDelete": "Confirm Delete"
+    },
+    "button": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "create": "Create"
     }
+  },
+  "filter": {
+    "title": "Filter"
+  },
+  "form": {
+    "title": {
+      "name": "Title",
+      "placeholder": "Please input title"
+    },
+    "content": {
+      "name": "Content",
+      "placeholder": "Please input content"
+    },
+    "category": {
+      "name": "Category",
+      "placeholder": "Please select category",
+      "searchPlaceholder": "Search categories..."
+    },
+    "tag": {
+      "name": "Tag",
+      "placeholder": "Please select tags"
+    },
+    "parentCategory": {
+      "placeholder": "Please select parent category",
+      "searchPlaceholder": "Please enter keyword to search"
+    },
+    "image": {
+      "placeholder": "Please upload  images",
+      "name": "Images"
+    },
+    "submit": "Submit",
+    "type": {
+      "placeholder": "Please select type"
+    },
+    "advancedOptions": "Advance Options",
+    "requireLogin": "Require Login",
+    "requireFollow": "Require Follow",
+    "requirePayment": "Requie Payment",
+    "viewPrice": "View Price"
   }
 }

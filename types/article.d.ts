@@ -1,3 +1,12 @@
+export enum ArticleStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
+  ARCHIVED = 'ARCHIVED',
+  DELETED = 'DELETED',
+  BANNED = 'BANNED',
+  REJECTED = 'REJECTED'
+}
+
 export interface Article {
   id?: number;
 
@@ -15,7 +24,7 @@ export interface Article {
   views?: number;
   likes?: number;
   collections?: number;
-  status?: string;
+  status?: ArticleStatus;
   cover?: unknown;
   authorId?: number;
   author: {

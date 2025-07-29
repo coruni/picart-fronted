@@ -47,6 +47,7 @@
       "delete": "删除",
       "avatar": "头像",
       "createdAt": "创建时间",
+      "updatedAt": "更新时间",
       "name": "名称",
       "description": "描述",
       "parent": "上级分类",
@@ -59,7 +60,65 @@
       "collections": "收藏",
       "likes": "喜欢",
       "status": "状态",
-      "views": "浏览"
+      "views": "浏览",
+      "roles": "角色",
+      "category": "分类",
+      "filter": "筛选"
+    },
+    "message": {
+      "deleteSuccess": "删除成功",
+      "deleteFailed": "删除失败"
+    },
+    "modal": {
+      "confirmDelete": "确认删除",
+      "confirmDeleteMessage": "删除后无法恢复"
+    },
+    "button": {
+      "cancel": "取消",
+      "confirm": "确认",
+      "create": "新增"
     }
+  },
+  "filter": {
+    "title": "筛选"
+  },
+  "form": {
+    "title": {
+      "name": "标题",
+      "placeholder": "请输入标题"
+    },
+    "content": {
+      "name": "内容",
+      "placeholder": "请输入内容"
+    },
+    "category": {
+      "name": "分类",
+      "placeholder": "请选择分类",
+      "searchPlaceholder": "搜索分类..."
+    },
+    "tag": {
+      "name": "标签",
+      "placeholder": "请选择标签"
+    },
+    "parentCategory": {
+      "placeholder": "请选择主分类",
+      "searchPlaceholder": "输入关键词搜索"
+    },
+    "image": {
+      "placeholder": "请上传图片",
+      "name": "图片"
+    },
+    "submit": "提交",
+    "type": {
+      "placeholder": "请选择类型"
+    },
+    "advancedOptions": "高级设置",
+    "requireFollow": "需要关注",
+    "requirePayment": "付费查看",
+    "viewPrice": {
+      "placeholder": "请输入价格",
+      "name": "付费金额"
+    },
+    "requireLogin": "登录查看"
   }
 }

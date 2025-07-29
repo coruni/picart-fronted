@@ -14,12 +14,18 @@
     "strings": "on"
   },
   "tailwindCSS.classAttributes": ["class", "ui"],
-  "tailwindCSS.experimental.classRegex": [
-    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-  "i18n-ally.localesPaths": [
-    "i18n",
-    "i18n/locales"
-  ],
-  "i18n-ally.keystyle": "nested" // set as "true" to run 'prettier' last not first
+  "tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]],
+  "i18n-ally.localesPaths": ["i18n", "i18n/locales"],
+  "i18n-ally.keystyle": "nested",
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }, // set as "true" to run 'prettier' last not first
+  "files.watcherExclude": {
+    "api": true,
+    "node_modules": true,
+    "dist": true,
+    "_nuxt": true,
+    "node-compile-cache": true
+  },
+  "i18n-ally.sourceLanguage": "zh"
 }
