@@ -1,26 +1,40 @@
 <template>
   <aside
     :class="[
-      'bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out dark:bg-gray-800  ',
-      sidebarCollapsed ? 'w-16' : 'w-64'
+      'bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out dark:bg-gray-800 h-full',
+      $attrs.class || ''
     ]"
   >
     <!-- Logo 区域 -->
     <div
-      class="h-16 flex items-center justify-center border-b border-gray-200 dark:border-gray-600 relative"
+      class="h-16 flex items-center justify-between border-b border-gray-200 dark:border-gray-600 px-4"
     >
       <h1
         v-show="!sidebarCollapsed"
-        class="text-xl font-bold text-gray-800 transition-opacity duration-200"
+        class="text-lg sm:text-xl font-bold text-gray-800 dark:text-white transition-opacity duration-200 truncate"
       >
         {{ $t('admin.menu.dashboard') }}
       </h1>
-      <Icon v-show="sidebarCollapsed" name="mynaui:dashboard" class="w-6 h-6 text-gray-800" />
+      <Icon
+        v-show="sidebarCollapsed"
+        name="mynaui:brand-trello"
+        class="w-5 h-5 text-gray-800 dark:text-white"
+      />
 
-      <!-- 收起/展开按钮 -->
+      <!-- 移动端关闭按钮 -->
       <button
+        v-if="$attrs.class?.includes('fixed')"
+        @click="$emit('close')"
+        class="p-1 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 lg:hidden"
+      >
+        <Icon name="mynaui:panel-left-close" class="w-5 h-5" />
+      </button>
+
+      <!-- 收起/展开按钮 - 移动端隐藏 -->
+      <button
+        v-if="!$attrs.class?.includes('fixed')"
         @click="handleToggle"
-        class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+        class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm hidden lg:flex"
       >
         <Icon
           :name="sidebarCollapsed ? 'mynaui:chevron-right' : 'mynaui:chevron-left'"
@@ -30,7 +44,7 @@
     </div>
 
     <!-- 导航菜单 -->
-    <nav class="flex-1 p-4 bg-gay-800">
+    <nav class="flex-1 p-4">
       <ul class="space-y-2">
         <li v-for="item in menuItems" :key="item.path">
           <NuxtLinkLocale
@@ -73,7 +87,7 @@
     }
   });
 
-  const emit = defineEmits(['toggle']);
+  const emit = defineEmits(['toggle', 'close']);
 
   const handleToggle = () => {
     emit('toggle');

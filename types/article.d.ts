@@ -9,7 +9,6 @@ export enum ArticleStatus {
 
 export interface Article {
   id?: number;
-
   title?: string;
   description?: string;
   image?: string;
@@ -45,6 +44,21 @@ export interface Article {
     name?: string;
     description?: string;
     parentId?: unknown;
+    parent?: {
+      id?: number;
+      name?: string;
+      description?: string;
+      parentId?: number;
+      avatar?: string;
+      background?: string;
+      cover?: string;
+      sort?: number;
+      status?: string;
+      articleCount?: number;
+      followCount?: number;
+      createdAt?: string;
+      updatedAt?: string;
+    },
     avatar?: string;
     background?: string;
     cover?: string;

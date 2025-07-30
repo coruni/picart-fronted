@@ -325,19 +325,19 @@ export type CreateTagDto = {
   /**
    * 标签头像
    */
-  avatar: string;
+  avatar?: string;
   /**
    * 标签背景
    */
-  background: string;
+  background?: string;
   /**
    * 标签封面
    */
-  cover: string;
+  cover?: string;
   /**
    * 排序
    */
-  sort: number;
+  sort?: number;
 };
 
 export type CalculateCommissionDto = {
@@ -2066,6 +2066,21 @@ export type ArticleControllerFindOneResponses = {
         name: string;
         description: string;
         parentId: number;
+        parent: {
+          id: number;
+          name: string;
+          description: string;
+          parentId: number;
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          status: string;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
         avatar: string;
         background: string;
         cover: string;
@@ -2920,6 +2935,18 @@ export type CategoryControllerFindAllData = {
      * 每页数量
      */
     limit?: number;
+    /**
+     * 分类名
+     */
+    name?: string;
+    /**
+     * 状态
+     */
+    status?: string;
+    /**
+     * 主分类ID
+     */
+    parentId?: number;
   };
   url: '/category';
 };

@@ -8,7 +8,26 @@ export default defineAppConfig({
       primary: 'indigo'
     },
     icons: {
-      check: 'mynaui:check-solid'
+      arrowLeft: 'mynaui:arrow-left',
+      arrowRight: 'mynaui:arrow-right',
+      check: 'mynaui:check',
+      chevronDoubleLeft: 'mynaui:chevron-left',
+      chevronDoubleRight: 'mynaui:chevron-left',
+      chevronDown: 'mynaui:chevron-down',
+      chevronLeft: 'mynaui:chevron-left',
+      chevronRight: 'mynaui:chevron-right',
+      chevronUp: 'mynaui:chevron-up',
+      close: 'mynaui:x',
+      ellipsis: 'mynaui:dots',
+      external: 'mynaui:external-link',
+      file: 'mynaui:file',
+      folder: 'mynaui:folder',
+      folderOpen: 'mynaui:folder-two',
+      loading: 'mynaui:circle-notch',
+      minus: 'mynaui:minus',
+      plus: 'mynaui:plus',
+      search: 'mynaui:search',
+      upload: 'mynaui:upload'
     }
   }
 });

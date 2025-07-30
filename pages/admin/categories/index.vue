@@ -1,5 +1,11 @@
 <template>
   <div class="flex flex-col min-h-full relative z-10">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">{{ t('admin.categories.title') }}</h1>
+      <UButton icon="mynaui:plus" color="primary" @click="onCreate">
+        {{ t('common.button.create') }}
+      </UButton>
+    </div>
     <UTable
       ref="table"
       v-model:pagination="pagination"
@@ -49,7 +55,7 @@
   import { useI18n } from 'vue-i18n';
   import { categoryControllerFindAll, categoryControllerRemove } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
-
+  const router = useRouter();
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
   const UModal = resolveComponent('UModal');
@@ -163,7 +169,7 @@
         label: t('common.table.edit'),
         class: 'cursor-pointer',
         onClick: () => {
-          console.log('Edit row:', row.original);
+          navigateTo(`/admin/categories/${row.original.id}`);
         }
       },
       {
@@ -228,6 +234,10 @@
     },
     { deep: true }
   );
+
+  const onCreate = () => {
+    router.push('categories/create');
+  };
 
   // 调试信息
   onMounted(() => {});

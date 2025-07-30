@@ -28,24 +28,31 @@
         </div>
       </template>
     </UCollapsible>
-    <UButton @click="onCreate()">
-      {{ t('common.button.create') }}
-    </UButton>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+      <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
+        {{ t('admin.menu.articles') }}
+      </h1>
+      <UButton @click="onCreate()" class="w-full sm:w-auto cursor-pointer">
+        {{ t('common.button.create') }}
+      </UButton>
+    </div>
 
-    <UTable
-      ref="table"
-      v-model:pagination="pagination"
-      sticky="header"
-      :loading="articles.pending.value"
-      loading-color="primary"
-      loading-animation="carousel"
-      :data="tableData"
-      :columns="columns"
-      :pagination-options="{
-        getPaginationRowModel: getPaginationRowModel()
-      }"
-      class="flex-1"
-    />
+    <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+      <UTable
+        ref="table"
+        v-model:pagination="pagination"
+        sticky="header"
+        :loading="articles.pending.value"
+        loading-color="primary"
+        loading-animation="carousel"
+        :data="tableData"
+        :columns="columns"
+        :pagination-options="{
+          getPaginationRowModel: getPaginationRowModel()
+        }"
+        class="min-w-[600px] sm:min-w-0"
+      />
+    </div>
     <div class="flex justify-center border-t border-default pt-4">
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
@@ -208,7 +215,7 @@
         label: t('common.table.edit'),
         class: 'cursor-pointer',
         onClick: () => {
-          console.log('Edit row:', row.original);
+          router.push(`articles/${row.original.id}`);
         }
       },
       {

@@ -38,7 +38,8 @@
       "avatar": "头像",
       "parent": "上级分类",
       "createdAt": "创建时间",
-      "edit": "编辑"
+      "edit": "编辑",
+      "title": "分类"
     }
   },
   "common": {
@@ -67,7 +68,11 @@
     },
     "message": {
       "deleteSuccess": "删除成功",
-      "deleteFailed": "删除失败"
+      "deleteFailed": "删除失败",
+      "updateSuccess": "更新完成",
+      "updateFailed": "更新失败",
+      "createFailed": "创建失败",
+      "createSuccess": "创建完成"
     },
     "modal": {
       "confirmDelete": "确认删除",
@@ -119,6 +124,9 @@
       "placeholder": "请输入价格",
       "name": "付费金额"
     },
-    "requireLogin": "登录查看"
+    "requireLogin": "登录查看",
+    "name": {
+      "placeholder": "请输入名称"
+    }
   }
 }

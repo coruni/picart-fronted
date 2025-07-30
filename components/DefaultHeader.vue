@@ -18,7 +18,7 @@
           </NuxtLinkLocale>
           <div class="group relative cursor-pointer flex items-center gap-1" v-else>
             <span>{{ item.name }}</span>
-            <Icon name="mynaui:chevron-down group-hover:rotate-180 transition-transform" />
+            <Icon name="mynaui:chevron-down" class="group-hover:rotate-180 transition-transform" />
             <div
               class="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
             >

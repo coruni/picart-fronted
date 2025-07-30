@@ -10,7 +10,7 @@
           :class="[
             'cursor-pointer px-4 rounded-2xl py-2 text-sm font-medium !rounded-button whitespace-nowrap transition-all duration-200',
             currentTab === tab.id
-              ? 'bg-white shadow-sm text-primary font-semibold  dark:bg-gray-900'
+              ? 'bg-white shadow-sm text-primary font-semibold dark:bg-gray-900'
               : 'text-gray-600 hover:text-primary dark:text-white/80'
           ]"
           @click="currentTab = tab.id"

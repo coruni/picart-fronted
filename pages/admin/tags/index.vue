@@ -1,5 +1,14 @@
 <template>
   <div class="flex flex-col min-h-full">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">{{ t('admin.tags.title') }}</h1>
+      <UButton color="primary" @click="$router.push('/admin/tags/create')">
+        <template #leading>
+          <span class="mynaui:plus" />
+        </template>
+        {{ t('common.button.create') }}
+      </UButton>
+    </div>
     <UTable
       ref="table"
       v-model:pagination="pagination"
@@ -156,7 +165,7 @@
         label: t('common.table.edit'),
         class: 'cursor-pointer',
         onClick: () => {
-          console.log('Edit row:', row.original);
+          navigateTo(`/admin/tags/${row.original.id}`);
         }
       },
       {

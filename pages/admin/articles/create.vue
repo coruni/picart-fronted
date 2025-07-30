@@ -123,6 +123,7 @@
         icon="i-mynaui-save"
         class="w-full cursor-pointer justify-center"
         size="lg"
+        :loading="loading"
         >{{ $t('form.submit') }}</UButton
       >
     </UForm>
@@ -132,12 +133,11 @@
 <script lang="ts" setup>
   import * as z from 'zod';
   import { articleControllerCreate, categoryControllerFindAll, tagControllerFindAll } from '~~/api';
-
-  // 导入正确的类型
   import type { SelectMenuItem } from '#ui/types';
-
+  import { debounce } from 'lodash-es';
+  const router = useRouter();
   const { t } = useI18n();
-
+  const toast = useToast();
   definePageMeta({
     layout: 'dashboard'
   });
@@ -172,8 +172,11 @@
     tagIds: []
   });
 
-  const onSubmit = async () => {
+  const loading = ref(false);
+  
+  const onSubmit = debounce(async () => {
     try {
+      loading.value = true;
       const { parentCategory, ...data } = await schema.parseAsync(state);
       // 删除不需要的数据
       // 分离现有标签ID和新标签名称
@@ -203,11 +206,21 @@
         }
       });
 
-      console.log('文章创建成功');
+      toast.add({
+        title: t('common.message.createSuccess'),
+        color: 'success'
+      });
+
+      router.push('/admin/articles');
     } catch (error) {
-      console.error('提交失败:', error);
+      toast.add({
+        title: t('common.message.createFailed'),
+        color: 'error'
+      });
+    } finally {
+      loading.value = false;
     }
-  };
+  }, 500);
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({
@@ -219,16 +232,18 @@
   // 定义正确的 SelectMenuItem 类型的分类选项
   const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
     return (
-      categories?.value?.data.data.map(
-        item =>
-          ({
-            id: item.id,
-            label: item.name,
-            value: item.id,
-            ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
-            ...(item.description ? { description: item.description } : {})
-          }) as SelectMenuItem
-      ) || []
+      categories?.value?.data.data
+        .filter(item => !item.parentId || item.parentId === item.id) // 显示顶级分类（无父分类或父分类是自己）
+        .map(
+          ({ id, name, avatar, description }) =>
+            ({
+              id,
+              label: name,
+              value: id,
+              ...(avatar ? { avatar: { src: avatar } } : {}),
+              ...(description ? { description } : {})
+            }) as SelectMenuItem
+        ) || []
     );
   });
 
@@ -257,7 +272,7 @@
   const { data: tagsData } = await tagControllerFindAll({
     composable: 'useAsyncData',
     key: 'tags',
-    query: {}
+    query: computed(() => ({}))
   });
 
   // 简化 TagMenuItem 类型定义

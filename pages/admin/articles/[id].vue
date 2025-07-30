@@ -123,6 +123,7 @@
         icon="i-mynaui-save"
         class="w-full cursor-pointer justify-center"
         size="lg"
+        :loading="loading"
         >{{ $t('form.submit') }}</UButton
       >
     </UForm>
@@ -131,6 +132,7 @@
 
 <script lang="ts" setup>
   import * as z from 'zod';
+  import { debounce } from 'lodash-es';
 
   import {
     categoryControllerFindAll,
@@ -142,7 +144,7 @@
 
   // 导入正确的类型
   import type { SelectMenuItem } from '#ui/types';
-
+  const toast = useToast();
   const { t } = useI18n();
   const route = useRoute(); // 获取当前路由
   const articleId = route.params.id as string; // 获取文章 id
@@ -195,7 +197,7 @@
         Object.assign(state, {
           title: articleData.value?.data?.title ?? '',
           content: articleData.value?.data?.content ?? '',
-          // parentCategory: articleData.value?.data?.parentCategory,
+          parentCategory: articleData.value?.data?.category?.parent?.id,
           categoryId: articleData.value?.data?.category.id,
           images: articleData.value?.data?.images ?? '',
           type: articleData.value?.data?.type ?? 'mixed',
@@ -206,13 +208,14 @@
           viewPrice: articleData.value?.data?.viewPrice ?? 0
         });
       }
-    } catch (error) {
-      console.error('获取文章详情失败:', error);
-    }
+    } catch (error) {}
   }
 
-  const onSubmit = async () => {
+  const loading = ref(false);
+
+  const onSubmit = debounce(async () => {
     try {
+      loading.value = true;
       const { parentCategory, ...data } = await schema.parseAsync(state);
 
       // 分离现有标签 ID 和新标签名称
@@ -239,16 +242,23 @@
         path: { id: articleId },
         body: {
           ...data,
-          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
+          tagIds: existingTagIds.length > 0 ? existingTagIds.map(id => id.toString()) : undefined,
           tagNames: newTagNames.length > 0 ? newTagNames : undefined
         }
       });
-
-      console.log('文章编辑成功');
+      toast.add({
+        title: t('common.message.updateSuccess'),
+        color: 'success'
+      });
     } catch (error) {
-      console.error('提交失败:', error);
+      toast.add({
+        title: t('common.message.updateFailed'),
+        color: 'error'
+      });
+    } finally {
+      loading.value = false;
     }
-  };
+  }, 500);
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({
@@ -257,19 +267,21 @@
     query: computed(() => ({}))
   });
 
-  // 定义正确的 SelectMenuItem 类型的分类选项
+  // 定义正确的 SelectMenuItem 类型的分类选项 - 只显示顶级分类且不包含children数据
   const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
     return (
-      categories?.value?.data.data.map(
-        item =>
-          ({
-            id: item.id,
-            label: item.name,
-            value: item.id,
-            ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
-            ...(item.description ? { description: item.description } : {})
-          }) as SelectMenuItem
-      ) || []
+      categories?.value?.data.data
+        .filter(item => !item.parentId || item.parentId === item.id) // 显示顶级分类（无父分类或父分类是自己）
+        .map(
+          ({ id, name, avatar, description }) =>
+            ({
+              id,
+              label: name,
+              value: id,
+              ...(avatar ? { avatar: { src: avatar } } : {}),
+              ...(description ? { description } : {})
+            }) as SelectMenuItem
+        ) || []
     );
   });
 

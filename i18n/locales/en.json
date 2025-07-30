@@ -38,7 +38,8 @@
       "avatar": "Avatar",
       "parent": "Parent",
       "createdAt": "Created At",
-      "edit": "Edit"
+      "edit": "Edit",
+      "title": "Category"
     }
   },
   "common": {
@@ -63,11 +64,16 @@
       "views": "Views",
       "roles": "Roles",
       "category": "Category",
-      "filter": "Filter"
+      "filter": "Filter",
+      "background": "Background"
     },
     "message": {
       "deleteSuccess": "Delete Successful",
-      "deleteFailed": "Delete Failed"
+      "deleteFailed": "Delete Failed",
+      "updateSuccess": "Update Success",
+      "updateFailed": "Update Failed",
+      "createFailed": "Create Failed",
+      "createSuccess": "Create Success"
     },
     "modal": {
       "confirmDelete": "Confirm Delete"
@@ -115,6 +121,9 @@
     "requireLogin": "Require Login",
     "requireFollow": "Require Follow",
     "requirePayment": "Requie Payment",
-    "viewPrice": "View Price"
+    "viewPrice": "View Price",
+    "name": {
+      "placeholder": "Please input name"
+    }
   }
 }
