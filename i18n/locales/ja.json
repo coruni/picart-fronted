@@ -38,7 +38,18 @@
       "avatar": "アバター",
       "parent": "親",
       "createdAt": "作成日時",
-      "edit": "編集"
+      "edit": "編集",
+      "avatarPlaceholder": "アバターをアップロードしてください",
+      "descriptionPlaceholder": "説明を入力してください",
+      "namePlaceholder": "インプートの名前をお願いします",
+      "selectParent": "親カテゴリを選択してください",
+      "title": "カテゴリ"
+    },
+    "tags": {
+      "avatarPlaceholder": "アバターをアップロードしてください",
+      "backgroundPlaceholder": "背景をアップロードしてください",
+      "descriptionPlaceholder": "説明を入力してください",
+      "namePlaceholder": "名前を入力してください"
     }
   },
   "common": {
@@ -61,13 +72,27 @@
       "likes": "いいね",
       "status": "状態",
       "views": "ビュー",
-      "roles": "ロール"
+      "roles": "ロール",
+      "background": "背景",
+      "category": "カテゴリ",
+      "filter": "フィルター"
     },
     "message": {
-      "deleteSuccess": ""
+      "deleteSuccess": "",
+      "createFailed": "失敗します",
+      "createSuccess": "成功を生み出します",
+      "deleteFailed": "削除に失敗しました",
+      "updateFailed": "更新に失敗しました",
+      "updateSuccess": "成功を更新します"
     },
     "modal": {
-      "confirmDeleteMessage": ""
+      "confirmDeleteMessage": "",
+      "confirmDelete": "削除を確認します"
+    },
+    "button": {
+      "cancel": "キャンセル",
+      "confirm": "確認する",
+      "create": "作成する"
     }
   },
   "filter": {
@@ -88,10 +113,28 @@
       "searchPlaceholder": "カテゴリーを検索..."
     },
     "parentCategory": {
-      "searchPlaceholder": ""
+      "searchPlaceholder": "",
+      "placeholder": "親カテゴリを選択してください"
     },
     "advancedOptions": "高度な設定",
     "requireLogin": "",
-    "viewPrice": "查看价格"
+    "viewPrice": "查看价格",
+    "image": {
+      "name": "画像",
+      "placeholder": "画像をアップロードしてください"
+    },
+    "name": {
+      "placeholder": "名前を入力してください"
+    },
+    "requireFollow": "フォローする必要があります",
+    "requirePayment": "必要な支払い",
+    "submit": "提出する",
+    "tag": {
+      "name": "タグ",
+      "placeholder": "タグを選択してください"
+    },
+    "type": {
+      "placeholder": "タイプを選択してください"
+    }
   }
 }

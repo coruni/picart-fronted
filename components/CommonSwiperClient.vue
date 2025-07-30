@@ -1,11 +1,11 @@
 <template>
   <ClientOnly>
     <template #fallback>
-      <div class="h-80 md:h-[500px] bg-gray-100 relative overflow-hidden">
+      <div class="h-80 md:h-[500px] bg-gray-100 dark:bg-gray-900 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-gray-300/30 to-transparent">
           <div class="absolute bottom-10 left-10 space-y-4 w-2/3">
-            <div class="h-8 bg-gray-200 rounded-full animate-pulse"></div>
-            <div class="h-6 bg-gray-200 rounded-full animate-pulse"></div>
+            <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+            <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
           </div>
         </div>
       </div>

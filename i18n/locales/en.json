@@ -39,7 +39,11 @@
       "parent": "Parent",
       "createdAt": "Created At",
       "edit": "Edit",
-      "title": "Category"
+      "title": "Category",
+      "namePlaceholder": "Please inpuit name",
+      "descriptionPlaceholder": "Please input description",
+      "selectParent": "Please select parent category",
+      "avatarPlaceholder": "Please upload avatar"
     },
     "tags": {
       "descriptionPlaceholder": "Please input description",
@@ -131,5 +135,15 @@
     "name": {
       "placeholder": "Please input name"
     }
+  },
+  "article": {
+    "publishAt": "Publish At",
+    "views": "Views",
+    "comments": "Comments",
+    "followers": "Followers",
+    "likes": "Likes",
+    "goodReviews": "Reviews",
+    "followAuthor": "Follow Author",
+    "relatedPosts": "Related Articles"
   }
 }

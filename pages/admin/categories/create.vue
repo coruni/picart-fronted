@@ -6,6 +6,7 @@
           v-model="form.name"
           :placeholder="t('admin.categories.namePlaceholder')"
           class="w-full"
+          size="lg"
         />
       </UFormField>
 
@@ -14,6 +15,7 @@
           v-model="form.description"
           :placeholder="t('admin.categories.descriptionPlaceholder')"
           class="w-full"
+          size="lg"
         />
       </UFormField>
 
@@ -25,11 +27,12 @@
           clearable
           :placeholder="t('admin.categories.selectParent')"
           class="w-full"
+          size="lg"
         />
       </UFormField>
 
       <UFormField :label="t('common.table.sort')" name="sort" class="w-full">
-        <UInput v-model="form.sort" type="number" min="0" class="w-full" />
+        <UInput v-model="form.sort" type="number" min="0" class="w-full" size="lg" />
       </UFormField>
 
       <UFormField :label="t('common.table.avatar')" name="avatar" class="w-full">
@@ -37,6 +40,7 @@
           v-model="form.avatar"
           :placeholder="t('admin.categories.avatarPlaceholder')"
           class="w-full"
+          size="lg"
         />
       </UFormField>
 
@@ -86,7 +90,7 @@
   const parentCategoryOptions = computed<SelectMenuItem[]>(() => {
     return (
       parentCategoriesData.value?.data.data
-        .filter(item => !item.parentId || item.parentId === item.id) // 只显示顶级分类
+        .filter(item => !item.parentId || item.parentId === item.id)
         .map(
           ({ id, name, avatar, description }) =>
             ({

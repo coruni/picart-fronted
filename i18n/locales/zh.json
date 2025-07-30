@@ -39,7 +39,17 @@
       "parent": "上级分类",
       "createdAt": "创建时间",
       "edit": "编辑",
-      "title": "分类"
+      "title": "分类",
+      "avatarPlaceholder": "请上传头像",
+      "descriptionPlaceholder": "请输入说明",
+      "namePlaceholder": "请inpuit名称",
+      "selectParent": "请选择父级类别"
+    },
+    "tags": {
+      "avatarPlaceholder": "请上传化身",
+      "backgroundPlaceholder": "请上传背景",
+      "descriptionPlaceholder": "请输入说明",
+      "namePlaceholder": "请输入名称"
     }
   },
   "common": {
@@ -64,7 +74,8 @@
       "views": "浏览",
       "roles": "角色",
       "category": "分类",
-      "filter": "筛选"
+      "filter": "筛选",
+      "background": "背景"
     },
     "message": {
       "deleteSuccess": "删除成功",
@@ -128,5 +139,13 @@
     "name": {
       "placeholder": "请输入名称"
     }
+  },
+  "article": {
+    "publishAt": "发布于",
+    "views": "浏览",
+    "comments": "评论区",
+    "followers": "粉丝",
+    "likes": "点赞",
+    "goodReviews": "好评"
   }
 }
