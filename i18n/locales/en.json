@@ -40,6 +40,12 @@
       "createdAt": "Created At",
       "edit": "Edit",
       "title": "Category"
+    },
+    "tags": {
+      "descriptionPlaceholder": "Please input description",
+      "backgroundPlaceholder": "Please upload background",
+      "avatarPlaceholder": "Please upload avatar",
+      "namePlaceholder": "Please input name"
     }
   },
   "common": {

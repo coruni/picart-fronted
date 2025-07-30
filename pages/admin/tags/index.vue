@@ -1,5 +1,29 @@
 <template>
   <div class="flex flex-col min-h-full">
+    <!-- 筛选面板 -->
+    <UCollapsible class="mb-4" v-model:open="showFilters">
+      <UButton
+        :label="t('common.table.filter')"
+        color="neutral"
+        variant="soft"
+        trailing-icon="i-mynaui-chevron-down"
+        block
+      />
+      <template #content>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+          <UInput
+            v-model="filters.name"
+            :placeholder="t('admin.tags.name')"
+            @update:model-value="onFilterChange"
+          />
+          <UInput
+            v-model="filters.description"
+            :placeholder="t('admin.tags.description')"
+            @update:model-value="onFilterChange"
+          />
+        </div>
+      </template>
+    </UCollapsible>
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">{{ t('admin.tags.title') }}</h1>
       <UButton color="primary" @click="$router.push('/admin/tags/create')">
@@ -53,6 +77,7 @@
 
 <script setup lang="ts">
   import { getPaginationRowModel } from '@tanstack/vue-table';
+  import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
   import { useI18n } from 'vue-i18n';
   import { tagControllerFindAll, tagControllerRemove } from '~~/api';
@@ -72,6 +97,13 @@
     pageSize: 20
   });
 
+  // 筛选状态
+  const showFilters = ref(false);
+  const filters = ref({
+    name: '',
+    description: ''
+  });
+
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentTagId = ref<number | null>(null);
@@ -79,6 +111,11 @@
   definePageMeta({
     layout: 'dashboard'
   });
+
+  // 防抖筛选
+  const onFilterChange = debounce(() => {
+    table.value?.tableApi?.setPageIndex(0);
+  }, 300);
 
   const columns: TableColumn<Tag>[] = [
     {
