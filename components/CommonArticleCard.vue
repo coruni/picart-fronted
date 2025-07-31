@@ -1,13 +1,14 @@
 <template>
   <NuxtLinkLocale
-    to="/article/1"
+    :to="`/article/${article.id}`"
     class="bg-white rounded-2xl shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-pink-100/50 dark:hover:shadow-indigo-900/30 group border border-pink-100/50 dark:border-indigo-900/30"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
       <NuxtImg
-        :src="article.image"
+        :src="article.cover ?? article.images[0] ?? ''"
         :alt="article.title"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        @error="handleImageError($event as Event, 'thumbnail')"
       />
 
       <!-- 渐变遮罩 -->
@@ -40,8 +41,9 @@
           <div class="flex items-center">
             <NuxtImg
               :src="article.author.avatar"
-              :alt="article.author.name"
+              :alt="article.author.nickname ?? article.author.username"
               class="w-7 h-7 rounded-full border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
+              @error="handleImageError($event as Event, 'avatar')"
             />
           </div>
         </div>
@@ -51,8 +53,9 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Article } from '~~/types/article';
-
+  import type { ArticleControllerFindOneResponse } from '~~/api';
+  const { handleImageError } = useImageError();
+  type Article = Exclude<ArticleControllerFindOneResponse['data'], undefined>;
   const props = defineProps({
     data: {
       type: Object as PropType<Article>,

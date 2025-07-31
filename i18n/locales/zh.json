@@ -146,6 +146,10 @@
     "comments": "评论区",
     "followers": "粉丝",
     "likes": "点赞",
-    "goodReviews": "好评"
+    "goodReviews": "好评",
+    "relatedArticles": "相关推荐",
+    "followAuthor": "关注作者",
+    "comment": "发表评论",
+    "reply": "回复"
   }
 }

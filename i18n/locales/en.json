@@ -144,6 +144,9 @@
     "likes": "Likes",
     "goodReviews": "Reviews",
     "followAuthor": "Follow Author",
-    "relatedPosts": "Related Articles"
+    "relatedPosts": "Related Articles",
+    "relatedArticles": "Related Articles",
+    "comment": "Comment",
+    "reply": "Reply"
   }
 }

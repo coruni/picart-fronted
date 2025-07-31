@@ -53,7 +53,12 @@
           />
         </div>
         <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
-          <NuxtImg alt="user avatar" class="w-full h-full object-cover" />
+          <NuxtImg
+            :src="currentUserAvatar"
+            alt="user avatar"
+            class="w-full h-full object-cover"
+            @error="handleImageError($event as Event, 'avatar')"
+          />
           <div
             class="absolute top-full right-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 dark:bg-gray-800 dark:text-white"
           >
@@ -73,11 +78,15 @@
 </template>
 <script lang="ts" setup>
   import type { Category } from '~~/types/category';
-
+  import { ref } from 'vue';
+  const { handleImageError } = useImageError();
   defineProps({
     categories: {
       type: Array as PropType<Category[]>,
       default: () => []
     }
   });
+
+  // 用户头像 - 这里应该连接到实际的用户数据
+  const currentUserAvatar = ref('https://via.placeholder.com/32');
 </script>

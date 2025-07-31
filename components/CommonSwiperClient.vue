@@ -25,7 +25,7 @@
       >
         <swiper-slide v-for="slide in slides" :key="slide.id">
           <div class="relative h-full">
-            <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" />
+            <NuxtImg :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" loading="lazy" format="webp" sizes="100vw" @error="handleImageError($event, 'general')" />
             <!-- 添加半透明遮罩层 -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
@@ -60,6 +60,9 @@
 
 <script setup>
   import { onMounted } from 'vue';
+
+  // 图片错误处理
+  const { handleImageError } = useImageError();
 
   // 示例数据
   const slides = ref([

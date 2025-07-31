@@ -2047,7 +2047,7 @@ export type ArticleControllerFindOneResponses = {
       views: number;
       likes: number;
       status: string;
-      cover: unknown;
+      cover?: string;
       authorId: number;
       author: {
         id: number;
@@ -2070,7 +2070,7 @@ export type ArticleControllerFindOneResponses = {
           id: number;
           name: string;
           description: string;
-          parentId: number;
+          parentId: unknown;
           avatar: string;
           background: string;
           cover: string;
@@ -3425,43 +3425,6 @@ export type OrderControllerFindOneResponses = {
   200: unknown;
 };
 
-export type OrderControllerPayOrderData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/order/{id}';
-};
-
-export type OrderControllerPayOrderErrors = {
-  /**
-   * 请求参数错误
-   */
-  400: unknown;
-  /**
-   * 未授权
-   */
-  401: unknown;
-  /**
-   * 订单不存在
-   */
-  404: unknown;
-};
-
-export type OrderControllerPayOrderResponses = {
-  /**
-   * 支付成功
-   */
-  200: unknown;
-};
-
 export type OrderControllerFindByOrderNoData = {
   body?: never;
   headers?: {
@@ -3546,8 +3509,44 @@ export type OrderControllerCreateOrderResponses = {
   /**
    * 创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      order: {
+        id: number;
+        userId: number;
+        authorId: string;
+        orderNo: string;
+        type: string;
+        title: string;
+        amount: string;
+        paymentMethod: string;
+        paymentOrderNo: unknown;
+        status: string;
+        paidAt: unknown;
+        remark: unknown;
+        createdAt: string;
+        updatedAt: string;
+      };
+      commission: {
+        authorAmount: number;
+        inviterAmount: number;
+        platformAmount: number;
+        authorRate: number;
+        inviterRate: number;
+        platformRate: number;
+        customCommission: {
+          author: boolean;
+          inviter: boolean;
+        };
+      };
+    };
+  };
 };
+
+export type OrderControllerCreateOrderResponse =
+  OrderControllerCreateOrderResponses[keyof OrderControllerCreateOrderResponses];
 
 export type InviteControllerGetMyInvitesData = {
   body?: never;

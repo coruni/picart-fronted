@@ -100,10 +100,10 @@ import type {
   PermissionControllerUpdateResponse,
   OrderControllerGetUserOrdersData,
   OrderControllerFindOneData,
-  OrderControllerPayOrderData,
   OrderControllerFindByOrderNoData,
   OrderControllerGetWalletBalanceData,
   OrderControllerCreateOrderData,
+  OrderControllerCreateOrderResponse,
   InviteControllerGetMyInvitesData,
   InviteControllerGetInviteStatsData,
   InviteControllerGetMyInviteEarningsData,
@@ -1550,20 +1550,6 @@ export const orderControllerFindOne = <TComposable extends Composable, DefaultT 
 };
 
 /**
- * 支付订单
- */
-export const orderControllerPayOrder = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerPayOrderData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/order/{id}',
-      ...options
-    }
-  );
-};
-
-/**
  * 根据订单号获取订单
  */
 export const orderControllerFindByOrderNo = <TComposable extends Composable, DefaultT = undefined>(
@@ -1593,15 +1579,26 @@ export const orderControllerGetWalletBalance = <
 /**
  * 创建订单（包含抽成计算）
  */
-export const orderControllerCreateOrder = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerCreateOrderData, unknown, DefaultT>
+export const orderControllerCreateOrder = <
+  TComposable extends Composable,
+  DefaultT extends OrderControllerCreateOrderResponse = OrderControllerCreateOrderResponse
+>(
+  options: Options<
+    TComposable,
+    OrderControllerCreateOrderData,
+    OrderControllerCreateOrderResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/order',
-      ...options
-    }
-  );
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    OrderControllerCreateOrderResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/order',
+    ...options
+  });
 };
 
 /**

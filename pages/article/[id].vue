@@ -12,10 +12,14 @@
             class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
           >
             <div class="flex items-center">
-              <img
+              <NuxtImg
                 :src="article?.data.author.avatar"
                 alt="作者头像"
                 class="w-8 h-8 rounded-full mr-2"
+                loading="lazy"
+                format="webp"
+                sizes="32px"
+                @error="handleImageError($event as Event, 'avatar')"
               />
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
             </div>
@@ -40,7 +44,14 @@
               ]"
               @click="showFullImage(img)"
             >
-              <img :src="img" :alt="'图片' + (index + 1)" class="w-full h-full object-cover" />
+              <NuxtImg
+                :src="img"
+                :alt="'图片' + (index + 1)"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                format="webp"
+                @error="handleImageError($event as Event, 'thumbnail')"
+              />
             </div>
           </div>
         </div>
@@ -58,10 +69,14 @@
           <!-- 评论输入框 -->
           <div class="mb-6 md:mb-8">
             <div class="flex items-start space-x-3 md:space-x-4">
-              <img
+              <NuxtImg
                 :src="article?.data.author.avatar"
                 alt="当前用户头像"
                 class="w-8 h-8 md:w-10 md:h-10 rounded-full"
+                loading="lazy"
+                format="webp"
+                sizes="40px md:40px"
+                @error="handleImageError($event as Event, 'avatar')"
               />
               <div class="flex-1">
                 <textarea
@@ -74,7 +89,7 @@
                   <button
                     class="px-3 py-1.5 md:px-4 md:py-2 bg-indigo-500 text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 !rounded-button whitespace-nowrap"
                   >
-                    发表评论
+                    {{ $t('article.comment') }}
                   </button>
                 </div>
               </div>
@@ -83,7 +98,15 @@
           <!-- 评论列表 -->
           <div class="space-y-6">
             <div v-for="comment in comments" :key="comment.id" class="flex space-x-4">
-              <img :src="comment.avatar" :alt="comment.author" class="w-10 h-10 rounded-full" />
+              <NuxtImg
+                :src="comment.avatar"
+                :alt="comment.author"
+                class="w-10 h-10 rounded-full"
+                loading="lazy"
+                format="webp"
+                sizes="40px"
+                @error="handleImageError($event as Event, 'avatar')"
+              />
               <div class="flex-1">
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                   <div class="flex items-center justify-between mb-2">
@@ -104,7 +127,7 @@
                   <button
                     class="text-gray-500 hover:text-indigo-500 text-sm !rounded-button whitespace-nowrap"
                   >
-                    回复
+                    {{ $t('article.reply') }}
                   </button>
                 </div>
               </div>
@@ -119,10 +142,14 @@
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
               <div class="relative">
-                <img
+                <NuxtImg
                   :src="article?.data.author.avatar"
                   alt="作者头像"
                   class="w-12 h-12 md:w-16 md:h-16 rounded-full ring-2 ring-white"
+                  loading="lazy"
+                  format="webp"
+                  sizes="48px md:64px"
+                  @error="handleImageError($event as Event, 'avatar')"
                 />
                 <div
                   class="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-2 border-white"
@@ -167,7 +194,7 @@
               class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
             >
               <i class="fas fa-fire text-orange-500 mr-2"></i>
-              {{ $t('article.relatedPosts') }}
+              {{ $t('article.relatedArticles') }}
             </h4>
             <div class="space-y-3 md:space-y-4">
               <div
@@ -176,10 +203,14 @@
                 class="group cursor-pointer flex items-center space-x-3"
               >
                 <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
-                  <img
+                  <NuxtImg
                     :src="item.image"
                     :alt="item.title"
                     class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
+                    loading="lazy"
+                    format="webp"
+                    sizes="64px md:80px"
+                    @error="handleImageError($event as Event, 'thumbnail')"
                   />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -211,6 +242,9 @@
       id: String(route.params.id)
     }
   });
+
+  // 图片错误处理
+  const { handleImageError } = useImageError();
 
   // 设置seo
   useHead({

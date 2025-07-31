@@ -4083,7 +4083,7 @@
                           "type": "string"
                         },
                         "cover": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "authorId": {
                           "type": "integer"
@@ -4163,7 +4163,7 @@
                                   "type": "string"
                                 },
                                 "parentId": {
-                                  "type": "integer"
+                                  "type": "null"
                                 },
                                 "avatar": {
                                   "type": "string"
@@ -4329,7 +4329,6 @@
                         "views",
                         "likes",
                         "status",
-                        "cover",
                         "authorId",
                         "author",
                         "category",
@@ -7682,86 +7681,6 @@
           }
         },
         "security": []
-      },
-      "post": {
-        "summary": "支付订单",
-        "deprecated": false,
-        "description": "",
-        "operationId": "OrderController_payOrder",
-        "tags": [
-          "订单管理"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "example": "",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "支付成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
-            "headers": {}
-          },
-          "404": {
-            "description": "订单不存在",
-            "headers": {}
-          }
-        },
-        "security": []
       }
     },
     "/order/no/{orderNo}": {
@@ -7956,6 +7875,179 @@
         "responses": {
           "201": {
             "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "order": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "authorId": {
+                              "type": "string"
+                            },
+                            "orderNo": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "amount": {
+                              "type": "string"
+                            },
+                            "paymentMethod": {
+                              "type": "string"
+                            },
+                            "paymentOrderNo": {
+                              "type": "null"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "paidAt": {
+                              "type": "null"
+                            },
+                            "remark": {
+                              "type": "null"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "userId",
+                            "authorId",
+                            "orderNo",
+                            "type",
+                            "title",
+                            "amount",
+                            "paymentMethod",
+                            "paymentOrderNo",
+                            "status",
+                            "paidAt",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        },
+                        "commission": {
+                          "type": "object",
+                          "properties": {
+                            "authorAmount": {
+                              "type": "integer"
+                            },
+                            "inviterAmount": {
+                              "type": "integer"
+                            },
+                            "platformAmount": {
+                              "type": "integer"
+                            },
+                            "authorRate": {
+                              "type": "number"
+                            },
+                            "inviterRate": {
+                              "type": "integer"
+                            },
+                            "platformRate": {
+                              "type": "number"
+                            },
+                            "customCommission": {
+                              "type": "object",
+                              "properties": {
+                                "author": {
+                                  "type": "boolean"
+                                },
+                                "inviter": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "author",
+                                "inviter"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "authorAmount",
+                            "inviterAmount",
+                            "platformAmount",
+                            "authorRate",
+                            "inviterRate",
+                            "platformRate",
+                            "customCommission"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "order",
+                        "commission"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "code": 200,
+                  "message": "操作成功",
+                  "data": {
+                    "order": {
+                      "id": 4,
+                      "userId": 1,
+                      "authorId": "1",
+                      "orderNo": "ORDER1753961695512847",
+                      "type": "MEMBERSHIP",
+                      "title": "测试",
+                      "amount": "15",
+                      "paymentMethod": "wechat",
+                      "paymentOrderNo": null,
+                      "status": "PENDING",
+                      "paidAt": null,
+                      "remark": null,
+                      "createdAt": "2025-07-31T11:34:55.518Z",
+                      "updatedAt": "2025-07-31T11:34:55.518Z"
+                    },
+                    "commission": {
+                      "authorAmount": 2,
+                      "inviterAmount": 0,
+                      "platformAmount": 13,
+                      "authorRate": 0.1,
+                      "inviterRate": 0,
+                      "platformRate": 0.9,
+                      "customCommission": {
+                        "author": false,
+                        "inviter": false
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "headers": {}
           },
           "400": {

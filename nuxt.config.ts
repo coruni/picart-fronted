@@ -47,7 +47,7 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     // 检测浏览器语言
     detectBrowserLanguage: {
-      useCookie: false,
+      useCookie: true,
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
       alwaysRedirect: false,
@@ -119,7 +119,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         {
           rel: 'canonical',
-          href: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.com'
+          href: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc'
         }
       ]
     }
@@ -127,6 +127,53 @@ export default defineNuxtConfig({
 
   // 服务端渲染
   ssr: true,
+
+  // Nuxt Image配置
+  image: {
+    // 全局占位图配置
+    placeholder: '/placeholder.svg',
+    // 错误处理
+    presets: {
+      default: {
+        modifiers: {
+          format: 'webp',
+          quality: 80
+        }
+      },
+      avatar: {
+        modifiers: {
+          format: 'webp',
+          quality: 90,
+          width: 80,
+          height: 80
+        }
+      },
+      thumbnail: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          width: 300,
+          height: 200
+        }
+      }
+    },
+    // 响应式断点
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    },
+    // 域名白名单（生产环境使用）
+    domains: [],
+    // 图片优化服务配置
+    quality: 80,
+    format: ['webp', 'jpg', 'png', 'gif'],
+    // 加载超时时间
+    timeout: 5000
+  },
 
   // 实验性功能
   experimental: {
