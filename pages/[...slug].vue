@@ -43,7 +43,7 @@
   const items = [
     {
       id: 1,
-      image: 'https://tc.alcy.cc/i/2025/07/11/686fe58cef820.webp',
+      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58cef820.webp',
       title: '春日限定 - 花见少女',
       description: '樱花纷飞的季节，邂逅最美的春日限定',
       likes: 1234,
@@ -55,7 +55,7 @@
     },
     {
       id: 2,
-      image: 'https://tc.alcy.cc/i/2025/07/11/686fe58ed7ac4.webp',
+      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58ed7ac4.webp',
       title: '魔法战姬 - 月光之剑',
       description: '守护世界和平的魔法战士降临',
       likes: 2156,
@@ -67,7 +67,7 @@
     },
     {
       id: 3,
-      image: 'https://tc.alcy.cc/i/2025/07/11/686fe58435572.webp',
+      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58435572.webp',
       title: '和风物语 - 秋日庭院',
       description: '传统与现代的完美融合',
       likes: 1876,
@@ -79,7 +79,7 @@
     },
     {
       id: 4,
-      image: 'https://tc.alcy.cc/i/2025/07/11/686fe591dbe9d.webp',
+      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe591dbe9d.webp',
       title: '赛博朋克 - 未来都市',
       description: '霓虹闪烁的未来世界',
       likes: 3421,

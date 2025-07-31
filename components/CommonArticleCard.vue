@@ -5,7 +5,7 @@
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
       <NuxtImg
-        :src="article.cover ?? article.images[0] ?? ''"
+        :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         @error="handleImageError($event as Event, 'thumbnail')"
