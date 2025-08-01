@@ -26,6 +26,7 @@
     "@unhead/vue": "^2.0.12",
     "lodash-es": "^4.17.21",
     "nuxt": "^3.17.6",
+    "nuxt-easy-lightbox": "^1.1.0",
     "nuxt-swiper": "2.0.1",
     "pinia": "^3.0.3",
     "tailwindcss": "^4.1.11",

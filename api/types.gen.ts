@@ -1888,26 +1888,26 @@ export type ArticleControllerFindAllResponses = {
     message: string;
     data: {
       data: Array<{
-        id?: number;
-        title?: string;
+        id: number;
+        title: string;
         requireLogin?: boolean;
         requireFollow?: boolean;
         requirePayment?: boolean;
         viewPrice?: string;
         type?: string;
         content?: string;
-        images?: unknown;
-        summary?: unknown;
+        images?: string;
+        summary?: string;
         views?: number;
         likes?: number;
         status?: string;
-        cover?: unknown;
+        cover?: string;
         authorId?: number;
         author?: {
           id: number;
           username: string;
           nickname: string;
-          avatar: unknown;
+          avatar: string;
           status: string;
           createdAt: string;
           updatedAt: string;
@@ -1919,7 +1919,22 @@ export type ArticleControllerFindAllResponses = {
           id: number;
           name: string;
           description: string;
-          parentId: unknown;
+          parentId: number;
+          parent: {
+            id: number;
+            name: string;
+            description: string;
+            parentId: unknown;
+            avatar: string;
+            background: string;
+            cover: string;
+            sort: number;
+            status: string;
+            articleCount: number;
+            followCount: number;
+            createdAt: string;
+            updatedAt: string;
+          };
           avatar: string;
           background: string;
           cover: string;
@@ -1930,7 +1945,19 @@ export type ArticleControllerFindAllResponses = {
           createdAt: string;
           updatedAt: string;
         };
-        tags?: Array<string>;
+        tags?: Array<{
+          id: number;
+          name: string;
+          description: string;
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        }>;
         createdAt?: string;
         updatedAt?: string;
       }>;
@@ -2047,7 +2074,7 @@ export type ArticleControllerFindOneResponses = {
       views: number;
       likes: number;
       status: string;
-      cover?: string;
+      cover: unknown;
       authorId: number;
       author: {
         id: number;

@@ -33,6 +33,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { articleControllerFindAll } from '~~/api';
+
   const tabs = [
     { id: 'all', name: 'home.tab.all' },
     { id: 'popular', name: 'home.tab.popular' },
@@ -40,59 +42,20 @@
     { id: 'following', name: 'home.tab.following' }
   ];
   const currentTab = ref('all');
-  const items = [
-    {
-      id: 1,
-      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58cef820.webp',
-      title: '春日限定 - 花见少女',
-      description: '樱花纷飞的季节，邂逅最美的春日限定',
-      likes: 1234,
-      collections: 890,
-      author: {
-        name: '星月摄影',
-        avatar: 'https://tc.alcy.cc/i/2025/07/11/686fe58cef820.webp'
-      }
-    },
-    {
-      id: 2,
-      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58ed7ac4.webp',
-      title: '魔法战姬 - 月光之剑',
-      description: '守护世界和平的魔法战士降临',
-      likes: 2156,
-      collections: 1023,
-      author: {
-        name: '幻想工作室',
-        avatar: 'https://ai-public.mastergo.com/ai/img_res/132a6b144e160555ea163d72a6fa36b8.jpg'
-      }
-    },
-    {
-      id: 3,
-      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe58435572.webp',
-      title: '和风物语 - 秋日庭院',
-      description: '传统与现代的完美融合',
-      likes: 1876,
-      collections: 765,
-      author: {
-        name: '清风摄影',
-        avatar: 'https://ai-public.mastergo.com/ai/img_res/b0d3c51e24a9031f98e6ed59f509825b.jpg'
-      }
-    },
-    {
-      id: 4,
-      cover: 'https://tc.alcy.cc/i/2025/07/11/686fe591dbe9d.webp',
-      title: '赛博朋克 - 未来都市',
-      description: '霓虹闪烁的未来世界',
-      likes: 3421,
-      collections: 1543,
-      author: {
-        name: '极光映像',
-        avatar: 'https://ai-public.mastergo.com/ai/img_res/d9834592f949a5fc629107c5b239d04d.jpg'
-      }
-    }
-  ];
+  const pagination = ref({
+    page: 1,
+    limit: 12
+  });
+  const { data: articles } = articleControllerFindAll({
+    composable: 'useFetch',
+    query: computed(() => ({
+      page: pagination.value.page,
+      limit: pagination.value.limit
+    }))
+  });
   const displayItems = computed(() => {
     // 根据当前选中的tab返回对应的数据
-    return items;
+    return articles.value?.data.data || [];
   });
 
   const notify = () => {

@@ -13,9 +13,9 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     'nuxt-swiper',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    'nuxt-easy-lightbox'
   ],
-
 
   // i18n 国际化配置
   i18n: {

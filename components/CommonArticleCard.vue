@@ -40,8 +40,8 @@
           </div>
           <div class="flex items-center">
             <NuxtImg
-              :src="article.author.avatar"
-              :alt="article.author.nickname ?? article.author.username"
+              :src="article.author?.avatar"
+              :alt="article.author?.nickname ?? article.author?.username"
               class="w-7 h-7 rounded-full border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
               @error="handleImageError($event as Event, 'avatar')"
             />
@@ -53,9 +53,9 @@
 </template>
 
 <script lang="ts" setup>
-  import type { ArticleControllerFindOneResponse } from '~~/api';
+  import type { ArticleControllerFindAllResponse } from '~~/api';
   const { handleImageError } = useImageError();
-  type Article = Exclude<ArticleControllerFindOneResponse['data'], undefined>;
+  type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined>;
   const props = defineProps({
     data: {
       type: Object as PropType<Article>,

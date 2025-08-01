@@ -1,5 +1,11 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+    <VueEasyLightbox
+      :visible="lightboxVisible"
+      :imgs="lightboxImages"
+      :index="lightboxIndex"
+      @hide="lightboxVisible = false"
+    />
     <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
       <!-- 左侧主内容区 -->
       <div class="flex-1">
@@ -19,6 +25,7 @@
                 loading="lazy"
                 format="webp"
                 sizes="32px"
+                placeholder
                 @error="handleImageError($event as Event, 'avatar')"
               />
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
@@ -42,7 +49,7 @@
                   ? 'sm:col-span-2 aspect-[16/9]'
                   : 'aspect-square'
               ]"
-              @click="showFullImage(img)"
+              @click="openLightbox(index)"
             >
               <NuxtImg
                 :src="img"
@@ -233,9 +240,21 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
   import { articleControllerFindOne } from '~~/api';
   const route = useRoute();
+
+  // lightbox相关状态
+  const lightboxVisible = ref(false);
+  const lightboxIndex = ref(0);
+  const lightboxImages = computed(() => article.value?.data?.images || []);
+
+  // 打开lightbox
+  const openLightbox = (index: number) => {
+    if (lightboxImages.value.length > 0) {
+      lightboxIndex.value = index;
+      lightboxVisible.value = true;
+    }
+  };
   const { data: article } = articleControllerFindOne({
     composable: 'useFetch',
     path: {
@@ -290,10 +309,4 @@
       views: 567
     }
   ]);
-  const currentUserAvatar = ref('https://via.placeholder.com/40');
-  const authorAvatar = ref('https://via.placeholder.com/64');
-
-  const showFullImage = (imageUrl: string) => {
-    window.open(imageUrl, '_blank');
-  };
 </script>

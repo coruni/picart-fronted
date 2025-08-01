@@ -47,6 +47,9 @@ importers:
       nuxt:
         specifier: ^3.17.6
         version: 3.17.7(@netlify/blobs@9.1.2)(@parcel/watcher@2.5.1)(@types/node@24.1.0)(@vue/compiler-sfc@3.5.18)(db0@0.3.2)(eslint@8.57.1)(ioredis@5.6.1)(lightningcss@1.30.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.45.1)(terser@5.43.1)(typescript@5.8.3)(vite@6.3.5(@types/node@24.1.0)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0))(yaml@2.8.0)
+      nuxt-easy-lightbox:
+        specifier: ^1.1.0
+        version: 1.1.0(magicast@0.3.5)(vue@3.5.18(typescript@5.8.3))
       nuxt-swiper:
         specifier: 2.0.1
         version: 2.0.1(magicast@0.3.5)
@@ -4105,6 +4108,9 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
+  nuxt-easy-lightbox@1.1.0:
+    resolution: {integrity: sha512-a8eseAvAC2w+zmptmb4+4UmaCwxRtgZkrfMHo84lAc4aINK+J7ZFDx3zzAr/hhpNHZEduNgSbF9LbfqDSFRzxA==}
+
   nuxt-swiper@2.0.1:
     resolution: {integrity: sha512-mUAzuGqQHcsqJa1p5y/Hafvurn62o6njHq8DcwQErourkpJpv7z/SnnT0ezXMr7YvDPNg22ayEKGdHkGXXOxMQ==}
 
@@ -5466,6 +5472,12 @@ packages:
 
   vue-devtools-stub@0.1.0:
     resolution: {integrity: sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==}
+
+  vue-easy-lightbox@1.19.0:
+    resolution: {integrity: sha512-YxLXgjEn91UF3DuK1y8u3Pyx2sJ7a/MnBpkyrBSQkvU1glzEJASyAZ7N+5yDpmxBQDVMwCsL2VmxWGIiFrWCgA==}
+    engines: {node: '>=14.18.3'}
+    peerDependencies:
+      vue: ^3.0.0
 
   vue-eslint-parser@10.2.0:
     resolution: {integrity: sha512-CydUvFOQKD928UzZhTp4pr2vWz1L+H99t7Pkln2QSPdvmURT0MoC4wUccfCnuEaihNsu9aYYyk+bep8rlfkUXw==}
@@ -10228,6 +10240,14 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
+  nuxt-easy-lightbox@1.1.0(magicast@0.3.5)(vue@3.5.18(typescript@5.8.3)):
+    dependencies:
+      '@nuxt/kit': 4.0.1(magicast@0.3.5)
+      vue-easy-lightbox: 1.19.0(vue@3.5.18(typescript@5.8.3))
+    transitivePeerDependencies:
+      - magicast
+      - vue
+
   nuxt-swiper@2.0.1(magicast@0.3.5):
     dependencies:
       '@nuxt/kit': 3.17.7(magicast@0.3.5)
@@ -11832,6 +11852,10 @@ snapshots:
       vue: 3.5.18(typescript@5.8.3)
 
   vue-devtools-stub@0.1.0: {}
+
+  vue-easy-lightbox@1.19.0(vue@3.5.18(typescript@5.8.3)):
+    dependencies:
+      vue: 3.5.18(typescript@5.8.3)
 
   vue-eslint-parser@10.2.0(eslint@8.57.1):
     dependencies:

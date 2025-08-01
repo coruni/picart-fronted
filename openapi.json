@@ -3713,10 +3713,10 @@
                                 "type": "string"
                               },
                               "images": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "summary": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "views": {
                                 "type": "integer"
@@ -3728,7 +3728,7 @@
                                 "type": "string"
                               },
                               "cover": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "authorId": {
                                 "type": "integer"
@@ -3746,7 +3746,7 @@
                                     "type": "string"
                                   },
                                   "avatar": {
-                                    "type": "null"
+                                    "type": "string"
                                   },
                                   "status": {
                                     "type": "string"
@@ -3793,7 +3793,66 @@
                                     "type": "string"
                                   },
                                   "parentId": {
-                                    "type": "null"
+                                    "type": "integer"
+                                  },
+                                  "parent": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string"
+                                      },
+                                      "parentId": {
+                                        "type": "null"
+                                      },
+                                      "avatar": {
+                                        "type": "string"
+                                      },
+                                      "background": {
+                                        "type": "string"
+                                      },
+                                      "cover": {
+                                        "type": "string"
+                                      },
+                                      "sort": {
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "type": "string"
+                                      },
+                                      "articleCount": {
+                                        "type": "integer"
+                                      },
+                                      "followCount": {
+                                        "type": "integer"
+                                      },
+                                      "createdAt": {
+                                        "type": "string"
+                                      },
+                                      "updatedAt": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "description",
+                                      "parentId",
+                                      "avatar",
+                                      "background",
+                                      "cover",
+                                      "sort",
+                                      "status",
+                                      "articleCount",
+                                      "followCount",
+                                      "createdAt",
+                                      "updatedAt"
+                                    ]
                                   },
                                   "avatar": {
                                     "type": "string"
@@ -3828,6 +3887,7 @@
                                   "name",
                                   "description",
                                   "parentId",
+                                  "parent",
                                   "avatar",
                                   "background",
                                   "cover",
@@ -3842,7 +3902,55 @@
                               "tags": {
                                 "type": "array",
                                 "items": {
-                                  "type": "string"
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "avatar": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string"
+                                    },
+                                    "cover": {
+                                      "type": "string"
+                                    },
+                                    "sort": {
+                                      "type": "integer"
+                                    },
+                                    "articleCount": {
+                                      "type": "integer"
+                                    },
+                                    "followCount": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description",
+                                    "avatar",
+                                    "background",
+                                    "cover",
+                                    "sort",
+                                    "articleCount",
+                                    "followCount",
+                                    "createdAt",
+                                    "updatedAt"
+                                  ]
                                 }
                               },
                               "createdAt": {
@@ -3851,7 +3959,11 @@
                               "updatedAt": {
                                 "type": "string"
                               }
-                            }
+                            },
+                            "required": [
+                              "id",
+                              "title"
+                            ]
                           }
                         },
                         "meta": {
@@ -4083,7 +4195,7 @@
                           "type": "string"
                         },
                         "cover": {
-                          "type": "string"
+                          "type": "null"
                         },
                         "authorId": {
                           "type": "integer"
@@ -4329,6 +4441,7 @@
                         "views",
                         "likes",
                         "status",
+                        "cover",
                         "authorId",
                         "author",
                         "category",
