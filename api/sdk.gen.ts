@@ -32,6 +32,7 @@ import type {
   UserControllerFindOneData,
   UserControllerUpdateData,
   UserControllerGetProfileData,
+  UserControllerGetProfileResponse,
   UserControllerGetFollowerCountData,
   UserControllerGetFollowingCountData,
   UserControllerGetFollowersData,
@@ -59,6 +60,10 @@ import type {
   ArticleControllerUpdateData,
   ArticleControllerGetLikeStatusData,
   ArticleControllerGetLikeCountData,
+  ArticleControllerFindRecommendData,
+  ArticleControllerFindRecommendResponse,
+  ArticleControllerFindArticleByAuthorData,
+  ArticleControllerFindArticleByAuthorResponse,
   ArticleControllerLikeData,
   CommentControllerFindAllData,
   CommentControllerRemoveData,
@@ -559,10 +564,23 @@ export const userControllerUpdate = <TComposable extends Composable, DefaultT = 
 /**
  * 获取当前用户信息
  */
-export const userControllerGetProfile = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerGetProfileData, unknown, DefaultT>
+export const userControllerGetProfile = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerGetProfileResponse = UserControllerGetProfileResponse
+>(
+  options: Options<
+    TComposable,
+    UserControllerGetProfileData,
+    UserControllerGetProfileResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    UserControllerGetProfileResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/user/profile',
     ...options
   });
@@ -971,6 +989,57 @@ export const articleControllerGetLikeCount = <TComposable extends Composable, De
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
     url: '/article/{id}/like/count',
+    ...options
+  });
+};
+
+/**
+ * 获取相关推荐
+ */
+export const articleControllerFindRecommend = <
+  TComposable extends Composable,
+  DefaultT extends ArticleControllerFindRecommendResponse = ArticleControllerFindRecommendResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerFindRecommendData,
+    ArticleControllerFindRecommendResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerFindRecommendResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/article/recommend/{id}',
+    ...options
+  });
+};
+
+/**
+ * 获取用户文章
+ */
+export const articleControllerFindArticleByAuthor = <
+  TComposable extends Composable,
+  DefaultT extends
+    ArticleControllerFindArticleByAuthorResponse = ArticleControllerFindArticleByAuthorResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerFindArticleByAuthorData,
+    ArticleControllerFindArticleByAuthorResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerFindArticleByAuthorResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/article/author/{id}',
     ...options
   });
 };

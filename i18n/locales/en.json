@@ -92,7 +92,11 @@
       "confirm": "Confirm",
       "cancel": "Cancel",
       "create": "Create"
-    }
+    },
+    "loading": {
+      "noMore": "No More"
+    },
+    "loadMore": "Load More"
   },
   "filter": {
     "title": "Filter"
@@ -148,5 +152,46 @@
     "relatedArticles": "Related Articles",
     "comment": "Comment",
     "reply": "Reply"
+  },
+  "validation": {
+    "required": "This field is required"
+  },
+  "login": {
+    "title": "User Login",
+    "username": "Username",
+    "usernamePlaceholder": "Please enter your username",
+    "password": "Password",
+    "passwordPlaceholder": "Please enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "login": "Login",
+    "loggingIn": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "register": "Register now",
+    "loginFailed": "Login failed, please check your username and password"
+  },
+  "user": {
+    "title": "User Profile",
+    "avatar": "User Avatar",
+    "noDescription": "No personal description",
+    "articles": "Articles",
+    "followers": "Followers",
+    "following": "Following",
+    "wallet": "Wallet",
+    "editProfile": "Edit Profile",
+    "logout": "Logout",
+    "myArticles": "My Articles",
+    "createArticle": "Create Article",
+    "noArticles": "No articles yet",
+    "membershipLevel": "Membership Level",
+    "basicMember": "Basic Member",
+    "experience": "Experience",
+    "score": "Score",
+    "inviteRewards": "Invite Rewards",
+    "inviteCode": "Invite Code",
+    "noInviteCode": "No invite code",
+    "inviteCount": "Invite Count",
+    "inviteEarnings": "Invite Earnings",
+    "copyInviteLink": "Copy Invite Link"
   }
 }

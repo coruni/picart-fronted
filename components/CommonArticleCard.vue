@@ -55,7 +55,10 @@
 <script lang="ts" setup>
   import type { ArticleControllerFindAllResponse } from '~~/api';
   const { handleImageError } = useImageError();
-  type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined>;
+  type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined> & {
+    images: string[] | string;
+  };
+
   const props = defineProps({
     data: {
       type: Object as PropType<Article>,

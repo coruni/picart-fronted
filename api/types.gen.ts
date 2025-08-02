@@ -70,18 +70,6 @@ export type LoginDto = {
    */
   username: string;
   /**
-   * 设备ID
-   */
-  deviceId: string;
-  /**
-   * 设备类型
-   */
-  deviceType?: string;
-  /**
-   * 设备名称
-   */
-  deviceName?: string;
-  /**
    * 密码
    */
   password: string;
@@ -1358,8 +1346,64 @@ export type UserControllerGetProfileResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      username: string;
+      nickname: string;
+      email: string;
+      phone: string;
+      status: string;
+      banned: unknown;
+      banReason: unknown;
+      avatar: string;
+      description: unknown;
+      address: unknown;
+      gender: string;
+      birthDate: unknown;
+      articleCount: number;
+      followerCount: number;
+      followingCount: number;
+      level: number;
+      experience: number;
+      score: number;
+      wallet: number;
+      membershipLevel: number;
+      membershipLevelName: string;
+      membershipStatus: string;
+      membershipStartDate: unknown;
+      membershipEndDate: unknown;
+      lastLoginAt: string;
+      lastActiveAt: unknown;
+      refreshToken: unknown;
+      inviterId: unknown;
+      inviteCode: string;
+      inviteEarnings: string;
+      inviteCount: number;
+      roles: Array<{
+        id?: number;
+        name?: string;
+        displayName?: unknown;
+        description?: string;
+        permissions?: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      config: unknown;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type UserControllerGetProfileResponse =
+  UserControllerGetProfileResponses[keyof UserControllerGetProfileResponses];
 
 export type UserControllerGetFollowerCountData = {
   body?: never;
@@ -1593,7 +1637,7 @@ export type UserControllerLoginResponses = {
       membershipStatus: string;
       membershipStartDate: unknown;
       membershipEndDate: unknown;
-      lastLoginAt: unknown;
+      lastLoginAt: string;
       lastActiveAt: unknown;
       refreshToken: string;
       inviterId: unknown;
@@ -1875,6 +1919,11 @@ export type ArticleControllerFindAllData = {
      */
     limit?: number;
     title?: string;
+    /**
+     * 分类
+     */
+    categoryId?: number;
+    type?: 'all' | 'latest' | 'following' | 'popular';
   };
   url: '/article';
 };
@@ -2242,6 +2291,236 @@ export type ArticleControllerGetLikeCountResponses = {
    */
   200: unknown;
 };
+
+export type ArticleControllerFindRecommendData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    /**
+     * 文章id
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/article/recommend/{id}';
+};
+
+export type ArticleControllerFindRecommendResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        title?: string;
+        requireLogin?: boolean;
+        requireFollow?: boolean;
+        requirePayment?: boolean;
+        viewPrice?: string;
+        type?: string;
+        content?: string;
+        images?: Array<string>;
+        summary?: unknown;
+        views?: number;
+        likes?: number;
+        status?: string;
+        cover?: string;
+        authorId?: number;
+        author?: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: unknown;
+          followerCount: number;
+          followingCount: number;
+        };
+        category?: {
+          id: number;
+          name: string;
+          description: string;
+          parentId: number;
+          parent: {
+            id: number;
+            name: string;
+            description: string;
+            parentId: unknown;
+            avatar: string;
+            background: string;
+            cover: string;
+            sort: number;
+            status: string;
+            articleCount: number;
+            followCount: number;
+            createdAt: string;
+            updatedAt: string;
+          };
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          status: string;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        tags?: Array<{
+          id?: number;
+          name?: string;
+          description?: string;
+          avatar?: string;
+          background?: string;
+          cover?: string;
+          sort?: number;
+          articleCount?: number;
+          followCount?: number;
+          createdAt?: string;
+          updatedAt?: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type ArticleControllerFindRecommendResponse =
+  ArticleControllerFindRecommendResponses[keyof ArticleControllerFindRecommendResponses];
+
+export type ArticleControllerFindArticleByAuthorData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    /**
+     * 用户id
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * 分页
+     */
+    page?: number;
+    /**
+     * 限制
+     */
+    limit?: number;
+    type?: 'all' | 'popular' | 'latest';
+  };
+  url: '/article/author/{id}';
+};
+
+export type ArticleControllerFindArticleByAuthorResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        title: string;
+        requireLogin: boolean;
+        requireFollow: boolean;
+        requirePayment: boolean;
+        viewPrice: string;
+        type: string;
+        content: string;
+        images: Array<string>;
+        summary: unknown;
+        views: number;
+        likes: number;
+        status: string;
+        cover: string;
+        authorId: number;
+        author: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: unknown;
+          followerCount: number;
+          followingCount: number;
+        };
+        category: {
+          id: number;
+          name: string;
+          description: string;
+          parentId: number;
+          parent: {
+            id: number;
+            name: string;
+            description: string;
+            parentId: unknown;
+            avatar: string;
+            background: string;
+            cover: string;
+            sort: number;
+            status: string;
+            articleCount: number;
+            followCount: number;
+            createdAt: string;
+            updatedAt: string;
+          };
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          status: string;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        tags: Array<{
+          id: number;
+          name: string;
+          description: string;
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        }>;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type ArticleControllerFindArticleByAuthorResponse =
+  ArticleControllerFindArticleByAuthorResponses[keyof ArticleControllerFindArticleByAuthorResponses];
 
 export type ArticleControllerLikeData = {
   body?: ArticleLikeDto;

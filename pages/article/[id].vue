@@ -94,7 +94,7 @@
                 ></textarea>
                 <div class="flex justify-end mt-2">
                   <button
-                    class="px-3 py-1.5 md:px-4 md:py-2 bg-indigo-500 text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 !rounded-button whitespace-nowrap"
+                    class="px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 !rounded-button whitespace-nowrap"
                   >
                     {{ $t('article.comment') }}
                   </button>
@@ -190,7 +190,7 @@
               </div>
             </div>
             <button
-              class="w-full py-2 md:py-2.5 bg-indigo-500 text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 transition-colors !rounded-button whitespace-nowrap"
+              class="w-full py-2 md:py-2.5 cursor-pointer bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 transition-colors !rounded-button whitespace-nowrap"
             >
               {{ $t('article.followAuthor') }}
             </button>
@@ -204,14 +204,15 @@
               {{ $t('article.relatedArticles') }}
             </h4>
             <div class="space-y-3 md:space-y-4">
-              <div
-                v-for="item in relatedPosts"
+              <NuxtLinkLocale
+                v-for="item in recommend?.data.data"
                 :key="item.id"
+                :to="`/article/${item.id}`"
                 class="group cursor-pointer flex items-center space-x-3"
               >
                 <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
                   <NuxtImg
-                    :src="item.image"
+                    :src="item.cover"
                     :alt="item.title"
                     class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                     loading="lazy"
@@ -230,7 +231,7 @@
                     {{ item.views }} {{ $t('article.views') }}
                   </p>
                 </div>
-              </div>
+              </NuxtLinkLocale>
             </div>
           </div>
         </div>
@@ -240,7 +241,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { articleControllerFindOne } from '~~/api';
+  import { articleControllerFindOne, articleControllerFindRecommend } from '~~/api';
   const route = useRoute();
 
   // lightbox相关状态
@@ -257,6 +258,15 @@
   };
   const { data: article } = articleControllerFindOne({
     composable: 'useFetch',
+    key: `article_${route.params.id}`,
+    path: {
+      id: String(route.params.id)
+    }
+  });
+
+  const { data: recommend } = articleControllerFindRecommend({
+    key: `recommend_${route.params.id}`,
+    composable: 'useLazyAsyncData',
     path: {
       id: String(route.params.id)
     }
@@ -264,8 +274,6 @@
 
   // 图片错误处理
   const { handleImageError } = useImageError();
-
-  // 设置seo
   useHead({
     title: () => article.value?.data.title || '文章详情',
     meta: [

@@ -187,7 +187,7 @@
   if (articleId) {
     try {
       const { data: articleData } = await articleControllerFindOne({
-        composable: 'useAsyncData',
+        composable: 'useFetch',
         key: 'articleDetail',
         path: { id: articleId }
       });
@@ -262,7 +262,7 @@
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     key: 'categories',
     query: computed(() => ({}))
   });
@@ -308,7 +308,7 @@
 
   // 获取标签数据
   const { data: tagsData } = await tagControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     key: 'tags',
     query: {}
   });

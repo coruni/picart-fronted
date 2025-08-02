@@ -90,7 +90,8 @@
   const table = useTemplateRef('table');
   const { t } = useI18n();
   definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+    requiresAdmin: true
   });
 
   // 分页状态 - 注意这里使用 pageIndex 从 0 开始
@@ -252,7 +253,7 @@
   };
 
   const categories = await categoryControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     key: 'categories',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,

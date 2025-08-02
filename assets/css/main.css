@@ -5,3 +5,14 @@
     @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300;
   }
 }
+
+/* 页面切换动画 */
+.my-enter-active,
+.my-leave-active {
+  transition: opacity 0.3s;
+}
+
+.my-enter-from,
+.my-leave-to {
+  opacity: 0;
+}

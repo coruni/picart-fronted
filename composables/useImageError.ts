@@ -5,8 +5,7 @@ export const useImageError = () => {
     if (!img) return;
 
     // 根据暗黑模式选择不同的占位图
-    const isDark = document.documentElement.classList.contains('dark')
-    console.log(isDark);
+    const isDark = document.documentElement.classList.contains('dark');
 
     switch (type) {
       case 'avatar':

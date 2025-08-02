@@ -246,7 +246,7 @@
   };
 
   const tags = await tagControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
       limit: pagination.value.pageSize

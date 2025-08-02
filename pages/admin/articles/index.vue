@@ -260,7 +260,7 @@
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     key: 'article-categories',
     query: computed(() => ({
       page: 1,
@@ -302,7 +302,7 @@
   }, 300);
 
   const articles = await articleControllerFindAll({
-    composable: 'useAsyncData',
+    composable: 'useFetch',
     key: 'articles',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,

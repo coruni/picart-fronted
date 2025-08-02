@@ -3,9 +3,9 @@
     class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 dark:bg-gray-900/80 backdrop-blur-md"
   >
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
-      <div class="flex items-center space-x-2">
+      <NuxtLinkLocale class="flex items-center space-x-2" to="/">
         <span class="text-xl font-bold text-gray-700 dark:text-white">PicArt</span>
-      </div>
+      </NuxtLinkLocale>
 
       <!-- 修改为使用动画过渡 -->
       <div

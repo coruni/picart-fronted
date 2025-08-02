@@ -2090,6 +2090,222 @@
         "responses": {
           "200": {
             "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "banned": {
+                          "type": "null"
+                        },
+                        "banReason": {
+                          "type": "null"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "null"
+                        },
+                        "address": {
+                          "type": "null"
+                        },
+                        "gender": {
+                          "type": "string"
+                        },
+                        "birthDate": {
+                          "type": "null"
+                        },
+                        "articleCount": {
+                          "type": "integer"
+                        },
+                        "followerCount": {
+                          "type": "integer"
+                        },
+                        "followingCount": {
+                          "type": "integer"
+                        },
+                        "level": {
+                          "type": "integer"
+                        },
+                        "experience": {
+                          "type": "integer"
+                        },
+                        "score": {
+                          "type": "integer"
+                        },
+                        "wallet": {
+                          "type": "integer"
+                        },
+                        "membershipLevel": {
+                          "type": "integer"
+                        },
+                        "membershipLevelName": {
+                          "type": "string"
+                        },
+                        "membershipStatus": {
+                          "type": "string"
+                        },
+                        "membershipStartDate": {
+                          "type": "null"
+                        },
+                        "membershipEndDate": {
+                          "type": "null"
+                        },
+                        "lastLoginAt": {
+                          "type": "string"
+                        },
+                        "lastActiveAt": {
+                          "type": "null"
+                        },
+                        "refreshToken": {
+                          "type": "null"
+                        },
+                        "inviterId": {
+                          "type": "null"
+                        },
+                        "inviteCode": {
+                          "type": "string"
+                        },
+                        "inviteEarnings": {
+                          "type": "string"
+                        },
+                        "inviteCount": {
+                          "type": "integer"
+                        },
+                        "roles": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "null"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "config": {
+                          "type": "null"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "username",
+                        "nickname",
+                        "email",
+                        "phone",
+                        "status",
+                        "banned",
+                        "banReason",
+                        "avatar",
+                        "description",
+                        "address",
+                        "gender",
+                        "birthDate",
+                        "articleCount",
+                        "followerCount",
+                        "followingCount",
+                        "level",
+                        "experience",
+                        "score",
+                        "wallet",
+                        "membershipLevel",
+                        "membershipLevelName",
+                        "membershipStatus",
+                        "membershipStartDate",
+                        "membershipEndDate",
+                        "lastLoginAt",
+                        "lastActiveAt",
+                        "refreshToken",
+                        "inviterId",
+                        "inviteCode",
+                        "inviteEarnings",
+                        "inviteCount",
+                        "roles",
+                        "config",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "401": {
@@ -2685,7 +2901,8 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/LoginDto"
-              }
+              },
+              "examples": {}
             }
           }
         },
@@ -2782,7 +2999,7 @@
                           "type": "null"
                         },
                         "lastLoginAt": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "lastActiveAt": {
                           "type": "null"
@@ -3623,6 +3840,32 @@
             "required": false,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "分类",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "latest",
+                "following",
+                "popular"
+              ],
+              "default": "all",
+              "nullable": true
             }
           },
           {
@@ -4788,6 +5031,853 @@
           },
           "404": {
             "description": "文章不存在",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/article/recommend/{id}": {
+      "get": {
+        "summary": "获取相关推荐",
+        "deprecated": false,
+        "description": "",
+        "operationId": "ArticleController_findRecommend",
+        "tags": [
+          "文章管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "文章id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "requireLogin": {
+                                "type": "boolean"
+                              },
+                              "requireFollow": {
+                                "type": "boolean"
+                              },
+                              "requirePayment": {
+                                "type": "boolean"
+                              },
+                              "viewPrice": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "images": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "summary": {
+                                "type": "null"
+                              },
+                              "views": {
+                                "type": "integer"
+                              },
+                              "likes": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "cover": {
+                                "type": "string"
+                              },
+                              "authorId": {
+                                "type": "integer"
+                              },
+                              "author": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "nickname": {
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "null"
+                                  },
+                                  "followerCount": {
+                                    "type": "integer"
+                                  },
+                                  "followingCount": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "username",
+                                  "nickname",
+                                  "avatar",
+                                  "status",
+                                  "createdAt",
+                                  "updatedAt",
+                                  "description",
+                                  "followerCount",
+                                  "followingCount"
+                                ]
+                              },
+                              "category": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "parentId": {
+                                    "type": "integer"
+                                  },
+                                  "parent": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string"
+                                      },
+                                      "parentId": {
+                                        "type": "null"
+                                      },
+                                      "avatar": {
+                                        "type": "string"
+                                      },
+                                      "background": {
+                                        "type": "string"
+                                      },
+                                      "cover": {
+                                        "type": "string"
+                                      },
+                                      "sort": {
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "type": "string"
+                                      },
+                                      "articleCount": {
+                                        "type": "integer"
+                                      },
+                                      "followCount": {
+                                        "type": "integer"
+                                      },
+                                      "createdAt": {
+                                        "type": "string"
+                                      },
+                                      "updatedAt": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "description",
+                                      "parentId",
+                                      "avatar",
+                                      "background",
+                                      "cover",
+                                      "sort",
+                                      "status",
+                                      "articleCount",
+                                      "followCount",
+                                      "createdAt",
+                                      "updatedAt"
+                                    ]
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "background": {
+                                    "type": "string"
+                                  },
+                                  "cover": {
+                                    "type": "string"
+                                  },
+                                  "sort": {
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "articleCount": {
+                                    "type": "integer"
+                                  },
+                                  "followCount": {
+                                    "type": "integer"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "description",
+                                  "parentId",
+                                  "parent",
+                                  "avatar",
+                                  "background",
+                                  "cover",
+                                  "sort",
+                                  "status",
+                                  "articleCount",
+                                  "followCount",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "avatar": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string"
+                                    },
+                                    "cover": {
+                                      "type": "string"
+                                    },
+                                    "sort": {
+                                      "type": "integer"
+                                    },
+                                    "articleCount": {
+                                      "type": "integer"
+                                    },
+                                    "followCount": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/article/author/{id}": {
+      "get": {
+        "summary": "获取用户文章",
+        "deprecated": false,
+        "description": "",
+        "operationId": "ArticleController_findArticleByAuthor",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户id",
+            "required": true,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "分页",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "限制",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "popular",
+                "latest"
+              ],
+              "nullable": true
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "requireLogin": {
+                                "type": "boolean"
+                              },
+                              "requireFollow": {
+                                "type": "boolean"
+                              },
+                              "requirePayment": {
+                                "type": "boolean"
+                              },
+                              "viewPrice": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "images": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "summary": {
+                                "type": "null"
+                              },
+                              "views": {
+                                "type": "integer"
+                              },
+                              "likes": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "cover": {
+                                "type": "string"
+                              },
+                              "authorId": {
+                                "type": "integer"
+                              },
+                              "author": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "nickname": {
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "null"
+                                  },
+                                  "followerCount": {
+                                    "type": "integer"
+                                  },
+                                  "followingCount": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "username",
+                                  "nickname",
+                                  "avatar",
+                                  "status",
+                                  "createdAt",
+                                  "updatedAt",
+                                  "description",
+                                  "followerCount",
+                                  "followingCount"
+                                ]
+                              },
+                              "category": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "parentId": {
+                                    "type": "integer"
+                                  },
+                                  "parent": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "description": {
+                                        "type": "string"
+                                      },
+                                      "parentId": {
+                                        "type": "null"
+                                      },
+                                      "avatar": {
+                                        "type": "string"
+                                      },
+                                      "background": {
+                                        "type": "string"
+                                      },
+                                      "cover": {
+                                        "type": "string"
+                                      },
+                                      "sort": {
+                                        "type": "integer"
+                                      },
+                                      "status": {
+                                        "type": "string"
+                                      },
+                                      "articleCount": {
+                                        "type": "integer"
+                                      },
+                                      "followCount": {
+                                        "type": "integer"
+                                      },
+                                      "createdAt": {
+                                        "type": "string"
+                                      },
+                                      "updatedAt": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "name",
+                                      "description",
+                                      "parentId",
+                                      "avatar",
+                                      "background",
+                                      "cover",
+                                      "sort",
+                                      "status",
+                                      "articleCount",
+                                      "followCount",
+                                      "createdAt",
+                                      "updatedAt"
+                                    ]
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "background": {
+                                    "type": "string"
+                                  },
+                                  "cover": {
+                                    "type": "string"
+                                  },
+                                  "sort": {
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "articleCount": {
+                                    "type": "integer"
+                                  },
+                                  "followCount": {
+                                    "type": "integer"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "name",
+                                  "description",
+                                  "parentId",
+                                  "parent",
+                                  "avatar",
+                                  "background",
+                                  "cover",
+                                  "sort",
+                                  "status",
+                                  "articleCount",
+                                  "followCount",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              "tags": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "avatar": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string"
+                                    },
+                                    "cover": {
+                                      "type": "string"
+                                    },
+                                    "sort": {
+                                      "type": "integer"
+                                    },
+                                    "articleCount": {
+                                      "type": "integer"
+                                    },
+                                    "followCount": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description",
+                                    "avatar",
+                                    "background",
+                                    "cover",
+                                    "sort",
+                                    "articleCount",
+                                    "followCount",
+                                    "createdAt",
+                                    "updatedAt"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "requireLogin",
+                              "requireFollow",
+                              "requirePayment",
+                              "viewPrice",
+                              "type",
+                              "content",
+                              "images",
+                              "summary",
+                              "views",
+                              "likes",
+                              "status",
+                              "cover",
+                              "authorId",
+                              "author",
+                              "category",
+                              "tags",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -9754,21 +10844,6 @@
             "description": "用户名",
             "example": "admin"
           },
-          "deviceId": {
-            "type": "string",
-            "description": "设备ID",
-            "example": "device-uuid-123"
-          },
-          "deviceType": {
-            "type": "string",
-            "description": "设备类型",
-            "example": "iOS/Android/Web"
-          },
-          "deviceName": {
-            "type": "string",
-            "description": "设备名称",
-            "example": "iPhone 15"
-          },
           "password": {
             "type": "string",
             "description": "密码",
@@ -9777,7 +10852,6 @@
         },
         "required": [
           "username",
-          "deviceId",
           "password"
         ]
       },

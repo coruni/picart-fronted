@@ -93,6 +93,9 @@
       "cancel": "キャンセル",
       "confirm": "確認する",
       "create": "作成する"
+    },
+    "loading": {
+      "noMore": "没有更多了"
     }
   },
   "filter": {
@@ -136,5 +139,58 @@
     "type": {
       "placeholder": "タイプを選択してください"
     }
+  },
+  "article": {
+    "publishAt": "发布于",
+    "views": "ビュー",
+    "comments": "コメント区",
+    "followers": "ファン",
+    "likes": "いいね",
+    "goodReviews": "好評",
+    "followAuthor": "著者をフォロー",
+    "relatedArticles": "関連推奨",
+    "comment": "コメントを投稿",
+    "reply": "返信"
+  },
+  "validation": {
+    "required": "このフィールドは必須です"
+  },
+  "login": {
+    "title": "ユーザーログイン",
+    "username": "ユーザー名",
+    "usernamePlaceholder": "ユーザー名を入力してください",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワードを入力してください",
+    "rememberMe": "私を覚えてますか",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "login": "ログイン",
+    "loggingIn": "ログイン中...",
+    "noAccount": "アカウントがありませんか？",
+    "register": "今すぐ登録",
+    "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください"
+  },
+  "user": {
+    "title": "ユーザープロフィール",
+    "avatar": "ユーザーアバター",
+    "noDescription": "個人的な説明はありません",
+    "articles": "記事",
+    "followers": "フォロワー",
+    "following": "フォロー中",
+    "wallet": "ウォレット",
+    "editProfile": "プロフィールを編集",
+    "logout": "ログアウト",
+    "myArticles": "私の記事",
+    "createArticle": "記事を作成",
+    "noArticles": "記事がありません",
+    "membershipLevel": "会員レベル",
+    "basicMember": "基本会員",
+    "experience": "経験値",
+    "score": "スコア",
+    "inviteRewards": "招待報酬",
+    "inviteCode": "招待コード",
+    "noInviteCode": "招待コードがありません",
+    "inviteCount": "招待人数",
+    "inviteEarnings": "招待収益",
+    "copyInviteLink": "招待リンクをコピー"
   }
 }

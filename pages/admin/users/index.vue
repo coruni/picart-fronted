@@ -168,9 +168,7 @@
       {
         label: t('common.table.edit'),
         class: 'cursor-pointer',
-        onClick: () => {
-          console.log('Edit row:', row.original);
-        }
+        onClick: () => {}
       },
       {
         label: t('common.table.delete'),
@@ -213,7 +211,8 @@
   };
 
   const users = await userControllerFindAll({
-    composable: 'useAsyncData',
+    composable: import.meta.client ? 'useFetch' : 'useAsyncData',
+
     key: 'users',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,

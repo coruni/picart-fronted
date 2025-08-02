@@ -93,7 +93,11 @@
       "cancel": "取消",
       "confirm": "确认",
       "create": "新增"
-    }
+    },
+    "loading": {
+      "noMore": "没有更多了"
+    },
+    "loadMore": "加载更多"
   },
   "filter": {
     "title": "筛选"
@@ -151,5 +155,46 @@
     "followAuthor": "关注作者",
     "comment": "发表评论",
     "reply": "回复"
+  },
+  "validation": {
+    "required": "此字段为必填项"
+  },
+  "login": {
+    "title": "用户登录",
+    "username": "用户名",
+    "usernamePlaceholder": "请输入用户名",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "login": "登录",
+    "loggingIn": "登录中...",
+    "noAccount": "没有账户？",
+    "register": "立即注册",
+    "loginFailed": "登录失败，请检查用户名和密码"
+  },
+  "user": {
+    "title": "用户中心",
+    "avatar": "用户头像",
+    "noDescription": "暂无个人简介",
+    "articles": "文章",
+    "followers": "粉丝",
+    "following": "关注",
+    "wallet": "钱包",
+    "editProfile": "编辑资料",
+    "logout": "退出登录",
+    "myArticles": "我的文章",
+    "createArticle": "创作文章",
+    "noArticles": "暂无文章",
+    "membershipLevel": "会员等级",
+    "basicMember": "基本会员",
+    "experience": "经验值",
+    "score": "积分",
+    "inviteRewards": "邀请奖励",
+    "inviteCode": "邀请码",
+    "noInviteCode": "暂无邀请码",
+    "inviteCount": "邀请人数",
+    "inviteEarnings": "邀请收益",
+    "copyInviteLink": "复制邀请链接"
   }
 }
