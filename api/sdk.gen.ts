@@ -43,6 +43,7 @@ import type {
   UserControllerLoginData,
   UserControllerLoginResponse,
   UserControllerRegisterUserData,
+  UserControllerRegisterUserResponse,
   UserControllerRefreshTokenData,
   UserControllerLogoutData,
   UserControllerFollowData,
@@ -60,6 +61,8 @@ import type {
   ArticleControllerUpdateData,
   ArticleControllerGetLikeStatusData,
   ArticleControllerGetLikeCountData,
+  ArticleControllerArticleSearchData,
+  ArticleControllerArticleSearchResponse,
   ArticleControllerFindRecommendData,
   ArticleControllerFindRecommendResponse,
   ArticleControllerFindArticleByAuthorData,
@@ -715,19 +718,30 @@ export const userControllerLogin = <
 /**
  * 用户注册
  */
-export const userControllerRegisterUser = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerRegisterUserData, unknown, DefaultT>
+export const userControllerRegisterUser = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerRegisterUserResponse = UserControllerRegisterUserResponse
+>(
+  options: Options<
+    TComposable,
+    UserControllerRegisterUserData,
+    UserControllerRegisterUserResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/user/register',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    UserControllerRegisterUserResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/user/register',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**
@@ -989,6 +1003,31 @@ export const articleControllerGetLikeCount = <TComposable extends Composable, De
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
     url: '/article/{id}/like/count',
+    ...options
+  });
+};
+
+/**
+ * 搜索文章列表
+ */
+export const articleControllerArticleSearch = <
+  TComposable extends Composable,
+  DefaultT extends ArticleControllerArticleSearchResponse = ArticleControllerArticleSearchResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerArticleSearchData,
+    ArticleControllerArticleSearchResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerArticleSearchResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/article/search',
     ...options
   });
 };

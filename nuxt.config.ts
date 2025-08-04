@@ -122,6 +122,11 @@ export default defineNuxtConfig({
           href: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc'
         }
       ]
+    },
+    // 页面过渡动画配置
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in'
     }
   },
 

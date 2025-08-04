@@ -1699,8 +1699,64 @@ export type UserControllerRegisterUserResponses = {
   /**
    * 注册成功，返回用户信息
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      username: string;
+      nickname: string;
+      email: string;
+      phone: unknown;
+      status: string;
+      banned: unknown;
+      banReason: unknown;
+      avatar: string;
+      description: unknown;
+      address: unknown;
+      gender: string;
+      birthDate: unknown;
+      articleCount: number;
+      followerCount: number;
+      followingCount: number;
+      level: number;
+      experience: number;
+      score: number;
+      wallet: number;
+      membershipLevel: number;
+      membershipLevelName: string;
+      membershipStatus: string;
+      membershipStartDate: unknown;
+      membershipEndDate: unknown;
+      lastLoginAt: unknown;
+      lastActiveAt: unknown;
+      refreshToken: string;
+      inviterId: unknown;
+      inviteCode: unknown;
+      inviteEarnings: string;
+      inviteCount: number;
+      roles: Array<{
+        id?: number;
+        name?: string;
+        displayName?: unknown;
+        description?: string;
+        permissions?: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      createdAt: string;
+      updatedAt: string;
+      token: string;
+    };
+  };
 };
+
+export type UserControllerRegisterUserResponse =
+  UserControllerRegisterUserResponses[keyof UserControllerRegisterUserResponses];
 
 export type UserControllerRefreshTokenData = {
   body?: {
@@ -2291,6 +2347,122 @@ export type ArticleControllerGetLikeCountResponses = {
    */
   200: unknown;
 };
+
+export type ArticleControllerArticleSearchData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query: {
+    /**
+     * 分页
+     */
+    page?: number;
+    /**
+     * 限制
+     */
+    limit?: number;
+    keyword: string;
+    categoryId?: number;
+  };
+  url: '/article/search';
+};
+
+export type ArticleControllerArticleSearchResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        title?: string;
+        requireLogin?: boolean;
+        requireFollow?: boolean;
+        requirePayment?: boolean;
+        viewPrice?: string;
+        type?: string;
+        content?: string;
+        images?: Array<string>;
+        summary?: unknown;
+        views?: number;
+        likes?: number;
+        status?: string;
+        cover?: string;
+        authorId?: number;
+        author?: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: unknown;
+          followerCount: number;
+          followingCount: number;
+        };
+        category?: {
+          id: number;
+          name: string;
+          description: string;
+          parentId: number;
+          parent: {
+            id: number;
+            name: string;
+            description: string;
+            parentId: unknown;
+            avatar: string;
+            background: string;
+            cover: string;
+            sort: number;
+            status: string;
+            articleCount: number;
+            followCount: number;
+            createdAt: string;
+            updatedAt: string;
+          };
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          status: string;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        tags?: Array<{
+          id: number;
+          name: string;
+          description: string;
+          avatar: string;
+          background: string;
+          cover: string;
+          sort: number;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type ArticleControllerArticleSearchResponse =
+  ArticleControllerArticleSearchResponses[keyof ArticleControllerArticleSearchResponses];
 
 export type ArticleControllerFindRecommendData = {
   body?: never;

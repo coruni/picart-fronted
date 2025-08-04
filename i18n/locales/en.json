@@ -96,7 +96,10 @@
     "loading": {
       "noMore": "No More"
     },
-    "loadMore": "Load More"
+    "loadMore": "Load More",
+    "loading": "Loading...",
+    "error": "Load failed, please try again",
+    "retry": "Reload"
   },
   "filter": {
     "title": "Filter"
@@ -154,7 +157,37 @@
     "reply": "Reply"
   },
   "validation": {
-    "required": "This field is required"
+    "required": "This field is required",
+    "usernameMin": "Username must be at least 3 characters",
+    "usernameMax": "Username must not exceed 20 characters",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordMin": "Password must be at least 6 characters",
+    "passwordMax": "Password must not exceed 50 characters",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "error": {
+    "pageNotFound": "Sorry, the page you're looking for doesn't exist",
+    "serverError": "Server error, please try again later",
+    "forbidden": "You don't have permission to access this page",
+    "generic": "Something went wrong, please try again later",
+    "backHome": "Back to Home",
+    "goBack": "Go Back",
+    "details": "Error Details"
+  },
+  "category": {
+    "title": "Category",
+    "loading": "Loading...",
+    "articles": "articles",
+    "views": "views",
+    "sortBy": "Sort by",
+    "latest": "Latest",
+    "popular": "Popular",
+    "oldest": "Oldest",
+    "loadMore": "Load more",
+    "loadingArticles": "Loading articles...",
+    "noArticles": "No articles",
+    "noArticlesDescription": "No articles have been published in this category yet",
+    "defaultDescription": "Explore amazing content in this category"
   },
   "login": {
     "title": "User Login",
@@ -169,6 +202,24 @@
     "noAccount": "Don't have an account?",
     "register": "Register now",
     "loginFailed": "Login failed, please check your username and password"
+  },
+  "register": {
+    "title": "User Registration",
+    "username": "Username",
+    "usernamePlaceholder": "Please enter your username",
+    "email": "Email",
+    "emailPlaceholder": "Please enter your email address",
+    "password": "Password",
+    "passwordPlaceholder": "Please enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Please enter your password again",
+    "agreeTerms": "I have read and agree to the User Agreement and Privacy Policy",
+    "register": "Register",
+    "registering": "Registering...",
+    "hasAccount": "Already have an account?",
+    "login": "Login now",
+    "success": "Registration successful, please login",
+    "registerFailed": "Registration failed"
   },
   "user": {
     "title": "User Profile",
@@ -193,5 +244,20 @@
     "inviteCount": "Invite Count",
     "inviteEarnings": "Invite Earnings",
     "copyInviteLink": "Copy Invite Link"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search images, articles, users...",
+    "allCategories": "All Categories",
+    "sort": {
+      "latest": "Latest",
+      "popular": "Popular",
+      "mostLiked": "Most Liked"
+    },
+    "trending": "Trending Searches",
+    "noResults": {
+      "title": "No results found",
+      "description": "Try different keywords or adjust your search criteria"
+    }
   }
 }

@@ -6,7 +6,33 @@
       :index="lightboxIndex"
       @hide="lightboxVisible = false"
     />
-    <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
+
+    <!-- 加载状态 -->
+    <div v-if="isLoading" class="flex items-center justify-center py-20">
+      <div class="text-center">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
+        ></div>
+        <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
+      </div>
+    </div>
+
+    <!-- 错误状态 -->
+    <div v-else-if="hasError" class="flex items-center justify-center py-20">
+      <div class="text-center">
+        <Icon name="mynaui:exclamation-triangle" class="text-red-500 text-4xl mb-4" />
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error') }}</p>
+        <button
+          @click="handleRetry"
+          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
+        >
+          {{ $t('common.retry') }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8">
       <!-- 左侧主内容区 -->
       <div class="flex-1">
         <!-- 文章标题区 -->
@@ -103,7 +129,7 @@
             </div>
           </div>
           <!-- 评论列表 -->
-          <div class="space-y-6">
+          <!-- <div class="space-y-6">
             <div v-for="comment in comments" :key="comment.id" class="flex space-x-4">
               <NuxtImg
                 :src="comment.avatar"
@@ -139,7 +165,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <!-- 右侧边栏 -->
@@ -243,7 +269,7 @@
 <script lang="ts" setup>
   import { articleControllerFindOne, articleControllerFindRecommend } from '~~/api';
   const route = useRoute();
-
+  const router = useRouter();
   // lightbox相关状态
   const lightboxVisible = ref(false);
   const lightboxIndex = ref(0);
@@ -256,7 +282,11 @@
       lightboxVisible.value = true;
     }
   };
-  const { data: article } = articleControllerFindOne({
+  const {
+    data: article,
+    pending: articlePending,
+    error: articleError
+  } = articleControllerFindOne({
     composable: 'useFetch',
     key: `article_${route.params.id}`,
     path: {
@@ -264,14 +294,23 @@
     }
   });
 
-  const { data: recommend } = articleControllerFindRecommend({
+  const {
+    data: recommend,
+    pending: recommendPending,
+    error: recommendError
+  } = articleControllerFindRecommend({
     key: `recommend_${route.params.id}`,
-    composable: 'useLazyAsyncData',
+    composable: 'useFetch',
     path: {
       id: String(route.params.id)
     }
   });
 
+  const isLoading = computed(() => articlePending.value || recommendPending.value);
+  const hasError = computed(() => articleError.value || recommendError.value);
+  const handleRetry = () => {
+    location.reload();
+  };
   // 图片错误处理
   const { handleImageError } = useImageError();
   useHead({
@@ -293,28 +332,4 @@
   });
 
   const commentText = ref('');
-  const comments = ref([
-    {
-      id: 1,
-      author: '用户1',
-      avatar: 'https://via.placeholder.com/40',
-      content: '这篇文章写得很好！',
-      time: '2小时前',
-      likes: 5
-    }
-  ]);
-  const relatedPosts = ref([
-    {
-      id: 1,
-      title: '相关文章1',
-      image: 'https://via.placeholder.com/80',
-      views: 1234
-    },
-    {
-      id: 2,
-      title: '相关文章2',
-      image: 'https://via.placeholder.com/80',
-      views: 567
-    }
-  ]);
 </script>

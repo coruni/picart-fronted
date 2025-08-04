@@ -95,9 +95,12 @@
       "create": "新增"
     },
     "loading": {
-      "noMore": "没有更多了"
+      "noMore": "没有更多了",
+      "loading": "加载中..."
     },
-    "loadMore": "加载更多"
+    "loadMore": "加载更多",
+    "error": "加载失败，请稍后重试",
+    "retry": "重新加载"
   },
   "filter": {
     "title": "筛选"
@@ -157,7 +160,37 @@
     "reply": "回复"
   },
   "validation": {
-    "required": "此字段为必填项"
+    "required": "此字段为必填项",
+    "usernameMin": "用户名至少需要3个字符",
+    "usernameMax": "用户名最多不能超过20个字符",
+    "emailInvalid": "请输入有效的邮箱地址",
+    "passwordMin": "密码至少需要6个字符",
+    "passwordMax": "密码最多不能超过50个字符",
+    "passwordMismatch": "两次输入的密码不一致"
+  },
+  "error": {
+    "pageNotFound": "抱歉，您访问的页面不存在",
+    "serverError": "服务器内部错误，请稍后重试",
+    "forbidden": "您没有权限访问此页面",
+    "generic": "发生了一些错误，请稍后重试",
+    "backHome": "返回首页",
+    "goBack": "返回上一页",
+    "details": "错误详情"
+  },
+  "category": {
+    "title": "分类",
+    "loading": "加载中...",
+    "articles": "篇文章",
+    "views": "次浏览",
+    "sortBy": "排序方式",
+    "latest": "最新发布",
+    "popular": "人气推荐",
+    "oldest": "最早发布",
+    "loadMore": "加载更多",
+    "loadingArticles": "正在加载文章...",
+    "noArticles": "暂无文章",
+    "noArticlesDescription": "该分类下还没有发布任何文章",
+    "defaultDescription": "探索这个分类下的精彩内容"
   },
   "login": {
     "title": "用户登录",
@@ -172,6 +205,24 @@
     "noAccount": "没有账户？",
     "register": "立即注册",
     "loginFailed": "登录失败，请检查用户名和密码"
+  },
+  "register": {
+    "title": "用户注册",
+    "username": "用户名",
+    "usernamePlaceholder": "请输入用户名",
+    "email": "邮箱",
+    "emailPlaceholder": "请输入邮箱地址",
+    "password": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "agreeTerms": "我已阅读并同意用户协议和隐私政策",
+    "register": "注册",
+    "registering": "注册中...",
+    "hasAccount": "已有账户？",
+    "login": "立即登录",
+    "success": "注册成功，请登录",
+    "registerFailed": "注册失败"
   },
   "user": {
     "title": "用户中心",
@@ -196,5 +247,20 @@
     "inviteCount": "邀请人数",
     "inviteEarnings": "邀请收益",
     "copyInviteLink": "复制邀请链接"
+  },
+  "search": {
+    "title": "搜索",
+    "placeholder": "搜索图片、文章、用户...",
+    "allCategories": "全部分类",
+    "sort": {
+      "latest": "最新发布",
+      "popular": "人气推荐",
+      "mostLiked": "最多点赞"
+    },
+    "trending": "热门搜索",
+    "noResults": {
+      "title": "没有找到相关内容",
+      "description": "试试其他关键词或调整搜索条件"
+    }
   }
 }

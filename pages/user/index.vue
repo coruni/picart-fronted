@@ -1,6 +1,7 @@
 <template>
-  <ClientOnly>
-    <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+  <div>
+    <ClientOnly>
+      <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
     <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
       <!-- 左侧主内容区 -->
       <div class="flex-1">
@@ -202,8 +203,9 @@
         </div>
       </div>
     </div>
+      </div>
+    </ClientOnly>
   </div>
-  </ClientOnly>
 </template>
 
 <script lang="ts" setup>

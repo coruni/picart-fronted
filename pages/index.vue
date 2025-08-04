@@ -1,50 +1,54 @@
 <template>
-  <CommonSwiperClient />
-  <div class="max-w-7xl mx-auto px-4 py-8">
-    <!-- Tab切换 -->
-    <div class="flex justify-center mb-8 md:justify-end">
-      <div class="bg-gray-100 p-1 rounded-2xl flex space-x-1 dark:bg-gray-800">
-        <button
-          v-for="tab in tabs"
-          :key="tab.id"
-          :class="[
-            'cursor-pointer px-4 rounded-2xl py-2 text-sm font-medium !rounded-button whitespace-nowrap transition-all duration-200',
-            currentTab === tab.id
-              ? 'bg-white shadow-sm text-primary font-semibold dark:bg-gray-900'
-              : 'text-gray-600 hover:text-primary dark:text-white/80'
-          ]"
-          @click="currentTab = tab.id"
-        >
-          {{ $t(tab.name) }}
-        </button>
+  <div>
+    <CommonSwiperClient />
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Tab切换 -->
+      <div class="flex justify-center mb-8 md:justify-end">
+        <div class="bg-gray-100 p-1 rounded-2xl flex space-x-1 dark:bg-gray-800">
+          <button
+            v-for="tab in tabs"
+            :key="tab.id"
+            :class="[
+              'cursor-pointer px-4 rounded-2xl py-2 text-sm font-medium !rounded-button whitespace-nowrap transition-all duration-200',
+              currentTab === tab.id
+                ? 'bg-white shadow-sm text-primary font-semibold dark:bg-gray-900'
+                : 'text-gray-600 hover:text-primary dark:text-white/80'
+            ]"
+            @click="currentTab = tab.id"
+          >
+            {{ $t(tab.name) }}
+          </button>
+        </div>
       </div>
-    </div>
-    <!-- 瀑布流展示 -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-      <div
-        v-for="item in displayItems"
-        :key="item.id"
-        class="transform transition-transform hover:scale-105 duration-300"
-      >
-        <CommonArticleCard :data="item" />
+      <!-- 瀑布流展示 -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        <TransitionGroup name="list" tag="div" class="contents">
+          <div
+            v-for="item in displayItems"
+            :key="item.id"
+            class="transform transition-transform hover:scale-105 duration-300"
+          >
+            <CommonArticleCard :data="item" />
+          </div>
+        </TransitionGroup>
       </div>
-    </div>
-    <!-- 加载指示器 -->
-    <div v-if="loading" class="col-span-2 md:col-span-4 flex justify-center py-4">
-      <div
-        class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
-      ></div>
-    </div>
+      <!-- 加载指示器 -->
+      <div v-if="loading" class="col-span-2 md:col-span-4 flex justify-center py-4">
+        <div
+          class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+      </div>
 
-    <!-- 没有更多数据提示 -->
-    <div
-      v-else-if="!hasMore && displayItems.length > 0"
-      class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
-    >
-      {{ $t('common.loading.noMore') }}
+      <!-- 没有更多数据提示 -->
+      <div
+        v-else-if="!hasMore && displayItems.length > 0"
+        class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
+      >
+        {{ $t('common.loading.noMore') }}
+      </div>
+      <!-- Intersection Observer 观察器元素 -->
+      <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
     </div>
-    <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
   </div>
 </template>
 
@@ -173,4 +177,20 @@
   });
 </script>
 
-<style></style>
+<style>
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 0.3s ease-out;
+  }
+  .list-enter-from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .list-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  .list-move {
+    transition: transform 0.3s ease;
+  }
+</style>

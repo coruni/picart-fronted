@@ -55,7 +55,7 @@
         <p class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('login.noAccount') }}
           <NuxtLinkLocale
-            to="/register"
+            to="/user/register"
             class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
           >
             {{ $t('login.register') }}
@@ -75,6 +75,7 @@
   const { t } = useI18n();
   const router = useRouter();
   const userStore = useUserStore();
+  const toast = useToast();
 
   // 定义表单验证模式
   const schema = z.object({
@@ -120,7 +121,10 @@
     } catch (error) {
       console.error('Login failed:', error);
       // 显示错误消息
-      alert(t('login.loginFailed'));
+      toast.add({
+        title: t('login.loginFailed'),
+        description: t('login.loginFailedDescription')
+      });
     } finally {
       loading.value = false;
     }
