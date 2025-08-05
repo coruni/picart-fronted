@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col min-h-full">
+  <div class="flex flex-col min-h-full relative z-10">
     <!-- 筛选面板 -->
     <UCollapsible class="mb-4" v-model:open="showFilters">
       <UButton
-        :label="t('common.table.filter')"
+        :label="$t('common.table.filter')"
         color="neutral"
         variant="soft"
         trailing-icon="i-mynaui-chevron-down"
@@ -12,47 +12,45 @@
       <template #content>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           <UInput
-            v-model="filters.name"
-            :placeholder="t('admin.tags.name')"
-            @update:model-value="onFilterChange"
-          />
-          <UInput
-            v-model="filters.description"
-            :placeholder="t('admin.tags.description')"
+            v-model="filters.title"
+            :placeholder="t('banners.title')"
             @update:model-value="onFilterChange"
           />
         </div>
       </template>
     </UCollapsible>
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">{{ t('admin.tags.title') }}</h1>
-      <UButton color="primary" @click="$router.push('/admin/tags/create')">
-        <template #leading>
-          <span class="mynaui:plus" />
-        </template>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+      <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
+        {{ t('admin.menu.banners') }}
+      </h1>
+      <UButton @click="onCreate()" class="w-full sm:w-auto cursor-pointer">
         {{ t('common.button.create') }}
       </UButton>
     </div>
-    <UTable
-      ref="table"
-      v-model:pagination="pagination"
-      sticky="header"
-      :loading="tags.pending.value"
-      loading-color="primary"
-      loading-animation="carousel"
-      :data="tableData"
-      :columns="columns"
-      :pagination-options="{
-        getPaginationRowModel: getPaginationRowModel()
-      }"
-      class="flex-1"
-    />
+
+    <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+      <UTable
+        ref="table"
+        v-model:pagination="pagination"
+        sticky="header"
+        :loading="banners.pending.value"
+        loading-color="primary"
+        loading-animation="carousel"
+        :data="tableData"
+        :columns="columns"
+        :pagination-options="{
+          getPaginationRowModel: getPaginationRowModel()
+        }"
+        class="min-w-[600px] sm:min-w-0"
+      />
+    </div>
     <div class="flex justify-center border-t border-default pt-4">
       <UPagination
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
         :items-per-page="table?.tableApi?.getState().pagination.pageSize"
         :total="table?.tableApi?.getFilteredRowModel().rows.length"
         @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
+        color="neutral"
       />
     </div>
     
@@ -65,10 +63,10 @@
         {{ t('common.modal.confirmDeleteMessage') }}
       </template>
       <template #footer>
-        <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
+        <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
           {{ t('common.button.cancel') }}
         </UButton>
-        <UButton color="error" class="cursor-pointer" @click="confirmDelete">
+        <UButton color="error" @click="confirmDelete" class="cursor-pointer">
           {{ t('common.button.confirm') }}
         </UButton>
       </template>
@@ -80,90 +78,83 @@
   import { getPaginationRowModel } from '@tanstack/vue-table';
   import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
+  import type { Banner } from '~~/types/banner';
   import { useI18n } from 'vue-i18n';
-  import { tagControllerFindAll, tagControllerRemove } from '~~/api';
+  import {
+    bannerControllerFindAll,
+    bannerControllerRemove
+  } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
-  import type { Tag } from '~~/types/tag';
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
+  const UBadge = resolveComponent('UBadge');
   const UModal = resolveComponent('UModal');
+  const router = useRouter();
   const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
-
-  // 分页状态 - 注意这里使用 pageIndex 从 0 开始
-  const pagination = ref({
-    pageIndex: 0,
-    pageSize: 20
-  });
-
-  // 筛选状态
-  const showFilters = ref(false);
-  const filters = ref({
-    name: '',
-    description: ''
-  });
-
-  // 删除确认模态框状态
-  const showDeleteModal = ref(false);
-  const currentTagId = ref<number | null>(null);
-
   definePageMeta({
     layout: 'dashboard',
     requiresAuth: true
   });
 
-  // 防抖筛选
-  const onFilterChange = debounce(() => {
-    table.value?.tableApi?.setPageIndex(0);
-  }, 300);
+  // 筛选状态
+  const showFilters = ref(false);
+  const filters = ref({
+    title: ''
+  });
 
-  const columns: TableColumn<Tag>[] = [
+  // 分页状态
+  const pagination = ref({ pageIndex: 0, pageSize: 20 });
+
+  // 删除确认模态框状态
+  const showDeleteModal = ref(false);
+  const currentBannerId = ref<number | null>(null);
+
+  const columns: TableColumn<Banner>[] = [
     {
       accessorKey: 'id',
       header: '#'
     },
     {
-      accessorKey: 'name',
-      header: t('common.table.name')
+      accessorKey: 'title',
+      header: t('banners.title')
     },
     {
-      accessorKey: 'description',
-      header: t('common.table.description')
-    },
-    {
-      accessorKey: 'avatar',
-      header: t('common.table.avatar'),
+      accessorKey: 'imageUrl',
+      header: t('banners.image'),
       cell: ({ row }) => {
         return h('img', {
-          src: row.getValue('avatar'),
-          alt: row.getValue('name'),
-          class: 'w-10 h-10 rounded-full object-cover'
+          src: row.getValue('imageUrl'),
+          class: 'w-16 h-16 object-cover rounded',
+          alt: row.getValue('title')
         });
       }
     },
-
     {
-      accessorKey: 'articleCount',
-      header: t('common.table.articleCount')
+      accessorKey: 'url',
+      header: t('banners.link')
     },
     {
-      accessorKey: 'sort',
-      header: t('common.table.sort')
+      accessorKey: 'sortOrder',
+      header: t('banners.sortOrder')
+    },
+    {
+      accessorKey: 'isActive',
+      header: t('banners.status'),
+      cell: ({ row }) => {
+        const isActive = row.getValue('isActive');
+        return h(UBadge, { 
+          class: 'capitalize', 
+          variant: 'subtle', 
+          color: isActive ? 'success' : 'neutral' 
+        }, () => isActive ? t('banners.active') : t('banners.inactive'));
+      }
     },
     {
       accessorKey: 'createdAt',
-      header: t('common.table.createdAt'),
-      cell: ({ row }) => {
-        return h(
-          'time',
-          {
-            datetime: row.getValue('createdAt')
-          },
-          new Date(row.getValue('createdAt')).toLocaleDateString()
-        );
-      }
+      header: t('common.table.createdAt')
     },
     {
       id: 'actions',
@@ -194,7 +185,7 @@
     }
   ];
 
-  const getRowItems = (row: Row<Tag>) => {
+  const getRowItems = (row: Row<Banner>) => {
     return [
       {
         type: 'label',
@@ -204,7 +195,7 @@
         label: t('common.table.edit'),
         class: 'cursor-pointer',
         onClick: () => {
-          navigateTo(`/admin/tags/${row.original.id}`);
+          router.push(`banners/${row.original.id}`);
         }
       },
       {
@@ -212,61 +203,74 @@
         class: 'cursor-pointer',
         color: 'error',
         onClick: () => {
-          currentTagId.value = row.original.id!;
+          currentBannerId.value = row.original.id!;
           showDeleteModal.value = true;
         }
       }
     ];
   };
 
-  // 确认删除标签
+  // 确认删除轮播图
   const confirmDelete = async () => {
-    if (!currentTagId.value) return;
+    if (!currentBannerId.value) return;
 
     try {
-      await tagControllerRemove({
+      await bannerControllerRemove({
         composable: '$fetch',
         path: {
-          id: currentTagId.value.toString()
+          id: currentBannerId.value.toString()
         }
       });
       toast.add({
         title: t('common.message.deleteSuccess'),
         color: 'success'
       });
-      tags.refresh?.();
+      banners.refresh?.();
     } catch (error) {
       toast.add({
         title: t('common.message.deleteFailed'),
         color: 'error'
       });
-      console.error('Failed to delete tag:', error);
+      console.error('Failed to delete banner:', error);
     } finally {
       showDeleteModal.value = false;
-      currentTagId.value = null;
+      currentBannerId.value = null;
     }
   };
 
-  const tags = await tagControllerFindAll({
+  const onFilterChange = debounce(() => {
+    // 重置到第一页
+    pagination.value.pageIndex = 0;
+    // 刷新数据
+    banners.refresh?.();
+  }, 300);
+
+  const banners = await bannerControllerFindAll({
     composable: 'useFetch',
+    key: 'banners',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
-      limit: pagination.value.pageSize
+      limit: pagination.value.pageSize,
+      title: filters.value.title || undefined
     }))
   });
 
   // 计算属性：表格数据
   const tableData = computed(() => {
-    const data = tags.data.value?.data?.data || [];
-    return data as Tag[];
+    const data = banners.data.value?.data?.data || [];
+    return data as Banner[];
   });
 
   // 监听分页变化
   watch(
     [() => pagination.value.pageIndex, () => pagination.value.pageSize],
     () => {
-      tags.refresh?.();
+      banners.refresh?.();
     },
     { deep: true }
   );
+
+  const onCreate = () => {
+    router.push('banners/create');
+  };
 </script>

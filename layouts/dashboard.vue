@@ -3,7 +3,7 @@
     <!-- 移动端遮罩层 -->
     <div
       v-if="toggleMobileSidebar"
-      class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+      class="fixed inset-0 bg-black/50 z-30 lg:hidden"
       @click="toggleMobileSidebar = false"
     ></div>
 
@@ -156,6 +156,11 @@
       path: '/admin/settings',
       icon: 'mynaui:cog-four',
       text: 'admin.menu.settings'
+    },
+    {
+      path: '/admin/banners',
+      icon: 'mynaui:image',
+      text: 'admin.menu.banners'
     }
   ];
 

@@ -150,7 +150,8 @@
   const articleId = route.params.id as string; // 获取文章 id
 
   definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+    requiresAuth: true
   });
 
   const schema = z.object({

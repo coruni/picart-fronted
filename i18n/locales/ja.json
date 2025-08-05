@@ -30,7 +30,35 @@
       "analytics": "分析データ",
       "settings": "システム設定",
       "comments": "コメント管理",
-      "tags": "タグ管理"
+      "tags": "タグ管理",
+      "banners": "バナー管理"
+    },
+    "settings": {
+      "title": "システム設定",
+      "tabs": {
+        "general": "基本設定",
+        "user": "ユーザー設定",
+        "content": "コンテンツ設定",
+        "maintenance": "メンテナンスモード",
+        "invite": "招待設定"
+      },
+      "siteName": "サイト名",
+      "siteDescription": "サイトの説明",
+      "siteKeywords": "サイトのキーワード",
+      "siteLogo": "サイトロゴ",
+      "siteFavicon": "サイトアイコン",
+      "userRegistrationEnabled": "ユーザー登録を許可",
+      "userEmailVerification": "ユーザーメールの検証",
+      "commentApprovalRequired": "コメントの承認が必要",
+      "articleApprovalRequired": "記事の承認が必要",
+      "maintenanceMode": "メンテナンスモード",
+      "maintenanceMessage": "メンテナンスモードメッセージ",
+      "inviteCodeEnabled": "招待コード機能を有効化",
+      "inviteCodeRequired": "登録に招待コードが必要",
+      "inviteDefaultCommissionRate": "デフォルトのコミッション率",
+      "inviteCodeExpireDays": "招待コードの有効期限（日）",
+      "saveSuccess": "設定が正常に保存されました",
+      "saveFailed": "設定の保存に失敗しました"
     },
     "categories": {
       "name": "カテゴリー名",
@@ -94,9 +122,8 @@
       "confirm": "確認する",
       "create": "作成する"
     },
-    "loading": {
-      "noMore": "没有更多了"
-    },
+    "save": "保存",
+
     "loading": "読み込み中...",
     "error": "読み込みに失敗しました。後でもう一度お試しください",
     "retry": "再読み込み"

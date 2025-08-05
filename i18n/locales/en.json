@@ -30,7 +30,35 @@
       "analytics": "Analytics",
       "settings": "Settings",
       "comments": "Comments",
-      "tags": "Tags"
+      "tags": "Tags",
+      "banners": "Banners"
+    },
+    "settings": {
+      "title": "System Settings",
+      "tabs": {
+        "general": "General",
+        "user": "User",
+        "content": "Content",
+        "maintenance": "Maintenance",
+        "invite": "Invite"
+      },
+      "siteName": "Site Name",
+      "siteDescription": "Site Description",
+      "siteKeywords": "Site Keywords",
+      "siteLogo": "Site Logo",
+      "siteFavicon": "Site Favicon",
+      "userRegistrationEnabled": "User Registration Enabled",
+      "userEmailVerification": "User Email Verification",
+      "commentApprovalRequired": "Comment Approval Required",
+      "articleApprovalRequired": "Article Approval Required",
+      "maintenanceMode": "Maintenance Mode",
+      "maintenanceMessage": "Maintenance Message",
+      "inviteCodeEnabled": "Invite Code Enabled",
+      "inviteCodeRequired": "Invite Code Required",
+      "inviteDefaultCommissionRate": "Default Commission Rate",
+      "inviteCodeExpireDays": "Invite Code Expire Days",
+      "saveSuccess": "Settings saved successfully",
+      "saveFailed": "Failed to save settings"
     },
     "categories": {
       "name": "Name",
@@ -93,9 +121,7 @@
       "cancel": "Cancel",
       "create": "Create"
     },
-    "loading": {
-      "noMore": "No More"
-    },
+    "save": "Save",
     "loadMore": "Load More",
     "loading": "Loading...",
     "error": "Load failed, please try again",
@@ -258,6 +284,15 @@
     "noResults": {
       "title": "No results found",
       "description": "Try different keywords or adjust your search criteria"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": "General",
+      "user": "User",
+      "content": "Content",
+      "maintenance": "Maintenance",
+      "invite": "Invite"
     }
   }
 }

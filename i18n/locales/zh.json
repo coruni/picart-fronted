@@ -30,7 +30,35 @@
       "analytics": "数据分析",
       "settings": "系统设置",
       "comments": "评论管理",
-      "tags": "标签管理"
+      "tags": "标签管理",
+      "banners": "轮播管理"
+    },
+    "settings": {
+      "title": "系统设置",
+      "tabs": {
+        "general": "基础设置",
+        "user": "用户设置",
+        "content": "内容设置",
+        "maintenance": "维护模式",
+        "invite": "邀请设置"
+      },
+      "siteName": "网站名称",
+      "siteDescription": "网站描述",
+      "siteKeywords": "网站关键词",
+      "siteLogo": "网站Logo",
+      "siteFavicon": "网站图标",
+      "userRegistrationEnabled": "允许用户注册",
+      "userEmailVerification": "用户邮箱验证",
+      "commentApprovalRequired": "评论需要审核",
+      "articleApprovalRequired": "文章需要审核",
+      "maintenanceMode": "维护模式",
+      "maintenanceMessage": "维护模式消息",
+      "inviteCodeEnabled": "启用邀请码功能",
+      "inviteCodeRequired": "注册需要邀请码",
+      "inviteDefaultCommissionRate": "默认佣金比例",
+      "inviteCodeExpireDays": "邀请码有效期（天）",
+      "saveSuccess": "设置保存成功",
+      "saveFailed": "设置保存失败"
     },
     "categories": {
       "name": "名称",
@@ -94,6 +122,7 @@
       "confirm": "确认",
       "create": "新增"
     },
+    "save": "保存",
     "loading": {
       "noMore": "没有更多了",
       "loading": "加载中..."
@@ -262,5 +291,32 @@
       "title": "没有找到相关内容",
       "description": "试试其他关键词或调整搜索条件"
     }
+  },
+  "settings": {
+    "title": "系统设置",
+    "tabs": {
+      "general": "基础设置",
+      "user": "用户设置",
+      "content": "内容设置",
+      "maintenance": "维护模式",
+      "invite": "邀请设置"
+    },
+    "siteName": "网站名称",
+    "siteDescription": "网站描述",
+    "siteKeywords": "网站关键词",
+    "siteLogo": "网站Logo",
+    "siteFavicon": "网站图标",
+    "userRegistrationEnabled": "允许用户注册",
+    "userEmailVerification": "用户邮箱验证",
+    "commentApprovalRequired": "评论需要审核",
+    "articleApprovalRequired": "文章需要审核",
+    "maintenanceMode": "维护模式",
+    "maintenanceMessage": "维护模式消息",
+    "inviteCodeEnabled": "启用邀请码功能",
+    "inviteCodeRequired": "注册需要邀请码",
+    "inviteDefaultCommissionRate": "默认佣金比例",
+    "inviteCodeExpireDays": "邀请码有效期（天）",
+    "saveSuccess": "设置保存成功",
+    "saveFailed": "设置保存失败"
   }
 }

@@ -44,6 +44,9 @@
     },
     {
       "name": "信息管理"
+    },
+    {
+      "name": "轮播管理"
     }
   ],
   "paths": {
@@ -534,6 +537,80 @@
         "responses": {
           "200": {
             "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "key": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "group": {
+                                "type": "string"
+                              },
+                              "public": {
+                                "type": "boolean"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "key",
+                              "value",
+                              "description",
+                              "type",
+                              "group",
+                              "public",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "401": {
@@ -11172,6 +11249,723 @@
         "responses": {
           "201": {
             "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/banners": {
+      "get": {
+        "summary": "轮播列表",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_findAll",
+        "tags": [
+          "轮播管理"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "分页",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "限制",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "imageUrl": {
+                                "type": "string"
+                              },
+                              "linkUrl": {
+                                "type": "string"
+                              },
+                              "sortOrder": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "创建轮播",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_create",
+        "tags": [
+          "轮播管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "linkUrl": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "sortOrder": {
+                    "type": "number",
+                    "example": 0
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive"
+                    ],
+                    "description": "状态",
+                    "example": ""
+                  }
+                },
+                "required": [
+                  "title",
+                  "imageUrl"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/banners/active": {
+      "get": {
+        "summary": "轮播活动列表",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_findActive",
+        "tags": [
+          "轮播管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "imageUrl": {
+                            "type": "string"
+                          },
+                          "linkUrl": {
+                            "type": "string"
+                          },
+                          "sortOrder": {
+                            "type": "integer"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string"
+                          },
+                          "updatedAt": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/banners/{id}": {
+      "get": {
+        "summary": "轮播详情",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_detail",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "imageUrl": {
+                          "type": "string"
+                        },
+                        "linkUrl": {
+                          "type": "string"
+                        },
+                        "sortOrder": {
+                          "type": "integer"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "description",
+                        "imageUrl",
+                        "linkUrl",
+                        "sortOrder",
+                        "status",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "删除轮播",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_deleteById",
+        "tags": [
+          "轮播管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "patch": {
+        "summary": "更新轮播",
+        "deprecated": false,
+        "description": "",
+        "operationId": "BannersController_update",
+        "tags": [
+          "轮播管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "description": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "linkUrl": {
+                    "example": "",
+                    "type": "string"
+                  },
+                  "sortOrder": {
+                    "type": "number",
+                    "example": 0
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "inactive",
+                      "active"
+                    ],
+                    "description": "状态",
+                    "example": "",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "title",
+                  "imageUrl"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
             "headers": {}
           }
         },

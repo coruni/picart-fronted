@@ -54,24 +54,25 @@
         @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
+    
+    <!-- 删除确认模态框 -->
+    <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+      <template #header>
+        {{ t('common.modal.confirmDelete') }}
+      </template>
+      <template #body>
+        {{ t('common.modal.confirmDeleteMessage') }}
+      </template>
+      <template #footer>
+        <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
+          {{ t('common.button.cancel') }}
+        </UButton>
+        <UButton color="error" class="cursor-pointer" @click="confirmDelete">
+          {{ t('common.button.confirm') }}
+        </UButton>
+      </template>
+    </UModal>
   </div>
-  <!-- 删除确认模态框 -->
-  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
-    <template #header>
-      {{ t('common.modal.confirmDelete') }}
-    </template>
-    <template #body>
-      {{ t('common.modal.confirmDeleteMessage') }}
-    </template>
-    <template #footer>
-      <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
-        {{ t('common.button.cancel') }}
-      </UButton>
-      <UButton color="error" class="cursor-pointer" @click="confirmDelete">
-        {{ t('common.button.confirm') }}
-      </UButton>
-    </template>
-  </UModal>
 </template>
 
 <script setup lang="ts">
@@ -91,7 +92,7 @@
   const { t } = useI18n();
   definePageMeta({
     layout: 'dashboard',
-    requiresAdmin: true
+    requiresAuth: true
   });
 
   // 分页状态 - 注意这里使用 pageIndex 从 0 开始

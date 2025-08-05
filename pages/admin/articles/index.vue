@@ -62,24 +62,25 @@
         color="neutral"
       />
     </div>
+    
+    <!-- 删除确认模态框 -->
+    <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+      <template #header>
+        {{ t('common.modal.confirmDelete') }}
+      </template>
+      <template #body>
+        {{ t('common.modal.confirmDeleteMessage') }}
+      </template>
+      <template #footer>
+        <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
+          {{ t('common.button.cancel') }}
+        </UButton>
+        <UButton color="error" @click="confirmDelete" class="cursor-pointer">
+          {{ t('common.button.confirm') }}
+        </UButton>
+      </template>
+    </UModal>
   </div>
-  <!-- 删除确认模态框 -->
-  <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
-    <template #header>
-      {{ t('common.modal.confirmDelete') }}
-    </template>
-    <template #body>
-      {{ t('common.modal.confirmDeleteMessage') }}
-    </template>
-    <template #footer>
-      <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
-        {{ t('common.button.cancel') }}
-      </UButton>
-      <UButton color="error" @click="confirmDelete" class="cursor-pointer">
-        {{ t('common.button.confirm') }}
-      </UButton>
-    </template>
-  </UModal>
 </template>
 
 <script setup lang="ts">
@@ -105,7 +106,8 @@
   const table = useTemplateRef('table');
   const { t } = useI18n();
   definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+    requiresAuth: true
   });
 
   // 筛选状态

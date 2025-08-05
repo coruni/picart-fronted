@@ -722,8 +722,27 @@ export type ConfigControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        key: string;
+        value: string;
+        description: string;
+        type: string;
+        group: string;
+        public: boolean;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+    };
+  };
 };
+
+export type ConfigControllerFindAllResponse =
+  ConfigControllerFindAllResponses[keyof ConfigControllerFindAllResponses];
 
 export type ConfigControllerUpdateAllData = {
   body?: Array<string>;
@@ -4507,6 +4526,223 @@ export type MessageControllerMarkAsReadData = {
 export type MessageControllerMarkAsReadResponses = {
   201: unknown;
 };
+
+export type BannersControllerFindAllData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: {
+    /**
+     * 分页
+     */
+    page?: number;
+    /**
+     * 限制
+     */
+    limit?: number;
+  };
+  url: '/banners';
+};
+
+export type BannersControllerFindAllResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        title?: string;
+        description?: string;
+        imageUrl?: string;
+        linkUrl?: string;
+        sortOrder?: number;
+        status?: string;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type BannersControllerFindAllResponse =
+  BannersControllerFindAllResponses[keyof BannersControllerFindAllResponses];
+
+export type BannersControllerCreateData = {
+  body?: {
+    title: string;
+    description?: string;
+    imageUrl: string;
+    linkUrl?: string;
+    sortOrder?: number;
+    /**
+     * 状态
+     */
+    status?: 'active' | 'inactive';
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/banners';
+};
+
+export type BannersControllerCreateResponses = {
+  200: {
+    [key: string]: unknown;
+  };
+};
+
+export type BannersControllerCreateResponse =
+  BannersControllerCreateResponses[keyof BannersControllerCreateResponses];
+
+export type BannersControllerFindActiveData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/banners/active';
+};
+
+export type BannersControllerFindActiveResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: Array<{
+      id?: number;
+      title?: string;
+      description?: string;
+      imageUrl?: string;
+      linkUrl?: string;
+      sortOrder?: number;
+      status?: string;
+      createdAt?: string;
+      updatedAt?: string;
+    }>;
+  };
+};
+
+export type BannersControllerFindActiveResponse =
+  BannersControllerFindActiveResponses[keyof BannersControllerFindActiveResponses];
+
+export type BannersControllerDeleteByIdData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    /**
+     * id
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/banners/{id}';
+};
+
+export type BannersControllerDeleteByIdResponses = {
+  200: {
+    [key: string]: unknown;
+  };
+};
+
+export type BannersControllerDeleteByIdResponse =
+  BannersControllerDeleteByIdResponses[keyof BannersControllerDeleteByIdResponses];
+
+export type BannersControllerDetailData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    /**
+     * id
+     */
+    id: string;
+  };
+  query?: never;
+  url: '/banners/{id}';
+};
+
+export type BannersControllerDetailResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      title: string;
+      description: string;
+      imageUrl: string;
+      linkUrl: string;
+      sortOrder: number;
+      status: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
+};
+
+export type BannersControllerDetailResponse =
+  BannersControllerDetailResponses[keyof BannersControllerDetailResponses];
+
+export type BannersControllerUpdateData = {
+  body?: {
+    title: string;
+    description?: string;
+    imageUrl: string;
+    linkUrl?: string;
+    sortOrder?: number;
+    /**
+     * 状态
+     */
+    status?: 'inactive' | 'active';
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/banners/{id}';
+};
+
+export type BannersControllerUpdateResponses = {
+  200: {
+    [key: string]: unknown;
+  };
+};
+
+export type BannersControllerUpdateResponse =
+  BannersControllerUpdateResponses[keyof BannersControllerUpdateResponses];
 
 export type PostPayCreateData = {
   body?: never;

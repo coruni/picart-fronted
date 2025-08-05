@@ -12,5 +12,7 @@ export interface SiteConfig {
     maintenance_message: string;
     invite_code_required: boolean;
     invite_code_enabled: boolean;
+    invite_default_commission_rate: number;
+    invite_code_expire_days: number;
     site_subname: string;
 }

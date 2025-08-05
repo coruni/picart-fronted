@@ -96,6 +96,7 @@
   }, 500);
 
   definePageMeta({
-    layout: 'dashboard'
+    layout: 'dashboard',
+    requiresAuth: true
   });
 </script>
