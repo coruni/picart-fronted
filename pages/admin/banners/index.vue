@@ -53,9 +53,13 @@
         color="neutral"
       />
     </div>
-    
+
     <!-- 删除确认模态框 -->
-    <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <UModal
+      v-model:open="showDeleteModal"
+      :close-on-backdrop="false"
+      :ui="{ footer: 'justify-end' }"
+    >
       <template #header>
         {{ t('common.modal.confirmDelete') }}
       </template>
@@ -78,12 +82,10 @@
   import { getPaginationRowModel } from '@tanstack/vue-table';
   import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
-  import type { Banner } from '~~/types/banner';
   import { useI18n } from 'vue-i18n';
-  import {
-    bannerControllerFindAll,
-    bannerControllerRemove
-  } from '~~/api';
+  import { bannersControllerFindAll, bannersControllerDeleteById } from '~~/api';
+  import type { BannersControllerFindAllResponse } from '~~/api';
+  type Banner = BannersControllerFindAllResponse['data']['data'][0];
   import type { Row } from '@tanstack/vue-table';
 
   const UButton = resolveComponent('UButton');
@@ -145,11 +147,15 @@
       header: t('banners.status'),
       cell: ({ row }) => {
         const isActive = row.getValue('isActive');
-        return h(UBadge, { 
-          class: 'capitalize', 
-          variant: 'subtle', 
-          color: isActive ? 'success' : 'neutral' 
-        }, () => isActive ? t('banners.active') : t('banners.inactive'));
+        return h(
+          UBadge,
+          {
+            class: 'capitalize',
+            variant: 'subtle',
+            color: isActive ? 'success' : 'neutral'
+          },
+          () => (isActive ? t('banners.active') : t('banners.inactive'))
+        );
       }
     },
     {
@@ -215,7 +221,7 @@
     if (!currentBannerId.value) return;
 
     try {
-      await bannerControllerRemove({
+      await bannersControllerDeleteById({
         composable: '$fetch',
         path: {
           id: currentBannerId.value.toString()
@@ -245,7 +251,7 @@
     banners.refresh?.();
   }, 300);
 
-  const banners = await bannerControllerFindAll({
+  const banners = await bannersControllerFindAll({
     composable: 'useFetch',
     key: 'banners',
     query: computed(() => ({
