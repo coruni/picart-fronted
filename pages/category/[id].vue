@@ -17,21 +17,11 @@
     <!-- 筛选和排序 -->
     <div class="max-w-7xl mx-auto px-4 py-8">
       <div class="flex justify-center mb-8 md:justify-end">
-        <div class="bg-gray-100 p-1 rounded-2xl flex space-x-1 dark:bg-gray-800">
-          <button
-            v-for="tab in tabs"
-            :key="tab.id"
-            :class="[
-              'cursor-pointer px-4 rounded-2xl py-2 text-sm font-medium !rounded-button whitespace-nowrap transition-all duration-200',
-              currentTab === tab.id
-                ? 'bg-white shadow-sm text-primary font-semibold dark:bg-gray-900'
-                : 'text-gray-600 hover:text-primary dark:text-white/80'
-            ]"
-            @click="currentTab = tab.id"
-          >
-            {{ $t(tab.name) }}
-          </button>
-        </div>
+        <UTabs :items="tabs" v-model="currentTab" class="w-auto" variant="pill">
+          <template #default="{ item }">
+            <span class="text-sm font-medium">{{ $t(item.label) }}</span>
+          </template>
+        </UTabs>
         <div class="flex items-center space-x-2 ml-4">
           <button
             @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'"
@@ -64,7 +54,7 @@
 
       <!-- 网格视图 -->
       <div v-else-if="viewMode === 'grid'">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           <TransitionGroup name="list" tag="div" class="contents">
             <div
               v-for="item in displayItems"
@@ -145,8 +135,8 @@
   const articles = ref<any[]>([]);
   const loading = ref(false);
   const tabs = [
-    { id: 'latest', name: 'category.latest' },
-    { id: 'popular', name: 'category.popular' }
+    { label: 'category.latest', value: 'latest' },
+    { label: 'category.popular', value: 'popular' }
   ];
   const currentTab = ref('latest');
   const viewMode = ref<'grid' | 'list'>('grid');

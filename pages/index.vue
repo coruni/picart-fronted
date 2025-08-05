@@ -4,21 +4,11 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Tab切换 -->
       <div class="flex justify-center mb-8 md:justify-end">
-        <div class="bg-gray-100 p-1 rounded-2xl flex space-x-1 dark:bg-gray-800">
-          <button
-            v-for="tab in tabs"
-            :key="tab.id"
-            :class="[
-              'cursor-pointer px-4 rounded-2xl py-2 text-sm font-medium !rounded-button whitespace-nowrap transition-all duration-200',
-              currentTab === tab.id
-                ? 'bg-white shadow-sm text-primary font-semibold dark:bg-gray-900'
-                : 'text-gray-600 hover:text-primary dark:text-white/80'
-            ]"
-            @click="currentTab = tab.id"
-          >
-            {{ $t(tab.name) }}
-          </button>
-        </div>
+        <UTabs v-model="currentTab" :items="tabs" variant="pill" class="w-auto" :default-value="0">
+          <template #default="{ item }">
+            <span class="text-sm font-medium">{{ $t(item.name) }}</span>
+          </template>
+        </UTabs>
       </div>
       <!-- 瀑布流展示 -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
@@ -57,7 +47,7 @@
   import { articleControllerFindAll } from '~~/api';
 
   const tabs: { id: 'all' | 'popular' | 'latest' | 'following'; name: string; value: string }[] = [
-    { id: 'all', name: 'home.tab.all', value: '' },
+    { id: 'all', name: 'home.tab.all', value: 'all' },
     { id: 'popular', name: 'home.tab.popular', value: 'popular' },
     { id: 'latest', name: 'home.tab.latest', value: 'latest' },
     { id: 'following', name: 'home.tab.following', value: 'following' }
@@ -93,7 +83,7 @@
     try {
       const response = await articleControllerFindAll({
         composable: 'useFetch',
-        key: currentTab.value,
+        key: `home-${currentTab.value}`,
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,
