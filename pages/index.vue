@@ -67,11 +67,12 @@
     pagination.value.page = 1;
     allItems.value = [];
     hasMore.value = true;
+    loading.value = false;
   };
 
-  watch(currentTab, () => {
+  watch(currentTab, async () => {
     resetData();
-    loadArticles();
+    await loadArticles();
   });
 
   // 加载文章数据
@@ -80,6 +81,11 @@
     if (loading.value || !hasMore.value) return;
 
     loading.value = true;
+    
+    // 如果是第一页，立即清空列表以提供即时反馈
+    if (pagination.value.page === 1) {
+      allItems.value = [];
+    }
     try {
       const response = await articleControllerFindAll({
         composable: 'useFetch',
