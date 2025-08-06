@@ -112,7 +112,8 @@
       "updateFailed": "Update Failed",
       "createFailed": "Create Failed",
       "createSuccess": "Create Success",
-      "uploadFailed": "Upload Failed"
+      "uploadFailed": "Upload Failed",
+      "uploadSuccess": "Upload Success"
     },
     "modal": {
       "confirmDelete": "Confirm Delete"
@@ -297,5 +298,19 @@
       "maintenance": "Maintenance",
       "invite": "Invite"
     }
+  },
+  "banners": {
+    "imageRequired": "Please upload image",
+    "titleRequired": "Please input title",
+    "inactive": "Active",
+    "active": "Active",
+    "status": "Status",
+    "link": "Link",
+    "linkPlaceholder": "Please input link",
+    "imagePlaceholder": "Please input image",
+    "descriptionPlaceholder": "Please input description",
+    "title": "Title",
+    "create": "New banner",
+    "edit": "Edit Banner"
   }
 }

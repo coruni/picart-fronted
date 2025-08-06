@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto p-4">
+  <div>
     <h1 class="text-2xl font-bold mb-6">{{ t('banners.create') }}</h1>
 
     <UForm :state="state" :schema="schema" @submit="onSubmit">
@@ -9,19 +9,31 @@
           <UInput v-model="state.title" :placeholder="t('banners.titlePlaceholder')" />
         </UFormField>
 
-        <!-- 图片上传 -->
-        <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
-          <UFileUpload
-            v-model="state.imageUrl"
-            :placeholder="t('banners.imagePlaceholder')"
-            accept="image/*"
-            @change="onImageUpload"
+        <!-- 描述 -->
+        <UFormField :label="t('banners.description')" name="description" class="md:col-span-2">
+          <UTextarea
+            v-model="state.description"
+            :placeholder="t('banners.descriptionPlaceholder')"
           />
         </UFormField>
 
+        <!-- 图片上传 -->
+        <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
+          <UFileUpload
+            v-model="file"
+            :placeholder="t('banners.imagePlaceholder')"
+            accept="image/*"
+            @update:modelValue="onImageUpload"
+            :loading="uploading"
+          />
+          <!-- <div v-if="state.imageUrl" class="mt-2">
+            <img :src="state.imageUrl" alt="预览图片" class="w-32 h-32 object-cover rounded-lg" />
+          </div> -->
+        </UFormField>
+
         <!-- 链接 -->
-        <UFormField :label="t('banners.link')" name="url" class="md:col-span-2">
-          <UInput v-model="state.url" :placeholder="t('banners.linkPlaceholder')" />
+        <UFormField :label="t('banners.link')" name="linkUrl" class="md:col-span-2">
+          <UInput v-model="state.linkUrl" :placeholder="t('banners.linkPlaceholder')" />
         </UFormField>
 
         <!-- 排序 -->
@@ -30,8 +42,14 @@
         </UFormField>
 
         <!-- 状态 -->
-        <UFormField :label="t('banners.status')" name="isActive">
-          <UToggle v-model="state.isActive" />
+        <UFormField :label="t('banners.status')" name="status">
+          <USelect
+            v-model="state.status"
+            :items="[
+              { label: t('banners.active'), value: 'active' },
+              { label: t('banners.inactive'), value: 'inactive' }
+            ]"
+          />
         </UFormField>
       </div>
 
@@ -64,28 +82,40 @@
   // 表单状态
   const state = reactive({
     title: '',
+    description: '',
     imageUrl: '',
-    url: '',
+    linkUrl: '',
     sortOrder: 0,
-    isActive: true
+    status: 'active'
   });
+
+  // 文件
+  const file = ref<File | null>(null);
+
+  // 上传状态
+  const uploading = ref(false);
 
   // 表单验证规则
   const schema = z.object({
     title: z.string().min(1, t('banners.titleRequired')),
+    description: z.string().optional(),
     imageUrl: z.string().min(1, t('banners.imageRequired')),
-    url: z.string().url(t('banners.urlInvalid')),
-    sortOrder: z.number(),
-    isActive: z.boolean()
+    linkUrl: z
+      .string()
+      .optional()
+      .refine(val => !val || val === '' || /^https?:\/\/.+/.test(val), t('banners.urlInvalid'))
+      .transform(val => (val === '' ? undefined : val)),
+    sortOrder: z.number().min(0, t('banners.sortOrderMin')),
+    status: z.string().optional()
   });
 
   // 加载状态
   const loading = ref(false);
 
   // 图片上传处理
-  const onImageUpload = async (files: File[]) => {
+  const onImageUpload = async (...args: unknown[]) => {
     // 检查是否有文件被选中
-    if (!files || files.length === 0) {
+    if (!args[0]) {
       toast.add({
         title: t('banners.imageRequired'),
         color: 'error'
@@ -93,23 +123,35 @@
       return;
     }
 
-    try {
-      // 将文件转换为base64字符串数组
-      const fileStrings = await Promise.all(
-        files.map(file => {
-          return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-          });
-        })
-      );
+    uploading.value = true;
 
-      // 执行文件上传
+    try {
+      // 使用formDataBodySerializer正确处理文件上传
+      const selectedFile = args[0] as File;
+      const formData = new FormData();
+      formData.append('files', selectedFile);
+      // 传递对象给formDataBodySerializer，它会自动转换为FormData
       const res = await uploadControllerUploadFile({
         composable: '$fetch',
-        body: fileStrings
+        body: {
+          files: selectedFile
+        },
+        bodySerializer: () => {
+          const formData = new FormData();
+          // 直接使用原始的selectedFile，而不是body.files中的对象
+          formData.append('files', selectedFile);
+          return formData;
+        }
+      });
+
+      state.imageUrl = res.data[0].url!;
+
+      // 手动触发表单重新验证以清除图片必填错误
+      await nextTick();
+
+      toast.add({
+        title: t('common.message.uploadSuccess'),
+        color: 'success'
       });
     } catch (error: any) {
       // 处理上传错误
@@ -118,16 +160,21 @@
         title: error?.message || t('common.message.uploadFailed'),
         color: 'error'
       });
-      // 重置文件选择
-      state.imageUrl = '';
+      // 重置文件选择（保留原有表单数据）
+      file.value = null;
+    } finally {
+      uploading.value = false;
     }
   };
 
   // 提交表单
   const onSubmit = async () => {
     loading.value = true;
-    const body = await schema.parseAsync(state);
+
     try {
+      // 验证表单数据
+      const body: any = await schema.parseAsync(state);
+
       await bannersControllerCreate({
         composable: '$fetch',
         body: body
@@ -140,12 +187,8 @@
 
       // 返回列表页
       router.push('/admin/banners');
-    } catch (error) {
-      toast.add({
-        title: t('common.message.createFailed'),
-        color: 'error'
-      });
-      console.error('Failed to create banner:', error);
+    } catch (error: any) {
+      // 处理验证错误
     } finally {
       loading.value = false;
     }

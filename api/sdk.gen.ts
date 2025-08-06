@@ -5,7 +5,8 @@ import {
   type Composable,
   type TDataShape,
   type Client,
-  formDataBodySerializer
+  formDataBodySerializer,
+  urlSearchParamsBodySerializer
 } from './client';
 import type {
   AppControllerGetHelloData,
@@ -1904,10 +1905,11 @@ export const uploadControllerUploadFile = <
     unknown,
     DefaultT
   >({
+    ...formDataBodySerializer,
     url: '/upload/file',
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': null,
       ...options.headers
     }
   });
@@ -2069,11 +2071,11 @@ export const bannersControllerCreate = <
     unknown,
     DefaultT
   >({
-    ...formDataBodySerializer,
+    ...urlSearchParamsBodySerializer,
     url: '/banners',
     ...options,
     headers: {
-      'Content-Type': null,
+      'Content-Type': 'application/x-www-form-urlencoded',
       ...options.headers
     }
   });

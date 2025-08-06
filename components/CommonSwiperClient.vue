@@ -26,7 +26,7 @@
         <swiper-slide v-for="slide in bannersData.data" :key="slide.id">
           <div class="relative h-full cursor-pointer" @click="handleBannerClick(slide.linkUrl)">
             <NuxtImg
-              :src="slide.image"
+              :src="slide.imageUrl"
               :alt="slide.title"
               class="w-full h-full object-cover"
               loading="lazy"
@@ -49,7 +49,7 @@
 
                 <!-- 装饰性下划线 -->
                 <div
-                  class="mt-4 w-20 h-1 bg-gradient-to-r from-pink-400 to-indigo-400 rounded-full shadow-lg"
+                  class="mt-4 w-20 h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full shadow-lg"
                 ></div>
               </div>
             </div>
@@ -80,6 +80,8 @@
     key: 'active-banners'
   });
 
+  console.log(bannersData.value.data);
+
   // 处理banner点击事件
   const handleBannerClick = linkUrl => {
     if (linkUrl) {
@@ -109,7 +111,7 @@
   }
   
   .custom-pagination .swiper-pagination-bullet-active {
-    background: oklch(71.4% 0.203 305.504);
+    background: rgb(99 102 241);
     transform: scale(1.3);
   }
   

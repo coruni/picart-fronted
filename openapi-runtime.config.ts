@@ -35,9 +35,8 @@ export const createClientConfig: CreateClientConfig = config => {
         }
 
         // 更新当前请求的headers
-        updateRequestHeaders(context, deviceId, userStore);
+      updateRequestHeaders(context, deviceId, userStore);
       }
-
       return context;
     },
     onRequestError: context => {

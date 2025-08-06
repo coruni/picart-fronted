@@ -28,9 +28,8 @@ export default defineNuxtConfig({
     },
     quality: 80,
     format: ['webp', 'jpg', 'png', 'avif'],
-    domains: ['*.picart.cc'],
-    provider: 'ipx',
-    densities: [1, 2, 3]
+    domains: ['*.cosfan.cc'],
+    provider: 'ipx'
   },
 
   // i18n 国际化配置
