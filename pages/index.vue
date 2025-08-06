@@ -81,7 +81,7 @@
     if (loading.value || !hasMore.value) return;
 
     loading.value = true;
-    
+
     // 如果是第一页，立即清空列表以提供即时反馈
     if (pagination.value.page === 1) {
       allItems.value = [];
@@ -89,7 +89,7 @@
     try {
       const response = await articleControllerFindAll({
         composable: 'useFetch',
-        key: `home-${currentTab.value}`,
+        key: `home-${currentTab.value}-${pagination.value.page}`,
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,

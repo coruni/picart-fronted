@@ -167,7 +167,8 @@
     try {
       const response = await articleControllerFindAll({
         composable: 'useFetch',
-        key: `category-articles-${categoryId.value}-${currentTab.value}`,
+        key: `category-articles-${categoryId.value}-${currentTab.value}-${pagination.value.page}`,
+
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,

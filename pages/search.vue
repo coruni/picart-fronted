@@ -109,6 +109,8 @@
     try {
       const { data: articles } = await articleControllerArticleSearch({
         composable: 'useFetch',
+        key: `search-${searchQuery.value}-${pagination.value.page}`,
+
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,
