@@ -23,9 +23,16 @@
           el: '.custom-pagination'
         }"
       >
-        <swiper-slide v-for="slide in slides" :key="slide.id">
-          <div class="relative h-full">
-            <NuxtImg :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" loading="lazy" format="webp" sizes="100vw" @error="handleImageError($event, 'general')" />
+        <swiper-slide v-for="slide in bannersData.data" :key="slide.id">
+          <div class="relative h-full cursor-pointer" @click="handleBannerClick(slide.linkUrl)">
+            <NuxtImg
+              :src="slide.image"
+              :alt="slide.title"
+              class="w-full h-full object-cover"
+              loading="lazy"
+              format="webp"
+              sizes="100vw"
+            />
             <!-- 添加半透明遮罩层 -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
@@ -59,32 +66,32 @@
 </template>
 
 <script setup>
-  import { onMounted } from 'vue';
+  import { bannersControllerFindActive } from '~~/api';
+  const router = useRouter();
+  const { locale } = useI18n();
 
-  // 图片错误处理
-  const { handleImageError } = useImageError();
+  // 获取活动的banner数据
+  const {
+    data: bannersData,
+    pending,
+    error
+  } = await bannersControllerFindActive({
+    composable: 'useFetch',
+    key: 'active-banners'
+  });
 
-  // 示例数据
-  const slides = ref([
-    {
-      id: 1,
-      title: '梦幻樱花季',
-      description: '在粉色花瓣飞舞的春日里，感受最纯真的美好时光',
-      image: 'https://tc.alcy.cc/i/2025/07/11/686ffb18e16e5.webp'
-    },
-    {
-      id: 2,
-      title: '星空下的约定',
-      description: '在漫天繁星的见证下，许下永恒的诺言',
-      image: 'https://tc.alcy.cc/i/2025/07/11/686fe512e5fcd.webp'
-    },
-    {
-      id: 3,
-      title: '海边的夏日祭',
-      description: '穿着浴衣，提着灯笼，在海风中感受夏日的浪漫',
-      image: 'https://tc.alcy.cc/i/2025/07/11/686ffa65bddb3.webp'
+  // 处理banner点击事件
+  const handleBannerClick = linkUrl => {
+    if (linkUrl) {
+      // 如果是外部链接，使用window.open打开
+      if (linkUrl.startsWith('http')) {
+        window.open(linkUrl, '_blank');
+      } else {
+        // 否则使用Nuxt的navigateTo进行内部跳转
+        router.push(`/${locale.value}${linkUrl}`);
+      }
     }
-  ]);
+  };
 
   onMounted(() => {
     // 添加自定义分页器样式

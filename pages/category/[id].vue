@@ -34,12 +34,9 @@
 
       <!-- 文章列表 -->
       <div v-if="loading && displayItems.length === 0" class="flex justify-center py-12">
-        <div class="text-center">
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
-          ></div>
-          <p class="text-gray-600 dark:text-gray-400">{{ $t('category.loadingArticles') }}</p>
-        </div>
+        <div
+          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
+        ></div>
       </div>
 
       <div v-else-if="!loading && displayItems.length === 0" class="text-center py-12">

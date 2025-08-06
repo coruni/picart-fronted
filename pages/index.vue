@@ -6,7 +6,7 @@
       <div class="flex justify-center mb-8 md:justify-end">
         <UTabs v-model="currentTab" :items="tabs" variant="pill" class="w-auto" :default-value="0">
           <template #default="{ item }">
-            <span class="text-sm font-medium">{{ $t(item.name) }}</span>
+            <span class="text-sm font-medium cursor-pointer">{{ $t(item.name) }}</span>
           </template>
         </UTabs>
       </div>

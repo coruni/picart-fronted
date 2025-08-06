@@ -55,9 +55,13 @@
         @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
       />
     </div>
-    
+
     <!-- 删除确认模态框 -->
-    <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <UModal
+      v-model:open="showDeleteModal"
+      :close-on-backdrop="false"
+      :ui="{ footer: 'justify-end' }"
+    >
       <template #header>
         {{ t('common.modal.confirmDelete') }}
       </template>
@@ -251,7 +255,8 @@
     composable: 'useFetch',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
-      limit: pagination.value.pageSize
+      limit: pagination.value.pageSize,
+      name: filters.value.name || undefined
     }))
   });
 
@@ -261,9 +266,9 @@
     return data as Tag[];
   });
 
-  // 监听分页变化
+  // 监听分页和筛选变化
   watch(
-    [() => pagination.value.pageIndex, () => pagination.value.pageSize],
+    [() => pagination.value.pageIndex, () => pagination.value.pageSize, () => filters.value],
     () => {
       tags.refresh?.();
     },

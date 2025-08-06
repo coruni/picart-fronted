@@ -111,7 +111,8 @@
       "updateSuccess": "更新完成",
       "updateFailed": "更新失败",
       "createFailed": "创建失败",
-      "createSuccess": "创建完成"
+      "createSuccess": "创建完成",
+      "uploadFailed": "上传失败"
     },
     "modal": {
       "confirmDelete": "确认删除",

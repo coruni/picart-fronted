@@ -5,41 +5,35 @@
     <UForm :state="state" :schema="schema" @submit="onSubmit">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- 标题 -->
-        <UFormGroup :label="t('banners.title')" name="title" class="md:col-span-2">
+        <UFormField :label="t('banners.title')" name="title" class="md:col-span-2">
           <UInput v-model="state.title" :placeholder="t('banners.titlePlaceholder')" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 图片上传 -->
-        <UFormGroup :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
-          <UFileUpload 
-            v-model="state.imageUrl" 
+        <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
+          <UFileUpload
+            v-model="state.imageUrl"
             :placeholder="t('banners.imagePlaceholder')"
             accept="image/*"
             multiple
             @change="onImageUpload"
           />
-          <img 
-            v-if="state.imageUrl" 
-            :src="state.imageUrl" 
-            :alt="state.title" 
-            class="mt-2 w-32 h-32 object-cover rounded"
-          />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 链接 -->
-        <UFormGroup :label="t('banners.link')" name="url" class="md:col-span-2">
+        <UFormField :label="t('banners.link')" name="url" class="md:col-span-2">
           <UInput v-model="state.url" :placeholder="t('banners.linkPlaceholder')" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 排序 -->
-        <UFormGroup :label="t('banners.sortOrder')" name="sortOrder">
+        <UFormField :label="t('banners.sortOrder')" name="sortOrder">
           <UInput v-model.number="state.sortOrder" type="number" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 状态 -->
-        <UFormGroup :label="t('banners.status')" name="isActive">
-          <UToggle v-model="state.isActive" />
-        </UFormGroup>
+        <UFormField :label="t('banners.status')" name="status">
+          <USwitch v-model="state.status" />
+        </UFormField>
       </div>
 
       <!-- 提交按钮 -->

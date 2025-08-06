@@ -33,10 +33,7 @@
       </div>
 
       <!-- 文章网格 -->
-      <div
-        v-if="hasSearched"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-      >
+      <div v-if="hasSearched" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
         <TransitionGroup name="list" tag="div" class="contents">
           <div
             v-for="article in displayArticles"

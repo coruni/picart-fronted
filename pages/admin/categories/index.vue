@@ -258,7 +258,8 @@
     key: 'categories',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
-      limit: pagination.value.pageSize
+      limit: pagination.value.pageSize,
+      name: filters.value.name || undefined
     }))
   });
 
@@ -268,9 +269,9 @@
     return data as Category[];
   });
 
-  // 监听分页变化
+  // 监听分页和筛选变化
   watch(
-    [() => pagination.value.pageIndex, () => pagination.value.pageSize],
+    [() => pagination.value.pageIndex, () => pagination.value.pageSize, () => filters.value],
     () => {
       categories.refresh?.();
     },

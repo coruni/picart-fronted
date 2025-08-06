@@ -111,7 +111,8 @@
       "updateSuccess": "Update Success",
       "updateFailed": "Update Failed",
       "createFailed": "Create Failed",
-      "createSuccess": "Create Success"
+      "createSuccess": "Create Success",
+      "uploadFailed": "Upload Failed"
     },
     "modal": {
       "confirmDelete": "Confirm Delete"
@@ -122,8 +123,10 @@
       "create": "Create"
     },
     "save": "Save",
-    "loadMore": "Load More",
-    "loading": "Loading...",
+    "loading": {
+      "loading": "Loading...",
+      "noMore": "No more"
+    },
     "error": "Load failed, please try again",
     "retry": "Reload"
   },

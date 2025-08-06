@@ -111,7 +111,8 @@
       "createSuccess": "成功を生み出します",
       "deleteFailed": "削除に失敗しました",
       "updateFailed": "更新に失敗しました",
-      "updateSuccess": "成功を更新します"
+      "updateSuccess": "成功を更新します",
+      "uploadFailed": "アップロードに失敗しました"
     },
     "modal": {
       "confirmDeleteMessage": "",

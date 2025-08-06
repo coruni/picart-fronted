@@ -5,35 +5,34 @@
     <UForm :state="state" :schema="schema" @submit="onSubmit">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- 标题 -->
-        <UFormGroup :label="t('banners.title')" name="title" class="md:col-span-2">
+        <UFormField :label="t('banners.title')" name="title" class="md:col-span-2">
           <UInput v-model="state.title" :placeholder="t('banners.titlePlaceholder')" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 图片上传 -->
-        <UFormGroup :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
+        <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
           <UFileUpload
             v-model="state.imageUrl"
             :placeholder="t('banners.imagePlaceholder')"
             accept="image/*"
-            multiple
             @change="onImageUpload"
           />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 链接 -->
-        <UFormGroup :label="t('banners.link')" name="url" class="md:col-span-2">
+        <UFormField :label="t('banners.link')" name="url" class="md:col-span-2">
           <UInput v-model="state.url" :placeholder="t('banners.linkPlaceholder')" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 排序 -->
-        <UFormGroup :label="t('banners.sortOrder')" name="sortOrder">
+        <UFormField :label="t('banners.sortOrder')" name="sortOrder">
           <UInput v-model.number="state.sortOrder" type="number" />
-        </UFormGroup>
+        </UFormField>
 
         <!-- 状态 -->
-        <UFormGroup :label="t('banners.status')" name="isActive">
+        <UFormField :label="t('banners.status')" name="isActive">
           <UToggle v-model="state.isActive" />
-        </UFormGroup>
+        </UFormField>
       </div>
 
       <!-- 提交按钮 -->
@@ -51,7 +50,6 @@
 
 <script setup lang="ts">
   import { z } from 'zod';
-  import { useI18n } from 'vue-i18n';
   import { bannersControllerCreate, uploadControllerUploadFile } from '~~/api';
 
   const router = useRouter();
@@ -66,7 +64,7 @@
   // 表单状态
   const state = reactive({
     title: '',
-    imageUrl: [],
+    imageUrl: '',
     url: '',
     sortOrder: 0,
     isActive: true
@@ -86,20 +84,42 @@
 
   // 图片上传处理
   const onImageUpload = async (files: File[]) => {
-    // 这里应该实现实际的图片上传逻辑
-    // uploadControllerUploadFile
-    const res = await uploadControllerUploadFile({
-      composable: '$fetch',
-      body: files
-    });
-    // 暂时使用本地URL作为示例
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = e => {
-        state.imageUrl = [e.target?.result as string];
-      };
-      reader.readAsDataURL(file);
+    // 检查是否有文件被选中
+    if (!files || files.length === 0) {
+      toast.add({
+        title: t('banners.imageRequired'),
+        color: 'error'
+      });
+      return;
+    }
+
+    try {
+      // 将文件转换为base64字符串数组
+      const fileStrings = await Promise.all(
+        files.map(file => {
+          return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        })
+      );
+
+      // 执行文件上传
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: fileStrings
+      });
+    } catch (error: any) {
+      // 处理上传错误
+      console.error('Failed to upload image:', error);
+      toast.add({
+        title: error?.message || t('common.message.uploadFailed'),
+        color: 'error'
+      });
+      // 重置文件选择
+      state.imageUrl = '';
     }
   };
 
