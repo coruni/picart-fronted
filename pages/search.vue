@@ -105,6 +105,7 @@
 
     loading.value = true;
     hasSearched.value = true;
+    if (loading.value || !hasMore.value) return;
 
     try {
       const { data: articles } = await articleControllerArticleSearch({
@@ -118,7 +119,7 @@
         }
       });
 
-      allArticles.value = articles.value?.data?.data || [];
+      allArticles.value = [...allArticles.value, ...(articles.value?.data?.data || [])];
       totalResults.value = articles.value?.data?.meta?.total || 0;
       hasMore.value = articles.value?.data?.data?.length === pagination.value.limit;
 
@@ -174,7 +175,7 @@
     } else {
       clearSearch();
     }
-  }, 300);
+  }, 500);
 
   watch(searchQuery, () => {
     debouncedSearch();

@@ -9,7 +9,8 @@ export const createClientConfig: CreateClientConfig = config => {
     baseURL: config?.baseURL || appConfig.apiBaseUrl,
     onRequest: async context => {
       // 获取用户 store 实例
-      const userStore = useUserStore();
+      const pinia = usePinia();
+      const userStore = useUserStore(pinia);
 
       // 生成基于浏览器指纹的唯一设备ID
       let deviceId = 'unknown';
@@ -35,7 +36,7 @@ export const createClientConfig: CreateClientConfig = config => {
         }
 
         // 更新当前请求的headers
-      updateRequestHeaders(context, deviceId, userStore);
+        updateRequestHeaders(context, deviceId, userStore);
       }
       return context;
     },
