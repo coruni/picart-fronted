@@ -1,53 +1,6 @@
 import { defineStore } from 'pinia';
-
-interface UserInfo {
-  id: number;
-  username: string;
-  nickname: string;
-  email: string;
-  phone: string;
-  status: string;
-  banned: unknown;
-  banReason: unknown;
-  avatar: string;
-  description: unknown;
-  address: unknown;
-  gender: string;
-  birthDate: unknown;
-  articleCount: number;
-  followerCount: number;
-  followingCount: number;
-  level: number;
-  experience: number;
-  score: number;
-  wallet: number;
-  membershipLevel: number;
-  membershipLevelName: string;
-  membershipStatus: string;
-  membershipStartDate: unknown;
-  membershipEndDate: unknown;
-  lastLoginAt: unknown;
-  lastActiveAt: unknown;
-  inviterId: unknown;
-  inviteCode: string;
-  inviteEarnings: string;
-  inviteCount: number;
-  roles: Array<{
-    id?: number;
-    name?: string;
-    displayName?: unknown;
-    description?: string;
-    permissions?: Array<{
-      id: number;
-      name: string;
-      description: string;
-    }>;
-    createdAt?: string;
-    updatedAt?: string;
-  }>;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { UserControllerGetProfileResponse } from '~~/api';
+type UserInfo = UserControllerGetProfileResponse['data'];
 
 interface UserState {
   token: string | null;
@@ -92,20 +45,14 @@ export const useUserStore = defineStore('user', {
     },
 
     login(token: string, refreshToken: string, userInfo: UserInfo) {
-      this.setToken(token);
-      this.setRefreshToken(refreshToken);
-      this.setUserInfo(userInfo);
+      this.token = token;
+      this.refreshToken = refreshToken;
+      this.userInfo = userInfo;
+      this.isAuthenticated = true;
     },
+
     setRefreshToken(refreshToken: string) {
       this.refreshToken = refreshToken;
-    },
-
-    logout() {
-      this.token = null;
-      this.refreshToken = null;
-      this.userInfo = null;
-
-      this.isAuthenticated = false;
     },
 
     clearAuth() {
@@ -113,12 +60,16 @@ export const useUserStore = defineStore('user', {
       this.userInfo = null;
       this.isAuthenticated = false;
       this.rememberedUsername = null;
+
+      // 清除认证相关的cookie
+      if (import.meta.client) {
+        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      }
     }
   },
 
   persist: {
-    key: 'picart-user-auth',
-    pick: ['token', 'userInfo', 'isAuthenticated', 'refreshToken', 'rememberedUsername'],
-    storage: typeof localStorage !== 'undefined' ? localStorage : undefined
+    storage: import.meta.client ? piniaPluginPersistedstate.localStorage() : undefined
   }
 });

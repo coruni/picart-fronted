@@ -70,11 +70,11 @@
       "title": "分类",
       "avatarPlaceholder": "请上传头像",
       "descriptionPlaceholder": "请输入说明",
-      "namePlaceholder": "请inpuit名称",
+      "namePlaceholder": "请输入名称",
       "selectParent": "请选择父级类别"
     },
     "tags": {
-      "avatarPlaceholder": "请上传化身",
+      "avatarPlaceholder": "请上传头像",
       "backgroundPlaceholder": "请上传背景",
       "descriptionPlaceholder": "请输入说明",
       "namePlaceholder": "请输入名称"
@@ -131,7 +131,9 @@
     },
     "loadMore": "加载更多",
     "error": "加载失败，请稍后重试",
-    "retry": "重新加载"
+    "retry": "重新加载",
+    "cancel": "取消",
+    "saving": "保存中..."
   },
   "filter": {
     "title": "筛选"
@@ -277,7 +279,13 @@
     "noInviteCode": "暂无邀请码",
     "inviteCount": "邀请人数",
     "inviteEarnings": "邀请收益",
-    "copyInviteLink": "复制邀请链接"
+    "copyInviteLink": "复制邀请链接",
+    "username": "用户名",
+    "enterUsername": "输入用户名",
+    "nickname": "昵称",
+    "enterNickname": "输入昵称",
+    "description": "简介",
+    "enterDescription": "输入简介"
   },
   "search": {
     "title": "搜索",

@@ -5,19 +5,19 @@
       "search": "検索",
       "login": "ログイン",
       "register": "登録",
-      "profile": "ユーザー中心",
+      "profile": "プロフィール",
       "logout": "ログアウト",
-      "admin": "管理者中心",
-      "message": "メッセージ中心",
+      "admin": "管理者センター",
+      "message": "メッセージセンター",
       "setting": "設定"
     }
   },
   "home": {
     "tab": {
       "all": "すべて",
-      "popular": "人気の作品",
-      "latest": "最新の作品",
-      "following": "フォロー中の作品"
+      "popular": "人気",
+      "latest": "最新",
+      "following": "フォロー中"
     }
   },
   "admin": {
@@ -27,8 +27,8 @@
       "articles": "記事管理",
       "categories": "カテゴリー管理",
       "orders": "注文管理",
-      "analytics": "分析データ",
-      "settings": "システム設定",
+      "analytics": "分析",
+      "settings": "設定",
       "comments": "コメント管理",
       "tags": "タグ管理",
       "banners": "バナー管理"
@@ -36,98 +36,103 @@
     "settings": {
       "title": "システム設定",
       "tabs": {
-        "general": "基本設定",
-        "user": "ユーザー設定",
-        "content": "コンテンツ設定",
-        "maintenance": "メンテナンスモード",
-        "invite": "招待設定"
+        "general": "一般",
+        "user": "ユーザー",
+        "content": "コンテンツ",
+        "maintenance": "メンテナンス",
+        "invite": "招待"
       },
       "siteName": "サイト名",
-      "siteDescription": "サイトの説明",
-      "siteKeywords": "サイトのキーワード",
+      "siteDescription": "サイト説明",
+      "siteKeywords": "サイトキーワード",
       "siteLogo": "サイトロゴ",
-      "siteFavicon": "サイトアイコン",
-      "userRegistrationEnabled": "ユーザー登録を許可",
-      "userEmailVerification": "ユーザーメールの検証",
-      "commentApprovalRequired": "コメントの承認が必要",
-      "articleApprovalRequired": "記事の承認が必要",
+      "siteFavicon": "サイトファビコン",
+      "userRegistrationEnabled": "ユーザー登録を有効にする",
+      "userEmailVerification": "ユーザーメール認証",
+      "commentApprovalRequired": "コメント承認が必要",
+      "articleApprovalRequired": "記事承認が必要",
       "maintenanceMode": "メンテナンスモード",
-      "maintenanceMessage": "メンテナンスモードメッセージ",
-      "inviteCodeEnabled": "招待コード機能を有効化",
+      "maintenanceMessage": "メンテナンスメッセージ",
+      "inviteCodeEnabled": "招待コードを有効にする",
       "inviteCodeRequired": "登録に招待コードが必要",
-      "inviteDefaultCommissionRate": "デフォルトのコミッション率",
-      "inviteCodeExpireDays": "招待コードの有効期限（日）",
+      "inviteDefaultCommissionRate": "デフォルトコミッション率",
+      "inviteCodeExpireDays": "招待コード有効期限（日）",
       "saveSuccess": "設定が正常に保存されました",
       "saveFailed": "設定の保存に失敗しました"
     },
     "categories": {
-      "name": "カテゴリー名",
+      "name": "名前",
       "description": "説明",
       "avatar": "アバター",
-      "parent": "親",
+      "parent": "親カテゴリー",
       "createdAt": "作成日時",
       "edit": "編集",
-      "avatarPlaceholder": "アバターをアップロードしてください",
+      "title": "カテゴリー",
+      "namePlaceholder": "名前を入力してください",
       "descriptionPlaceholder": "説明を入力してください",
-      "namePlaceholder": "インプートの名前をお願いします",
-      "selectParent": "親カテゴリを選択してください",
-      "title": "カテゴリ"
+      "selectParent": "親カテゴリーを選択してください",
+      "avatarPlaceholder": "アバターをアップロードしてください"
     },
     "tags": {
-      "avatarPlaceholder": "アバターをアップロードしてください",
-      "backgroundPlaceholder": "背景をアップロードしてください",
       "descriptionPlaceholder": "説明を入力してください",
+      "backgroundPlaceholder": "背景をアップロードしてください",
+      "avatarPlaceholder": "アバターをアップロードしてください",
       "namePlaceholder": "名前を入力してください"
     }
   },
   "common": {
     "table": {
-      "actions": "アクション",
-      "delete": "消去",
-      "avatar": "アバター",
-      "createdAt": "作成日時",
-      "updatedAt": "更新日時",
+      "actions": "操作",
+      "delete": "削除",
       "name": "名前",
       "description": "説明",
+      "avatar": "アバター",
       "parent": "親",
+      "createdAt": "作成日時",
+      "updatedAt": "更新日時",
       "edit": "編集",
       "articleCount": "記事",
-      "sort": "選別",
+      "sort": "並び替え",
       "title": "タイトル",
-      "summary": "まとめ",
+      "summary": "概要",
       "author": "著者",
       "collections": "コレクション",
       "likes": "いいね",
-      "status": "状態",
-      "views": "ビュー",
-      "roles": "ロール",
-      "background": "背景",
-      "category": "カテゴリ",
-      "filter": "フィルター"
+      "status": "ステータス",
+      "views": "閲覧数",
+      "roles": "役割",
+      "category": "カテゴリー",
+      "filter": "フィルター",
+      "background": "背景"
     },
     "message": {
-      "deleteSuccess": "",
-      "createFailed": "失敗します",
-      "createSuccess": "成功を生み出します",
-      "deleteFailed": "削除に失敗しました",
-      "updateFailed": "更新に失敗しました",
-      "updateSuccess": "成功を更新します",
-      "uploadFailed": "アップロードに失敗しました"
+      "deleteSuccess": "削除成功",
+      "deleteFailed": "削除失敗",
+      "updateSuccess": "更新成功",
+      "updateFailed": "更新失敗",
+      "createFailed": "作成失敗",
+      "createSuccess": "作成成功",
+      "uploadFailed": "アップロード失敗",
+      "uploadSuccess": "アップロード成功"
     },
     "modal": {
-      "confirmDeleteMessage": "",
-      "confirmDelete": "削除を確認します"
+      "confirmDelete": "削除確認"
     },
     "button": {
+      "confirm": "確認",
       "cancel": "キャンセル",
-      "confirm": "確認する",
-      "create": "作成する"
+      "create": "作成"
     },
     "save": "保存",
-
-    "loading": "読み込み中...",
-    "error": "読み込みに失敗しました。後でもう一度お試しください",
-    "retry": "再読み込み"
+    "loading": {
+      "loading": "読み込み中...",
+      "noMore": "これ以上なし"
+    },
+    "error": "読み込みに失敗しました。再試行してください",
+    "retry": "再読み込み",
+    "loadMore": "もっと読み込む",
+    "cancel": "キャンセル",
+    "saving": "保存中..."
   },
   "filter": {
     "title": "フィルター"
@@ -146,78 +151,76 @@
       "placeholder": "カテゴリーを選択してください",
       "searchPlaceholder": "カテゴリーを検索..."
     },
-    "parentCategory": {
-      "searchPlaceholder": "",
-      "placeholder": "親カテゴリを選択してください"
-    },
-    "advancedOptions": "高度な設定",
-    "requireLogin": "",
-    "viewPrice": "查看价格",
-    "image": {
-      "name": "画像",
-      "placeholder": "画像をアップロードしてください"
-    },
-    "name": {
-      "placeholder": "名前を入力してください"
-    },
-    "requireFollow": "フォローする必要があります",
-    "requirePayment": "必要な支払い",
-    "submit": "提出する",
     "tag": {
       "name": "タグ",
       "placeholder": "タグを選択してください"
     },
+    "parentCategory": {
+      "placeholder": "親カテゴリーを選択してください",
+      "searchPlaceholder": "キーワードを入力して検索してください"
+    },
+    "image": {
+      "placeholder": "画像をアップロードしてください",
+      "name": "画像"
+    },
+    "submit": "送信",
     "type": {
       "placeholder": "タイプを選択してください"
+    },
+    "advancedOptions": "詳細設定",
+    "requireLogin": "ログインが必要",
+    "requireFollow": "フォローが必要",
+    "requirePayment": "支払いが必要",
+    "viewPrice": "閲覧価格",
+    "name": {
+      "placeholder": "名前を入力してください"
     }
   },
   "article": {
-    "publishAt": "发布于",
-    "views": "ビュー",
-    "comments": "コメント区",
-    "followers": "ファン",
+    "publishAt": "公開日時",
+    "views": "閲覧数",
+    "comments": "コメント",
+    "followers": "フォロワー",
     "likes": "いいね",
-    "goodReviews": "好評",
+    "goodReviews": "レビュー",
     "followAuthor": "著者をフォロー",
-    "relatedArticles": "関連推奨",
-    "comment": "コメントを投稿",
+    "relatedPosts": "関連記事",
+    "relatedArticles": "関連記事",
+    "comment": "コメント",
     "reply": "返信"
   },
   "validation": {
     "required": "このフィールドは必須です",
-    "email": "有効なメールアドレスを入力してください",
-    "minLength": "最低{min}文字必要です",
-    "maxLength": "最大{max}文字までです",
-    "usernameMin": "ユーザー名は最低3文字必要です",
-    "usernameMax": "ユーザー名は最大20文字までです",
+    "usernameMin": "ユーザー名は3文字以上である必要があります",
+    "usernameMax": "ユーザー名は20文字を超えることはできません",
     "emailInvalid": "有効なメールアドレスを入力してください",
-    "passwordMin": "パスワードは最低6文字必要です",
-    "passwordMax": "パスワードは最大50文字までです",
+    "passwordMin": "パスワードは6文字以上である必要があります",
+    "passwordMax": "パスワードは50文字を超えることはできません",
     "passwordMismatch": "パスワードが一致しません"
   },
   "error": {
-    "pageNotFound": "申し訳ありません、お探しのページは見つかりませんでした",
-    "serverError": "サーバーエラーが発生しました。しばらくしてからもう一度お試しください",
+    "pageNotFound": "申し訳ありません、お探しのページは存在しません",
+    "serverError": "サーバーエラーです。後でもう一度お試しください",
     "forbidden": "このページにアクセスする権限がありません",
-    "generic": "エラーが発生しました。しばらくしてからもう一度お試しください",
+    "generic": "何かがうまくいきませんでした。後でもう一度お試しください",
     "backHome": "ホームに戻る",
-    "goBack": "前に戻る",
+    "goBack": "戻る",
     "details": "エラー詳細"
   },
   "category": {
     "title": "カテゴリー",
     "loading": "読み込み中...",
     "articles": "記事",
-    "views": "ビュー",
+    "views": "閲覧数",
     "sortBy": "並び替え",
     "latest": "最新",
     "popular": "人気",
     "oldest": "最古",
     "loadMore": "もっと読み込む",
-    "loadingArticles": "記事を読み込んでいます...",
+    "loadingArticles": "記事を読み込み中...",
     "noArticles": "記事がありません",
-    "noArticlesDescription": "このカテゴリーにはまだ記事が投稿されていません",
-    "defaultDescription": "このカテゴリーの素晴らしいコンテンツを探索する"
+    "noArticlesDescription": "このカテゴリーにはまだ記事が公開されていません",
+    "defaultDescription": "このカテゴリーの素晴らしいコンテンツを探索"
   },
   "login": {
     "title": "ユーザーログイン",
@@ -225,11 +228,11 @@
     "usernamePlaceholder": "ユーザー名を入力してください",
     "password": "パスワード",
     "passwordPlaceholder": "パスワードを入力してください",
-    "rememberMe": "私を覚えてますか",
-    "forgotPassword": "パスワードをお忘れですか？",
+    "rememberMe": "ログイン状態を保持",
+    "forgotPassword": "パスワードを忘れた場合",
     "login": "ログイン",
     "loggingIn": "ログイン中...",
-    "noAccount": "アカウントがありませんか？",
+    "noAccount": "アカウントをお持ちでない場合",
     "register": "今すぐ登録",
     "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください"
   },
@@ -242,37 +245,81 @@
     "password": "パスワード",
     "passwordPlaceholder": "パスワードを入力してください",
     "confirmPassword": "パスワード確認",
-    "confirmPasswordPlaceholder": "パスワードをもう一度入力してください",
-    "agreeTerms": "ユーザー規約とプライバシーポリシーに同意します",
+    "confirmPasswordPlaceholder": "パスワードを再度入力してください",
+    "agreeTerms": "ユーザー契約とプライバシーポリシーを読み、同意します",
     "register": "登録",
     "registering": "登録中...",
-    "hasAccount": "すでにアカウントをお持ちですか？",
+    "hasAccount": "すでにアカウントをお持ちの場合",
     "login": "今すぐログイン",
-    "success": "登録が完了しました。ログインしてください",
+    "success": "登録が成功しました。ログインしてください",
     "registerFailed": "登録に失敗しました"
   },
   "user": {
     "title": "ユーザープロフィール",
     "avatar": "ユーザーアバター",
-    "noDescription": "個人的な説明はありません",
+    "noDescription": "個人の説明がありません",
     "articles": "記事",
     "followers": "フォロワー",
     "following": "フォロー中",
     "wallet": "ウォレット",
-    "editProfile": "プロフィールを編集",
+    "editProfile": "プロフィール編集",
     "logout": "ログアウト",
-    "myArticles": "私の記事",
-    "createArticle": "記事を作成",
-    "noArticles": "記事がありません",
-    "membershipLevel": "会員レベル",
-    "basicMember": "基本会員",
+    "myArticles": "マイ記事",
+    "createArticle": "記事作成",
+    "noArticles": "まだ記事がありません",
+    "membershipLevel": "メンバーシップレベル",
+    "basicMember": "基本メンバー",
     "experience": "経験値",
     "score": "スコア",
     "inviteRewards": "招待報酬",
     "inviteCode": "招待コード",
     "noInviteCode": "招待コードがありません",
-    "inviteCount": "招待人数",
+    "inviteCount": "招待数",
     "inviteEarnings": "招待収益",
-    "copyInviteLink": "招待リンクをコピー"
+    "copyInviteLink": "招待リンクをコピー",
+    "username": "ユーザー名",
+    "enterUsername": "ユーザー名を入力",
+    "nickname": "ニックネーム",
+    "enterNickname": "ニックネームを入力",
+    "description": "説明",
+    "enterDescription": "説明を入力"
+  },
+  "search": {
+    "title": "検索",
+    "placeholder": "画像、記事、ユーザーを検索...",
+    "allCategories": "すべてのカテゴリー",
+    "sort": {
+      "latest": "最新",
+      "popular": "人気",
+      "mostLiked": "最もいいね"
+    },
+    "trending": "トレンド検索",
+    "noResults": {
+      "title": "結果が見つかりません",
+      "description": "別のキーワードを試すか、検索条件を調整してください"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "general": "一般",
+      "user": "ユーザー",
+      "content": "コンテンツ",
+      "maintenance": "メンテナンス",
+      "invite": "招待"
+    }
+  },
+  "banners": {
+    "imageRequired": "画像をアップロードしてください",
+    "titleRequired": "タイトルを入力してください",
+    "inactive": "非アクティブ",
+    "active": "アクティブ",
+    "status": "ステータス",
+    "link": "リンク",
+    "linkPlaceholder": "リンクを入力してください",
+    "imagePlaceholder": "画像をアップロードしてください",
+    "descriptionPlaceholder": "説明を入力してください",
+    "title": "タイトル",
+    "create": "新規バナー",
+    "edit": "バナー編集"
   }
 }

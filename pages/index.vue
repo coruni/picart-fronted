@@ -23,9 +23,9 @@
         </TransitionGroup>
       </div>
       <!-- 加载指示器 -->
-      <div v-if="loading" class="col-span-2 md:col-span-4 flex justify-center py-4">
+      <div v-if="loading" class="col-span-2 md:col-span-4 flex justify-center py-8">
         <div
-          class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
         ></div>
       </div>
 
@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
   import { articleControllerFindAll } from '~~/api';
+  const toast = useToast();
 
   const tabs: { id: 'all' | 'popular' | 'latest' | 'following'; name: string; value: string }[] = [
     { id: 'all', name: 'home.tab.all', value: 'all' },
@@ -133,15 +133,18 @@
   // 移除了节流函数和滚动检查函数，因为现在使用 Intersection Observer
 
   const notify = () => {
-    useNuxtApp().$toast.warn(
-      '页面还在开发中，下载资源请<a href="https://drive.cosfan.cc" style="color: #4299e1;" target="_blank">👉点击下载👈</a>',
-      {
-        dangerouslyHTMLString: true,
-        autoClose: 10000,
-        position: 'top-center',
-        hideProgressBar: true
-      }
-    );
+    toast.add({
+      title: '页面还在开发中，下载资源请前往https://drive.cosfan.cc',
+      actions: [
+        {
+          label: '打开',
+          color: 'primary',
+          onClick: () => {
+            window.open('https://drive.cosfan.cc');
+          }
+        }
+      ]
+    });
   };
 
   onMounted(() => {

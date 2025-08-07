@@ -68,9 +68,9 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { useI18n } from 'vue-i18n';
   import { userControllerLogin } from '~~/api';
   import { z } from 'zod';
+  const localePath = useLocalePath();
 
   const { t } = useI18n();
   const router = useRouter();
@@ -106,7 +106,27 @@
       // 保存token到用户store
       if (data?.token) {
         // 登录用户
-        userStore.login(data.token, data.refreshToken, data);
+        userStore.login(data.token, data.refreshToken, data as any);
+
+        // 设置cookie以支持SSR环境下的token传递
+        const authToken = useCookie('auth-token', {
+          expires: rememberMe.value ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : undefined, // 30天或会话cookie
+          secure: true, // HTTPS only
+          sameSite: 'lax', // 防止CSRF攻击
+          httpOnly: false // 允许JavaScript访问
+        });
+        authToken.value = data.token;
+
+        // 如果有refresh token，也设置到cookie
+        if (data.refreshToken) {
+          const refreshToken = useCookie('refresh-token', {
+            expires: rememberMe.value ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : undefined,
+            secure: true,
+            sameSite: 'lax',
+            httpOnly: false
+          });
+          refreshToken.value = data.refreshToken;
+        }
 
         // 如果选择了记住我，保存用户名
         if (rememberMe.value) {
@@ -116,7 +136,7 @@
         }
 
         // 跳转到用户中心
-        router.push('/user');
+        router.push(localePath('/user'));
       }
     } catch (error) {
       console.error('Login failed:', error);

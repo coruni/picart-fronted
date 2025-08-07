@@ -19,7 +19,7 @@
       <div class="flex justify-center mb-8 md:justify-end">
         <UTabs :items="tabs" v-model="currentTab" class="w-auto" variant="pill">
           <template #default="{ item }">
-            <span class="text-sm font-medium">{{ $t(item.label) }}</span>
+            <span class="text-sm font-medium cursor-pointer">{{ $t(item.label) }}</span>
           </template>
         </UTabs>
         <div class="flex items-center space-x-2 ml-4">

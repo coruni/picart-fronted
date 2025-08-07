@@ -9,9 +9,9 @@
 
     <!-- 加载状态 -->
     <div v-if="isLoading" class="flex items-center justify-center py-20">
-      <div class="text-center">
+      <div class="flex items-center justify-center flex-col gap-8">
         <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
+          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
         ></div>
         <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
       </div>

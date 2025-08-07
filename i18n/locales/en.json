@@ -68,7 +68,7 @@
       "createdAt": "Created At",
       "edit": "Edit",
       "title": "Category",
-      "namePlaceholder": "Please inpuit name",
+      "namePlaceholder": "Please input name",
       "descriptionPlaceholder": "Please input description",
       "selectParent": "Please select parent category",
       "avatarPlaceholder": "Please upload avatar"
@@ -129,7 +129,10 @@
       "noMore": "No more"
     },
     "error": "Load failed, please try again",
-    "retry": "Reload"
+    "retry": "Reload",
+    "loadMore": "Load More",
+    "cancel": "Cancel",
+    "saving": "Saving..."
   },
   "filter": {
     "title": "Filter"
@@ -157,17 +160,17 @@
       "searchPlaceholder": "Please enter keyword to search"
     },
     "image": {
-      "placeholder": "Please upload  images",
+      "placeholder": "Please upload images",
       "name": "Images"
     },
     "submit": "Submit",
     "type": {
       "placeholder": "Please select type"
     },
-    "advancedOptions": "Advance Options",
+    "advancedOptions": "Advanced Options",
     "requireLogin": "Require Login",
     "requireFollow": "Require Follow",
-    "requirePayment": "Requie Payment",
+    "requirePayment": "Require Payment",
     "viewPrice": "View Price",
     "name": {
       "placeholder": "Please input name"
@@ -207,13 +210,13 @@
   "category": {
     "title": "Category",
     "loading": "Loading...",
-    "articles": "articles",
-    "views": "views",
+    "articles": "Articles",
+    "views": "Views",
     "sortBy": "Sort by",
     "latest": "Latest",
     "popular": "Popular",
     "oldest": "Oldest",
-    "loadMore": "Load more",
+    "loadMore": "Load More",
     "loadingArticles": "Loading articles...",
     "noArticles": "No articles",
     "noArticlesDescription": "No articles have been published in this category yet",
@@ -273,7 +276,13 @@
     "noInviteCode": "No invite code",
     "inviteCount": "Invite Count",
     "inviteEarnings": "Invite Earnings",
-    "copyInviteLink": "Copy Invite Link"
+    "copyInviteLink": "Copy Invite Link",
+    "username": "Username",
+    "enterUsername": "Enter username",
+    "nickname": "Nickname",
+    "enterNickname": "Enter nickname",
+    "description": "Description",
+    "enterDescription": "Enter description"
   },
   "search": {
     "title": "Search",
@@ -302,15 +311,15 @@
   "banners": {
     "imageRequired": "Please upload image",
     "titleRequired": "Please input title",
-    "inactive": "Active",
+    "inactive": "Inactive",
     "active": "Active",
     "status": "Status",
     "link": "Link",
     "linkPlaceholder": "Please input link",
-    "imagePlaceholder": "Please input image",
+    "imagePlaceholder": "Please upload image",
     "descriptionPlaceholder": "Please input description",
     "title": "Title",
-    "create": "New banner",
+    "create": "New Banner",
     "edit": "Edit Banner"
   }
 }

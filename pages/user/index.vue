@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="min-h-screen">
     <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
-      <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
+      <div class="flex flex-col lg:flex-row gap-4 md:gap-8 relative overflow-visible">
         <!-- 左侧主内容区 -->
-        <div class="flex-1">
+        <div class="flex-1 overflow-visible">
           <!-- 用户信息区 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div
@@ -11,16 +11,16 @@
             >
               <div class="relative">
                 <NuxtImg
-                  :src="userInfo?.avatar || 'https://via.placeholder.com/120'"
+                  :src="userInfo?.avatar"
                   alt="用户头像"
-                  class="w-24 h-24 md:w-32 md:h-32 rounded-full ring-2 ring-white"
+                  class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
                   sizes="96px md:128px"
-                  @error="handleImageError($event as Event, 'avatar')"
                 />
                 <div
                   class="absolute bottom-2 right-2 w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer"
+                  @click="triggerAvatarUpload"
                 >
                   <Icon name="mynaui:camera" class="text-white text-xs md:text-sm" />
                 </div>
@@ -69,6 +69,7 @@
               </div>
               <div class="flex space-x-2">
                 <UButton
+                  @click="isEditModalOpen = true"
                   class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 transition-colors !rounded-button whitespace-nowrap"
                 >
                   {{ $t('user.editProfile') }}
@@ -99,7 +100,7 @@
 
             <div
               v-if="displayArticles.length > 0"
-              class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+              class="grid grid-cols-2 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
             >
               <template v-for="article in displayArticles" :key="article.id">
                 <CommonArticleCard :data="article" class="!rounded-xl" />
@@ -116,13 +117,14 @@
               <UButton
                 @click="loadUserArticles"
                 :disabled="loading"
-                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-indigo-600 transition-colors disabled:opacity-50 !rounded-button"
+                color="primary"
+                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
               >
                 <div
                   v-if="loading"
                   class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
                 ></div>
-                {{ loading ? $t('common.loading') : $t('common.loadMore') }}
+                {{ loading ? $t('common.loading.loading') : $t('common.loadMore') }}
               </UButton>
             </div>
 
@@ -137,7 +139,10 @@
         </div>
 
         <!-- 右侧边栏 -->
-        <div class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0">
+        <div
+          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10"
+          style="position: sticky"
+        >
           <!-- 会员等级 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
@@ -195,7 +200,7 @@
               </div>
             </div>
             <UButton
-              class="w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
+              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
             >
               {{ $t('user.copyInviteLink') }}
             </UButton>
@@ -203,16 +208,111 @@
         </div>
       </div>
     </div>
+    <UModal v-model:open="isEditModalOpen" :ui="{ close: 'cursor-pointer' }">
+      <template #body>
+        <UForm
+          :state="editForm"
+          :validate="validateForm"
+          @submit="handleSaveProfile"
+          class="space-y-4"
+        >
+          <!-- 头像上传 -->
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <NuxtImg
+                :src="editForm.avatar || userInfo?.avatar"
+                alt="用户头像"
+                fit="cover"
+                class="w-20 h-20 rounded-full ring-2 object-cover ring-white"
+                loading="lazy"
+                format="webp"
+                sizes="80px"
+              />
+              <div
+                class="absolute bottom-0 right-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center cursor-pointer"
+                @click="triggerAvatarUpload"
+              >
+                <Icon v-if="!avatarUploading" name="mynaui:camera" class="text-white text-xs" />
+                <Icon v-else name="mynaui:circle-notch" class="text-white text-xs" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 用户名 -->
+          <UFormField :label="$t('user.username')" name="username">
+            <UInput
+              v-model="editForm.username"
+              disabled
+              :placeholder="$t('user.enterUsername')"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 昵称 -->
+          <UFormField :label="$t('user.nickname')" name="nickname">
+            <UInput
+              v-model="editForm.nickname"
+              :placeholder="$t('user.enterNickname')"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 个人简介 -->
+          <UFormField :label="$t('user.description')" name="description">
+            <UTextarea
+              v-model="editForm.description"
+              :placeholder="$t('user.enterDescription')"
+              :rows="3"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 按钮组 -->
+          <div class="flex space-x-3 pt-4">
+            <UButton
+              type="submit"
+              :loading="isSaving"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+            >
+              {{ isSaving ? $t('common.saving') : $t('common.save') }}
+            </UButton>
+            <UButton
+              type="button"
+              @click="isEditModalOpen = false"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button"
+            >
+              {{ $t('common.cancel') }}
+            </UButton>
+          </div>
+        </UForm>
+      </template>
+    </UModal>
+    <input
+      ref="avatarInput"
+      type="file"
+      accept="image/*"
+      class="hidden"
+      @change="handleAvatarChange"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { userControllerGetProfile, articleControllerFindArticleByAuthor } from '~~/api';
+  import {
+    userControllerGetProfile,
+    articleControllerFindArticleByAuthor,
+    userControllerUpdate
+  } from '~~/api';
+  import { watch, nextTick } from 'vue';
+  import type { FormError } from '@nuxt/ui';
+  import { uploadControllerUploadFile } from '~~/api';
+  const toast = useToast();
 
   const { t } = useI18n();
   const router = useRouter();
   const userStore = useUserStore();
   const userInfo = computed(() => userStore.userInfo);
+  const localPath = useLocalePath();
 
   const pagination = ref({
     page: 1,
@@ -221,6 +321,20 @@
   const loading = ref(false);
   const hasMore = ref(true);
   const allArticles = ref<any[]>([]);
+
+  // 编辑模态框状态
+  const isEditModalOpen = ref(false);
+  const isSaving = ref(false);
+  const avatarUploading = ref(false);
+  const avatarInput = ref<HTMLInputElement>();
+
+  // 编辑表单数据
+  const editForm = ref({
+    username: '',
+    nickname: '',
+    description: '',
+    avatar: ''
+  });
 
   // 用户资料
   const { data: userProfile } = userControllerGetProfile({
@@ -287,9 +401,6 @@
 
   loadUserArticles();
 
-  // 图片错误处理
-  const { handleImageError } = useImageError();
-
   onMounted(() => {
     // 移除 Intersection Observer，改为手动加载
   });
@@ -313,8 +424,123 @@
   // 处理登出
   const handleLogout = () => {
     // 清除认证信息
-    userStore.logout();
+    userStore.clearAuth();
     // 跳转到首页
-    router.push('/');
+    router.push(localPath('/'));
+  };
+
+  // 表单验证函数
+  const validateForm = (state: any): FormError[] => {
+    const errors = [];
+    if (!state.username) errors.push({ name: 'username', message: '用户名不能为空' });
+    if (!state.nickname) errors.push({ name: 'nickname', message: '昵称不能为空' });
+    return errors;
+  };
+
+  // 监听模态框打开，初始化表单数据
+  watch(isEditModalOpen, newValue => {
+    if (newValue && userInfo.value) {
+      editForm.value = {
+        username: userInfo.value.username || '',
+        nickname: userInfo.value.nickname || '',
+        description: (userInfo.value.description as string) || '',
+        avatar: userInfo.value.avatar || ''
+      };
+    }
+  });
+
+  // 触发头像上传
+  const triggerAvatarUpload = () => {
+    avatarInput.value?.click();
+  };
+
+  // 处理头像变更
+  const handleAvatarChange = async (event: Event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) {
+      toast.add({
+        title: '请选择头像文件',
+        color: 'error'
+      });
+      return;
+    }
+
+    avatarUploading.value = true;
+
+    try {
+      // 使用formDataBodySerializer正确处理文件上传
+      const formData = new FormData();
+      formData.append('files', file);
+      // 传递对象给formDataBodySerializer，它会自动转换为FormData
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {
+          files: file
+        },
+        bodySerializer: () => {
+          const formData = new FormData();
+          // 直接使用原始的file，而不是body.files中的对象
+          formData.append('files', file);
+          return formData;
+        }
+      });
+
+      editForm.value.avatar = res.data[0].url!;
+
+      toast.add({
+        title: '头像上传成功',
+        color: 'success'
+      });
+    } catch (error: any) {
+      // 处理上传错误
+      console.error('Failed to upload avatar:', error);
+      toast.add({
+        title: error?.message || '头像上传失败',
+        color: 'error'
+      });
+    } finally {
+      avatarUploading.value = false;
+    }
+  };
+
+  // 保存个人资料
+  const handleSaveProfile = async () => {
+    isSaving.value = true;
+    try {
+      // 调用保存个人资料的API
+      await userControllerUpdate({
+        composable: '$fetch',
+        path: {
+          id: userInfo.value?.id?.toString()!
+        },
+        body: editForm.value
+      });
+
+      // 更新本地用户信息
+      if (userInfo.value) {
+        userStore.userInfo = {
+          ...userInfo.value,
+          ...editForm.value
+        };
+      }
+
+      // 关闭模态框
+      isEditModalOpen.value = false;
+
+      // 显示成功提示
+      toast.add({
+        title: t('user.profileSaved'),
+        color: 'success',
+        duration: 2000
+      });
+    } catch (error) {
+      toast.add({
+        title: t('user.saveProfileFailed'),
+        color: 'error',
+        duration: 2000
+      });
+    } finally {
+      isSaving.value = false;
+    }
   };
 </script>

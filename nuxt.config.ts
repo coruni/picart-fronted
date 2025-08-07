@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     'nuxt-swiper',
     '@nuxt/ui',
@@ -140,7 +140,7 @@ export default defineNuxtConfig({
     },
     // 页面过渡动画配置
     pageTransition: {
-      name: 'page',
+      name: 'zoom',
       mode: 'out-in'
     }
   },

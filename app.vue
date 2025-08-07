@@ -10,7 +10,7 @@
 <script lang="ts" setup>
   import { configControllerGetPublic } from './api';
   const configs = await configControllerGetPublic({
-    composable: 'useLazyAsyncData',
+    composable: 'useFetch',
     key: 'siteConfig'
   });
   // 提供配置

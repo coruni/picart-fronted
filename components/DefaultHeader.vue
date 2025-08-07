@@ -18,14 +18,14 @@
             <span>{{ item.name }}</span>
             <Icon name="mynaui:chevron-down" class="group-hover:rotate-180 transition-transform" />
             <div
-              class="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
+              class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
             >
               <div class="py-1">
                 <NuxtLinkLocale
                   v-for="child in item.children"
                   :key="child.id"
                   :to="`/category/${child.id}`"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary"
+                  class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary transition-colors duration-200"
                 >
                   {{ child.name }}
                 </NuxtLinkLocale>
@@ -60,7 +60,7 @@
               @error="handleImageError($event as Event, 'avatar')"
             />
             <div
-              class="absolute top-full right-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 dark:bg-gray-800 dark:text-white"
+              class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200 dark:border-gray-700"
             >
               <div class="py-1">
                 <NuxtLinkLocale
@@ -70,12 +70,12 @@
                   <span>{{ $t('header.nav.profile') }}</span>
                 </NuxtLinkLocale>
 
-                <button
+                <Button
                   @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
                 >
                   <span>{{ $t('user.logout') }}</span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -91,14 +91,15 @@
       </div>
 
       <!-- 移动端汉堡菜单按钮 -->
-      <button
+      <UButton
         @click="toggleMobileMenu"
-        class="mobile-menu-container md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+        variant="outline"
+        class="mobile-menu-container md:hidden p-2 flex items-center cursor-pointer justify-center rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
         :aria-expanded="isMobileMenuOpen"
         :aria-label="isMobileMenuOpen ? '关闭菜单' : '打开菜单'"
       >
         <Icon :name="isMobileMenuOpen ? 'mynaui:x' : 'mynaui:menu'" class="w-6 h-6" />
-      </button>
+      </UButton>
 
       <!-- 移动端菜单 -->
       <transition
@@ -182,12 +183,12 @@
                   </div>
                 </NuxtLinkLocale>
 
-                <button
+                <UButton
                   @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                 >
                   {{ $t('user.logout') }}
-                </button>
+                </UButton>
               </template>
               <template v-else>
                 <NuxtLinkLocale
@@ -212,16 +213,16 @@
   const { handleImageError } = useImageError();
   const route = useRoute();
   const router = useRouter();
-  
+
   // 搜索相关
   const searchQuery = ref('');
-  
+
   const handleSearch = () => {
     if (searchQuery.value.trim()) {
       router.push({ path: '/search', query: { q: searchQuery.value } });
     }
   };
-  
+
   defineProps({
     categories: {
       type: Array as PropType<Category[]>,
@@ -270,7 +271,7 @@
 
   // 处理登出
   const handleLogout = () => {
-    userStore.logout();
+    userStore.clearAuth();
     closeMobileMenu();
     // 登出后跳转到首页
     router.push('/');

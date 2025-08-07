@@ -23,7 +23,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <!-- 空状态 -->
       <div v-if="!loading && displayArticles.length === 0 && hasSearched" class="text-center py-16">
-        <UIcon name="i-heroicons-magnifying-glass" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        <Icon name="mynaui:search" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+
         <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('search.noResults.title') }}
         </h3>
@@ -48,7 +49,7 @@
       <!-- 加载指示器 -->
       <div v-if="loading" class="flex justify-center py-8">
         <div
-          class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
         ></div>
       </div>
 
@@ -68,8 +69,7 @@
 
 <script setup lang="ts">
   import { articleControllerArticleSearch } from '~~/api';
-  import { onUnmounted } from 'vue';
-
+  import { debounce } from 'lodash-es';
   const { t } = useI18n();
 
   // 搜索状态
@@ -103,10 +103,9 @@
       return;
     }
 
+    if (loading.value || !hasMore.value) return;
     loading.value = true;
     hasSearched.value = true;
-    if (loading.value || !hasMore.value) return;
-
     try {
       const { data: articles } = await articleControllerArticleSearch({
         composable: 'useFetch',
@@ -149,23 +148,16 @@
     () => useRoute().query.q,
     newQuery => {
       if (newQuery && typeof newQuery === 'string') {
-        searchQuery.value = newQuery;
-        resetData();
-        handleSearch();
-      } else if (!newQuery) {
+        // 避免重复设置相同值
+        if (searchQuery.value !== newQuery) {
+          searchQuery.value = newQuery;
+        }
+      } else if (!newQuery && searchQuery.value) {
         clearSearch();
       }
     },
     { immediate: true }
   );
-
-  // 监听搜索参数变化
-  watch(searchQuery, () => {
-    if (searchQuery.value.trim()) {
-      resetData();
-      handleSearch();
-    }
-  });
 
   // 防抖搜索
   const debouncedSearch = debounce(() => {
@@ -177,6 +169,7 @@
     }
   }, 500);
 
+  // 监听搜索参数变化（使用防抖）
   watch(searchQuery, () => {
     debouncedSearch();
   });

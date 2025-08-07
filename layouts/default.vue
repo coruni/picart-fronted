@@ -1,23 +1,18 @@
 <template>
   <DefaultHeader :categories="categories?.data.data" />
   <div class="flex-1 w-full pt-16 h-full">
-    <NuxtPage />
+    <NuxtPage
+      :keepalive="{
+        include: ['dashboard', 'index', 'search'],
+        exclude: ['login'],
+        max: 10
+      }"
+    />
   </div>
 </template>
 
 <style>
-  .page-enter-active,
-  .page-leave-active {
-    transition: all 0.4s ease-out;
-  }
-  .page-enter-from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  .page-leave-to {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
+
 </style>
 <script lang="ts" setup>
   import { categoryControllerFindAll } from '~~/api';

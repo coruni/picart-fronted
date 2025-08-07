@@ -23,7 +23,7 @@
           el: '.custom-pagination'
         }"
       >
-        <swiper-slide v-for="slide in bannersData.data" :key="slide.id">
+        <swiper-slide v-for="slide in safeBannersData" :key="slide.id">
           <div class="relative h-full cursor-pointer" @click="handleBannerClick(slide.linkUrl)">
             <NuxtImg
               :src="slide.imageUrl"
@@ -67,6 +67,7 @@
 
 <script setup>
   import { bannersControllerFindActive } from '~~/api';
+  import { computed } from 'vue';
   const router = useRouter();
   const { locale } = useI18n();
 
@@ -77,11 +78,12 @@
     error
   } = await bannersControllerFindActive({
     composable: 'useFetch',
+    server: false,
     key: 'active-banners'
   });
 
-  console.log(bannersData.value.data);
-
+  // 确保bannersData有默认值
+  const safeBannersData = computed(() => bannersData.value?.data || []);
   // 处理banner点击事件
   const handleBannerClick = linkUrl => {
     if (linkUrl) {
@@ -100,10 +102,10 @@
     const style = document.createElement('style');
     style.textContent = `
   .custom-pagination .swiper-pagination-bullet {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 6px;
     background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
+    border-radius: 3px;
     opacity: 1;
     margin: 0 6px;
     transition: all 0.3s ease;
