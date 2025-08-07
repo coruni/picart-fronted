@@ -22,15 +22,17 @@
       </UFormField>
       <UFormField name="images" :label="$t('form.image.name')">
         <UFileUpload
-          v-model="state.images"
-          dropzone
-          size="sm"
-          accept="images/*"
+          v-model:modelValue="displayFiles"
           :placeholder="$t('form.image.placeholder')"
+          accept="image/*"
+          @update:modelValue="onImageUpload"
+          :loading="uploading"
           multiple
           :ui="{ files: 'md:grid-cols-6' }"
-        />
+        >
+        </UFileUpload>
       </UFormField>
+
       <div class="flex items-center space-x-2">
         <UFormField name="parentCategory" class="flex-1">
           <USelectMenu
@@ -59,6 +61,7 @@
           />
         </UFormField>
       </div>
+
       <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
         <USelectMenu
           v-model="state.tagIds"
@@ -73,6 +76,7 @@
           @create="onCreate"
         />
       </UFormField>
+
       <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
         <template #advanced>
           <div class="space-y-4 mt-4">
@@ -124,8 +128,9 @@
         class="w-full cursor-pointer justify-center"
         size="lg"
         :loading="loading"
-        >{{ $t('form.submit') }}</UButton
       >
+        {{ $t('form.submit') }}
+      </UButton>
     </UForm>
   </div>
 </template>
@@ -138,21 +143,30 @@
     categoryControllerFindAll,
     tagControllerFindAll,
     articleControllerFindOne,
-    articleControllerUpdate
+    articleControllerUpdate,
+    uploadControllerUploadFile
   } from '~~/api';
-  import { useRoute } from 'vue-router'; // 导入 useRoute
+  import { useRoute } from 'vue-router';
 
-  // 导入正确的类型
   import type { SelectMenuItem } from '#ui/types';
+
   const toast = useToast();
   const { t } = useI18n();
-  const route = useRoute(); // 获取当前路由
-  const articleId = route.params.id as string; // 获取文章 id
+  const route = useRoute();
+  const articleId = route.params.id as string;
 
   definePageMeta({
     layout: 'dashboard',
     requiresAuth: true
   });
+
+  // 扩展File接口，添加自定义属性
+  interface ExtendedFile extends File {
+    _url?: string;
+    _uploaded?: boolean;
+    _uploading?: boolean;
+    _id?: string;
+  }
 
   const schema = z.object({
     title: z.string().min(8, t('form.title.placeholder')),
@@ -161,7 +175,6 @@
     categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
     type: z.enum(['mixed', 'image']).optional().default('mixed'),
-
     tagIds: z
       .array(z.union([z.string(), z.number()]))
       .optional()
@@ -184,6 +197,45 @@
     tagIds: []
   });
 
+  // 文件列表，用于FileUpload组件展示
+  const displayFiles = ref<ExtendedFile[]>([]);
+  const uploading = ref(false);
+  const loading = ref(false);
+
+  // 将URL转换为File对象
+  const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
+    try {
+      // 从URL获取图片数据
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+
+      // 将响应转换为Blob
+      const blob = await response.blob();
+
+      // 从URL获取文件名
+      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
+
+      // 从Blob创建File对象
+      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+
+      return file;
+    } catch (error) {
+      console.error('Error converting URL to File:', error);
+      // 创建一个默认的虚拟文件作为备选
+      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
+      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+      return file;
+    }
+  };
+
   // 若 articleId 存在，请求文章详情数据
   if (articleId) {
     try {
@@ -193,27 +245,172 @@
         path: { id: articleId }
       });
 
-      if (articleData.value) {
-        // 使用可选链操作符确保安全访问
+      if (articleData.value?.data) {
+        const data = articleData.value.data;
+
         Object.assign(state, {
-          title: articleData.value?.data?.title ?? '',
-          content: articleData.value?.data?.content ?? '',
-          parentCategory: articleData.value?.data?.category?.parent?.id,
-          categoryId: articleData.value?.data?.category.id,
-          images: articleData.value?.data?.images ?? '',
-          type: articleData.value?.data?.type ?? 'mixed',
-          tagIds: articleData.value?.data?.tags.map(tag => tag.id) ?? [],
-          requireLogin: articleData.value?.data?.requireLogin ?? false,
-          requireFollow: articleData.value?.data?.requireFollow ?? false,
-          requirePayment: articleData.value?.data?.requirePayment ?? false,
-          viewPrice: articleData.value?.data?.viewPrice ?? 0
+          title: data.title ?? '',
+          content: data.content ?? '',
+          parentCategory: data.category?.parent?.id,
+          categoryId: data.category?.id,
+          images: data.images ?? '',
+          type: data.type ?? 'mixed',
+          tagIds: data.tags?.map(tag => tag.id) ?? [],
+          requireLogin: data.requireLogin ?? false,
+          requireFollow: data.requireFollow ?? false,
+          requirePayment: data.requirePayment ?? false,
+          viewPrice: data.viewPrice ?? 0
         });
+
+        // 初始化已有图片
+        if (state.images) {
+          // 创建虚拟File对象
+          const virtualFiles = await Promise.all(
+            state.images.map((url: string, index: number) => createVirtualFile(url.trim(), index))
+          );
+
+          displayFiles.value = virtualFiles;
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Failed to load article:', error);
+    }
   }
 
-  const loading = ref(false);
+  // 获取文件预览URL
+  const getFilePreview = (file: ExtendedFile): string => {
+    if (file._url) {
+      return file._url;
+    }
 
+    if (file.size > 0) {
+      return URL.createObjectURL(file);
+    }
+
+    return '';
+  };
+
+  // 图片上传处理
+  const onImageUpload = async (files: unknown) => {
+    if (!files || files.length === 0) return;
+
+    // 找出新添加的文件（没有_uploaded标记的）
+    const newFiles = files.filter((file: unknown): file is ExtendedFile => {
+      if (file instanceof File) {
+        const extendedFile = file as ExtendedFile;
+        return !extendedFile._uploaded && !extendedFile._uploading;
+      }
+      return false;
+    });
+
+    if (newFiles.length === 0) return;
+
+    // 标记新文件为正在上传
+    newFiles.forEach((file: ExtendedFile) => {
+      file._uploading = true;
+    });
+
+    uploading.value = true;
+
+    try {
+      // 一次上传多个文件
+      const formData = new FormData();
+      newFiles.forEach((file: ExtendedFile) => {
+        formData.append('files', file);
+      });
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      // 更新所有文件状态
+      newFiles.forEach((file: ExtendedFile, index: number) => {
+        if (res.data && res.data[index]) {
+          file._url = res.data[index].url!;
+          file._uploaded = true;
+          file._uploading = false;
+          file._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        } else {
+          // 上传失败的文件标记
+          file._uploading = false;
+        }
+      });
+
+      // 更新state.images
+      updateStateImages();
+
+      toast.add({
+        title: t('common.message.uploadSuccess'),
+        color: 'success'
+      });
+    } catch (error: any) {
+      console.error('Failed to upload image:', error);
+
+      // 移除上传失败的文件
+      newFiles.forEach((failedFile: ExtendedFile) => {
+        const index = displayFiles.value.findIndex(f => f === failedFile);
+        if (index > -1) {
+          displayFiles.value.splice(index, 1);
+        }
+      });
+
+      toast.add({
+        title: error?.message || t('common.message.uploadFailed'),
+        color: 'error'
+      });
+    } finally {
+      uploading.value = false;
+    }
+  };
+
+  // 删除图片
+  const removeImage = (index: number) => {
+    if (index >= 0 && index < displayFiles.value.length) {
+      const file = displayFiles.value[index];
+
+      // 如果是本地预览URL，需要释放内存
+      if (file.size > 0 && !file._url) {
+        const url = getFilePreview(file);
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      }
+
+      displayFiles.value.splice(index, 1);
+      updateStateImages();
+
+      toast.add({
+        title: t('form.image.removeSuccess') || '图片删除成功',
+        color: 'success'
+      });
+    }
+  };
+
+  // 图片重新排序
+  const onImageReorder = () => {
+    updateStateImages();
+  };
+
+  // 更新state.images
+  const updateStateImages = () => {
+    const urls = displayFiles.value
+      .filter(file => file._url) // 只包含已上传或已存在的图片
+      .map(file => file._url!);
+    state.images = urls.join(',');
+  };
+
+  // 监听displayFiles变化
+  watch(
+    () => displayFiles.value,
+    () => {
+      updateStateImages();
+    },
+    { deep: true }
+  );
+
+  // 提交表单
   const onSubmit = debounce(async () => {
     try {
       loading.value = true;
@@ -226,10 +423,8 @@
       state.tagIds?.forEach(id => {
         const tag = tagsOptions.value.find((t: TagMenuItem) => t.id === id);
         if (tag?.flag) {
-          // 临时标签，使用名称
           newTagNames.push(tag.label as string);
         } else {
-          // 现有标签，使用 ID
           const numericId = typeof id === 'string' ? parseInt(id) : id;
           if (!isNaN(numericId)) {
             existingTagIds.push(numericId);
@@ -247,11 +442,13 @@
           tagNames: newTagNames.length > 0 ? newTagNames : undefined
         }
       });
+
       toast.add({
         title: t('common.message.updateSuccess'),
         color: 'success'
       });
     } catch (error) {
+      console.error('Failed to update article:', error);
       toast.add({
         title: t('common.message.updateFailed'),
         color: 'error'
@@ -268,12 +465,11 @@
     query: computed(() => ({}))
   });
 
-  // 定义正确的 SelectMenuItem 类型的分类选项 - 只显示顶级分类且不包含children数据
   const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
     return (
       categories?.value?.data.data
-        .filter(item => !item.parentId || item.parentId === item.id) // 显示顶级分类（无父分类或父分类是自己）
-        .map(
+        ?.filter(item => !item.parentId || item.parentId === item.id)
+        ?.map(
           ({ id, name, avatar, description }) =>
             ({
               id,
@@ -289,7 +485,7 @@
   const subCategoriesOptions = computed<SelectMenuItem[]>(() => {
     if (!state.parentCategory) return [];
 
-    const parentCategory = categories?.value?.data.data.find(
+    const parentCategory = categories?.value?.data.data?.find(
       item => item.id === state.parentCategory
     );
 
@@ -314,7 +510,6 @@
     query: {}
   });
 
-  // 简化 TagMenuItem 类型定义
   interface TagMenuItem {
     id: string | number;
     label: string;
@@ -323,7 +518,6 @@
     flag?: boolean;
   }
 
-  // 替换原有的复杂类型定义
   const tagsOptions = ref<TagMenuItem[]>([]);
 
   // 初始化标签选项
@@ -355,13 +549,10 @@
 
   // 创建新标签的函数
   const onCreate = (item: string) => {
-    // 生成唯一的临时 ID
     const tempId = `temp_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 
-    // 检查是否已存在相同名称的标签
     const existingTag = tagsOptions.value.find(t => t.label === item);
     if (existingTag) {
-      // 如果已存在，直接选中
       if (!state.tagIds) {
         state.tagIds = [];
       }
@@ -371,21 +562,40 @@
       return;
     }
 
-    // 构建临时标签，确保符合 SelectMenuItem 接口
     const tag: TagMenuItem = {
       id: tempId,
       label: item,
       value: tempId,
-      flag: true // 标记为临时标签
+      flag: true
     };
 
-    // 添加到选项列表
     tagsOptions.value.push(tag);
 
-    // 自动选中新创建的标签
     if (!state.tagIds) {
       state.tagIds = [];
     }
     state.tagIds.push(tempId);
   };
+
+  // 组件卸载时清理URL对象
+  onUnmounted(() => {
+    displayFiles.value.forEach(file => {
+      if (file.size > 0 && !file._url) {
+        const url = getFilePreview(file);
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      }
+    });
+  });
 </script>
+
+<style scoped>
+  .cursor-move {
+    cursor: move;
+  }
+
+  .cursor-move:active {
+    cursor: grabbing;
+  }
+</style>

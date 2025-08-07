@@ -42,7 +42,7 @@
             <NuxtImg
               :src="article.author?.avatar"
               :alt="article.author?.nickname ?? article.author?.username"
-              class="w-7 h-7 rounded-full border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
+              class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
               @error="handleImageError($event as Event, 'avatar')"
             />
           </div>

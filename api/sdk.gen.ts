@@ -2176,11 +2176,11 @@ export const bannersControllerUpdate = <
     unknown,
     DefaultT
   >({
-    ...formDataBodySerializer,
+    ...urlSearchParamsBodySerializer,
     url: '/banners/{id}',
     ...options,
     headers: {
-      'Content-Type': null,
+      'Content-Type': 'application/x-www-form-urlencoded',
       ...options.headers
     }
   });

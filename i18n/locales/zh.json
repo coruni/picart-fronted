@@ -122,7 +122,8 @@
     "button": {
       "cancel": "取消",
       "confirm": "确认",
-      "create": "新增"
+      "create": "新增",
+      "update": "更新"
     },
     "save": "保存",
     "loading": {
@@ -133,7 +134,11 @@
     "error": "加载失败，请稍后重试",
     "retry": "重新加载",
     "cancel": "取消",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "status": {
+      "active": "启用",
+      "inactive": "禁用"
+    }
   },
   "filter": {
     "title": "筛选"
@@ -343,6 +348,11 @@
     "create": "新建轮播",
     "description": "描述",
     "image": "图片",
-    "edit": "编辑轮播"
+    "edit": "编辑轮播",
+    "sortOrder": "排序",
+    "titlePlaceholder": "输入标题"
+  },
+  "categories": {
+    "create": "创建分类"
   }
 }

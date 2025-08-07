@@ -6,12 +6,17 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- 标题 -->
         <UFormField :label="t('banners.title')" name="title" class="md:col-span-2">
-          <UInput v-model="state.title" :placeholder="t('banners.titlePlaceholder')" />
+          <UInput
+            class="w-full"
+            v-model="state.title"
+            :placeholder="t('banners.titlePlaceholder')"
+          />
         </UFormField>
 
         <!-- 描述 -->
         <UFormField :label="t('banners.description')" name="description" class="md:col-span-2">
           <UTextarea
+            class="w-full"
             v-model="state.description"
             :placeholder="t('banners.descriptionPlaceholder')"
           />
@@ -33,18 +38,23 @@
 
         <!-- 链接 -->
         <UFormField :label="t('banners.link')" name="linkUrl" class="md:col-span-2">
-          <UInput v-model="state.linkUrl" :placeholder="t('banners.linkPlaceholder')" />
+          <UInput
+            class="w-full"
+            v-model="state.linkUrl"
+            :placeholder="t('banners.linkPlaceholder')"
+          />
         </UFormField>
 
         <!-- 排序 -->
         <UFormField :label="t('banners.sortOrder')" name="sortOrder">
-          <UInput v-model.number="state.sortOrder" type="number" />
+          <UInput class="w-full" :min="0" v-model.number="state.sortOrder" type="number" />
         </UFormField>
 
         <!-- 状态 -->
         <UFormField :label="t('banners.status')" name="status">
           <USelect
             v-model="state.status"
+            class="w-full"
             :items="[
               { label: t('banners.active'), value: 'active' },
               { label: t('banners.inactive'), value: 'inactive' }

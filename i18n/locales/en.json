@@ -121,7 +121,8 @@
     "button": {
       "confirm": "Confirm",
       "cancel": "Cancel",
-      "create": "Create"
+      "create": "Create",
+      "update": "Update"
     },
     "save": "Save",
     "loading": {
@@ -132,7 +133,11 @@
     "retry": "Reload",
     "loadMore": "Load More",
     "cancel": "Cancel",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
   },
   "filter": {
     "title": "Filter"
@@ -320,6 +325,13 @@
     "descriptionPlaceholder": "Please input description",
     "title": "Title",
     "create": "New Banner",
-    "edit": "Edit Banner"
+    "edit": "Edit Banner",
+    "image": "Image",
+    "sortOrder": "Sort",
+    "titlePlaceholder": "Input Title",
+    "description": "Description"
+  },
+  "categories": {
+    "create": "New Category"
   }
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
+    <h1 class="text-2xl font-bold mb-6">{{ t('categories.create') }}</h1>
     <UForm :schema="schema" :state="form" @submit="onSubmit" class="w-full">
       <UFormField :label="t('common.table.name')" name="name" required class="w-full">
         <UInput
@@ -32,7 +33,7 @@
       </UFormField>
 
       <UFormField :label="t('common.table.sort')" name="sort" class="w-full">
-        <UInput v-model="form.sort" type="number" min="0" class="w-full" size="lg" />
+        <UInput v-model="form.sort" :min="0" type="number" class="w-full" size="lg" />
       </UFormField>
 
       <UFormField :label="t('common.table.avatar')" name="avatar" class="w-full">
