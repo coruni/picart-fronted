@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-08',
   devtools: { enabled: true },
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -148,7 +149,8 @@ export default defineNuxtConfig({
   // 实验性功能
   experimental: {
     // 禁用payload提取，防止敏感数据泄露
-    payloadExtraction: false
+    payloadExtraction: false,
+    buildCache: true
   },
   webpack: {
     extractCSS: true,

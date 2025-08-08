@@ -1,16 +1,30 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
     <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
-      <UFormField name="title">
-        <UInput
-          v-model="state.title"
-          size="xl"
-          :placeholder="$t('form.title.placeholder')"
-          variant="soft"
-          class="w-full"
-        />
-      </UFormField>
-      <UFormField name="content">
+      <div class="flex items-center space-x-4">
+        <UFormField name="title" class="flex-1">
+          <UInput
+            v-model="state.title"
+            size="xl"
+            :placeholder="$t('form.title.placeholder')"
+            variant="soft"
+            class="w-full"
+          />
+        </UFormField>
+        <UFormField name="type">
+          <USelect
+            v-model="state.type"
+            :items="typeOptions"
+            :placeholder="$t('form.type.placeholder')"
+            value-key="value"
+            variant="soft"
+            size="lg"
+            class="w-full"
+          />
+        </UFormField>
+      </div>
+
+      <UFormField name="content" v-show="state.type === 'mixed'">
         <UTextarea
           v-model="state.content"
           size="xl"
@@ -23,12 +37,14 @@
       <UFormField name="images" :label="$t('form.image.name')">
         <UFileUpload
           v-model:modelValue="displayFiles"
+          draggable
+          dropzone
           :placeholder="$t('form.image.placeholder')"
           accept="image/*"
           @update:modelValue="onImageUpload"
           :loading="uploading"
           multiple
-          :ui="{ files: 'md:grid-cols-6' }"
+          :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
         >
         </UFileUpload>
       </UFormField>
@@ -47,7 +63,7 @@
             :search-placeholder="$t('form.parentCategory.searchPlaceholder')"
           />
         </UFormField>
-        <UFormField name="category" v-if="state.parentCategory" class="flex-1">
+        <UFormField name="category" v-show="state.parentCategory" class="flex-1">
           <USelectMenu
             v-model="state.categoryId"
             :items="subCategoriesOptions"
@@ -61,6 +77,19 @@
           />
         </UFormField>
       </div>
+
+      <!-- 文章状态 -->
+      <UFormField name="status" class="flex-1" :label="$t('form.status.name')">
+        <USelect
+          v-model="state.status"
+          :items="statusOptions"
+          :placeholder="$t('form.status.placeholder')"
+          value-key="value"
+          variant="soft"
+          class="w-full"
+          size="lg"
+        />
+      </UFormField>
 
       <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
         <USelectMenu
@@ -107,14 +136,14 @@
             <UFormField
               name="viewPrice"
               :label="$t('form.viewPrice.name')"
-              v-if="state.requirePayment"
+              v-show="state.requirePayment"
               class="flex items-center justify-between"
             >
               <UInput
                 v-model="state.viewPrice"
                 type="number"
                 variant="soft"
-                :min="1"
+                :min="0"
                 :placeholder="$t('form.viewPrice.placeholder')"
               />
             </UFormField>
@@ -124,9 +153,9 @@
 
       <UButton
         type="submit"
-        icon="i-mynaui-save"
         class="w-full cursor-pointer justify-center"
         size="lg"
+        :disabled="loading"
         :loading="loading"
       >
         {{ $t('form.submit') }}
@@ -137,8 +166,6 @@
 
 <script lang="ts" setup>
   import * as z from 'zod';
-  import { debounce } from 'lodash-es';
-
   import {
     categoryControllerFindAll,
     tagControllerFindAll,
@@ -146,10 +173,10 @@
     articleControllerUpdate,
     uploadControllerUploadFile
   } from '~~/api';
-  import { useRoute } from 'vue-router';
 
-  import type { SelectMenuItem } from '#ui/types';
-
+  import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+  const router = useRouter();
+  const localePath = useLocalePath();
   const toast = useToast();
   const { t } = useI18n();
   const route = useRoute();
@@ -170,8 +197,8 @@
 
   const schema = z.object({
     title: z.string().min(8, t('form.title.placeholder')),
-    content: z.string().min(10, t('form.content.placeholder')),
-    parentCategory: z.number().min(1, t('form.parentCategory.placeholder')),
+    content: z.string().optional(),
+    parentCategory: z.number().optional(),
     categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
     type: z.enum(['mixed', 'image']).optional().default('mixed'),
@@ -182,7 +209,10 @@
     requireLogin: z.boolean().default(false),
     requireFollow: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
-    viewPrice: z.number().min(0).default(0)
+    viewPrice: z.number().min(0).default(0),
+    status: z
+      .enum(['PUBLISHED', 'DRAFT', 'ARCHIVED', 'REJECTED', 'BANNED', 'DELETED'])
+      .default('PUBLISHED')
   });
 
   type Schema = z.output<typeof schema>;
@@ -194,13 +224,65 @@
     categoryId: undefined,
     images: '',
     type: 'mixed',
-    tagIds: []
+    tagIds: [],
+    status: 'PUBLISHED'
   });
 
   // 文件列表，用于FileUpload组件展示
   const displayFiles = ref<ExtendedFile[]>([]);
   const uploading = ref(false);
   const loading = ref(false);
+
+  const typeOptions = ref<SelectMenuItem[]>([
+    {
+      label: t('form.type.mixed'),
+      value: 'mixed'
+    },
+    {
+      label: t('form.type.image'),
+      value: 'image'
+    }
+  ]);
+
+  const statusOptions = ref<SelectMenuItem[]>([
+    {
+      label: t('form.status.published'),
+      icon: 'mynaui:check',
+      class: 'cursor-pointer',
+      value: 'PUBLISHED'
+    },
+    {
+      label: t('form.status.draft'),
+      icon: 'mynaui:edit',
+      class: 'cursor-pointer',
+
+      value: 'DRAFT'
+    },
+    {
+      label: t('form.status.archived'),
+      icon: 'mynaui:archive',
+      value: 'ARCHIVED',
+      class: 'cursor-pointer'
+    },
+    {
+      label: t('form.status.rejected'),
+      class: 'cursor-pointer',
+      icon: 'mynaui:x',
+      value: 'REJECTED'
+    },
+    {
+      label: t('form.status.banned'),
+      class: 'cursor-pointer',
+      icon: 'mynaui:ban',
+      value: 'BANNED'
+    },
+    {
+      label: t('form.status.deleted'),
+      class: 'cursor-pointer',
+      icon: 'mynaui:trash',
+      value: 'DELETED'
+    }
+  ]);
 
   // 将URL转换为File对象
   const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
@@ -259,7 +341,8 @@
           requireLogin: data.requireLogin ?? false,
           requireFollow: data.requireFollow ?? false,
           requirePayment: data.requirePayment ?? false,
-          viewPrice: data.viewPrice ?? 0
+          viewPrice: Number(data.viewPrice) ?? 0,
+          status: data.status
         });
 
         // 初始化已有图片
@@ -291,7 +374,7 @@
   };
 
   // 图片上传处理
-  const onImageUpload = async (files: unknown) => {
+  const onImageUpload = async (files: any) => {
     if (!files || files.length === 0) return;
 
     // 找出新添加的文件（没有_uploaded标记的）
@@ -366,32 +449,6 @@
   };
 
   // 删除图片
-  const removeImage = (index: number) => {
-    if (index >= 0 && index < displayFiles.value.length) {
-      const file = displayFiles.value[index];
-
-      // 如果是本地预览URL，需要释放内存
-      if (file.size > 0 && !file._url) {
-        const url = getFilePreview(file);
-        if (url.startsWith('blob:')) {
-          URL.revokeObjectURL(url);
-        }
-      }
-
-      displayFiles.value.splice(index, 1);
-      updateStateImages();
-
-      toast.add({
-        title: t('form.image.removeSuccess') || '图片删除成功',
-        color: 'success'
-      });
-    }
-  };
-
-  // 图片重新排序
-  const onImageReorder = () => {
-    updateStateImages();
-  };
 
   // 更新state.images
   const updateStateImages = () => {
@@ -411,9 +468,18 @@
   );
 
   // 提交表单
-  const onSubmit = debounce(async () => {
+  const onSubmit = async (event: FormSubmitEvent<Schema>) => {
+    console.log('onSubmit', event);
+    loading.value = true;
+
+    if (state.type === 'mixed' && state.content!.length < 10) {
+      toast.add({
+        title: t('form.content.placeholder'),
+        color: 'error'
+      });
+      return;
+    }
     try {
-      loading.value = true;
       const { parentCategory, ...data } = await schema.parseAsync(state);
 
       // 分离现有标签 ID 和新标签名称
@@ -439,16 +505,17 @@
         body: {
           ...data,
           tagIds: existingTagIds.length > 0 ? existingTagIds.map(id => id.toString()) : undefined,
-          tagNames: newTagNames.length > 0 ? newTagNames : undefined
+          tagNames: newTagNames.length > 0 ? newTagNames : undefined,
+          images: data.images.join(',')
         }
       });
 
       toast.add({
         title: t('common.message.updateSuccess'),
-        color: 'success'
+        color: 'primary'
       });
+      router.push(localePath('/admin/articles'));
     } catch (error) {
-      console.error('Failed to update article:', error);
       toast.add({
         title: t('common.message.updateFailed'),
         color: 'error'
@@ -456,7 +523,7 @@
     } finally {
       loading.value = false;
     }
-  }, 500);
+  };
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({

@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen">
     <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
-      <div class="flex flex-col lg:flex-row gap-4 md:gap-8 relative overflow-visible">
+      <div class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
         <!-- 左侧主内容区 -->
-        <div class="flex-1 overflow-visible">
+        <div class="flex-1">
           <!-- 用户信息区 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div
               class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
             >
-              <div class="relative">
+              <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
                 <NuxtImg
                   :src="userInfo?.avatar"
                   alt="用户头像"
@@ -70,7 +70,7 @@
               <div class="flex space-x-2">
                 <UButton
                   @click="isEditModalOpen = true"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 transition-colors !rounded-button whitespace-nowrap"
+                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
                 >
                   {{ $t('user.editProfile') }}
                 </UButton>
@@ -92,7 +92,7 @@
               </h2>
               <NuxtLinkLocale
                 to="/article/create"
-                class="text-indigo-500 hover:text-indigo-600 text-sm md:text-base"
+                class="text-primary-500 hover:text-primary-600 text-sm md:text-base"
               >
                 {{ $t('user.createArticle') }}
               </NuxtLinkLocale>
@@ -152,7 +152,7 @@
               <span class="text-sm text-gray-700 dark:text-gray-300">{{
                 userInfo?.membershipLevelName || $t('user.basicMember')
               }}</span>
-              <span class="text-sm font-medium text-indigo-500"
+              <span class="text-sm font-medium text-primary-500"
                 >Lv.{{ userInfo?.membershipLevel || 0 }}</span
               >
             </div>
@@ -200,7 +200,7 @@
               </div>
             </div>
             <UButton
-              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
+              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
             >
               {{ $t('user.copyInviteLink') }}
             </UButton>
@@ -208,7 +208,11 @@
         </div>
       </div>
     </div>
-    <UModal v-model:open="isEditModalOpen" :ui="{ close: 'cursor-pointer' }">
+    <UModal
+      :title="$t('user.editProfile')"
+      v-model:open="isEditModalOpen"
+      :ui="{ close: 'cursor-pointer' }"
+    >
       <template #body>
         <UForm
           :state="editForm"

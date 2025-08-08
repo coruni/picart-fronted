@@ -24,7 +24,7 @@
         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error') }}</p>
         <UButton
           @click="handleRetry"
-          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
+          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
         >
           {{ $t('common.retry') }}
         </UButton>
@@ -115,12 +115,12 @@
                 <textarea
                   v-model="commentText"
                   rows="2"
-                  class="w-full p-3 md:p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-indigo-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
+                  class="w-full p-3 md:p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
                   placeholder="分享你的想法..."
                 ></textarea>
                 <div class="flex justify-end mt-2">
                   <button
-                    class="px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 !rounded-button whitespace-nowrap"
+                    class="px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 !rounded-button whitespace-nowrap"
                   >
                     {{ $t('article.comment') }}
                   </button>
@@ -152,13 +152,13 @@
                 </div>
                 <div class="flex items-center space-x-4 mt-2 ml-2">
                   <button
-                    class="text-gray-500 hover:text-indigo-500 text-sm flex items-center !rounded-button whitespace-nowrap"
+                    class="text-gray-500 hover:text-primary-500 text-sm flex items-center !rounded-button whitespace-nowrap"
                   >
                     <i class="far fa-heart mr-1"></i>
                     <span>{{ comment.likes }}</span>
                   </button>
                   <button
-                    class="text-gray-500 hover:text-indigo-500 text-sm !rounded-button whitespace-nowrap"
+                    class="text-gray-500 hover:text-primary-500 text-sm !rounded-button whitespace-nowrap"
                   >
                     {{ $t('article.reply') }}
                   </button>
@@ -215,7 +215,7 @@
               </div>
             </div>
             <button
-              class="w-full py-2 md:py-2.5 cursor-pointer bg-primary text-white text-sm md:text-base rounded-lg hover:bg-indigo-600 transition-colors !rounded-button whitespace-nowrap"
+              class="w-full py-2 md:py-2.5 cursor-pointer bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
             >
               {{ $t('article.followAuthor') }}
             </button>
@@ -248,7 +248,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <h5
-                    class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-indigo-500 transition-colors line-clamp-2 mb-1"
+                    class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-500 transition-colors line-clamp-2 mb-1"
                   >
                     {{ item.title }}
                   </h5>

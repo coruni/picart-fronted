@@ -62,9 +62,13 @@
         color="neutral"
       />
     </div>
-    
+
     <!-- 删除确认模态框 -->
-    <UModal v-model:open="showDeleteModal" :close-on-backdrop="false" :ui="{ footer: 'justify-end' }">
+    <UModal
+      v-model:open="showDeleteModal"
+      :close-on-backdrop="false"
+      :ui="{ footer: 'justify-end' }"
+    >
       <template #header>
         {{ t('common.modal.confirmDelete') }}
       </template>
@@ -88,7 +92,8 @@
   import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
   import type { Article, ArticleStatus } from '~~/types/article';
-  import { useI18n } from 'vue-i18n';
+  import type { SelectMenuItem } from '@nuxt/ui';
+
   import {
     articleControllerFindAll,
     articleControllerRemove,
@@ -180,6 +185,7 @@
     },
     {
       id: 'actions',
+
       cell: ({ row }) => {
         return h(
           'div',
@@ -271,7 +277,6 @@
   });
 
   // 分类选项
-  import type { SelectMenuItem } from '@nuxt/ui';
 
   const categoryOptions = computed<SelectMenuItem[]>(() => {
     const allCategories = categories.value?.data.data || [];

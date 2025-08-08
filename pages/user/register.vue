@@ -69,7 +69,7 @@
           {{ $t('register.hasAccount') }}
           <NuxtLinkLocale
             to="/user/login"
-            class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
           >
             {{ $t('register.login') }}
           </NuxtLinkLocale>

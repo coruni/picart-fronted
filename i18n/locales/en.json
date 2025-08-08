@@ -170,7 +170,10 @@
     },
     "submit": "Submit",
     "type": {
-      "placeholder": "Please select type"
+      "placeholder": "Please select type",
+      "mixed": "Mixed",
+      "image": "Image",
+      "searchPlaceholder": "Select Type"
     },
     "advancedOptions": "Advanced Options",
     "requireLogin": "Require Login",
@@ -179,6 +182,16 @@
     "viewPrice": "View Price",
     "name": {
       "placeholder": "Please input name"
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft",
+      "archived": "Archived",
+      "rejected": "Rejected",
+      "banned": "Banned",
+      "deleted": "Deleted",
+      "name": "Status",
+      "placeholder": "Select Status"
     }
   },
   "article": {

@@ -83,7 +83,7 @@
         <template v-else>
           <NuxtLinkLocale
             to="/user/login"
-            class="px-4 py-2 text-sm font-medium text-primary hover:text-indigo-600 dark:hover:text-indigo-400"
+            class="px-4 py-2 text-sm font-medium text-primary hover:text-primary-600 dark:hover:text-primary-400"
           >
             {{ $t('login.login') }}
           </NuxtLinkLocale>

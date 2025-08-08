@@ -1,14 +1,14 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
-    class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-pink-100/50 dark:hover:shadow-indigo-900/30 group border border-pink-100/50 dark:border-indigo-900/30"
+    class="bg-white rounded-lg shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 group border border-primary-100/50 dark:border-primary-900/30"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
       <NuxtImg
         :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
+        loading="lazy"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        @error="handleImageError($event as Event, 'thumbnail')"
       />
 
       <!-- 渐变遮罩 -->
@@ -17,9 +17,9 @@
       ></div>
     </div>
 
-    <div class="p-5 flex-grow flex flex-col relative overflow-hidden line-clamp-2">
+    <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden line-clamp-2">
       <h3
-        class="text-lg font-medium text-gray-800 dark:text-white/90 mb-3 transition-all duration-300"
+        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 mb-2 sm:mb-3 transition-all duration-300"
       >
         {{ article.title }}
       </h3>
