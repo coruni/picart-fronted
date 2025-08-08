@@ -2,7 +2,7 @@
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-05-15',
+  compatibilityDate: '2025-08-08',
   devtools: { enabled: true },
   modules: [
     '@nuxt/eslint',
@@ -39,16 +39,19 @@ export default defineNuxtConfig({
     },
     locales: [
       {
+        language: 'zh-CN',
         code: 'zh',
         name: '简体中文',
         file: 'zh.json'
       },
       {
+        language: 'en-US',
         code: 'en',
         name: 'English',
         file: 'en.json'
       },
       {
+        language: 'ja-JP',
         code: 'ja',
         name: '日本語',
         file: 'ja.json'
@@ -84,16 +87,10 @@ export default defineNuxtConfig({
 
     // 公共配置（客户端和服务端都可用）
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || '/api',
-      appName: process.env.NUXT_PUBLIC_APP_NAME || 'PicArt',
-      appVersion: process.env.NUXT_PUBLIC_APP_VERSION || '1.0.0'
+      apiBaseUrl: '',
+      appName: 'PicArt',
+      appVersion: '1.0.1'
     }
-  },
-
-  // 配置别名
-  alias: {
-    '@': '.',
-    '~': '.'
   },
 
   // 配置TypeScript

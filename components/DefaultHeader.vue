@@ -70,12 +70,12 @@
                   <span>{{ $t('header.nav.profile') }}</span>
                 </NuxtLinkLocale>
 
-                <Button
+                <button
                   @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
                 >
                   <span>{{ $t('user.logout') }}</span>
-                </Button>
+                </button>
               </div>
             </div>
           </div>

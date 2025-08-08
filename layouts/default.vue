@@ -11,9 +11,7 @@
   </div>
 </template>
 
-<style>
-
-</style>
+<style></style>
 <script lang="ts" setup>
   import { categoryControllerFindAll } from '~~/api';
 
