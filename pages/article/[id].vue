@@ -22,12 +22,12 @@
       <div class="text-center">
         <Icon name="mynaui:exclamation-triangle" class="text-red-500 text-4xl mb-4" />
         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error') }}</p>
-        <button
+        <UButton
           @click="handleRetry"
           class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-600 transition-colors !rounded-button"
         >
           {{ $t('common.retry') }}
-        </button>
+        </UButton>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
               <NuxtImg
                 :src="article?.data.author.avatar"
                 alt="作者头像"
-                class="w-8 h-8 rounded-full mr-2"
+                class="w-8 h-8 rounded-full mr-2 object-cover"
                 loading="lazy"
                 format="webp"
                 sizes="32px"
@@ -178,11 +178,10 @@
                 <NuxtImg
                   :src="article?.data.author.avatar"
                   alt="作者头像"
-                  class="w-12 h-12 md:w-16 md:h-16 rounded-full ring-2 ring-white"
+                  class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
                   sizes="48px md:64px"
-                  @error="handleImageError($event as Event, 'avatar')"
                 />
                 <div
                   class="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-2 border-white"
