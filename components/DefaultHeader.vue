@@ -183,12 +183,12 @@
                   </div>
                 </NuxtLinkLocale>
 
-                <UButton
+                <button
                   @click="handleLogout"
-                  class="block w-full cursor-pointer text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                  class="block w-full cursor-pointer text-left px-4 py-2 text-red-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                 >
                   {{ $t('user.logout') }}
-                </UButton>
+                </button>
               </template>
               <template v-else>
                 <NuxtLinkLocale
