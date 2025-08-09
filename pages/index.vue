@@ -11,7 +11,7 @@
         </UTabs>
       </div>
       <!-- 瀑布流展示 -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
         <TransitionGroup name="list" tag="div" class="contents">
           <div
             v-for="item in displayItems"

@@ -212,7 +212,36 @@
     "followAuthor": "关注作者",
     "comment": "发表评论",
     "reply": "回复",
-    "commentText": "请输入评论内容"
+    "commentText": "请输入评论内容",
+    "like": "点赞",
+    "liked": "已点赞",
+    "restrictions": {
+      "loginRequired": {
+        "title": "需要登录查看",
+        "description": "请登录后继续浏览精彩内容",
+        "loginButton": "立即登录",
+        "registerText": "还没有账号？",
+        "registerButton": "免费注册"
+      },
+      "followRequired": {
+        "title": "关注后可查看",
+        "description": "关注作者即可查看完整内容",
+        "followButton": "关注作者",
+        "followingText": "已关注"
+      },
+      "paymentRequired": {
+        "title": "付费内容",
+        "description": "此内容需要付费后查看",
+        "price": "价格",
+        "payButton": "立即购买",
+        "paidText": "已购买"
+      },
+      "contentRestricted": {
+        "title": "内容受限",
+        "description": "该内容暂时无法访问，请稍后再试",
+        "contactText": "如有疑问，请联系客服"
+      }
+    }
   },
   "validation": {
     "required": "此字段为必填项",
@@ -259,7 +288,8 @@
     "loggingIn": "登录中...",
     "noAccount": "没有账户？",
     "register": "立即注册",
-    "loginFailed": "登录失败，请检查用户名和密码"
+    "loginFailed": "登录失败，请检查用户名和密码",
+    "loginFailedDescription": "请检查用户名和密码是否正确"
   },
   "register": {
     "title": "用户注册",

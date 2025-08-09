@@ -43,7 +43,6 @@
               :src="article.author?.avatar"
               :alt="article.author?.nickname ?? article.author?.username"
               class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
-              @error="handleImageError($event as Event, 'avatar')"
             />
           </div>
         </div>
@@ -54,7 +53,6 @@
 
 <script lang="ts" setup>
   import type { ArticleControllerFindAllResponse } from '~~/api';
-  const { handleImageError } = useImageError();
   type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined> & {
     images: string[] | string;
   };

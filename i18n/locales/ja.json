@@ -187,7 +187,36 @@
     "relatedPosts": "関連記事",
     "relatedArticles": "関連記事",
     "comment": "コメント",
-    "reply": "返信"
+    "reply": "返信",
+    "like": "いいね",
+    "liked": "いいね済み",
+    "restrictions": {
+      "loginRequired": {
+        "title": "ログインが必要です",
+        "description": "素晴らしいコンテンツを続けて閲覧するにはログインしてください",
+        "loginButton": "今すぐログイン",
+        "registerText": "アカウントをお持ちでないですか？",
+        "registerButton": "無料登録"
+      },
+      "followRequired": {
+        "title": "フォローして表示",
+        "description": "著者をフォローして完全なコンテンツを表示",
+        "followButton": "著者をフォロー",
+        "followingText": "フォロー中"
+      },
+      "paymentRequired": {
+        "title": "プレミアムコンテンツ",
+        "description": "このコンテンツは有料です",
+        "price": "価格",
+        "payButton": "今すぐ購入",
+        "paidText": "購入済み"
+      },
+      "contentRestricted": {
+        "title": "コンテンツが制限されています",
+        "description": "このコンテンツは一時的に利用できません。後でもう一度お試しください",
+        "contactText": "ご質問がございましたら、カスタマーサービスにお問い合わせください"
+      }
+    }
   },
   "validation": {
     "required": "このフィールドは必須です",

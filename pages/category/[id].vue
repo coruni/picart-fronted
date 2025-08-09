@@ -89,7 +89,6 @@
                   class="w-full h-48 md:h-32 object-cover rounded-lg"
                   loading="lazy"
                   format="webp"
-                  @error="handleImageError($event as Event, 'thumbnail')"
                 />
               </div>
               <div class="md:w-2/3">
@@ -225,7 +224,6 @@
   };
 
   // 图片错误处理
-  const { handleImageError } = useImageError();
 
   // 监听状态变化
   watch(currentTab, () => {

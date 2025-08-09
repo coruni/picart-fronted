@@ -71,6 +71,7 @@
   import { userControllerLogin } from '~~/api';
   import { z } from 'zod';
   const localePath = useLocalePath();
+  const route = useRoute();
 
   const { t } = useI18n();
   const router = useRouter();
@@ -136,7 +137,11 @@
         }
 
         // 跳转到用户中心
-        router.push(localePath('/user'));
+        if (route.query.redirect) {
+          router.push(localePath(route.query.redirect as string));
+        } else {
+          router.push(localePath('/user'));
+        }
       }
     } catch (error) {
       console.error('Login failed:', error);

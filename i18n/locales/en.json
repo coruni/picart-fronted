@@ -209,7 +209,36 @@
     "relatedArticles": "Related Articles",
     "comment": "Comment",
     "reply": "Reply",
-    "commentText": "Please input content"
+    "commentText": "Please input content",
+    "like": "Like",
+    "liked": "Liked",
+    "restrictions": {
+      "loginRequired": {
+        "title": "Login Required",
+        "description": "Please login to continue browsing amazing content",
+        "loginButton": "Login Now",
+        "registerText": "Don't have an account?",
+        "registerButton": "Register Free"
+      },
+      "followRequired": {
+        "title": "Follow to View",
+        "description": "Follow the author to view the complete content",
+        "followButton": "Follow Author",
+        "followingText": "Following"
+      },
+      "paymentRequired": {
+        "title": "Premium Content",
+        "description": "This content requires payment to view",
+        "price": "Price",
+        "payButton": "Buy Now",
+        "paidText": "Purchased"
+      },
+      "contentRestricted": {
+        "title": "Content Restricted",
+        "description": "This content is temporarily unavailable, please try again later",
+        "contactText": "If you have any questions, please contact customer service"
+      }
+    }
   },
   "validation": {
     "required": "This field is required",

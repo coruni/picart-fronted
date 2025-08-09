@@ -95,6 +95,9 @@ export default defineNuxtConfig({
   // 配置Nitro
   nitro: {
     // 可以在这里配置服务端相关设置
+    routeRules: {
+      '/admin/**': { prerender: false, ssr: false }
+    }
   },
 
   // 配置Vite

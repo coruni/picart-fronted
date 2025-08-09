@@ -4,14 +4,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const userStore = useUserStore();
     const localePath = useLocalePath();
 
-    // 调试信息（可以在生产环境中移除）
-    console.log('路由中间件 - 目标路径:', to.path);
-    console.log('用户认证状态:', userStore.isAuthenticated);
-    console.log(
-      '用户角色:',
-      userStore.userInfo?.roles?.map(r => r.name)
-    );
-
     // 登录注册页面路径
     const authPages = [localePath('/user/login'), localePath('/user/register')];
 

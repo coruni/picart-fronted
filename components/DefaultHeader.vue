@@ -62,7 +62,6 @@
               :src="currentUserAvatar"
               alt="user avatar"
               class="w-full h-full object-cover"
-              @error="handleImageError($event as Event, 'avatar')"
             />
             <div
               class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200 dark:border-gray-700"
@@ -182,7 +181,6 @@
                       :src="currentUserAvatar"
                       alt="user avatar"
                       class="w-6 h-6 rounded-full object-cover"
-                      @error="handleImageError($event as Event, 'avatar')"
                     />
                     <span>{{ $t('header.nav.profile') }}</span>
                   </div>
@@ -215,7 +213,6 @@
   import type { Category } from '~~/types/category';
   import { useRoute } from 'vue-router';
   const userStore = useUserStore();
-  const { handleImageError } = useImageError();
   const route = useRoute();
   const router = useRouter();
 

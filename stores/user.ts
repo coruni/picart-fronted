@@ -65,9 +65,19 @@ export const useUserStore = defineStore('user', {
       if (import.meta.client) {
         document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        const route = useRoute();
+        const router = useRouter();
+        const localePath = useLocalePath();
+        // 根据当前页面决定跳转行为
+        const currentPath = route.path;
+        if (currentPath === localePath('/')) {
+          // 如果在首页，则重新加载页面
+          window.location.reload();
+        } else {
+          // 如果不在首页，则跳转到首页
+          window.location.href = localePath('/');
+        }
       }
-      // 重载页面到登录页
-      window.location.href = '/';
     }
   },
 

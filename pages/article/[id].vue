@@ -48,7 +48,44 @@
     </div>
 
     <!-- 内容区域 -->
-    <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8">
+    <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
+      <!-- 点赞悬浮按钮 - 仅在PC端显示 -->
+      <div
+        ref="likeButtonContainer"
+        class="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 transition-all duration-300 ease-in-out z-40"
+      >
+        <div
+          class="bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-3 backdrop-blur-sm"
+        >
+          <button
+            @click="handleLike"
+            :disabled="isLikeLoading"
+            class="flex flex-col items-center space-y-2 group transition-all duration-200"
+            :class="{ 'pointer-events-none': isLikeLoading }"
+          >
+            <div class="relative">
+              <Icon
+                :name="isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                class="text-2xl cursor-pointer transition-all duration-300 transform group-hover:scale-110"
+                :class="[
+                  isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
+                  isLikeLoading ? 'animate-pulse' : ''
+                ]"
+              />
+              <!-- 点赞动画效果 -->
+              <div v-if="showLikeAnimation" class="absolute inset-0 pointer-events-none">
+                <Icon name="mynaui:heart-solid" class="text-2xl text-red-500 animate-ping" />
+              </div>
+            </div>
+            <span
+              class="text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+            >
+              {{ currentLikeCount }}
+            </span>
+          </button>
+        </div>
+      </div>
+
       <!-- 左侧主内容区 -->
       <div class="flex-1">
         <!-- 文章标题区 -->
@@ -103,13 +140,52 @@
           </div>
         </div>
         <!-- 文章内容 -->
-        <div
-          class="prose max-w-none mb-6 md:mb-12 whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
-          v-html="article?.data.content"
-        ></div>
+        <div v-if="shouldShowContent" class="mb-6 md:mb-12">
+          <div
+            class="prose max-w-none whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
+            v-html="article?.data.content"
+          ></div>
+        </div>
+
+        <!-- 内容限制组件 -->
+        <ArticleContentRestriction
+          v-else-if="restrictionType"
+          :type="restrictionType"
+          :price="article?.data.viewPrice"
+        />
+
+        <!-- 移动端点赞按钮 -->
+        <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
+          <button
+            @click="handleLike"
+            :disabled="isLikeLoading"
+            class="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
+            :class="{ 'pointer-events-none': isLikeLoading }"
+          >
+            <div class="relative">
+              <Icon
+                :name="isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                class="text-xl transition-all duration-300 transform group-hover:scale-110"
+                :class="[
+                  isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
+                  isLikeLoading ? 'animate-pulse' : ''
+                ]"
+              />
+              <!-- 点赞动画效果 -->
+              <div v-if="showLikeAnimation" class="absolute inset-0 pointer-events-none">
+                <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
+              </div>
+            </div>
+            <span
+              class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+            >
+              {{ isLiked ? $t('article.liked') : $t('article.like') }} ({{ currentLikeCount }})
+            </span>
+          </button>
+        </div>
 
         <!-- 评论区 -->
-        <div class="mb-6 md:mb-8">
+        <div class="mb-6 md:mb-8 comments-section">
           <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
             {{ $t('article.comments') }}
           </h3>
@@ -295,6 +371,69 @@
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
+
+  // 用户状态管理
+  const userStore = useUserStore();
+  const isLoggedIn = computed(() => userStore.isAuthenticated);
+
+  // 内容访问控制
+  const shouldShowContent = computed(() => {
+    if (!article.value?.data) return false;
+
+    const data = article.value.data;
+
+    // 如果需要登录但用户未登录
+    if (data.requireLogin && !isLoggedIn.value) {
+      return false;
+    }
+
+    // 如果需要关注但用户未关注作者
+    if (data.requireFollow && !isFollowingAuthor.value) {
+      return false;
+    }
+
+    // 如果需要付费但用户未付费
+    if (data.requirePayment && !hasPaid.value) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const restrictionType = computed(() => {
+    if (!article.value?.data) return null;
+
+    const data = article.value.data;
+
+    // 按优先级检查限制条件
+    if (data.requireLogin && !isLoggedIn.value) {
+      return 'login';
+    }
+
+    if (data.requireFollow && !isFollowingAuthor.value) {
+      return 'follow';
+    }
+
+    if (data.requirePayment && !hasPaid.value) {
+      return 'payment';
+    }
+
+    return null;
+  });
+
+  // 关注状态
+  const isFollowingAuthor = ref(false);
+
+  // 付费状态
+  const hasPaid = ref(false);
+
+  // 点赞相关状态
+  const isLiked = ref(false);
+  const isLikeLoading = ref(false);
+  const showLikeAnimation = ref(false);
+  const currentLikeCount = ref(0);
+  const likeButtonContainer = ref(null);
+
   // lightbox相关状态
   const lightboxVisible = ref(false);
   const lightboxIndex = ref(0);
@@ -363,4 +502,53 @@
       console.log(error);
     }
   };
+
+  // 处理点赞
+  const handleLike = async () => {
+    if (isLikeLoading.value) return;
+
+    try {
+      isLikeLoading.value = true;
+
+      // TODO: 调用点赞/取消点赞 API
+      // const result = await articleControllerLike({ ... })
+
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // 切换点赞状态
+      isLiked.value = !isLiked.value;
+      currentLikeCount.value += isLiked.value ? 1 : -1;
+
+      // 显示点赞动画
+      if (isLiked.value) {
+        showLikeAnimation.value = true;
+        setTimeout(() => {
+          showLikeAnimation.value = false;
+        }, 600);
+      }
+    } catch (error) {
+      console.error('点赞操作失败:', error);
+    } finally {
+      isLikeLoading.value = false;
+    }
+  };
+
+  // 初始化点赞数据
+  const initializeLikeData = () => {
+    if (article.value?.data) {
+      currentLikeCount.value = article.value.data.likes || 0;
+      // TODO: 检查当前用户是否已点赞
+      // isLiked.value = checkUserLikedStatus();
+    }
+  };
+
+  // 监听文章数据变化
+  watch(
+    article,
+    () => {
+      initializeLikeData();
+    },
+    { immediate: true }
+  );
 </script>
