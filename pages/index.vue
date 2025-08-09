@@ -44,6 +44,8 @@
 
 <script lang="ts" setup>
   import { articleControllerFindAll } from '~~/api';
+
+  // 首页使用默认的全局SEO设置，不需要额外设置
   const toast = useToast();
 
   const tabs: { id: 'all' | 'popular' | 'latest' | 'following'; name: string; value: string }[] = [
@@ -134,6 +136,7 @@
 
   const notify = () => {
     toast.add({
+      ui: { close: 'cursor-pointer' },
       title:
         '页面还在开发中，下载资源请前往https://drive.cosfan.cc，用户数据暂未导入 请不要注册账号',
       actions: [

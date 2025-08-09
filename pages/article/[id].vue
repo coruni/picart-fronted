@@ -1,5 +1,21 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+    <Title>{{ article?.data.title }}</Title>
+    <Meta name="description" :content="article?.data.summary as string" />
+    <Meta name="author" :content="article?.data.author.nickname" />
+    <Meta name="keywords" :content="article?.data.tags?.map(tag => tag.name).join(',')" />
+    <Meta name="robots" content="index, follow" />
+    <Meta name="og:title" :content="article?.data.title" />
+    <Meta name="og:description" :content="article?.data.summary as string" />
+    <Meta name="og:type" content="article" />
+    <Meta
+      name="og:image"
+      :content="(article?.data.cover as string) || (article?.data.images?.[0] as string)"
+    />
+    <Meta
+      name="article:author"
+      :content="article?.data.author.nickname ?? article?.data.author.username"
+    />
     <VueEasyLightbox
       :visible="lightboxVisible"
       :imgs="lightboxImages"
@@ -52,7 +68,6 @@
                 format="webp"
                 sizes="32px"
                 placeholder
-                @error="handleImageError($event as Event, 'avatar')"
               />
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
             </div>
@@ -83,7 +98,6 @@
                 class="w-full h-full object-cover"
                 loading="lazy"
                 format="webp"
-                @error="handleImageError($event as Event, 'thumbnail')"
               />
             </div>
           </div>
@@ -248,7 +262,6 @@
                     loading="lazy"
                     format="webp"
                     sizes="64px md:80px"
-                    @error="handleImageError($event as Event, 'thumbnail')"
                   />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -276,7 +289,9 @@
     articleControllerFindOne,
     articleControllerFindRecommend,
     userControllerFollow
-  } from '~~/api';
+  } from '~/api';
+  import type { ArticleControllerFindOneResponse } from '~/api';
+  type Article = ArticleControllerFindOneResponse['data'];
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
@@ -297,7 +312,7 @@
     pending: articlePending,
     error: articleError
   } = articleControllerFindOne({
-    composable: 'useFetch',
+    composable: 'useAsyncData',
     key: `article_${route.params.id}`,
     path: {
       id: String(route.params.id)
@@ -322,24 +337,6 @@
     location.reload();
   };
   // 图片错误处理
-  const { handleImageError } = useImageError();
-  useHead({
-    title: () => article.value?.data.title || '文章详情',
-    meta: [
-      {
-        name: 'description',
-        content: () => String(article.value?.data.summary) || ''
-      },
-      {
-        name: 'keywords',
-        content: () => article.value?.data.tags?.map(tag => tag.name).join(',') || ''
-      },
-      {
-        name: 'author',
-        content: () => article.value?.data.author.nickname || ''
-      }
-    ]
-  });
 
   const schema = zod.object({
     commentText: zod.string().min(1, t('article.commentText'))

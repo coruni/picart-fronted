@@ -62,16 +62,8 @@ export default defineNuxtConfig({
     defaultLocale: 'zh',
     // 语言文件目录
     langDir: 'locales/',
-    // 策略配置
-    strategy: 'prefix_except_default',
     // 检测浏览器语言
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      alwaysRedirect: false,
-      fallbackLocale: 'en'
-    },
+    detectBrowserLanguage: false,
     // 编译优化
     compilation: {
       strictMessage: false,
@@ -117,22 +109,33 @@ export default defineNuxtConfig({
     }
   },
 
-  // SEO优化
+  // 基础应用配置
   app: {
     head: {
-      title: 'PicArt',
-      titleTemplate: '%s - PicArt',
       viewport: 'width=device-width, initial-scale=1',
       charset: 'utf-8',
       meta: [
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#ffffff' }
       ],
-      link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      script: [
         {
-          rel: 'canonical',
-          href: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc'
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'PicArt',
+            description: '图片分享社区',
+            url: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc'}/search?q={search_term_string}`
+              },
+              'query-input': 'required name=search_term_string'
+            }
+          })
         }
       ]
     },
@@ -146,12 +149,6 @@ export default defineNuxtConfig({
   // 服务端渲染
   ssr: true,
 
-  // 实验性功能
-  experimental: {
-    // 禁用payload提取，防止敏感数据泄露
-    payloadExtraction: false,
-    buildCache: true
-  },
   webpack: {
     extractCSS: true,
     optimization: {

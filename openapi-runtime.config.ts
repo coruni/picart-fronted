@@ -5,7 +5,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 export const createClientConfig: CreateClientConfig = config => {
   return {
     ...config,
-    composable: '$fetch',
     baseURL: config?.baseURL || appConfig.apiBaseUrl,
     onRequest: async context => {
       let userStore: any = null;

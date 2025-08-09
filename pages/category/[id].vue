@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-[calc(100vh-3.5rem)]">
+    <Title>{{ category?.data?.name }}</Title>
+    <Meta name="description" :content="category?.data?.description" />
+    <Meta name="keywords" :content="category?.data?.name" />
+    <Meta name="robots" content="index, follow" />
+    <Meta name="og:title" :content="category?.data?.name" />
+    <Meta name="og:description" :content="category?.data?.description" />
+    <Meta name="og:type" content="website" />
+    <Meta name="og:image" :content="category?.data?.cover" />
     <!-- 分类头部信息 -->
     <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
       <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
@@ -147,7 +155,7 @@
 
   // 加载分类信息
   const { data: category } = await categoryControllerFindOne({
-    composable: 'useFetch',
+    composable: 'useAsyncData',
     key: `category-${categoryId.value}`,
     path: { id: categoryId.value }
   });
@@ -258,17 +266,6 @@
       observer.disconnect();
     }
   });
-
-  // 页面元数据
-  useHead(() => ({
-    title: () => category?.value?.data.name,
-    meta: [
-      {
-        name: 'description',
-        content: () => category?.value?.data.description
-      }
-    ]
-  }));
 </script>
 
 <style scoped>
