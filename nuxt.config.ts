@@ -138,7 +138,7 @@ export default defineNuxtConfig({
     },
     // 页面过渡动画配置
     pageTransition: {
-      name: 'zoom',
+      name: 'fade',
       mode: 'out-in'
     }
   },

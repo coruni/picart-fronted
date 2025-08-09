@@ -105,26 +105,30 @@
               <NuxtImg
                 :src="article?.data.author.avatar"
                 alt="当前用户头像"
-                class="w-8 h-8 md:w-10 md:h-10 rounded-full"
+                class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
                 loading="lazy"
                 format="webp"
                 sizes="40px md:40px"
-                @error="handleImageError($event as Event, 'avatar')"
               />
               <div class="flex-1">
-                <textarea
-                  v-model="commentText"
-                  rows="2"
-                  class="w-full p-3 md:p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
-                  placeholder="分享你的想法..."
-                ></textarea>
-                <div class="flex justify-end mt-2">
-                  <button
-                    class="px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 !rounded-button whitespace-nowrap"
-                  >
-                    {{ $t('article.comment') }}
-                  </button>
-                </div>
+                <UForm :schema="schema" :state="state" @submit="handleSubmit">
+                  <UFormField name="commentText">
+                    <UTextarea
+                      v-model="state.commentText"
+                      class="w-full p-3 md:p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
+                      placeholder="分享你的想法..."
+                    ></UTextarea>
+                  </UFormField>
+
+                  <div class="flex justify-end mt-2">
+                    <UButton
+                      type="submit"
+                      class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 !rounded-button whitespace-nowrap"
+                    >
+                      {{ $t('article.comment') }}
+                    </UButton>
+                  </div>
+                </UForm>
               </div>
             </div>
           </div>
@@ -214,11 +218,12 @@
                 <div class="text-gray-500 dark:text-gray-400">{{ $t('article.goodReviews') }}</div>
               </div>
             </div>
-            <button
-              class="w-full py-2 md:py-2.5 cursor-pointer bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
+            <UButton
+              @click="handleFollow"
+              class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
             >
               {{ $t('article.followAuthor') }}
-            </button>
+            </UButton>
           </div>
           <!-- 相关推荐 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
@@ -266,9 +271,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { articleControllerFindOne, articleControllerFindRecommend } from '~~/api';
+  import zod from 'zod';
+  import {
+    articleControllerFindOne,
+    articleControllerFindRecommend,
+    userControllerFollow
+  } from '~~/api';
   const route = useRoute();
   const router = useRouter();
+  const { t } = useI18n();
   // lightbox相关状态
   const lightboxVisible = ref(false);
   const lightboxIndex = ref(0);
@@ -330,5 +341,29 @@
     ]
   });
 
-  const commentText = ref('');
+  const schema = zod.object({
+    commentText: zod.string().min(1, t('article.commentText'))
+  });
+
+  const state = reactive({
+    commentText: ''
+  });
+
+  const handleSubmit = (payload: SubmitEvent) => {
+    console.log(payload);
+  };
+
+  const handleFollow = async () => {
+    try {
+      await userControllerFollow({
+        composable: '$fetch',
+        key: `follow_${article.value?.data.author.id}`,
+        path: {
+          id: String(article.value?.data.author.id)
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 </script>

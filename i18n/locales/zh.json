@@ -66,12 +66,14 @@
       "avatar": "头像",
       "parent": "上级分类",
       "createdAt": "创建时间",
-      "edit": "编辑",
+      "edit": "编辑分类",
       "title": "分类",
       "avatarPlaceholder": "请上传头像",
       "descriptionPlaceholder": "请输入说明",
       "namePlaceholder": "请输入名称",
-      "selectParent": "请选择父级类别"
+      "selectParent": "请选择父级类别",
+      "coverPlaceholder": "上传封面",
+      "coverRequired": "请选择图片"
     },
     "tags": {
       "avatarPlaceholder": "请上传头像",
@@ -103,7 +105,8 @@
       "roles": "角色",
       "category": "分类",
       "filter": "筛选",
-      "background": "背景"
+      "background": "背景",
+      "cover": "封面"
     },
     "message": {
       "deleteSuccess": "删除成功",
@@ -208,7 +211,8 @@
     "relatedArticles": "相关推荐",
     "followAuthor": "关注作者",
     "comment": "发表评论",
-    "reply": "回复"
+    "reply": "回复",
+    "commentText": "请输入评论内容"
   },
   "validation": {
     "required": "此字段为必填项",
@@ -367,5 +371,10 @@
   },
   "categories": {
     "create": "创建分类"
+  },
+  "response": {
+    "error": {
+      "followSelf": "不能关注自己"
+    }
   }
 }

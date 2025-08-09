@@ -71,7 +71,9 @@
       "namePlaceholder": "Please input name",
       "descriptionPlaceholder": "Please input description",
       "selectParent": "Please select parent category",
-      "avatarPlaceholder": "Please upload avatar"
+      "avatarPlaceholder": "Please upload avatar",
+      "coverPlaceholder": "Upload Cover",
+      "coverRequired": "Please Select Image"
     },
     "tags": {
       "descriptionPlaceholder": "Please input description",
@@ -103,7 +105,8 @@
       "roles": "Roles",
       "category": "Category",
       "filter": "Filter",
-      "background": "Background"
+      "background": "Background",
+      "cover": "Cover"
     },
     "message": {
       "deleteSuccess": "Delete Successful",
@@ -205,7 +208,8 @@
     "relatedPosts": "Related Articles",
     "relatedArticles": "Related Articles",
     "comment": "Comment",
-    "reply": "Reply"
+    "reply": "Reply",
+    "commentText": "Please input content"
   },
   "validation": {
     "required": "This field is required",

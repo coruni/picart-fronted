@@ -41,10 +41,22 @@ export const createClientConfig: CreateClientConfig = config => {
     },
     onResponse: context => {
       // 只允许200和201状态码继续处理
-      if (![200, 201].includes(context.response._data?.code)) {
+      if (![200, 201].includes(context.response.status)) {
         const error = new Error(context.response._data?.message);
         // 将响应数据附加到错误上以便调用者访问
         Object.assign(error, { response: context.response });
+        // 发起提示
+        const taost = useToast();
+        const { $i18n } = useNuxtApp();
+        const t = $i18n.t;
+
+        taost.add({
+          title: t(error.message),
+          color: 'error',
+          icon: 'mynaui:slash-circle',
+          ui: { close: 'cursor-pointer' }
+        });
+
         throw error;
       }
       return context;

@@ -14,7 +14,7 @@
 <style></style>
 <script lang="ts" setup>
   import { categoryControllerFindAll } from '~~/api';
-
+  const route = useRoute();
   const { data: categories } = categoryControllerFindAll({
     composable: 'useFetch',
     key: 'categories',

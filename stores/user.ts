@@ -66,6 +66,8 @@ export const useUserStore = defineStore('user', {
         document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       }
+      // 重载页面到登录页
+      window.location.href = '/';
     }
   },
 

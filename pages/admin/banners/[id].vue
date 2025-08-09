@@ -23,38 +23,6 @@
             :loading="uploading"
             :ui="{ files: 'flex justify-center' }"
           >
-            <template #default="{ file }">
-              <div v-if="file" class="flex justify-center">
-                <div class="relative group">
-                  <img
-                    :src="getFilePreview(file)"
-                    :alt="file.name"
-                    class="max-w-xs max-h-48 object-contain rounded-md border border-gray-200 dark:border-gray-700"
-                  />
-                  <div
-                    class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-md transition-all duration-200"
-                  />
-
-                  <!-- 删除按钮 -->
-                  <button
-                    type="button"
-                    class="absolute top-2 right-2 flex items-center justify-center w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
-                    @click="removeImage"
-                    :title="t('form.image.remove')"
-                  >
-                    <Icon name="mynaui:x" class="w-4 h-4" />
-                  </button>
-
-                  <!-- 上传状态指示器 -->
-                  <div
-                    v-if="file._uploading"
-                    class="absolute inset-0 bg-black bg-opacity-50 rounded-md flex items-center justify-center"
-                  >
-                    <div class="text-white text-sm">上传中...</div>
-                  </div>
-                </div>
-              </div>
-            </template>
           </UFileUpload>
         </UFormField>
 

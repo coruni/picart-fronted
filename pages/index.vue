@@ -134,7 +134,8 @@
 
   const notify = () => {
     toast.add({
-      title: '页面还在开发中，下载资源请前往https://drive.cosfan.cc',
+      title:
+        '页面还在开发中，下载资源请前往https://drive.cosfan.cc，用户数据暂未导入 请不要注册账号',
       actions: [
         {
           label: '打开',
