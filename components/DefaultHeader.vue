@@ -58,7 +58,7 @@
         </div>
         <template v-if="userStore.isLoggedIn">
           <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
-            <NuxtImg
+            <UAvatar
               :src="currentUserAvatar"
               alt="user avatar"
               class="w-full h-full object-cover"
@@ -177,7 +177,7 @@
                   @click="closeMobileMenu"
                 >
                   <div class="flex items-center space-x-2">
-                    <NuxtImg
+                    <UAvatar
                       :src="currentUserAvatar"
                       alt="user avatar"
                       class="w-6 h-6 rounded-full object-cover"

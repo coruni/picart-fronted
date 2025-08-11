@@ -15,9 +15,9 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-swiper',
     '@nuxt/ui',
-    'nuxt-easy-lightbox',
-    '@hey-api/nuxt'
+    'nuxt-easy-lightbox'
   ],
+
   image: {
     screens: {
       xs: 320,

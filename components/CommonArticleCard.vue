@@ -39,8 +39,8 @@
             </button>
           </div>
           <div class="flex items-center">
-            <NuxtImg
-              :src="article.author?.avatar"
+            <UAvatar
+              :src="article.author?.avatar ?? ''"
               :alt="article.author?.nickname ?? article.author?.username"
               class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
             />
