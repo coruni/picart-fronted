@@ -2,7 +2,7 @@
   <div class="p-4 sm:p-6">
     <h1 class="text-2xl font-bold mb-6">{{ t('admin.settings.title') }}</h1>
 
-    <UTabs :items="tabs" class="w-full" v-model="activeTab">
+    <UTabs :items="tabs" class="w-full" v-model="activeTab" :ui="{ trigger: 'cursor-pointer' }">
       <template #general="{ item }">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('admin.settings.siteName')" name="site_name" class="w-full">

@@ -31,7 +31,7 @@
     <UButton
       @click="handleFollow"
       :disabled="isFollowing || isFollowLoading"
-      class="bg-primary hover:bg-primary/80 text-white px-6 py-2 !rounded-button"
+      class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2 !rounded-button"
     >
       {{
         isFollowLoading
@@ -40,6 +40,26 @@
             ? $t('article.restrictions.followRequired.followingText')
             : $t('article.restrictions.followRequired.followButton')
       }}
+    </UButton>
+  </div>
+
+  <!-- 会员限制 -->
+  <div
+    v-else-if="type === 'membership'"
+    class="bg-gradient-to-br from-purple-50/50 to-purple-100/50 dark:from-purple-900/10 dark:to-purple-800/10 rounded-xl p-6 text-center my-8 border border-purple-200/50 dark:border-purple-800/30"
+  >
+    <Icon name="mynaui:crown" class="text-3xl text-purple-600 dark:text-purple-400 mb-3" />
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+      {{ $t('article.restrictions.membershipRequired.title') }}
+    </h3>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      {{ $t('article.restrictions.membershipRequired.description') }}
+    </p>
+    <UButton
+      @click="handleMembership"
+      class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2 !rounded-button"
+    >
+      {{ $t('article.restrictions.membershipRequired.upgradeButton') }}
     </UButton>
   </div>
 
@@ -59,7 +79,7 @@
     <UButton
       @click="handlePayment"
       :disabled="isPaid || isPaymentLoading"
-      class="bg-primary hover:bg-primary/80 text-white px-6 py-2 !rounded-button"
+      class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2 !rounded-button"
     >
       {{
         isPaymentLoading
@@ -88,7 +108,7 @@
 
 <script lang="ts" setup>
   interface Props {
-    type: 'login' | 'follow' | 'payment' | 'restricted';
+    type: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
     price?: string | number;
   }
 
@@ -132,5 +152,10 @@
     await new Promise(resolve => setTimeout(resolve, 1500));
     isPaid.value = true;
     isPaymentLoading.value = false;
+  };
+
+  // 处理会员升级
+  const handleMembership = () => {
+    router.push(localePath('/user'));
   };
 </script>

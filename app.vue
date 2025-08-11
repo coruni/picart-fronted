@@ -14,7 +14,7 @@
     key: 'siteConfig'
   });
   // 提供配置
-  provide('siteConfig', configs.data);
+  provide('siteConfig', configs.data.value?.data);
 
   // 构建全局元数据和SEO
   useSeoMeta({

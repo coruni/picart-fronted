@@ -9481,12 +9481,12 @@
         "security": []
       }
     },
-    "/order/list": {
+    "/order": {
       "get": {
-        "summary": "获取用户订单列表",
+        "summary": "获取订单列表",
         "deprecated": false,
         "description": "",
-        "operationId": "OrderController_getUserOrders",
+        "operationId": "OrderController_getOrders",
         "tags": [
           "订单管理"
         ],
@@ -9507,6 +9507,45 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "状态",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "PAID",
+                "CANCELLED",
+                "REFUNDED"
+              ]
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "MEMBERSHIP",
+                "PRODUCT",
+                "SERVICE",
+                "ARTICLE"
+              ]
             }
           },
           {
@@ -9557,6 +9596,76 @@
           }
         },
         "security": []
+      },
+      "post": {
+        "summary": "创建订单（包含抽成计算）",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_createOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/order/{id}": {
@@ -9783,7 +9892,7 @@
         ]
       }
     },
-    "/order": {
+    "/order/user": {
       "get": {
         "summary": "获取用户订单列表",
         "deprecated": false,
@@ -9809,6 +9918,36 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "状态",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "PAID",
+                "CANCELLED",
+                "REFUNDED"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PRODUCT",
+                "MEMBERSHIP",
+                "SERVICE",
+                "ARTICLE"
+              ]
             }
           },
           {
@@ -9855,76 +9994,6 @@
         "responses": {
           "200": {
             "description": "获取成功",
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "创建订单（包含抽成计算）",
-        "deprecated": false,
-        "description": "",
-        "operationId": "OrderController_createOrder",
-        "tags": [
-          "订单管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "创建成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
             "headers": {}
           }
         },

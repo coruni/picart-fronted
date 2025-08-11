@@ -114,12 +114,12 @@ import type {
   PermissionControllerFindOneResponse,
   PermissionControllerUpdateData,
   PermissionControllerUpdateResponse,
-  OrderControllerGetUserOrdersData,
+  OrderControllerGetOrdersData,
+  OrderControllerCreateOrderData,
   OrderControllerFindOneData,
   OrderControllerFindByOrderNoData,
   OrderControllerGetWalletBalanceData,
-  OrderControllerGetUserOrders2Data,
-  OrderControllerCreateOrderData,
+  OrderControllerGetUserOrdersData,
   OrderControllerGetPendingOrdersData,
   OrderControllerCancelOrderData,
   OrderControllerCreatePaymentOrderData,
@@ -1680,15 +1680,35 @@ export const permissionControllerUpdate = <
 };
 
 /**
- * 获取用户订单列表
+ * 获取订单列表
  */
-export const orderControllerGetUserOrders = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerGetUserOrdersData, unknown, DefaultT>
+export const orderControllerGetOrders = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerGetOrdersData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
-    url: '/order/list',
+    url: '/order',
     ...options
   });
+};
+
+/**
+ * 创建订单（包含抽成计算）
+ */
+export const orderControllerCreateOrder = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerCreateOrderData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order',
+      ...options
+    }
+  );
 };
 
 /**
@@ -1751,8 +1771,8 @@ export const orderControllerGetWalletBalance = <
 /**
  * 获取用户订单列表
  */
-export const orderControllerGetUserOrders2 = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerGetUserOrders2Data, unknown, DefaultT>
+export const orderControllerGetUserOrders = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerGetUserOrdersData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
     security: [
@@ -1761,29 +1781,9 @@ export const orderControllerGetUserOrders2 = <TComposable extends Composable, De
         type: 'http'
       }
     ],
-    url: '/order',
+    url: '/order/user',
     ...options
   });
-};
-
-/**
- * 创建订单（包含抽成计算）
- */
-export const orderControllerCreateOrder = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerCreateOrderData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/order',
-      ...options
-    }
-  );
 };
 
 /**

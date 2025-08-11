@@ -25,10 +25,14 @@
     <!-- 筛选和排序 -->
     <div class="max-w-7xl mx-auto px-4 py-8">
       <div class="flex justify-center mb-8 md:justify-end">
-        <UTabs :items="tabs" v-model="currentTab" class="w-auto" variant="pill">
-          <template #default="{ item }">
-            <span class="text-sm font-medium cursor-pointer">{{ $t(item.label) }}</span>
-          </template>
+        <UTabs
+          :items="tabs"
+          :default-value="0"
+          v-model="currentTab"
+          class="w-auto"
+          variant="pill"
+          :ui="{ trigger: 'cursor-pointer' }"
+        >
         </UTabs>
         <div class="flex items-center space-x-2 ml-4">
           <button

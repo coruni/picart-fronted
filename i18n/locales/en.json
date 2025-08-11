@@ -366,7 +366,16 @@
     "nickname": "Nickname",
     "enterNickname": "Enter nickname",
     "description": "Description",
-    "enterDescription": "Enter description"
+    "enterDescription": "Enter description",
+    "orders": {
+      "status": {
+        "all": "All",
+        "pending": "Pending",
+        "paid": "Paid",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      }
+    }
   },
   "author": {
     "title": "Author Profile",

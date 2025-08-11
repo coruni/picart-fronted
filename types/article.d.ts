@@ -14,6 +14,7 @@ export interface Article {
   image?: string;
   requireLogin?: boolean;
   requireFollow?: boolean;
+  requireMembership?: boolean;
   requirePayment?: boolean;
   viewPrice?: string;
   type?: string;
@@ -58,7 +59,7 @@ export interface Article {
       followCount?: number;
       createdAt?: string;
       updatedAt?: string;
-    },
+    };
     avatar?: string;
     background?: string;
     cover?: string;

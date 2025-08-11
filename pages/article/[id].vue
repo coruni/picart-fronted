@@ -163,7 +163,6 @@
             :class="{ 'pointer-events-none': isLikeLoading }"
           >
             <div class="relative flex items-center justify-center">
-            <div class="relative flex items-center justify-center">
               <Icon
                 :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
                 class="text-xl transition-all duration-300 transform group-hover:scale-110"
@@ -395,6 +394,11 @@
       return false;
     }
 
+    // 如果需要会员但用户不是会员
+    if (data.requireMembership && !isMembershipValid.value) {
+      return false;
+    }
+
     // 如果需要付费但用户未付费
     if (data.requirePayment && !hasPaid.value) {
       return false;
@@ -417,11 +421,37 @@
       return 'follow';
     }
 
+    if (data.requireMembership && !isMembershipValid.value) {
+      return 'membership';
+    }
+
     if (data.requirePayment && !hasPaid.value) {
       return 'payment';
     }
 
     return null;
+  });
+
+  // 检查会员状态
+  const isMembershipValid = computed(() => {
+    if (!isLoggedIn.value) return false;
+
+    const userInfo = userStore.userInfo;
+    if (!userInfo) return false;
+
+    // 检查会员等级是否大于0（基础会员）
+    if (userInfo.membershipLevel && userInfo.membershipLevel > 0) {
+      return true;
+    }
+
+    // 检查会员到期时间
+    if (userInfo.membershipEndDate) {
+      const endDate = new Date(userInfo.membershipEndDate as string);
+      const now = new Date();
+      return endDate > now;
+    }
+
+    return false;
   });
 
   // 关注状态

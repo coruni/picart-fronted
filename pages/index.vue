@@ -4,10 +4,13 @@
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Tab切换 -->
       <div class="flex justify-center mb-8 md:justify-end">
-        <UTabs v-model="currentTab" :items="tabs" variant="pill" class="w-auto" :default-value="0">
-          <template #default="{ item }">
-            <span class="text-sm font-medium cursor-pointer">{{ $t(item.name) }}</span>
-          </template>
+        <UTabs
+          v-model="currentTab"
+          :items="tabs"
+          variant="pill"
+          class="w-auto"
+          :default-value="0"
+          :ui="{ trigger: 'cursor-pointer' }"
         </UTabs>
       </div>
       <!-- 瀑布流展示 -->
@@ -43,16 +46,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { articleControllerFindAll } from '~~/api';
+  import type { TabsItem } from '@nuxt/ui';
+import { articleControllerFindAll } from '~~/api';
 
   // 首页使用默认的全局SEO设置，不需要额外设置
   const toast = useToast();
-
-  const tabs: { id: 'all' | 'popular' | 'latest' | 'following'; name: string; value: string }[] = [
-    { id: 'all', name: 'home.tab.all', value: 'all' },
-    { id: 'popular', name: 'home.tab.popular', value: 'popular' },
-    { id: 'latest', name: 'home.tab.latest', value: 'latest' },
-    { id: 'following', name: 'home.tab.following', value: 'following' }
+const {t} = useI18n();
+  const tabs: TabsItem[] = [
+    { id: 'all', label: t('home.tab.all'), value: 'all', icon: 'mynaui:brand-trello' },
+    { id: 'popular', label: t('home.tab.popular'), value: 'popular', icon: 'mynaui:brand-trello' },
+    { id: 'latest', label: t('home.tab.latest'), value: 'latest', icon: 'mynaui:brand-trello' },
+    { id: 'following', label: t('home.tab.following'), value: 'following', icon: 'mynaui:brand-trello' }
   ];
   const currentTab = ref('all');
   const pagination = ref({

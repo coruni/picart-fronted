@@ -3979,7 +3979,7 @@ export type PermissionControllerUpdateResponses = {
 export type PermissionControllerUpdateResponse =
   PermissionControllerUpdateResponses[keyof PermissionControllerUpdateResponses];
 
-export type OrderControllerGetUserOrdersData = {
+export type OrderControllerGetOrdersData = {
   body?: never;
   headers?: {
     Authorization?: string;
@@ -3991,15 +3991,52 @@ export type OrderControllerGetUserOrdersData = {
   query: {
     page: string;
     limit: string;
+    /**
+     * 状态
+     */
+    status?: 'PENDING' | 'PAID' | 'CANCELLED' | 'REFUNDED';
+    userId?: number;
+    type?: 'MEMBERSHIP' | 'PRODUCT' | 'SERVICE' | 'ARTICLE';
   };
-  url: '/order/list';
+  url: '/order';
 };
 
-export type OrderControllerGetUserOrdersResponses = {
+export type OrderControllerGetOrdersResponses = {
   /**
    * 获取成功
    */
   200: unknown;
+};
+
+export type OrderControllerCreateOrderData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/order';
+};
+
+export type OrderControllerCreateOrderErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+};
+
+export type OrderControllerCreateOrderResponses = {
+  /**
+   * 创建成功
+   */
+  201: unknown;
 };
 
 export type OrderControllerFindOneData = {
@@ -4087,7 +4124,7 @@ export type OrderControllerGetWalletBalanceResponses = {
   200: unknown;
 };
 
-export type OrderControllerGetUserOrders2Data = {
+export type OrderControllerGetUserOrdersData = {
   body?: never;
   headers?: {
     Authorization?: string;
@@ -4099,46 +4136,20 @@ export type OrderControllerGetUserOrders2Data = {
   query: {
     page: string;
     limit: string;
+    /**
+     * 状态
+     */
+    status?: 'PENDING' | 'PAID' | 'CANCELLED' | 'REFUNDED';
+    type?: 'PRODUCT' | 'MEMBERSHIP' | 'SERVICE' | 'ARTICLE';
   };
-  url: '/order';
+  url: '/order/user';
 };
 
-export type OrderControllerGetUserOrders2Responses = {
+export type OrderControllerGetUserOrdersResponses = {
   /**
    * 获取成功
    */
   200: unknown;
-};
-
-export type OrderControllerCreateOrderData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/order';
-};
-
-export type OrderControllerCreateOrderErrors = {
-  /**
-   * 请求参数错误
-   */
-  400: unknown;
-  /**
-   * 未授权
-   */
-  401: unknown;
-};
-
-export type OrderControllerCreateOrderResponses = {
-  /**
-   * 创建成功
-   */
-  201: unknown;
 };
 
 export type OrderControllerGetPendingOrdersData = {
