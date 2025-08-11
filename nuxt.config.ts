@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     'nuxt-easy-lightbox'
   ],
+
   image: {
     screens: {
       xs: 320,

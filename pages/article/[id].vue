@@ -60,7 +60,7 @@
           <button
             @click="handleLike"
             :disabled="isLikeLoading"
-            class="flex flex-col items-center space-y-2 group transition-all duration-200"
+            class="flex flex-col items-center space-y-2 group transition-all duration-200 cursor-pointer"
             :class="{ 'pointer-events-none': isLikeLoading }"
           >
             <div class="relative">
@@ -97,7 +97,7 @@
             class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
           >
             <div class="flex items-center">
-              <NuxtImg
+              <UAvatar
                 :src="article?.data.author.avatar"
                 alt="作者头像"
                 class="w-8 h-8 rounded-full mr-2 object-cover"
@@ -163,6 +163,7 @@
             :class="{ 'pointer-events-none': isLikeLoading }"
           >
             <div class="relative flex items-center justify-center">
+            <div class="relative flex items-center justify-center">
               <Icon
                 :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
                 class="text-xl transition-all duration-300 transform group-hover:scale-110"
@@ -194,7 +195,7 @@
           <!-- 评论输入框 -->
           <div class="mb-6 md:mb-8">
             <div class="flex items-start space-x-3 md:space-x-4">
-              <NuxtImg
+              <UAvatar
                 :src="article?.data.author.avatar"
                 alt="当前用户头像"
                 class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
@@ -271,7 +272,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
               <div class="relative">
-                <NuxtImg
+                <UAvatar
                   :src="article?.data.author.avatar"
                   alt="作者头像"
                   class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full ring-2 ring-white"
