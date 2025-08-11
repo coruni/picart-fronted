@@ -39,18 +39,42 @@
         "general": "基础设置",
         "user": "用户设置",
         "content": "内容设置",
+        "payment": "支付设置",
+        "commission": "抽成",
+        "membership": "会员设置",
         "maintenance": "维护模式",
         "invite": "邀请设置"
       },
       "siteName": "网站名称",
+      "siteSubtitle": "网站副标题",
       "siteDescription": "网站描述",
       "siteKeywords": "网站关键词",
       "siteLogo": "网站Logo",
+      "siteLogoPlaceholder": "上传网站Logo",
       "siteFavicon": "网站图标",
+      "siteFaviconPlaceholder": "上传网站图标",
       "userRegistrationEnabled": "允许用户注册",
       "userEmailVerification": "用户邮箱验证",
       "commentApprovalRequired": "评论需要审核",
       "articleApprovalRequired": "文章需要审核",
+      "paymentAlipayEnabled": "启用支付宝支付",
+      "paymentWechatEnabled": "启用微信支付",
+      "paymentEpayEnabled": "启用易支付",
+      "paymentAlipayAppId": "支付宝应用ID",
+      "paymentAlipayPrivateKey": "支付宝私钥",
+      "paymentAlipayPublicKey": "支付宝公钥",
+      "paymentWechatAppId": "微信应用ID",
+      "paymentWechatApiKey": "微信API密钥",
+      "paymentWechatMchId": "微信商户号",
+      "paymentEpayPid": "易支付商户ID",
+      "paymentEpayKey": "易支付密钥",
+      "paymentEpayNotifyUrl": "易支付通知地址",
+      "paymentEpayReturnUrl": "易支付返回地址",
+      "commissionAuthorRate": "作者佣金比例",
+      "commissionPlatformRate": "平台佣金比例",
+      "membershipEnabled": "启用会员功能",
+      "membershipName": "会员名称",
+      "membershipPrice": "会员价格",
       "maintenanceMode": "维护模式",
       "maintenanceMessage": "维护模式消息",
       "inviteCodeEnabled": "启用邀请码功能",
@@ -134,7 +158,11 @@
       "loading": "加载中..."
     },
     "loadMore": "加载更多",
-    "error": "加载失败，请稍后重试",
+    "error": {
+      "title": "加载失败",
+      "description": "页面加载失败，请稍后重试",
+      "retry": "重新加载"
+    },
     "retry": "重新加载",
     "cancel": "取消",
     "saving": "保存中...",
@@ -339,6 +367,34 @@
     "description": "简介",
     "enterDescription": "输入简介"
   },
+  "author": {
+    "title": "作者主页",
+    "noDescription": "这个人很懒，什么都没有留下",
+    "articles": "文章",
+    "followers": "粉丝",
+    "following": "关注",
+    "wallet": "钱包",
+    "follow": "关注",
+    "unfollow": "取消关注",
+    "allArticles": "全部文章",
+    "popularArticles": "热门文章",
+    "latestArticles": "最新文章",
+    "noArticles": "还没有发布任何文章",
+    "membershipLevel": "会员等级",
+    "basicMember": "普通会员",
+    "experience": "经验",
+    "score": "积分",
+    "statistics": "统计信息",
+    "totalViews": "总浏览量",
+    "totalLikes": "总点赞数",
+    "avgRating": "平均评分",
+    "loginRequired": "请先登录",
+    "followSuccess": "关注成功",
+    "followFailed": "关注失败",
+    "unfollowSuccess": "取消关注成功",
+    "unfollowFailed": "取消关注失败",
+    "defaultDescription": "查看作者的精彩作品"
+  },
   "search": {
     "title": "搜索",
     "placeholder": "搜索图片、文章、用户...",
@@ -353,33 +409,6 @@
       "title": "没有找到相关内容",
       "description": "试试其他关键词或调整搜索条件"
     }
-  },
-  "settings": {
-    "title": "系统设置",
-    "tabs": {
-      "general": "基础设置",
-      "user": "用户设置",
-      "content": "内容设置",
-      "maintenance": "维护模式",
-      "invite": "邀请设置"
-    },
-    "siteName": "网站名称",
-    "siteDescription": "网站描述",
-    "siteKeywords": "网站关键词",
-    "siteLogo": "网站Logo",
-    "siteFavicon": "网站图标",
-    "userRegistrationEnabled": "允许用户注册",
-    "userEmailVerification": "用户邮箱验证",
-    "commentApprovalRequired": "评论需要审核",
-    "articleApprovalRequired": "文章需要审核",
-    "maintenanceMode": "维护模式",
-    "maintenanceMessage": "维护模式消息",
-    "inviteCodeEnabled": "启用邀请码功能",
-    "inviteCodeRequired": "注册需要邀请码",
-    "inviteDefaultCommissionRate": "默认佣金比例",
-    "inviteCodeExpireDays": "邀请码有效期（天）",
-    "saveSuccess": "设置保存成功",
-    "saveFailed": "设置保存失败"
   },
   "banners": {
     "imageRequired": "请上传图片",
@@ -406,5 +435,6 @@
     "error": {
       "followSelf": "不能关注自己"
     }
-  }
+  },
+  "Unauthorized": "未授权"
 }

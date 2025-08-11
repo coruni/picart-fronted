@@ -30,6 +30,7 @@
           <div class="flex items-center space-x-4">
             <button
               class="cursor-pointer text-gray-500 dark:text-white/70 flex items-center gap-2 hover:text-pink-400 rounded-full px-3 py-1.5 hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300 whitespace-nowrap group/like"
+              :class="article.isLiked ? 'text-pink-500' : 'text-gray-500 dark:text-white/70'"
             >
               <Icon
                 name="mynaui:heart-solid"

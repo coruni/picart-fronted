@@ -37,7 +37,7 @@
     <div v-else-if="hasError" class="flex items-center justify-center py-20">
       <div class="text-center">
         <Icon name="mynaui:exclamation-triangle" class="text-red-500 text-4xl mb-4" />
-        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error') }}</p>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
         <UButton
           @click="handleRetry"
           class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
@@ -65,22 +65,22 @@
           >
             <div class="relative">
               <Icon
-                :name="isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
                 class="text-2xl cursor-pointer transition-all duration-300 transform group-hover:scale-110"
                 :class="[
-                  isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
+                  article.data.isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
                   isLikeLoading ? 'animate-pulse' : ''
                 ]"
               />
               <!-- 点赞动画效果 -->
-              <div v-if="showLikeAnimation" class="absolute inset-0 pointer-events-none">
+              <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
                 <Icon name="mynaui:heart-solid" class="text-2xl text-red-500 animate-ping" />
               </div>
             </div>
             <span
               class="text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
             >
-              {{ currentLikeCount }}
+              {{ article.data.likes }}
             </span>
           </button>
         </div>
@@ -159,27 +159,29 @@
           <button
             @click="handleLike"
             :disabled="isLikeLoading"
-            class="flex items-center space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
+            class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
             :class="{ 'pointer-events-none': isLikeLoading }"
           >
-            <div class="relative">
+            <div class="relative flex items-center justify-center">
               <Icon
-                :name="isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
                 class="text-xl transition-all duration-300 transform group-hover:scale-110"
                 :class="[
-                  isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
+                  article.data.isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
                   isLikeLoading ? 'animate-pulse' : ''
                 ]"
               />
               <!-- 点赞动画效果 -->
-              <div v-if="showLikeAnimation" class="absolute inset-0 pointer-events-none">
+              <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
                 <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
               </div>
             </div>
             <span
               class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
             >
-              {{ isLiked ? $t('article.liked') : $t('article.like') }} ({{ currentLikeCount }})
+              {{ article.data.isLiked ? $t('article.liked') : $t('article.like') }} ({{
+                article?.data.likes
+              }})
             </span>
           </button>
         </div>
@@ -364,10 +366,10 @@
   import {
     articleControllerFindOne,
     articleControllerFindRecommend,
+    articleControllerLike,
     userControllerFollow
   } from '~/api';
   import type { ArticleControllerFindOneResponse } from '~/api';
-  type Article = ArticleControllerFindOneResponse['data'];
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
@@ -428,11 +430,7 @@
   const hasPaid = ref(false);
 
   // 点赞相关状态
-  const isLiked = ref(false);
   const isLikeLoading = ref(false);
-  const showLikeAnimation = ref(false);
-  const currentLikeCount = ref(0);
-  const likeButtonContainer = ref(null);
 
   // lightbox相关状态
   const lightboxVisible = ref(false);
@@ -510,22 +508,20 @@
     try {
       isLikeLoading.value = true;
 
-      // TODO: 调用点赞/取消点赞 API
-      // const result = await articleControllerLike({ ... })
-
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await articleControllerLike({
+        composable: '$fetch',
+        path: {
+          id: String(article.value?.data.id)
+        },
+        body: {
+          reactionType: 'like'
+        }
+      });
 
       // 切换点赞状态
-      isLiked.value = !isLiked.value;
-      currentLikeCount.value += isLiked.value ? 1 : -1;
-
-      // 显示点赞动画
-      if (isLiked.value) {
-        showLikeAnimation.value = true;
-        setTimeout(() => {
-          showLikeAnimation.value = false;
-        }, 600);
+      if (article.value) {
+        article.value.data.isLiked = !article.value.data.isLiked;
+        article.value.data.likes += article.value.data.isLiked ? 1 : -1;
       }
     } catch (error) {
       console.error('点赞操作失败:', error);
@@ -533,22 +529,4 @@
       isLikeLoading.value = false;
     }
   };
-
-  // 初始化点赞数据
-  const initializeLikeData = () => {
-    if (article.value?.data) {
-      currentLikeCount.value = article.value.data.likes || 0;
-      // TODO: 检查当前用户是否已点赞
-      // isLiked.value = checkUserLikedStatus();
-    }
-  };
-
-  // 监听文章数据变化
-  watch(
-    article,
-    () => {
-      initializeLikeData();
-    },
-    { immediate: true }
-  );
 </script>

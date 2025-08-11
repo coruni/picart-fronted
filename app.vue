@@ -19,7 +19,7 @@
   // 构建全局元数据和SEO
   useSeoMeta({
     title: configs.data.value?.data?.site_name || 'PicArt',
-    titleTemplate: '%s - ' + (configs.data.value?.data?.site_subname || 'PICA PICA'),
+    titleTemplate: '%s - ' + (configs.data.value?.data?.site_subtitle || 'PICA PICA'),
     description:
       configs.data.value?.data?.site_description || '发现和分享精美图片，探索创意艺术作品',
     keywords:

@@ -47,6 +47,9 @@
     },
     {
       "name": "轮播管理"
+    },
+    {
+      "name": "支付"
     }
   ],
   "paths": {
@@ -1536,8 +1539,26 @@
                         "invite_code_enabled": {
                           "type": "boolean"
                         },
-                        "site_subname": {
+                        "site_subtitle": {
                           "type": "string"
+                        },
+                        "payment_alipay_enabled": {
+                          "type": "boolean"
+                        },
+                        "payment_wechat_enabled": {
+                          "type": "boolean"
+                        },
+                        "payment_epay_enabled": {
+                          "type": "boolean"
+                        },
+                        "membership_price": {
+                          "type": "integer"
+                        },
+                        "membership_name": {
+                          "type": "string"
+                        },
+                        "membership_enabled": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -1554,7 +1575,13 @@
                         "maintenance_message",
                         "invite_code_required",
                         "invite_code_enabled",
-                        "site_subname"
+                        "site_subtitle",
+                        "payment_alipay_enabled",
+                        "payment_wechat_enabled",
+                        "payment_epay_enabled",
+                        "membership_price",
+                        "membership_name",
+                        "membership_enabled"
                       ]
                     }
                   },
@@ -4246,13 +4273,37 @@
                                 "type": "string"
                               },
                               "content": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "images": {
-                                "type": "string"
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
                               },
                               "summary": {
-                                "type": "string"
+                                "nullable": true,
+                                "oneOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  },
+                                  {
+                                    "type": "array"
+                                  },
+                                  {
+                                    "type": "object"
+                                  },
+                                  {
+                                    "type": "number"
+                                  }
+                                ]
                               },
                               "views": {
                                 "type": "integer"
@@ -4441,51 +4492,24 @@
                                   "type": "object",
                                   "properties": {
                                     "id": {
-                                      "type": "integer"
+                                      "type": "number",
+                                      "description": "ID 编号"
                                     },
                                     "name": {
-                                      "type": "string"
-                                    },
-                                    "description": {
                                       "type": "string"
                                     },
                                     "avatar": {
                                       "type": "string"
                                     },
-                                    "background": {
-                                      "type": "string"
-                                    },
                                     "cover": {
-                                      "type": "string"
-                                    },
-                                    "sort": {
-                                      "type": "integer"
-                                    },
-                                    "articleCount": {
-                                      "type": "integer"
-                                    },
-                                    "followCount": {
-                                      "type": "integer"
-                                    },
-                                    "createdAt": {
-                                      "type": "string"
-                                    },
-                                    "updatedAt": {
                                       "type": "string"
                                     }
                                   },
                                   "required": [
                                     "id",
                                     "name",
-                                    "description",
                                     "avatar",
-                                    "background",
-                                    "cover",
-                                    "sort",
-                                    "articleCount",
-                                    "followCount",
-                                    "createdAt",
-                                    "updatedAt"
+                                    "cover"
                                   ]
                                 }
                               },
@@ -4494,11 +4518,32 @@
                               },
                               "updatedAt": {
                                 "type": "string"
+                              },
+                              "isLiked": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
                               "id",
-                              "title"
+                              "title",
+                              "requireLogin",
+                              "requireFollow",
+                              "requirePayment",
+                              "viewPrice",
+                              "type",
+                              "content",
+                              "images",
+                              "views",
+                              "likes",
+                              "status",
+                              "cover",
+                              "authorId",
+                              "author",
+                              "category",
+                              "tags",
+                              "createdAt",
+                              "updatedAt",
+                              "isLiked"
                             ]
                           }
                         },
@@ -4716,7 +4761,10 @@
                           "type": "string"
                         },
                         "images": {
-                          "type": "string"
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
                         },
                         "summary": {
                           "type": "null"
@@ -4731,7 +4779,7 @@
                           "type": "string"
                         },
                         "cover": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "authorId": {
                           "type": "integer"
@@ -4908,51 +4956,23 @@
                             "type": "object",
                             "properties": {
                               "id": {
-                                "type": "integer"
+                                "type": "number"
                               },
                               "name": {
-                                "type": "string"
-                              },
-                              "description": {
                                 "type": "string"
                               },
                               "avatar": {
                                 "type": "string"
                               },
-                              "background": {
-                                "type": "string"
-                              },
                               "cover": {
-                                "type": "string"
-                              },
-                              "sort": {
-                                "type": "integer"
-                              },
-                              "articleCount": {
-                                "type": "integer"
-                              },
-                              "followCount": {
-                                "type": "integer"
-                              },
-                              "createdAt": {
-                                "type": "string"
-                              },
-                              "updatedAt": {
                                 "type": "string"
                               }
                             },
                             "required": [
                               "id",
                               "name",
-                              "description",
                               "avatar",
-                              "background",
-                              "cover",
-                              "sort",
-                              "articleCount",
-                              "followCount",
-                              "createdAt",
-                              "updatedAt"
+                              "cover"
                             ]
                           }
                         },
@@ -4961,6 +4981,9 @@
                         },
                         "updatedAt": {
                           "type": "string"
+                        },
+                        "isLiked": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -4983,7 +5006,8 @@
                         "category",
                         "tags",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "isLiked"
                       ]
                     }
                   },
@@ -9606,7 +9630,11 @@
             "headers": {}
           }
         },
-        "security": []
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/order/no/{orderNo}": {
@@ -9680,7 +9708,11 @@
             "headers": {}
           }
         },
-        "security": []
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/order/wallet/balance": {
@@ -9744,10 +9776,94 @@
             "headers": {}
           }
         },
-        "security": []
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/order": {
+      "get": {
+        "summary": "获取用户订单列表",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_getUserOrders",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
       "post": {
         "summary": "创建订单（包含抽成计算）",
         "deprecated": false,
@@ -9801,179 +9917,6 @@
         "responses": {
           "201": {
             "description": "创建成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "order": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
-                            "userId": {
-                              "type": "integer"
-                            },
-                            "authorId": {
-                              "type": "string"
-                            },
-                            "orderNo": {
-                              "type": "string"
-                            },
-                            "type": {
-                              "type": "string"
-                            },
-                            "title": {
-                              "type": "string"
-                            },
-                            "amount": {
-                              "type": "string"
-                            },
-                            "paymentMethod": {
-                              "type": "string"
-                            },
-                            "paymentOrderNo": {
-                              "type": "null"
-                            },
-                            "status": {
-                              "type": "string"
-                            },
-                            "paidAt": {
-                              "type": "null"
-                            },
-                            "remark": {
-                              "type": "null"
-                            },
-                            "createdAt": {
-                              "type": "string"
-                            },
-                            "updatedAt": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "id",
-                            "userId",
-                            "authorId",
-                            "orderNo",
-                            "type",
-                            "title",
-                            "amount",
-                            "paymentMethod",
-                            "paymentOrderNo",
-                            "status",
-                            "paidAt",
-                            "remark",
-                            "createdAt",
-                            "updatedAt"
-                          ]
-                        },
-                        "commission": {
-                          "type": "object",
-                          "properties": {
-                            "authorAmount": {
-                              "type": "integer"
-                            },
-                            "inviterAmount": {
-                              "type": "integer"
-                            },
-                            "platformAmount": {
-                              "type": "integer"
-                            },
-                            "authorRate": {
-                              "type": "number"
-                            },
-                            "inviterRate": {
-                              "type": "integer"
-                            },
-                            "platformRate": {
-                              "type": "number"
-                            },
-                            "customCommission": {
-                              "type": "object",
-                              "properties": {
-                                "author": {
-                                  "type": "boolean"
-                                },
-                                "inviter": {
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "author",
-                                "inviter"
-                              ]
-                            }
-                          },
-                          "required": [
-                            "authorAmount",
-                            "inviterAmount",
-                            "platformAmount",
-                            "authorRate",
-                            "inviterRate",
-                            "platformRate",
-                            "customCommission"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "order",
-                        "commission"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "message",
-                    "data"
-                  ]
-                },
-                "example": {
-                  "code": 200,
-                  "message": "操作成功",
-                  "data": {
-                    "order": {
-                      "id": 4,
-                      "userId": 1,
-                      "authorId": "1",
-                      "orderNo": "ORDER1753961695512847",
-                      "type": "MEMBERSHIP",
-                      "title": "测试",
-                      "amount": "15",
-                      "paymentMethod": "wechat",
-                      "paymentOrderNo": null,
-                      "status": "PENDING",
-                      "paidAt": null,
-                      "remark": null,
-                      "createdAt": "2025-07-31T11:34:55.518Z",
-                      "updatedAt": "2025-07-31T11:34:55.518Z"
-                    },
-                    "commission": {
-                      "authorAmount": 2,
-                      "inviterAmount": 0,
-                      "platformAmount": 13,
-                      "authorRate": 0.1,
-                      "inviterRate": 0,
-                      "platformRate": 0.9,
-                      "customCommission": {
-                        "author": false,
-                        "inviter": false
-                      }
-                    }
-                  }
-                }
-              }
-            },
             "headers": {}
           },
           "400": {
@@ -9985,7 +9928,483 @@
             "headers": {}
           }
         },
-        "security": []
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/pending": {
+      "get": {
+        "summary": "获取待支付订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_getPendingOrders",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/{id}/cancel": {
+      "put": {
+        "summary": "取消订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_cancelOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "取消成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          },
+          "404": {
+            "description": "订单不存在",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/payment": {
+      "post": {
+        "summary": "创建支付订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_createPaymentOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/{id}/refund": {
+      "post": {
+        "summary": "申请退款",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_requestRefund",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "申请成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          },
+          "404": {
+            "description": "订单不存在",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/article": {
+      "post": {
+        "summary": "创建文章订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_createArticleOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateArticleOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/order/membership": {
+      "post": {
+        "summary": "创建会员充值订单",
+        "deprecated": false,
+        "description": "",
+        "operationId": "OrderController_createMembershipOrder",
+        "tags": [
+          "订单管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMembershipOrderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/invite/my": {
@@ -12233,6 +12652,524 @@
         },
         "security": []
       }
+    },
+    "/payment/create": {
+      "post": {
+        "summary": "创建支付",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_createPayment",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "支付创建成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/payment/notify/alipay": {
+      "post": {
+        "summary": "支付宝支付回调",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_alipayNotify",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlipayNotifyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "回调处理成功",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/payment/notify/wechat": {
+      "post": {
+        "summary": "微信支付回调",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_wechatNotify",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WechatNotifyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "回调处理成功",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/payment/record/{id}": {
+      "get": {
+        "summary": "查询支付记录",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_findPaymentRecord",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": 0,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查询成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/payment/order/{orderId}": {
+      "get": {
+        "summary": "查询订单支付记录",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_findPaymentByOrderId",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": 0,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查询成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/payment/user": {
+      "get": {
+        "summary": "查询用户支付记录",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_findUserPayments",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查询成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/payment/simulate/{id}/success": {
+      "post": {
+        "summary": "模拟支付成功（仅用于测试）",
+        "deprecated": false,
+        "description": "",
+        "operationId": "PaymentController_simulatePaymentSuccess",
+        "tags": [
+          "支付"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": 0,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "模拟成功",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -12433,7 +13370,7 @@
             "description": "标签ID数组（与tagNames二选一）",
             "type": "array",
             "items": {
-              "type": "number"
+              "type": "string"
             },
             "example": [
               1,
@@ -12446,11 +13383,7 @@
             "description": "文章状态",
             "enum": [
               "DRAFT",
-              "PUBLISHED",
-              "ARCHIVED",
-              "DELETED",
-              "BANNED",
-              "REJECTED"
+              "PUBLISHED"
             ],
             "default": "DRAFT",
             "example": "DRAFT"
@@ -12558,11 +13491,7 @@
             "description": "文章状态",
             "enum": [
               "DRAFT",
-              "PUBLISHED",
-              "ARCHIVED",
-              "REJECTED",
-              "BANNED",
-              "DELETED"
+              "PUBLISHED"
             ],
             "default": "DRAFT",
             "example": "DRAFT"
@@ -12678,7 +13607,11 @@
           }
         },
         "required": [
-          "name"
+          "name",
+          "avatar",
+          "background",
+          "cover",
+          "sort"
         ]
       },
       "UpdateTagDto": {
@@ -13118,6 +14051,151 @@
           "data",
           "timestamp"
         ]
+      },
+      "CreateArticleOrderDto": {
+        "type": "object",
+        "properties": {
+          "articleId": {
+            "type": "number",
+            "description": "文章ID"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注"
+          }
+        },
+        "required": [
+          "articleId"
+        ]
+      },
+      "CreateMembershipOrderDto": {
+        "type": "object",
+        "properties": {
+          "duration": {
+            "type": "number",
+            "description": "充值时长（月）"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注"
+          }
+        },
+        "required": [
+          "duration"
+        ]
+      },
+      "CreatePaymentDto": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "number",
+            "description": "订单ID"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "支付方式",
+            "enum": [
+              "ALIPAY",
+              "WECHAT",
+              "BALANCE"
+            ]
+          },
+          "details": {
+            "type": "string",
+            "description": "支付详情"
+          }
+        },
+        "required": [
+          "orderId",
+          "paymentMethod"
+        ]
+      },
+      "AlipayNotifyDto": {
+        "type": "object",
+        "properties": {
+          "trade_no": {
+            "type": "string",
+            "description": "支付宝交易号"
+          },
+          "out_trade_no": {
+            "type": "string",
+            "description": "商户订单号"
+          },
+          "trade_status": {
+            "type": "string",
+            "description": "交易状态"
+          },
+          "total_amount": {
+            "type": "string",
+            "description": "交易金额"
+          },
+          "buyer_id": {
+            "type": "string",
+            "description": "买家支付宝用户号"
+          },
+          "sign": {
+            "type": "string",
+            "description": "签名"
+          },
+          "sign_type": {
+            "type": "string",
+            "description": "签名类型"
+          }
+        },
+        "required": [
+          "trade_no",
+          "out_trade_no",
+          "trade_status",
+          "total_amount",
+          "buyer_id",
+          "sign",
+          "sign_type"
+        ]
+      },
+      "WechatNotifyDto": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string",
+            "description": "微信支付订单号"
+          },
+          "out_trade_no": {
+            "type": "string",
+            "description": "商户订单号"
+          },
+          "trade_state": {
+            "type": "string",
+            "description": "交易状态"
+          },
+          "amount": {
+            "type": "string",
+            "description": "交易金额"
+          },
+          "openid": {
+            "type": "string",
+            "description": "用户标识"
+          },
+          "sign": {
+            "type": "string",
+            "description": "签名"
+          }
+        },
+        "required": [
+          "transaction_id",
+          "out_trade_no",
+          "trade_state",
+          "amount",
+          "openid",
+          "sign"
+        ]
+      },
+      "CreateBannerDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateBannerDto": {
+        "type": "object",
+        "properties": {}
       }
     },
     "securitySchemes": {

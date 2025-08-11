@@ -39,18 +39,42 @@
         "general": "一般",
         "user": "ユーザー",
         "content": "コンテンツ",
+        "payment": "支払い",
+        "commission": "コミッション",
+        "membership": "メンバーシップ",
         "maintenance": "メンテナンス",
         "invite": "招待"
       },
       "siteName": "サイト名",
+      "siteSubtitle": "サイトサブタイトル",
       "siteDescription": "サイト説明",
       "siteKeywords": "サイトキーワード",
       "siteLogo": "サイトロゴ",
+      "siteLogoPlaceholder": "サイトロゴをアップロード",
       "siteFavicon": "サイトファビコン",
+      "siteFaviconPlaceholder": "サイトファビコンをアップロード",
       "userRegistrationEnabled": "ユーザー登録を有効にする",
       "userEmailVerification": "ユーザーメール認証",
       "commentApprovalRequired": "コメント承認が必要",
       "articleApprovalRequired": "記事承認が必要",
+      "paymentAlipayEnabled": "Alipay支払いを有効にする",
+      "paymentWechatEnabled": "WeChat支払いを有効にする",
+      "paymentEpayEnabled": "Epay支払いを有効にする",
+      "paymentAlipayAppId": "AlipayアプリID",
+      "paymentAlipayPrivateKey": "Alipay秘密鍵",
+      "paymentAlipayPublicKey": "Alipay公開鍵",
+      "paymentWechatAppId": "WeChatアプリID",
+      "paymentWechatApiKey": "WeChat APIキー",
+      "paymentWechatMchId": "WeChatマーチャントID",
+      "paymentEpayPid": "EpayマーチャントID",
+      "paymentEpayKey": "Epayキー",
+      "paymentEpayNotifyUrl": "Epay通知URL",
+      "paymentEpayReturnUrl": "Epay戻りURL",
+      "commissionAuthorRate": "著者コミッション率",
+      "commissionPlatformRate": "プラットフォームコミッション率",
+      "membershipEnabled": "メンバーシップを有効にする",
+      "membershipName": "メンバーシップ名",
+      "membershipPrice": "メンバーシップ価格",
       "maintenanceMode": "メンテナンスモード",
       "maintenanceMessage": "メンテナンスメッセージ",
       "inviteCodeEnabled": "招待コードを有効にする",
@@ -71,7 +95,9 @@
       "namePlaceholder": "名前を入力してください",
       "descriptionPlaceholder": "説明を入力してください",
       "selectParent": "親カテゴリーを選択してください",
-      "avatarPlaceholder": "アバターをアップロードしてください"
+      "avatarPlaceholder": "アバターをアップロードしてください",
+      "coverPlaceholder": "カバーをアップロード",
+      "coverRequired": "画像を選択してください"
     },
     "tags": {
       "descriptionPlaceholder": "説明を入力してください",
@@ -103,7 +129,8 @@
       "roles": "役割",
       "category": "カテゴリー",
       "filter": "フィルター",
-      "background": "背景"
+      "background": "背景",
+      "cover": "カバー"
     },
     "message": {
       "deleteSuccess": "削除成功",
@@ -116,19 +143,25 @@
       "uploadSuccess": "アップロード成功"
     },
     "modal": {
-      "confirmDelete": "削除確認"
+      "confirmDelete": "削除確認",
+      "confirmDeleteMessage": "削除後は復元できません"
     },
     "button": {
       "confirm": "確認",
       "cancel": "キャンセル",
-      "create": "作成"
+      "create": "作成",
+      "update": "更新"
     },
     "save": "保存",
     "loading": {
       "loading": "読み込み中...",
       "noMore": "これ以上なし"
     },
-    "error": "読み込みに失敗しました。再試行してください",
+    "error": {
+      "title": "読み込みに失敗しました",
+      "description": "ページの読み込みに失敗しました。後でもう一度お試しください",
+      "retry": "再読み込み"
+    },
     "retry": "再読み込み",
     "loadMore": "もっと読み込む",
     "cancel": "キャンセル",
@@ -165,15 +198,31 @@
     },
     "submit": "送信",
     "type": {
-      "placeholder": "タイプを選択してください"
+      "placeholder": "タイプを選択してください",
+      "mixed": "混合",
+      "image": "画像",
+      "searchPlaceholder": "タイプを選択"
     },
     "advancedOptions": "詳細設定",
     "requireLogin": "ログインが必要",
     "requireFollow": "フォローが必要",
     "requirePayment": "支払いが必要",
-    "viewPrice": "閲覧価格",
+    "viewPrice": {
+      "placeholder": "価格を入力してください",
+      "name": "有料金額"
+    },
     "name": {
       "placeholder": "名前を入力してください"
+    },
+    "status": {
+      "published": "公開",
+      "draft": "下書き",
+      "archived": "アーカイブ",
+      "rejected": "却下",
+      "banned": "禁止",
+      "deleted": "削除済み",
+      "name": "ステータス",
+      "placeholder": "ステータスを選択"
     }
   },
   "article": {
@@ -183,11 +232,12 @@
     "followers": "フォロワー",
     "likes": "いいね",
     "goodReviews": "レビュー",
-    "followAuthor": "著者をフォロー",
     "relatedPosts": "関連記事",
+    "followAuthor": "著者をフォロー",
     "relatedArticles": "関連記事",
     "comment": "コメント",
     "reply": "返信",
+    "commentText": "コメント内容を入力してください",
     "like": "いいね",
     "liked": "いいね済み",
     "restrictions": {
@@ -263,7 +313,8 @@
     "loggingIn": "ログイン中...",
     "noAccount": "アカウントをお持ちでない場合",
     "register": "今すぐ登録",
-    "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください"
+    "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください",
+    "loginFailedDescription": "ユーザー名とパスワードが正しいかご確認ください"
   },
   "register": {
     "title": "ユーザー登録",
@@ -313,6 +364,35 @@
     "description": "説明",
     "enterDescription": "説明を入力"
   },
+  "author": {
+    "title": "作者プロフィール",
+    "noDescription": "この人は怠け者で何も残していません",
+    "articles": "記事",
+    "followers": "フォロワー",
+    "following": "フォロー中",
+    "wallet": "ウォレット",
+    "follow": "フォロー",
+    "unfollow": "フォロー解除",
+    "allArticles": "すべての記事",
+    "popularArticles": "人気記事",
+    "latestArticles": "最新記事",
+    "noArticles": "まだ記事が公開されていません",
+    "membershipLevel": "メンバーシップレベル",
+    "basicMember": "基本メンバー",
+    "experience": "経験値",
+    "score": "スコア",
+    "statistics": "統計情報",
+    "totalViews": "総閲覧数",
+    "totalLikes": "総いいね数",
+    "avgRating": "平均評価",
+    "loginRequired": "先にログインしてください",
+    "followSuccess": "フォローに成功しました",
+    "followFailed": "フォローに失敗しました",
+    "unfollowSuccess": "フォロー解除に成功しました",
+    "unfollowFailed": "フォロー解除に失敗しました",
+    "defaultDescription": "作者の素晴らしい作品を見る"
+  },
+
   "search": {
     "title": "検索",
     "placeholder": "画像、記事、ユーザーを検索...",
@@ -328,17 +408,10 @@
       "description": "別のキーワードを試すか、検索条件を調整してください"
     }
   },
-  "settings": {
-    "tabs": {
-      "general": "一般",
-      "user": "ユーザー",
-      "content": "コンテンツ",
-      "maintenance": "メンテナンス",
-      "invite": "招待"
-    }
-  },
+
   "banners": {
     "imageRequired": "画像をアップロードしてください",
+    "urlInvalid": "リンクエラー",
     "titleRequired": "タイトルを入力してください",
     "inactive": "非アクティブ",
     "active": "アクティブ",
@@ -349,6 +422,18 @@
     "descriptionPlaceholder": "説明を入力してください",
     "title": "タイトル",
     "create": "新規バナー",
-    "edit": "バナー編集"
+    "edit": "バナー編集",
+    "image": "画像",
+    "sortOrder": "並び替え",
+    "titlePlaceholder": "タイトルを入力",
+    "description": "説明"
+  },
+  "categories": {
+    "create": "新規カテゴリー"
+  },
+  "response": {
+    "error": {
+      "followSelf": "自分をフォローすることはできません"
+    }
   }
 }

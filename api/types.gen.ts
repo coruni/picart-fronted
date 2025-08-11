@@ -128,11 +128,11 @@ export type CreateArticleDto = {
   /**
    * 标签ID数组（与tagNames二选一）
    */
-  tagIds?: Array<number>;
+  tagIds?: Array<string>;
   /**
    * 文章状态
    */
-  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'DELETED' | 'BANNED' | 'REJECTED';
+  status?: 'DRAFT' | 'PUBLISHED';
   /**
    * 是否需要登录后才能查看
    */
@@ -191,7 +191,7 @@ export type UpdateArticleDto = {
   /**
    * 文章状态
    */
-  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED' | 'REJECTED' | 'BANNED' | 'DELETED';
+  status?: 'DRAFT' | 'PUBLISHED';
   /**
    * 是否需要登录后才能查看
    */
@@ -256,19 +256,19 @@ export type CreateTagDto = {
   /**
    * 标签头像
    */
-  avatar?: string;
+  avatar: string;
   /**
    * 标签背景
    */
-  background?: string;
+  background: string;
   /**
    * 标签封面
    */
-  cover?: string;
+  cover: string;
   /**
    * 排序
    */
-  sort?: number;
+  sort: number;
 };
 
 export type UpdateTagDto = {
@@ -557,6 +557,109 @@ export type ListResponseDto = {
    * 时间戳
    */
   timestamp: number;
+};
+
+export type CreateArticleOrderDto = {
+  /**
+   * 文章ID
+   */
+  articleId: number;
+  /**
+   * 备注
+   */
+  remark?: string;
+};
+
+export type CreateMembershipOrderDto = {
+  /**
+   * 充值时长（月）
+   */
+  duration: number;
+  /**
+   * 备注
+   */
+  remark?: string;
+};
+
+export type CreatePaymentDto = {
+  /**
+   * 订单ID
+   */
+  orderId: number;
+  /**
+   * 支付方式
+   */
+  paymentMethod: 'ALIPAY' | 'WECHAT' | 'BALANCE';
+  /**
+   * 支付详情
+   */
+  details?: string;
+};
+
+export type AlipayNotifyDto = {
+  /**
+   * 支付宝交易号
+   */
+  trade_no: string;
+  /**
+   * 商户订单号
+   */
+  out_trade_no: string;
+  /**
+   * 交易状态
+   */
+  trade_status: string;
+  /**
+   * 交易金额
+   */
+  total_amount: string;
+  /**
+   * 买家支付宝用户号
+   */
+  buyer_id: string;
+  /**
+   * 签名
+   */
+  sign: string;
+  /**
+   * 签名类型
+   */
+  sign_type: string;
+};
+
+export type WechatNotifyDto = {
+  /**
+   * 微信支付订单号
+   */
+  transaction_id: string;
+  /**
+   * 商户订单号
+   */
+  out_trade_no: string;
+  /**
+   * 交易状态
+   */
+  trade_state: string;
+  /**
+   * 交易金额
+   */
+  amount: string;
+  /**
+   * 用户标识
+   */
+  openid: string;
+  /**
+   * 签名
+   */
+  sign: string;
+};
+
+export type CreateBannerDto = {
+  [key: string]: unknown;
+};
+
+export type UpdateBannerDto = {
+  [key: string]: unknown;
 };
 
 export type AppControllerGetHelloData = {
@@ -1141,7 +1244,13 @@ export type ConfigControllerGetPublicResponses = {
       maintenance_message: string;
       invite_code_required: boolean;
       invite_code_enabled: boolean;
-      site_subname: string;
+      site_subtitle: string;
+      payment_alipay_enabled: boolean;
+      payment_wechat_enabled: boolean;
+      payment_epay_enabled: boolean;
+      membership_price: number;
+      membership_name: string;
+      membership_enabled: boolean;
     };
   };
 };
@@ -2014,20 +2123,29 @@ export type ArticleControllerFindAllResponses = {
       data: Array<{
         id: number;
         title: string;
-        requireLogin?: boolean;
-        requireFollow?: boolean;
-        requirePayment?: boolean;
-        viewPrice?: string;
-        type?: string;
-        content?: string;
-        images?: string;
-        summary?: string;
-        views?: number;
-        likes?: number;
-        status?: string;
-        cover?: string;
-        authorId?: number;
-        author?: {
+        requireLogin: boolean;
+        requireFollow: boolean;
+        requirePayment: boolean;
+        viewPrice: string;
+        type: string;
+        content: string | null;
+        images: Array<string>;
+        summary?:
+          | string
+          | number
+          | boolean
+          | Array<unknown>
+          | {
+              [key: string]: unknown;
+            }
+          | number
+          | null;
+        views: number;
+        likes: number;
+        status: string;
+        cover: string;
+        authorId: number;
+        author: {
           id: number;
           username: string;
           nickname: string;
@@ -2039,7 +2157,7 @@ export type ArticleControllerFindAllResponses = {
           followerCount: number;
           followingCount: number;
         };
-        category?: {
+        category: {
           id: number;
           name: string;
           description: string;
@@ -2069,21 +2187,18 @@ export type ArticleControllerFindAllResponses = {
           createdAt: string;
           updatedAt: string;
         };
-        tags?: Array<{
+        tags: Array<{
+          /**
+           * ID 编号
+           */
           id: number;
           name: string;
-          description: string;
           avatar: string;
-          background: string;
           cover: string;
-          sort: number;
-          articleCount: number;
-          followCount: number;
-          createdAt: string;
-          updatedAt: string;
         }>;
-        createdAt?: string;
-        updatedAt?: string;
+        createdAt: string;
+        updatedAt: string;
+        isLiked: boolean;
       }>;
       meta: {
         total: number;
@@ -2193,12 +2308,12 @@ export type ArticleControllerFindOneResponses = {
       viewPrice: string;
       type: string;
       content: string;
-      images: string;
+      images: Array<string>;
       summary: unknown;
       views: number;
       likes: number;
       status: string;
-      cover: unknown;
+      cover: string;
       authorId: number;
       author: {
         id: number;
@@ -2245,18 +2360,12 @@ export type ArticleControllerFindOneResponses = {
       tags: Array<{
         id: number;
         name: string;
-        description: string;
         avatar: string;
-        background: string;
         cover: string;
-        sort: number;
-        articleCount: number;
-        followCount: number;
-        createdAt: string;
-        updatedAt: string;
       }>;
       createdAt: string;
       updatedAt: string;
+      isLiked: boolean;
     };
   };
 };
@@ -3978,6 +4087,29 @@ export type OrderControllerGetWalletBalanceResponses = {
   200: unknown;
 };
 
+export type OrderControllerGetUserOrders2Data = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query: {
+    page: string;
+    limit: string;
+  };
+  url: '/order';
+};
+
+export type OrderControllerGetUserOrders2Responses = {
+  /**
+   * 获取成功
+   */
+  200: unknown;
+};
+
 export type OrderControllerCreateOrderData = {
   body?: never;
   headers?: {
@@ -4006,44 +4138,195 @@ export type OrderControllerCreateOrderResponses = {
   /**
    * 创建成功
    */
-  201: {
-    code: number;
-    message: string;
-    data: {
-      order: {
-        id: number;
-        userId: number;
-        authorId: string;
-        orderNo: string;
-        type: string;
-        title: string;
-        amount: string;
-        paymentMethod: string;
-        paymentOrderNo: unknown;
-        status: string;
-        paidAt: unknown;
-        remark: unknown;
-        createdAt: string;
-        updatedAt: string;
-      };
-      commission: {
-        authorAmount: number;
-        inviterAmount: number;
-        platformAmount: number;
-        authorRate: number;
-        inviterRate: number;
-        platformRate: number;
-        customCommission: {
-          author: boolean;
-          inviter: boolean;
-        };
-      };
-    };
-  };
+  201: unknown;
 };
 
-export type OrderControllerCreateOrderResponse =
-  OrderControllerCreateOrderResponses[keyof OrderControllerCreateOrderResponses];
+export type OrderControllerGetPendingOrdersData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/order/pending';
+};
+
+export type OrderControllerGetPendingOrdersResponses = {
+  /**
+   * 获取成功
+   */
+  200: unknown;
+};
+
+export type OrderControllerCancelOrderData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/order/{id}/cancel';
+};
+
+export type OrderControllerCancelOrderErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+  /**
+   * 订单不存在
+   */
+  404: unknown;
+};
+
+export type OrderControllerCancelOrderResponses = {
+  /**
+   * 取消成功
+   */
+  200: unknown;
+};
+
+export type OrderControllerCreatePaymentOrderData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/order/payment';
+};
+
+export type OrderControllerCreatePaymentOrderErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+};
+
+export type OrderControllerCreatePaymentOrderResponses = {
+  /**
+   * 创建成功
+   */
+  201: unknown;
+};
+
+export type OrderControllerRequestRefundData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/order/{id}/refund';
+};
+
+export type OrderControllerRequestRefundErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+  /**
+   * 订单不存在
+   */
+  404: unknown;
+};
+
+export type OrderControllerRequestRefundResponses = {
+  /**
+   * 申请成功
+   */
+  200: unknown;
+};
+
+export type OrderControllerCreateArticleOrderData = {
+  body: CreateArticleOrderDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/order/article';
+};
+
+export type OrderControllerCreateArticleOrderErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+};
+
+export type OrderControllerCreateArticleOrderResponses = {
+  /**
+   * 创建成功
+   */
+  201: unknown;
+};
+
+export type OrderControllerCreateMembershipOrderData = {
+  body: CreateMembershipOrderDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/order/membership';
+};
+
+export type OrderControllerCreateMembershipOrderErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+};
+
+export type OrderControllerCreateMembershipOrderResponses = {
+  /**
+   * 创建成功
+   */
+  201: unknown;
+};
 
 export type InviteControllerGetMyInvitesData = {
   body?: never;
@@ -4826,6 +5109,155 @@ export type PostPayNotifyByPaywayResponses = {
 
 export type PostPayNotifyByPaywayResponse =
   PostPayNotifyByPaywayResponses[keyof PostPayNotifyByPaywayResponses];
+
+export type PaymentControllerCreatePaymentData = {
+  body: CreatePaymentDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/payment/create';
+};
+
+export type PaymentControllerCreatePaymentResponses = {
+  /**
+   * 支付创建成功
+   */
+  201: unknown;
+};
+
+export type PaymentControllerAlipayNotifyData = {
+  body: AlipayNotifyDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/payment/notify/alipay';
+};
+
+export type PaymentControllerAlipayNotifyResponses = {
+  /**
+   * 回调处理成功
+   */
+  200: unknown;
+};
+
+export type PaymentControllerWechatNotifyData = {
+  body: WechatNotifyDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/payment/notify/wechat';
+};
+
+export type PaymentControllerWechatNotifyResponses = {
+  /**
+   * 回调处理成功
+   */
+  200: unknown;
+};
+
+export type PaymentControllerFindPaymentRecordData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: number;
+  };
+  query?: never;
+  url: '/payment/record/{id}';
+};
+
+export type PaymentControllerFindPaymentRecordResponses = {
+  /**
+   * 查询成功
+   */
+  200: unknown;
+};
+
+export type PaymentControllerFindPaymentByOrderIdData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    orderId: number;
+  };
+  query?: never;
+  url: '/payment/order/{orderId}';
+};
+
+export type PaymentControllerFindPaymentByOrderIdResponses = {
+  /**
+   * 查询成功
+   */
+  200: unknown;
+};
+
+export type PaymentControllerFindUserPaymentsData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query: {
+    page: number;
+    limit: number;
+  };
+  url: '/payment/user';
+};
+
+export type PaymentControllerFindUserPaymentsResponses = {
+  /**
+   * 查询成功
+   */
+  200: unknown;
+};
+
+export type PaymentControllerSimulatePaymentSuccessData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: number;
+  };
+  query?: never;
+  url: '/payment/simulate/{id}/success';
+};
+
+export type PaymentControllerSimulatePaymentSuccessResponses = {
+  /**
+   * 模拟成功
+   */
+  200: unknown;
+};
 
 export type ClientOptions = {
   baseURL: string;

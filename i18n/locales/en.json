@@ -39,18 +39,42 @@
         "general": "General",
         "user": "User",
         "content": "Content",
+        "payment": "Payment",
+        "commission": "Commission",
+        "membership": "Membership",
         "maintenance": "Maintenance",
         "invite": "Invite"
       },
       "siteName": "Site Name",
+      "siteSubtitle": "Site Subtitle",
       "siteDescription": "Site Description",
       "siteKeywords": "Site Keywords",
       "siteLogo": "Site Logo",
+      "siteLogoPlaceholder": "Upload site logo",
       "siteFavicon": "Site Favicon",
+      "siteFaviconPlaceholder": "Upload site favicon",
       "userRegistrationEnabled": "User Registration Enabled",
       "userEmailVerification": "User Email Verification",
       "commentApprovalRequired": "Comment Approval Required",
       "articleApprovalRequired": "Article Approval Required",
+      "paymentAlipayEnabled": "Alipay Payment Enabled",
+      "paymentWechatEnabled": "WeChat Payment Enabled",
+      "paymentEpayEnabled": "Epay Payment Enabled",
+      "paymentAlipayAppId": "Alipay App ID",
+      "paymentAlipayPrivateKey": "Alipay Private Key",
+      "paymentAlipayPublicKey": "Alipay Public Key",
+      "paymentWechatAppId": "WeChat App ID",
+      "paymentWechatApiKey": "WeChat API Key",
+      "paymentWechatMchId": "WeChat Merchant ID",
+      "paymentEpayPid": "Epay Merchant ID",
+      "paymentEpayKey": "Epay Key",
+      "paymentEpayNotifyUrl": "Epay Notify URL",
+      "paymentEpayReturnUrl": "Epay Return URL",
+      "commissionAuthorRate": "Author Commission Rate",
+      "commissionPlatformRate": "Platform Commission Rate",
+      "membershipEnabled": "Membership Enabled",
+      "membershipName": "Membership Name",
+      "membershipPrice": "Membership Price",
       "maintenanceMode": "Maintenance Mode",
       "maintenanceMessage": "Maintenance Message",
       "inviteCodeEnabled": "Invite Code Enabled",
@@ -119,7 +143,8 @@
       "uploadSuccess": "Upload Success"
     },
     "modal": {
-      "confirmDelete": "Confirm Delete"
+      "confirmDelete": "Confirm Delete",
+      "confirmDeleteMessage": "Cannot be restored after deletion"
     },
     "button": {
       "confirm": "Confirm",
@@ -132,7 +157,11 @@
       "loading": "Loading...",
       "noMore": "No more"
     },
-    "error": "Load failed, please try again",
+    "error": {
+      "title": "Loading Failed",
+      "description": "Page loading failed, please try again later",
+      "retry": "Reload"
+    },
     "retry": "Reload",
     "loadMore": "Load More",
     "cancel": "Cancel",
@@ -182,7 +211,10 @@
     "requireLogin": "Require Login",
     "requireFollow": "Require Follow",
     "requirePayment": "Require Payment",
-    "viewPrice": "View Price",
+    "viewPrice": {
+      "placeholder": "Please input price",
+      "name": "Payment Amount"
+    },
     "name": {
       "placeholder": "Please input name"
     },
@@ -285,7 +317,8 @@
     "loggingIn": "Logging in...",
     "noAccount": "Don't have an account?",
     "register": "Register now",
-    "loginFailed": "Login failed, please check your username and password"
+    "loginFailed": "Login failed, please check your username and password",
+    "loginFailedDescription": "Please check if username and password are correct"
   },
   "register": {
     "title": "User Registration",
@@ -335,6 +368,34 @@
     "description": "Description",
     "enterDescription": "Enter description"
   },
+  "author": {
+    "title": "Author Profile",
+    "noDescription": "This person is lazy and left nothing",
+    "articles": "Articles",
+    "followers": "Followers",
+    "following": "Following",
+    "wallet": "Wallet",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "allArticles": "All Articles",
+    "popularArticles": "Popular Articles",
+    "latestArticles": "Latest Articles",
+    "noArticles": "No articles published yet",
+    "membershipLevel": "Membership Level",
+    "basicMember": "Basic Member",
+    "experience": "Experience",
+    "score": "Score",
+    "statistics": "Statistics",
+    "totalViews": "Total Views",
+    "totalLikes": "Total Likes",
+    "avgRating": "Average Rating",
+    "loginRequired": "Please login first",
+    "followSuccess": "Follow successful",
+    "followFailed": "Follow failed",
+    "unfollowSuccess": "Unfollow successful",
+    "unfollowFailed": "Unfollow failed",
+    "defaultDescription": "View author's wonderful works"
+  },
   "search": {
     "title": "Search",
     "placeholder": "Search images, articles, users...",
@@ -350,17 +411,9 @@
       "description": "Try different keywords or adjust your search criteria"
     }
   },
-  "settings": {
-    "tabs": {
-      "general": "General",
-      "user": "User",
-      "content": "Content",
-      "maintenance": "Maintenance",
-      "invite": "Invite"
-    }
-  },
   "banners": {
     "imageRequired": "Please upload image",
+    "urlInvalid": "Invalid link",
     "titleRequired": "Please input title",
     "inactive": "Inactive",
     "active": "Active",
@@ -379,5 +432,10 @@
   },
   "categories": {
     "create": "New Category"
+  },
+  "response": {
+    "error": {
+      "followSelf": "Cannot follow yourself"
+    }
   }
 }

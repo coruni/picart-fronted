@@ -118,8 +118,14 @@ import type {
   OrderControllerFindOneData,
   OrderControllerFindByOrderNoData,
   OrderControllerGetWalletBalanceData,
+  OrderControllerGetUserOrders2Data,
   OrderControllerCreateOrderData,
-  OrderControllerCreateOrderResponse,
+  OrderControllerGetPendingOrdersData,
+  OrderControllerCancelOrderData,
+  OrderControllerCreatePaymentOrderData,
+  OrderControllerRequestRefundData,
+  OrderControllerCreateArticleOrderData,
+  OrderControllerCreateMembershipOrderData,
   InviteControllerGetMyInvitesData,
   InviteControllerGetInviteStatsData,
   InviteControllerGetMyInviteEarningsData,
@@ -156,7 +162,14 @@ import type {
   GetPayOrderStatusData,
   GetPayOrderStatusResponse,
   PostPayNotifyByPaywayData,
-  PostPayNotifyByPaywayResponse
+  PostPayNotifyByPaywayResponse,
+  PaymentControllerCreatePaymentData,
+  PaymentControllerAlipayNotifyData,
+  PaymentControllerWechatNotifyData,
+  PaymentControllerFindPaymentRecordData,
+  PaymentControllerFindPaymentByOrderIdData,
+  PaymentControllerFindUserPaymentsData,
+  PaymentControllerSimulatePaymentSuccessData
 } from './types.gen';
 import { client as _heyApiClient } from './client.gen';
 
@@ -1685,6 +1698,12 @@ export const orderControllerFindOne = <TComposable extends Composable, DefaultT 
   options: Options<TComposable, OrderControllerFindOneData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/order/{id}',
     ...options
   });
@@ -1697,6 +1716,12 @@ export const orderControllerFindByOrderNo = <TComposable extends Composable, Def
   options: Options<TComposable, OrderControllerFindByOrderNoData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/order/no/{orderNo}',
     ...options
   });
@@ -1712,7 +1737,31 @@ export const orderControllerGetWalletBalance = <
   options: Options<TComposable, OrderControllerGetWalletBalanceData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/order/wallet/balance',
+    ...options
+  });
+};
+
+/**
+ * 获取用户订单列表
+ */
+export const orderControllerGetUserOrders2 = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerGetUserOrders2Data, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/order',
     ...options
   });
 };
@@ -1720,26 +1769,157 @@ export const orderControllerGetWalletBalance = <
 /**
  * 创建订单（包含抽成计算）
  */
-export const orderControllerCreateOrder = <
-  TComposable extends Composable,
-  DefaultT extends OrderControllerCreateOrderResponse = OrderControllerCreateOrderResponse
->(
-  options: Options<
-    TComposable,
-    OrderControllerCreateOrderData,
-    OrderControllerCreateOrderResponse,
-    DefaultT
-  >
+export const orderControllerCreateOrder = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerCreateOrderData, unknown, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).post<
-    TComposable,
-    OrderControllerCreateOrderResponse | DefaultT,
-    unknown,
-    DefaultT
-  >({
-    url: '/order',
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order',
+      ...options
+    }
+  );
+};
+
+/**
+ * 获取待支付订单
+ */
+export const orderControllerGetPendingOrders = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, OrderControllerGetPendingOrdersData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/order/pending',
     ...options
   });
+};
+
+/**
+ * 取消订单
+ */
+export const orderControllerCancelOrder = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerCancelOrderData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).put<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/order/{id}/cancel',
+    ...options
+  });
+};
+
+/**
+ * 创建支付订单
+ */
+export const orderControllerCreatePaymentOrder = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, OrderControllerCreatePaymentOrderData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order/payment',
+      ...options
+    }
+  );
+};
+
+/**
+ * 申请退款
+ */
+export const orderControllerRequestRefund = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, OrderControllerRequestRefundData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order/{id}/refund',
+      ...options
+    }
+  );
+};
+
+/**
+ * 创建文章订单
+ */
+export const orderControllerCreateArticleOrder = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, OrderControllerCreateArticleOrderData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order/article',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 创建会员充值订单
+ */
+export const orderControllerCreateMembershipOrder = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, OrderControllerCreateMembershipOrderData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/order/membership',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
 };
 
 /**
@@ -2244,4 +2424,153 @@ export const postPayNotifyByPayway = <
     url: '/pay/notify/{payway}',
     ...options
   });
+};
+
+/**
+ * 创建支付
+ */
+export const paymentControllerCreatePayment = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, PaymentControllerCreatePaymentData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/payment/create',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 支付宝支付回调
+ */
+export const paymentControllerAlipayNotify = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, PaymentControllerAlipayNotifyData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/payment/notify/alipay',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 微信支付回调
+ */
+export const paymentControllerWechatNotify = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, PaymentControllerWechatNotifyData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/payment/notify/wechat',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 查询支付记录
+ */
+export const paymentControllerFindPaymentRecord = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, PaymentControllerFindPaymentRecordData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/payment/record/{id}',
+    ...options
+  });
+};
+
+/**
+ * 查询订单支付记录
+ */
+export const paymentControllerFindPaymentByOrderId = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, PaymentControllerFindPaymentByOrderIdData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/payment/order/{orderId}',
+    ...options
+  });
+};
+
+/**
+ * 查询用户支付记录
+ */
+export const paymentControllerFindUserPayments = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, PaymentControllerFindUserPaymentsData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/payment/user',
+    ...options
+  });
+};
+
+/**
+ * 模拟支付成功（仅用于测试）
+ */
+export const paymentControllerSimulatePaymentSuccess = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, PaymentControllerSimulatePaymentSuccessData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/payment/simulate/{id}/success',
+      ...options
+    }
+  );
 };
