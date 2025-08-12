@@ -88,7 +88,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { userControllerSendVerificationCode } from '~~/api';
+  import { userControllerPasswordReset, userControllerSendVerificationCode } from '~~/api';
   import { z } from 'zod';
 
   const { t } = useI18n();
@@ -176,12 +176,14 @@
     try {
       loading.value = true;
 
-      // 这里需要调用密码重置API
-      // 由于API中没有密码重置接口，这里先模拟
-      // TODO: 实现实际的密码重置API调用
-
-      // 模拟API调用
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await userControllerPasswordReset({
+        composable: '$fetch',
+        body: {
+          email: forgotForm.value.email,
+          code: forgotForm.value.verificationCode,
+          newPassword: forgotForm.value.newPassword
+        }
+      });
 
       toast.add({
         title: t('forgotPassword.resetSuccess'),
