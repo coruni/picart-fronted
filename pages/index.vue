@@ -142,8 +142,9 @@ const {t} = useI18n();
     toast.add({
       ui: { close: 'cursor-pointer' },
       title:
-        '页面还在开发中，下载资源请前往https://drive.cosfan.cc，用户数据暂未导入 请不要注册账号',
-      actions: [
+        '用户数据已导入，部分账号有重复。可以使用邮箱登录，昵称可以修改但是用户名目前无法修改。有效期会员已补充一个月会员，其余不变。',
+      duration: 30000,
+        actions: [
         {
           label: '打开',
           color: 'primary',

@@ -316,12 +316,39 @@
     "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください",
     "loginFailedDescription": "ユーザー名とパスワードが正しいかご確認ください"
   },
+  "forgotPassword": {
+    "title": "パスワードを忘れた場合",
+    "email": "メールアドレス",
+    "emailPlaceholder": "メールアドレスを入力してください",
+    "verificationCode": "認証コード",
+    "verificationCodePlaceholder": "認証コードを入力してください",
+    "sendCode": "コードを送信",
+    "newPassword": "新しいパスワード",
+    "newPasswordPlaceholder": "新しいパスワードを入力してください",
+    "confirmPassword": "パスワード確認",
+    "confirmPasswordPlaceholder": "新しいパスワードを再入力してください",
+    "resetPassword": "パスワードをリセット",
+    "resetting": "リセット中...",
+    "rememberPassword": "パスワードを思い出しましたか？",
+    "backToLogin": "ログインに戻る",
+    "enterEmailFirst": "先にメールアドレスを入力してください",
+    "codeSent": "認証コードを送信しました",
+    "sendCodeFailed": "認証コードの送信に失敗しました",
+    "resetSuccess": "パスワードのリセットが成功しました",
+    "resetFailed": "パスワードのリセットに失敗しました"
+  },
   "register": {
     "title": "ユーザー登録",
     "username": "ユーザー名",
     "usernamePlaceholder": "ユーザー名を入力してください",
     "email": "メールアドレス",
     "emailPlaceholder": "メールアドレスを入力してください",
+    "verificationCode": "認証コード",
+    "verificationCodePlaceholder": "認証コードを入力してください",
+    "sendCode": "コードを送信",
+    "inviteCode": "招待コード",
+    "inviteCodePlaceholder": "招待コードを入力してください（任意）",
+    "inviteCodeRequiredPlaceholder": "招待コードを入力してください",
     "password": "パスワード",
     "passwordPlaceholder": "パスワードを入力してください",
     "confirmPassword": "パスワード確認",
@@ -331,8 +358,14 @@
     "registering": "登録中...",
     "hasAccount": "すでにアカウントをお持ちの場合",
     "login": "今すぐログイン",
+    "backToLogin": "ログインに戻る",
     "success": "登録が成功しました。ログインしてください",
-    "registerFailed": "登録に失敗しました"
+    "registerFailed": "登録に失敗しました",
+    "registrationDisabled": "登録機能が無効",
+    "registrationDisabledDescription": "現在このサイトではユーザー登録機能が無効になっています。招待コードについては管理者にお問い合わせいただくか、既存のアカウントでログインしてください。",
+    "enterEmailFirst": "先にメールアドレスを入力してください",
+    "codeSent": "認証コードを送信しました",
+    "sendCodeFailed": "認証コードの送信に失敗しました"
   },
   "user": {
     "title": "ユーザープロフィール",
@@ -362,7 +395,20 @@
     "nickname": "ニックネーム",
     "enterNickname": "ニックネームを入力",
     "description": "説明",
-    "enterDescription": "説明を入力"
+    "enterDescription": "説明を入力",
+    "changePassword": {
+      "title": "パスワード変更",
+      "currentPassword": "現在のパスワード",
+      "currentPasswordPlaceholder": "現在のパスワードを入力してください",
+      "newPassword": "新しいパスワード",
+      "newPasswordPlaceholder": "新しいパスワードを入力してください",
+      "confirmPassword": "パスワード確認",
+      "confirmPasswordPlaceholder": "新しいパスワードを再入力してください",
+      "changePassword": "パスワード変更",
+      "changing": "変更中...",
+      "success": "パスワードの変更が成功しました",
+      "failed": "パスワードの変更に失敗しました"
+    }
   },
   "author": {
     "title": "作者プロフィール",

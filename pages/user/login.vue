@@ -6,12 +6,12 @@
       </h1>
 
       <UForm :schema="schema" :state="loginForm" @submit="handleLogin" class="space-y-6">
-        <UFormField name="username" required :label="$t('login.username')">
+        <UFormField name="account" required :label="$t('login.account')">
           <UInput
-            v-model="loginForm.username"
+            v-model="loginForm.account"
             type="text"
             size="xl"
-            :placeholder="$t('login.usernamePlaceholder')"
+            :placeholder="$t('login.accountPlaceholder')"
             class="w-full"
           />
         </UFormField>
@@ -32,9 +32,11 @@
           </div>
 
           <div class="text-sm">
-            <UButton variant="link" color="primary">
-              {{ $t('login.forgotPassword') }}
-            </UButton>
+            <NuxtLinkLocale to="/user/forgot-password">
+              <UButton variant="link" color="primary" class="cursor-pointer">
+                {{ $t('login.forgotPassword') }}
+              </UButton>
+            </NuxtLinkLocale>
           </div>
         </div>
 
@@ -80,14 +82,14 @@
 
   // 定义表单验证模式
   const schema = z.object({
-    username: z.string().min(1, t('validation.required')),
+    account: z.string().min(1, t('validation.required')),
     password: z.string().min(1, t('validation.required'))
   });
 
   type Schema = z.infer<typeof schema>;
 
   const loginForm = ref<Schema>({
-    username: '',
+    account: '',
     password: ''
   });
 
@@ -129,9 +131,9 @@
           refreshToken.value = data.refreshToken;
         }
 
-        // 如果选择了记住我，保存用户名
+        // 如果选择了记住我，保存账号
         if (rememberMe.value) {
-          userStore.setRememberedUsername(loginForm.value.username);
+          userStore.setRememberedUsername(loginForm.value.account);
         } else {
           userStore.clearRememberedUsername();
         }
@@ -155,10 +157,10 @@
     }
   };
 
-  // 页面加载时，如果之前选择了记住我，填充用户名
+  // 页面加载时，如果之前选择了记住我，填充账号
   onMounted(() => {
     if (userStore.hasRememberedUsername) {
-      loginForm.value.username = userStore.rememberedUsername || '';
+      loginForm.value.account = userStore.rememberedUsername || '';
       rememberMe.value = true;
     }
   });

@@ -5,8 +5,8 @@ import {
   type Composable,
   type TDataShape,
   type Client,
-  formDataBodySerializer,
-  urlSearchParamsBodySerializer
+  urlSearchParamsBodySerializer,
+  formDataBodySerializer
 } from './client';
 import type {
   AppControllerGetHelloData,
@@ -60,6 +60,8 @@ import type {
   UserControllerRechargeWalletData,
   UserControllerWithdrawWalletData,
   UserControllerSendVerificationCodeData,
+  UserControllerPasswordResetData,
+  UserControllerPasswordResetResponse,
   ArticleControllerFindAllData,
   ArticleControllerFindAllResponse,
   ArticleControllerCreateData,
@@ -115,11 +117,13 @@ import type {
   PermissionControllerUpdateData,
   PermissionControllerUpdateResponse,
   OrderControllerGetOrdersData,
+  OrderControllerGetOrdersResponse,
   OrderControllerCreateOrderData,
   OrderControllerFindOneData,
   OrderControllerFindByOrderNoData,
   OrderControllerGetWalletBalanceData,
   OrderControllerGetUserOrdersData,
+  OrderControllerGetUserOrdersResponse,
   OrderControllerGetPendingOrdersData,
   OrderControllerCancelOrderData,
   OrderControllerCreatePaymentOrderData,
@@ -921,6 +925,36 @@ export const userControllerSendVerificationCode = <
 };
 
 /**
+ * 重置密码
+ */
+export const userControllerPasswordReset = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerPasswordResetResponse = UserControllerPasswordResetResponse
+>(
+  options: Options<
+    TComposable,
+    UserControllerPasswordResetData,
+    UserControllerPasswordResetResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    UserControllerPasswordResetResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    ...urlSearchParamsBodySerializer,
+    url: '/user/password/reset',
+    ...options,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      ...options.headers
+    }
+  });
+};
+
+/**
  * 获取文章列表
  */
 export const articleControllerFindAll = <
@@ -1682,10 +1716,23 @@ export const permissionControllerUpdate = <
 /**
  * 获取订单列表
  */
-export const orderControllerGetOrders = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerGetOrdersData, unknown, DefaultT>
+export const orderControllerGetOrders = <
+  TComposable extends Composable,
+  DefaultT extends OrderControllerGetOrdersResponse = OrderControllerGetOrdersResponse
+>(
+  options: Options<
+    TComposable,
+    OrderControllerGetOrdersData,
+    OrderControllerGetOrdersResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    OrderControllerGetOrdersResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/order',
     ...options
   });
@@ -1771,10 +1818,23 @@ export const orderControllerGetWalletBalance = <
 /**
  * 获取用户订单列表
  */
-export const orderControllerGetUserOrders = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerGetUserOrdersData, unknown, DefaultT>
+export const orderControllerGetUserOrders = <
+  TComposable extends Composable,
+  DefaultT extends OrderControllerGetUserOrdersResponse = OrderControllerGetUserOrdersResponse
+>(
+  options: Options<
+    TComposable,
+    OrderControllerGetUserOrdersData,
+    OrderControllerGetUserOrdersResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    OrderControllerGetUserOrdersResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     security: [
       {
         scheme: 'bearer',

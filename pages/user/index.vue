@@ -117,6 +117,15 @@
                 <Icon name="tabler:settings" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
               </div>
+              <div
+                @click="isChangePasswordModalOpen = true"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+              >
+                <Icon name="tabler:lock" class="w-8 h-8 text-primary mb-2" />
+                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                  $t('user.changePassword.title')
+                }}</span>
+              </div>
             </div>
           </div>
 
@@ -345,6 +354,82 @@
       @change="handleAvatarChange"
     />
 
+    <!-- 修改密码模态框 -->
+    <UModal
+      :title="$t('user.changePassword.title')"
+      v-model:open="isChangePasswordModalOpen"
+      :ui="{ close: 'cursor-pointer' }"
+    >
+      <template #body>
+        <UForm
+          :schema="changePasswordSchema"
+          :state="changePasswordForm"
+          @submit="handleChangePassword"
+          class="space-y-4"
+        >
+          <!-- 当前密码 -->
+          <UFormField
+            name="currentPassword"
+            required
+            :label="$t('user.changePassword.currentPassword')"
+          >
+            <UInput
+              v-model="changePasswordForm.currentPassword"
+              type="password"
+              :placeholder="$t('user.changePassword.currentPasswordPlaceholder')"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 新密码 -->
+          <UFormField name="newPassword" required :label="$t('user.changePassword.newPassword')">
+            <UInput
+              v-model="changePasswordForm.newPassword"
+              type="password"
+              :placeholder="$t('user.changePassword.newPasswordPlaceholder')"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 确认新密码 -->
+          <UFormField
+            name="confirmPassword"
+            required
+            :label="$t('user.changePassword.confirmPassword')"
+          >
+            <UInput
+              v-model="changePasswordForm.confirmPassword"
+              type="password"
+              :placeholder="$t('user.changePassword.confirmPasswordPlaceholder')"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 按钮组 -->
+          <div class="flex space-x-3 pt-4">
+            <UButton
+              type="submit"
+              :loading="changingPassword"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+            >
+              {{
+                changingPassword
+                  ? $t('user.changePassword.changing')
+                  : $t('user.changePassword.changePassword')
+              }}
+            </UButton>
+            <UButton
+              type="button"
+              @click="isChangePasswordModalOpen = false"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button"
+            >
+              {{ $t('common.cancel') }}
+            </UButton>
+          </div>
+        </UForm>
+      </template>
+    </UModal>
+
     <!-- 会员充值模态框 -->
     <UModal v-model:open="isRechargeModalOpen" :title="$t('user.recharge.title')" size="lg">
       <template #body>
@@ -448,6 +533,7 @@
   import { watch, nextTick } from 'vue';
   import type { FormError } from '@nuxt/ui';
   import { uploadControllerUploadFile } from '~~/api';
+  import { z } from 'zod';
   const toast = useToast();
 
   const { t } = useI18n();
@@ -475,6 +561,10 @@
   const selectedPaymentMethod = ref<any>(null);
   const recharging = ref(false);
 
+  // 修改密码模态框状态
+  const isChangePasswordModalOpen = ref(false);
+  const changingPassword = ref(false);
+
   // 编辑表单数据
   const editForm = ref({
     username: '',
@@ -482,6 +572,28 @@
     description: '',
     avatar: ''
   });
+
+  // 修改密码表单数据
+  const changePasswordForm = ref({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  // 修改密码表单验证模式
+  const changePasswordSchema = z
+    .object({
+      currentPassword: z.string().min(1, t('validation.required')),
+      newPassword: z
+        .string()
+        .min(6, t('validation.passwordMin'))
+        .max(50, t('validation.passwordMax')),
+      confirmPassword: z.string().min(1, t('validation.required'))
+    })
+    .refine(data => data.newPassword === data.confirmPassword, {
+      message: t('validation.passwordMismatch'),
+      path: ['confirmPassword']
+    });
 
   // 用户资料
   const { data: userProfile } = userControllerGetProfile({
@@ -804,5 +916,40 @@
   const handleThirdPartyPayment = async (order: any) => {
     // TODO: 跳转到第三方支付页面
     toast.add({ title: t('user.recharge.redirectToPayment'), color: 'info' });
+  };
+
+  // 处理修改密码
+  const handleChangePassword = async () => {
+    try {
+      changingPassword.value = true;
+
+      // 这里需要调用修改密码API
+      // 由于API中没有修改密码接口，这里先模拟
+      // TODO: 实现实际的修改密码API调用
+
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast.add({
+        title: t('user.changePassword.success'),
+        color: 'success'
+      });
+
+      // 关闭模态框并重置表单
+      isChangePasswordModalOpen.value = false;
+      changePasswordForm.value = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      };
+    } catch (error: any) {
+      console.error('修改密码失败:', error);
+      toast.add({
+        title: error?.data?.message || t('user.changePassword.failed'),
+        color: 'error'
+      });
+    } finally {
+      changingPassword.value = false;
+    }
   };
 </script>

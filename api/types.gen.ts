@@ -42,7 +42,7 @@ export type LoginDto = {
   /**
    * 用户名
    */
-  username: string;
+  account: string;
   /**
    * 密码
    */
@@ -486,6 +486,10 @@ export type SendMailDto = {
    * 邮箱
    */
   email: string;
+  /**
+   * 类型
+   */
+  type: 'verification' | 'reset_password';
 };
 
 export type CreateMessageDto = {
@@ -2084,6 +2088,46 @@ export type UserControllerSendVerificationCodeResponses = {
   200: unknown;
 };
 
+export type UserControllerPasswordResetData = {
+  body?: {
+    /**
+     * 邮箱
+     */
+    email: string;
+    /**
+     * 验证码
+     */
+    code: string;
+    /**
+     * 新密码
+     */
+    newPassword?: string;
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/user/password/reset';
+};
+
+export type UserControllerPasswordResetResponses = {
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+    };
+  };
+};
+
+export type UserControllerPasswordResetResponse =
+  UserControllerPasswordResetResponses[keyof UserControllerPasswordResetResponses];
+
 export type ArticleControllerFindAllData = {
   body?: never;
   headers?: {
@@ -2305,9 +2349,10 @@ export type ArticleControllerFindOneResponses = {
       requireLogin: boolean;
       requireFollow: boolean;
       requirePayment: boolean;
+      requireMembership: boolean;
       viewPrice: string;
       type: string;
-      content: string;
+      content?: string;
       images: Array<string>;
       summary: unknown;
       views: number;
@@ -2357,12 +2402,7 @@ export type ArticleControllerFindOneResponses = {
         createdAt: string;
         updatedAt: string;
       };
-      tags: Array<{
-        id: number;
-        name: string;
-        avatar: string;
-        cover: string;
-      }>;
+      tags: Array<string>;
       createdAt: string;
       updatedAt: string;
       isLiked: boolean;
@@ -4005,8 +4045,23 @@ export type OrderControllerGetOrdersResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<string>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type OrderControllerGetOrdersResponse =
+  OrderControllerGetOrdersResponses[keyof OrderControllerGetOrdersResponses];
 
 export type OrderControllerCreateOrderData = {
   body?: never;
@@ -4149,8 +4204,23 @@ export type OrderControllerGetUserOrdersResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<string>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type OrderControllerGetUserOrdersResponse =
+  OrderControllerGetUserOrdersResponses[keyof OrderControllerGetUserOrdersResponses];
 
 export type OrderControllerGetPendingOrdersData = {
   body?: never;

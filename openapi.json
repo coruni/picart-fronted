@@ -1974,6 +1974,82 @@
         },
         "security": []
       },
+      "delete": {
+        "summary": "删除用户",
+        "deprecated": false,
+        "description": "",
+        "operationId": "UserController_remove",
+        "tags": [
+          "用户管理"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          },
+          "404": {
+            "description": "用户不存在",
+            "headers": {}
+          }
+        },
+        "security": []
+      },
       "patch": {
         "summary": "更新用户",
         "deprecated": false,
@@ -2050,82 +2126,6 @@
           },
           "400": {
             "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
-            "headers": {}
-          },
-          "404": {
-            "description": "用户不存在",
-            "headers": {}
-          }
-        },
-        "security": []
-      },
-      "delete": {
-        "summary": "删除用户",
-        "deprecated": false,
-        "description": "",
-        "operationId": "UserController_remove",
-        "tags": [
-          "用户管理"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "",
-            "required": true,
-            "example": "",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "删除成功",
             "headers": {}
           },
           "401": {
@@ -4120,6 +4120,132 @@
         "security": []
       }
     },
+    "/user/password/reset": {
+      "post": {
+        "summary": "重置密码",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userController_passwordReset",
+        "tags": [
+          "用户管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "邮箱",
+                    "example": "",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "验证码",
+                    "example": "",
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "description": "新密码",
+                    "example": "",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "code"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/article": {
       "get": {
         "summary": "获取文章列表",
@@ -4751,6 +4877,9 @@
                         "requirePayment": {
                           "type": "boolean"
                         },
+                        "requireMembership": {
+                          "type": "boolean"
+                        },
                         "viewPrice": {
                           "type": "string"
                         },
@@ -4953,27 +5082,7 @@
                         "tags": {
                           "type": "array",
                           "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "number"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "avatar": {
-                                "type": "string"
-                              },
-                              "cover": {
-                                "type": "string"
-                              }
-                            },
-                            "required": [
-                              "id",
-                              "name",
-                              "avatar",
-                              "cover"
-                            ]
+                            "type": "string"
                           }
                         },
                         "createdAt": {
@@ -4992,9 +5101,9 @@
                         "requireLogin",
                         "requireFollow",
                         "requirePayment",
+                        "requireMembership",
                         "viewPrice",
                         "type",
-                        "content",
                         "images",
                         "summary",
                         "views",
@@ -9592,6 +9701,64 @@
         "responses": {
           "200": {
             "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -9994,6 +10161,64 @@
         "responses": {
           "200": {
             "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -13305,7 +13530,7 @@
       "LoginDto": {
         "type": "object",
         "properties": {
-          "username": {
+          "account": {
             "type": "string",
             "description": "用户名",
             "example": "admin"
@@ -13317,7 +13542,7 @@
           }
         },
         "required": [
-          "username",
+          "account",
           "password"
         ]
       },
@@ -14012,10 +14237,19 @@
             "type": "string",
             "description": "邮箱",
             "example": "test@example.com"
+          },
+          "type": {
+            "type": "string",
+            "description": "类型",
+            "enum": [
+              "verification",
+              "reset_password"
+            ]
           }
         },
         "required": [
-          "email"
+          "email",
+          "type"
         ]
       },
       "CreateMessageDto": {
