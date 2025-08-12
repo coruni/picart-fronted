@@ -142,7 +142,8 @@
       await userControllerSendVerificationCode({
         composable: '$fetch',
         body: {
-          email: forgotForm.value.email
+          email: forgotForm.value.email,
+          type: 'reset_password'
         }
       });
 
