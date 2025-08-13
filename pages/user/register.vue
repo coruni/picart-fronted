@@ -7,7 +7,7 @@
 
       <!-- 注册功能已关闭提示 -->
       <div v-if="!siteConfig?.user_registration_enabled" class="text-center py-8">
-        <Icon name="tabler:lock" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        <Icon name="mynaui:lock" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
           {{ $t('register.registrationDisabled') }}
         </h2>

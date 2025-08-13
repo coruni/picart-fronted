@@ -15,8 +15,26 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-swiper',
     '@nuxt/ui',
-    'nuxt-easy-lightbox'
+    'nuxt-easy-lightbox',
+    '@nuxtjs/seo'
   ],
+
+  // SEO 配置
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc',
+    name: process.env.NUXT_PUBLIC_APP_NAME || 'PicArt',
+    description: process.env.NUXT_PUBLIC_DESCRIPTION || '图片分享社区',
+    defaultLocale: process.env.NUXT_PUBLIC_DEFAULT_LOCALE || 'zh'
+  },
+
+  // Robots 配置
+  robots: {
+    rules: {
+      UserAgent: '*',
+      Allow: '/',
+      Disallow: ['/admin/', '/api/', '/user/']
+    }
+  },
 
   image: {
     screens: {
@@ -97,7 +115,7 @@ export default defineNuxtConfig({
   nitro: {
     // 可以在这里配置服务端相关设置
     routeRules: {
-      '/admin/**': { prerender: false, ssr: false }
+      '/admin/**': { prerender: false }
     }
   },
 

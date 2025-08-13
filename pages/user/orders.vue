@@ -166,7 +166,7 @@
         <!-- 空状态 -->
         <div v-else class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 text-center">
           <div class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600">
-            <Icon name="tabler:receipt-off" class="w-full h-full" />
+            <Icon name="mynaui:cart-x" class="w-full h-full" />
           </div>
           <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
             {{ $t('user.orders.empty.title') }}

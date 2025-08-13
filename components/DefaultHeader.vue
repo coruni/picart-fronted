@@ -60,7 +60,8 @@
           <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
             <UAvatar
               :src="currentUserAvatar"
-              alt="user avatar"
+              :alt="userStore.userInfo?.nickname || userStore.userInfo?.username"
+              fit="cover"
               class="w-full h-full object-cover"
             />
             <div
@@ -179,7 +180,8 @@
                   <div class="flex items-center space-x-2">
                     <UAvatar
                       :src="currentUserAvatar"
-                      alt="user avatar"
+                      :alt="userStore.userInfo?.nickname || userStore.userInfo?.username"
+                      fit="cover"
                       class="w-6 h-6 rounded-full object-cover"
                     />
                     <span>{{ $t('header.nav.profile') }}</span>

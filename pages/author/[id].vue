@@ -117,7 +117,8 @@
               <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
                 {{ $t('author.articles') }}
               </h2>
-              <div class="flex justify-end">
+              <!-- Tab切换 -->
+              <div class="flex justify-center mb-8 md:justify-end">
                 <UTabs
                   v-model="currentArticleType"
                   :items="mobileArticleTabs"
@@ -238,6 +239,7 @@
 </template>
 
 <script lang="ts" setup>
+  import type { TabsItem } from '@nuxt/ui';
   import {
     userControllerFindOne,
     articleControllerFindArticleByAuthor,
@@ -301,11 +303,11 @@
   };
 
   // 文章类型选项
-  const articleTypes = ref([
-    { label: t('author.allArticles'), value: 'all' },
-    { label: t('author.popularArticles'), value: 'popular' },
-    { label: t('author.latestArticles'), value: 'latest' }
-  ]);
+  const tabs: TabsItem[] = [
+    { id: 'all', label: t('author.allArticles'), value: 'all', icon: 'mynaui:brand-trello' },
+    { id: 'popular', label: t('author.popularArticles'), value: 'popular', icon: 'mynaui:fire' },
+    { id: 'latest', label: t('author.latestArticles'), value: 'latest', icon: 'mynaui:plus' }
+  ];
 
   // 响应式处理移动端和桌面端的标签显示
   const windowWidth = ref(import.meta.client ? window.innerWidth : 1024);
@@ -317,16 +319,10 @@
 
   const mobileArticleTabs = computed(() => {
     const isMobile = windowWidth.value < 768;
-    return articleTypes.value.map(type => ({
-      id: type.value,
-      label: isMobile ? '' : type.label, // 移动端只显示图标，桌面端显示完整标签
-      value: type.value,
-      icon:
-        type.value === 'all'
-          ? 'mynaui:brand-trello'
-          : type.value === 'popular'
-            ? 'mynaui:fire'
-            : 'mynaui:plus'
+    return tabs.map(tab => ({
+      ...tab,
+      label: isMobile ? '' : tab.label, // 移动端只显示图标，桌面端显示完整标签
+      icon: tab.icon
     }));
   });
 
@@ -457,7 +453,7 @@
     meta: [
       {
         name: 'description',
-        content: authorInfo.value?.description || t('author.defaultDescription')
+        content: authorInfo.value?.description
       },
       {
         name: 'robots',

@@ -10,9 +10,9 @@
               class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
             >
               <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
-                <NuxtImg
+                <UAvatar
                   :src="userInfo?.avatar"
-                  alt="用户头像"
+                  :alt="userInfo?.nickname || userInfo?.username"
                   class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
@@ -94,7 +94,7 @@
                 to="/user/orders"
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
               >
-                <Icon name="tabler:receipt" class="w-8 h-8 text-primary mb-2" />
+                <Icon name="mynaui:cart" class="w-8 h-8 text-primary mb-2" />
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
                   $t('user.orders.title')
                 }}</span>
@@ -102,26 +102,26 @@
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
               >
-                <Icon name="tabler:wallet" class="w-8 h-8 text-gray-400 mb-2" />
+                <Icon name="mynaui:credit-card" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.wallet') }}</span>
               </div>
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
               >
-                <Icon name="tabler:heart" class="w-8 h-8 text-gray-400 mb-2" />
+                <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
               </div>
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
               >
-                <Icon name="tabler:settings" class="w-8 h-8 text-gray-400 mb-2" />
+                <Icon name="mynaui:cog" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
               </div>
               <div
                 @click="isChangePasswordModalOpen = true"
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
               >
-                <Icon name="tabler:lock" class="w-8 h-8 text-primary mb-2" />
+                <Icon name="mynaui:lock" class="w-8 h-8 text-primary mb-2" />
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
                   $t('user.changePassword.title')
                 }}</span>
@@ -278,9 +278,9 @@
           <!-- 头像上传 -->
           <div class="flex items-center space-x-4">
             <div class="relative">
-              <NuxtImg
+              <UAvatar
                 :src="editForm.avatar || userInfo?.avatar"
-                alt="用户头像"
+                :alt="userInfo?.nickname || userInfo?.username"
                 fit="cover"
                 class="w-20 h-20 rounded-full ring-2 object-cover ring-white"
                 loading="lazy"
