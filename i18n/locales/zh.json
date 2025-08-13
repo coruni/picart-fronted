@@ -104,6 +104,47 @@
       "backgroundPlaceholder": "请上传背景",
       "descriptionPlaceholder": "请输入说明",
       "namePlaceholder": "请输入名称"
+    },
+    "users": {
+      "searchAndFilter": "搜索和筛选",
+      "searchUsername": "搜索用户名"
+    },
+    "articles": {
+      "searchAndFilter": "搜索和筛选"
+    },
+    "categories": {
+      "searchAndFilter": "搜索和筛选"
+    },
+    "tags": {
+      "searchAndFilter": "搜索和筛选"
+    },
+    "banners": {
+      "searchAndFilter": "搜索和筛选"
+    },
+    "orders": {
+      "orderNo": "订单号",
+      "userId": "用户ID",
+      "type": "订单类型",
+      "status": "订单状态",
+      "amount": "金额",
+      "createdAt": "创建时间",
+      "description": "订单描述",
+      "orderDetail": "订单详情",
+      "viewDetail": "查看详情",
+      "selectStatus": "选择状态",
+      "selectType": "选择类型",
+      "searchUserId": "搜索用户ID",
+      "searchAndFilter": "搜索和筛选",
+      "allStatus": "全部状态",
+      "allTypes": "全部类型",
+      "pending": "待支付",
+      "paid": "已支付",
+      "cancelled": "已取消",
+      "refunded": "已退款",
+      "membership": "会员订单",
+      "product": "商品订单",
+      "service": "服务订单",
+      "article": "文章订单"
     }
   },
   "common": {
@@ -150,7 +191,9 @@
       "cancel": "取消",
       "confirm": "确认",
       "create": "新增",
-      "update": "更新"
+      "update": "更新",
+      "search": "搜索",
+      "close": "关闭"
     },
     "save": "保存",
     "loading": {
@@ -567,6 +610,9 @@
   "response": {
     "error": {
       "followSelf": "不能关注自己"
+    },
+    "success": {
+      "verificationCodeSent": "验证码已发送"
     }
   },
   "Unauthorized": "未授权"

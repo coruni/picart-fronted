@@ -104,6 +104,47 @@
       "backgroundPlaceholder": "背景をアップロードしてください",
       "avatarPlaceholder": "アバターをアップロードしてください",
       "namePlaceholder": "名前を入力してください"
+    },
+    "users": {
+      "searchAndFilter": "検索・フィルター",
+      "searchUsername": "ユーザー名を検索"
+    },
+    "articles": {
+      "searchAndFilter": "検索・フィルター"
+    },
+    "categories": {
+      "searchAndFilter": "検索・フィルター"
+    },
+    "tags": {
+      "searchAndFilter": "検索・フィルター"
+    },
+    "banners": {
+      "searchAndFilter": "検索・フィルター"
+    },
+    "orders": {
+      "orderNo": "注文番号",
+      "userId": "ユーザーID",
+      "type": "注文タイプ",
+      "status": "注文ステータス",
+      "amount": "金額",
+      "createdAt": "作成日時",
+      "description": "注文説明",
+      "orderDetail": "注文詳細",
+      "viewDetail": "詳細を見る",
+      "selectStatus": "ステータスを選択",
+      "selectType": "タイプを選択",
+      "searchUserId": "ユーザーIDを検索",
+      "searchAndFilter": "検索・フィルター",
+      "allStatus": "すべてのステータス",
+      "allTypes": "すべてのタイプ",
+      "pending": "保留中",
+      "paid": "支払い済み",
+      "cancelled": "キャンセル済み",
+      "refunded": "返金済み",
+      "membership": "メンバーシップ",
+      "product": "商品",
+      "service": "サービス",
+      "article": "記事"
     }
   },
   "common": {
@@ -150,7 +191,9 @@
       "confirm": "確認",
       "cancel": "キャンセル",
       "create": "作成",
-      "update": "更新"
+      "update": "更新",
+      "search": "検索",
+      "close": "閉じる"
     },
     "save": "保存",
     "loading": {
@@ -480,6 +523,10 @@
   "response": {
     "error": {
       "followSelf": "自分をフォローすることはできません"
+    },
+    "success": {
+      "verificationCodeSent": "認証コードを送信しました"
     }
-  }
+  },
+  "Unauthorized": "未認証"
 }

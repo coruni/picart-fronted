@@ -1,21 +1,31 @@
 <template>
   <div class="flex flex-col min-h-full relative z-10">
-    <!-- 筛选面板 -->
-    <UCollapsible class="mb-4" v-model:open="showFilters">
+    <!-- 搜索和筛选面板 -->
+    <UCollapsible v-model:open="showFilters" class="mb-6">
       <UButton
-        :label="$t('common.table.filter')"
+        class="group w-full justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm"
         color="neutral"
-        variant="soft"
-        trailing-icon="i-mynaui-chevron-down"
-        block
-      />
+        variant="ghost"
+        trailing-icon="i-lucide-chevron-down"
+        :ui="{
+          trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
+        }"
+      >
+        <div class="flex items-center gap-2">
+          <UIcon name="mynaui:search" class="w-5 h-5" />
+          <span class="font-medium">{{ $t('admin.banners.searchAndFilter') }}</span>
+        </div>
+      </UButton>
       <template #content>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-          <UInput
-            v-model="filters.title"
-            :placeholder="t('banners.title')"
-            @update:model-value="onFilterChange"
-          />
+        <div
+          class="p-4 bg-white dark:bg-gray-800 rounded-b-lg shadow-sm border-t border-gray-200 dark:border-gray-700"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <UInput v-model="filters.title" :placeholder="t('banners.title')" class="w-full" />
+            <UButton @click="handleSearch" color="primary" class="w-full">
+              {{ $t('common.button.search') }}
+            </UButton>
+          </div>
         </div>
       </template>
     </UCollapsible>
@@ -38,18 +48,16 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :pagination-options="{
-          getPaginationRowModel: getPaginationRowModel()
-        }"
+        :key="tableKey"
         class="min-w-[600px] sm:min-w-0"
       />
     </div>
     <div class="flex justify-center border-t border-default pt-4">
       <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-        :total="table?.tableApi?.getFilteredRowModel().rows.length"
-        @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
+        :page="currentPage"
+        :items-per-page="pagination.pageSize"
+        :total="totalItems"
+        @update:page="handlePageChange"
         color="neutral"
       />
     </div>
@@ -101,6 +109,12 @@
     requiresAuth: true
   });
 
+  // 搜索功能 - 不需要手动刷新，reactive query 会自动处理
+  const handleSearch = () => {
+    pagination.value.pageIndex = 0;
+    tableKey.value++; // 强制重新渲染
+  };
+
   // 筛选状态
   const showFilters = ref(false);
   const filters = ref({
@@ -108,11 +122,24 @@
   });
 
   // 分页状态
-  const pagination = ref({ pageIndex: 0, pageSize: 20 });
+  const pagination = ref({
+    pageIndex: 0,
+    pageSize: 20
+  });
+
+  // 关键修改点2: 添加当前页面计算属性和表格key
+  const currentPage = computed(() => pagination.value.pageIndex + 1);
+  const tableKey = ref(0); // 强制重新渲染表格
 
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentBannerId = ref<number | null>(null);
+
+  // 关键修改点4: 添加页面变化处理函数
+  const handlePageChange = (newPage: number) => {
+    pagination.value.pageIndex = newPage - 1;
+    tableKey.value++; // 强制重新渲染
+  };
 
   const columns: TableColumn<Banner>[] = [
     {
@@ -257,24 +284,22 @@
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
       limit: pagination.value.pageSize,
-      title: filters.value.title || undefined
+      ...(filters.value.title && { title: filters.value.title })
     }))
   });
 
   // 计算属性：表格数据
   const tableData = computed(() => {
     const data = banners.data.value?.data?.data || [];
-    return data as Banner[];
+    return [...data];
   });
 
-  // 监听分页变化
-  watch(
-    [() => pagination.value.pageIndex, () => pagination.value.pageSize],
-    () => {
-      banners.refresh?.();
-    },
-    { deep: true }
-  );
+  // 计算属性：总条目数
+  const totalItems = computed(() => {
+    return banners.data.value?.data?.meta?.total || 0;
+  });
+
+  // 移除 watch，让 reactive query 自动处理数据获取
 
   const onCreate = () => {
     router.push('banners/create');

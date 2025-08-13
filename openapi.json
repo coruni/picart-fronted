@@ -3754,6 +3754,41 @@
         "responses": {
           "201": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -4104,8 +4139,43 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "发送成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "400": {
@@ -9718,7 +9788,85 @@
                         "data": {
                           "type": "array",
                           "items": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "userId": {
+                                "type": "integer"
+                              },
+                              "authorId": {
+                                "type": "integer"
+                              },
+                              "articleId": {
+                                "type": "null"
+                              },
+                              "orderNo": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "string"
+                              },
+                              "paymentMethod": {
+                                "type": "null"
+                              },
+                              "paymentOrderNo": {
+                                "type": "null"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "paidAt": {
+                                "type": "null"
+                              },
+                              "details": {
+                                "type": "object",
+                                "properties": {
+                                  "remark": {
+                                    "type": "string"
+                                  },
+                                  "duration": {
+                                    "type": "integer"
+                                  },
+                                  "basePrice": {
+                                    "type": "integer"
+                                  },
+                                  "totalAmount": {
+                                    "type": "integer"
+                                  },
+                                  "membershipName": {
+                                    "type": "string"
+                                  },
+                                  "membershipLevel": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "remark",
+                                  "duration",
+                                  "basePrice",
+                                  "totalAmount",
+                                  "membershipName",
+                                  "membershipLevel"
+                                ]
+                              },
+                              "remark": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
                           }
                         },
                         "meta": {
@@ -9763,76 +9911,6 @@
           }
         },
         "security": []
-      },
-      "post": {
-        "summary": "创建订单（包含抽成计算）",
-        "deprecated": false,
-        "description": "",
-        "operationId": "OrderController_createOrder",
-        "tags": [
-          "订单管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "创建成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
       }
     },
     "/order/{id}": {
@@ -10178,7 +10256,85 @@
                         "data": {
                           "type": "array",
                           "items": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "userId": {
+                                "type": "integer"
+                              },
+                              "authorId": {
+                                "type": "integer"
+                              },
+                              "articleId": {
+                                "type": "null"
+                              },
+                              "orderNo": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "amount": {
+                                "type": "string"
+                              },
+                              "paymentMethod": {
+                                "type": "null"
+                              },
+                              "paymentOrderNo": {
+                                "type": "null"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "paidAt": {
+                                "type": "null"
+                              },
+                              "details": {
+                                "type": "object",
+                                "properties": {
+                                  "remark": {
+                                    "type": "string"
+                                  },
+                                  "duration": {
+                                    "type": "integer"
+                                  },
+                                  "basePrice": {
+                                    "type": "integer"
+                                  },
+                                  "totalAmount": {
+                                    "type": "integer"
+                                  },
+                                  "membershipName": {
+                                    "type": "string"
+                                  },
+                                  "membershipLevel": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "remark",
+                                  "duration",
+                                  "basePrice",
+                                  "totalAmount",
+                                  "membershipName",
+                                  "membershipLevel"
+                                ]
+                              },
+                              "remark": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
                           }
                         },
                         "meta": {
@@ -10369,78 +10525,6 @@
           },
           "404": {
             "description": "订单不存在",
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/order/payment": {
-      "post": {
-        "summary": "创建支付订单",
-        "deprecated": false,
-        "description": "",
-        "operationId": "OrderController_createPaymentOrder",
-        "tags": [
-          "订单管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "创建成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
             "headers": {}
           }
         },
@@ -10683,6 +10767,125 @@
         "responses": {
           "201": {
             "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "authorId": {
+                          "type": "integer"
+                        },
+                        "articleId": {
+                          "type": "null"
+                        },
+                        "orderNo": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "paymentMethod": {
+                          "type": "null"
+                        },
+                        "paymentOrderNo": {
+                          "type": "null"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "paidAt": {
+                          "type": "null"
+                        },
+                        "details": {
+                          "type": "object",
+                          "properties": {
+                            "membershipLevel": {
+                              "type": "integer"
+                            },
+                            "membershipName": {
+                              "type": "string"
+                            },
+                            "duration": {
+                              "type": "integer"
+                            },
+                            "basePrice": {
+                              "type": "integer"
+                            },
+                            "totalAmount": {
+                              "type": "integer"
+                            },
+                            "remark": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "membershipLevel",
+                            "membershipName",
+                            "duration",
+                            "basePrice",
+                            "totalAmount",
+                            "remark"
+                          ]
+                        },
+                        "remark": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "userId",
+                        "authorId",
+                        "articleId",
+                        "orderNo",
+                        "type",
+                        "title",
+                        "amount",
+                        "paymentMethod",
+                        "paymentOrderNo",
+                        "status",
+                        "paidAt",
+                        "details",
+                        "remark",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "400": {

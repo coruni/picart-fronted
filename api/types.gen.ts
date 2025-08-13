@@ -1942,8 +1942,18 @@ export type UserControllerFollowData = {
 };
 
 export type UserControllerFollowResponses = {
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+    };
+  };
 };
+
+export type UserControllerFollowResponse =
+  UserControllerFollowResponses[keyof UserControllerFollowResponses];
 
 export type UserControllerUnfollowData = {
   body?: never;
@@ -2085,8 +2095,18 @@ export type UserControllerSendVerificationCodeResponses = {
   /**
    * 发送成功
    */
-  200: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+    };
+  };
 };
+
+export type UserControllerSendVerificationCodeResponse =
+  UserControllerSendVerificationCodeResponses[keyof UserControllerSendVerificationCodeResponses];
 
 export type UserControllerPasswordResetData = {
   body?: {
@@ -4049,7 +4069,31 @@ export type OrderControllerGetOrdersResponses = {
     code: number;
     message: string;
     data: {
-      data: Array<string>;
+      data: Array<{
+        id?: number;
+        userId?: number;
+        authorId?: number;
+        articleId?: unknown;
+        orderNo?: string;
+        type?: string;
+        title?: string;
+        amount?: string;
+        paymentMethod?: unknown;
+        paymentOrderNo?: unknown;
+        status?: string;
+        paidAt?: unknown;
+        details?: {
+          remark: string;
+          duration: number;
+          basePrice: number;
+          totalAmount: number;
+          membershipName: string;
+          membershipLevel: number;
+        };
+        remark?: string;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
       meta: {
         total: number;
         page: number;
@@ -4062,37 +4106,6 @@ export type OrderControllerGetOrdersResponses = {
 
 export type OrderControllerGetOrdersResponse =
   OrderControllerGetOrdersResponses[keyof OrderControllerGetOrdersResponses];
-
-export type OrderControllerCreateOrderData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/order';
-};
-
-export type OrderControllerCreateOrderErrors = {
-  /**
-   * 请求参数错误
-   */
-  400: unknown;
-  /**
-   * 未授权
-   */
-  401: unknown;
-};
-
-export type OrderControllerCreateOrderResponses = {
-  /**
-   * 创建成功
-   */
-  201: unknown;
-};
 
 export type OrderControllerFindOneData = {
   body?: never;
@@ -4208,7 +4221,31 @@ export type OrderControllerGetUserOrdersResponses = {
     code: number;
     message: string;
     data: {
-      data: Array<string>;
+      data: Array<{
+        id?: number;
+        userId?: number;
+        authorId?: number;
+        articleId?: unknown;
+        orderNo?: string;
+        type?: string;
+        title?: string;
+        amount?: string;
+        paymentMethod?: unknown;
+        paymentOrderNo?: unknown;
+        status?: string;
+        paidAt?: unknown;
+        details?: {
+          remark: string;
+          duration: number;
+          basePrice: number;
+          totalAmount: number;
+          membershipName: string;
+          membershipLevel: number;
+        };
+        remark?: string;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
       meta: {
         total: number;
         page: number;
@@ -4277,37 +4314,6 @@ export type OrderControllerCancelOrderResponses = {
    * 取消成功
    */
   200: unknown;
-};
-
-export type OrderControllerCreatePaymentOrderData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/order/payment';
-};
-
-export type OrderControllerCreatePaymentOrderErrors = {
-  /**
-   * 请求参数错误
-   */
-  400: unknown;
-  /**
-   * 未授权
-   */
-  401: unknown;
-};
-
-export type OrderControllerCreatePaymentOrderResponses = {
-  /**
-   * 创建成功
-   */
-  201: unknown;
 };
 
 export type OrderControllerRequestRefundData = {
@@ -4406,8 +4412,39 @@ export type OrderControllerCreateMembershipOrderResponses = {
   /**
    * 创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      userId: number;
+      authorId: number;
+      articleId: unknown;
+      orderNo: string;
+      type: string;
+      title: string;
+      amount: number;
+      paymentMethod: unknown;
+      paymentOrderNo: unknown;
+      status: string;
+      paidAt: unknown;
+      details: {
+        membershipLevel: number;
+        membershipName: string;
+        duration: number;
+        basePrice: number;
+        totalAmount: number;
+        remark: string;
+      };
+      remark: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type OrderControllerCreateMembershipOrderResponse =
+  OrderControllerCreateMembershipOrderResponses[keyof OrderControllerCreateMembershipOrderResponses];
 
 export type InviteControllerGetMyInvitesData = {
   body?: never;

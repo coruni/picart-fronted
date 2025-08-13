@@ -55,11 +55,13 @@ import type {
   UserControllerRefreshTokenData,
   UserControllerLogoutData,
   UserControllerFollowData,
+  UserControllerFollowResponse,
   UserControllerUnfollowData,
   UserControllerCalculateCommissionData,
   UserControllerRechargeWalletData,
   UserControllerWithdrawWalletData,
   UserControllerSendVerificationCodeData,
+  UserControllerSendVerificationCodeResponse,
   UserControllerPasswordResetData,
   UserControllerPasswordResetResponse,
   ArticleControllerFindAllData,
@@ -118,7 +120,6 @@ import type {
   PermissionControllerUpdateResponse,
   OrderControllerGetOrdersData,
   OrderControllerGetOrdersResponse,
-  OrderControllerCreateOrderData,
   OrderControllerFindOneData,
   OrderControllerFindByOrderNoData,
   OrderControllerGetWalletBalanceData,
@@ -126,10 +127,10 @@ import type {
   OrderControllerGetUserOrdersResponse,
   OrderControllerGetPendingOrdersData,
   OrderControllerCancelOrderData,
-  OrderControllerCreatePaymentOrderData,
   OrderControllerRequestRefundData,
   OrderControllerCreateArticleOrderData,
   OrderControllerCreateMembershipOrderData,
+  OrderControllerCreateMembershipOrderResponse,
   InviteControllerGetMyInvitesData,
   InviteControllerGetInviteStatsData,
   InviteControllerGetMyInviteEarningsData,
@@ -829,15 +830,21 @@ export const userControllerLogout = <TComposable extends Composable, DefaultT = 
 /**
  * 关注用户
  */
-export const userControllerFollow = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerFollowData, unknown, DefaultT>
+export const userControllerFollow = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerFollowResponse = UserControllerFollowResponse
+>(
+  options: Options<TComposable, UserControllerFollowData, UserControllerFollowResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/user/{id}/follow',
-      ...options
-    }
-  );
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    UserControllerFollowResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/user/{id}/follow',
+    ...options
+  });
 };
 
 /**
@@ -908,20 +915,29 @@ export const userControllerWithdrawWallet = <TComposable extends Composable, Def
  */
 export const userControllerSendVerificationCode = <
   TComposable extends Composable,
-  DefaultT = undefined
+  DefaultT extends
+    UserControllerSendVerificationCodeResponse = UserControllerSendVerificationCodeResponse
 >(
-  options: Options<TComposable, UserControllerSendVerificationCodeData, unknown, DefaultT>
+  options: Options<
+    TComposable,
+    UserControllerSendVerificationCodeData,
+    UserControllerSendVerificationCodeResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/user/email/verification',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    UserControllerSendVerificationCodeResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/user/email/verification',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**
@@ -1739,26 +1755,6 @@ export const orderControllerGetOrders = <
 };
 
 /**
- * 创建订单（包含抽成计算）
- */
-export const orderControllerCreateOrder = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, OrderControllerCreateOrderData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/order',
-      ...options
-    }
-  );
-};
-
-/**
  * 获取订单详情
  */
 export const orderControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
@@ -1886,29 +1882,6 @@ export const orderControllerCancelOrder = <TComposable extends Composable, Defau
 };
 
 /**
- * 创建支付订单
- */
-export const orderControllerCreatePaymentOrder = <
-  TComposable extends Composable,
-  DefaultT = undefined
->(
-  options: Options<TComposable, OrderControllerCreatePaymentOrderData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/order/payment',
-      ...options
-    }
-  );
-};
-
-/**
  * 申请退款
  */
 export const orderControllerRequestRefund = <TComposable extends Composable, DefaultT = undefined>(
@@ -1960,26 +1933,35 @@ export const orderControllerCreateArticleOrder = <
  */
 export const orderControllerCreateMembershipOrder = <
   TComposable extends Composable,
-  DefaultT = undefined
+  DefaultT extends
+    OrderControllerCreateMembershipOrderResponse = OrderControllerCreateMembershipOrderResponse
 >(
-  options: Options<TComposable, OrderControllerCreateMembershipOrderData, unknown, DefaultT>
+  options: Options<
+    TComposable,
+    OrderControllerCreateMembershipOrderData,
+    OrderControllerCreateMembershipOrderResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/order/membership',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    OrderControllerCreateMembershipOrderResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
       }
+    ],
+    url: '/order/membership',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**

@@ -36,9 +36,9 @@
               class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
             >
               <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
-                <NuxtImg
+                <UAvatar
                   :src="authorInfo?.avatar"
-                  alt="作者头像"
+                  :alt="authorInfo?.nickname || authorInfo?.username"
                   class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
@@ -117,20 +117,15 @@
               <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
                 {{ $t('author.articles') }}
               </h2>
-              <div class="flex space-x-2">
-                <UButton
-                  v-for="type in articleTypes"
-                  :key="type.value"
-                  @click="changeArticleType(type.value)"
-                  :class="[
-                    'px-3 py-1.5 text-sm rounded-lg transition-colors',
-                    currentArticleType === type.value
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
-                  ]"
-                >
-                  {{ type.label }}
-                </UButton>
+              <div class="flex justify-end">
+                <UTabs
+                  v-model="currentArticleType"
+                  :items="mobileArticleTabs"
+                  variant="pill"
+                  class="w-auto"
+                  :default-value="0"
+                  :ui="{ trigger: 'cursor-pointer' }"
+                />
               </div>
             </div>
 
@@ -312,6 +307,29 @@
     { label: t('author.latestArticles'), value: 'latest' }
   ]);
 
+  // 响应式处理移动端和桌面端的标签显示
+  const windowWidth = ref(import.meta.client ? window.innerWidth : 1024);
+
+  // 窗口大小变化处理函数
+  const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+  };
+
+  const mobileArticleTabs = computed(() => {
+    const isMobile = windowWidth.value < 768;
+    return articleTypes.value.map(type => ({
+      id: type.value,
+      label: isMobile ? '' : type.label, // 移动端只显示图标，桌面端显示完整标签
+      value: type.value,
+      icon:
+        type.value === 'all'
+          ? 'mynaui:brand-trello'
+          : type.value === 'popular'
+            ? 'mynaui:fire'
+            : 'mynaui:plus'
+    }));
+  });
+
   // 重置数据
   const resetData = () => {
     pagination.value.page = 1;
@@ -319,12 +337,11 @@
     hasMore.value = true;
   };
 
-  // 切换文章类型
-  const changeArticleType = (type: 'all' | 'popular' | 'latest') => {
-    currentArticleType.value = type;
+  // 监听文章类型变化
+  watch(currentArticleType, async () => {
     resetData();
-    loadAuthorArticles();
-  };
+    await loadAuthorArticles();
+  });
 
   // 加载作者文章
   const loadAuthorArticles = async () => {
@@ -374,14 +391,6 @@
 
   // 处理关注
   const handleFollow = async () => {
-    if (!userStore.isAuthenticated) {
-      toast.add({
-        title: t('author.loginRequired'),
-        color: 'error'
-      });
-      return;
-    }
-
     followLoading.value = true;
     try {
       await userControllerFollow({
@@ -392,15 +401,18 @@
       });
 
       isFollowing.value = true;
+
+      const { data } = await userControllerFollow({
+        composable: '$fetch',
+        path: {
+          id: String(route.params.id)
+        }
+      });
       toast.add({
-        title: t('author.followSuccess'),
-        color: 'success'
+        title: t(data.message),
+        color: 'primary'
       });
     } catch (error: any) {
-      toast.add({
-        title: error?.message || t('author.followFailed'),
-        color: 'error'
-      });
     } finally {
       followLoading.value = false;
     }
@@ -418,15 +430,7 @@
       });
 
       isFollowing.value = false;
-      toast.add({
-        title: t('author.unfollowSuccess'),
-        color: 'success'
-      });
     } catch (error: any) {
-      toast.add({
-        title: error?.message || t('author.unfollowFailed'),
-        color: 'error'
-      });
     } finally {
       followLoading.value = false;
     }
@@ -435,6 +439,16 @@
   // 初始加载
   loadAuthorArticles();
   checkFollowStatus();
+
+  // 监听窗口大小变化
+  onMounted(() => {
+    window.addEventListener('resize', handleResize);
+  });
+
+  // 组件销毁时清理监听器
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+  });
 
   // 页面元数据
   useHead({

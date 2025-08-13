@@ -1,33 +1,44 @@
 <template>
   <div class="flex flex-col min-h-full relative z-10">
-    <!-- 筛选面板 -->
-    <UCollapsible class="mb-4" v-model:open="showFilters">
+    <!-- 搜索和筛选面板 -->
+    <UCollapsible v-model:open="showFilters" class="mb-6">
       <UButton
-        :label="$t('common.table.filter')"
+        class="group w-full justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm"
         color="neutral"
-        variant="soft"
-        trailing-icon="i-mynaui-chevron-down"
-        block
-      />
+        variant="ghost"
+        trailing-icon="mynaui:chevron-down"
+        :ui="{
+          trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
+        }"
+      >
+        <div class="flex items-center gap-2">
+          <UIcon name="mynaui:search" class="w-5 h-5" />
+          <span class="font-medium">{{ $t('admin.articles.searchAndFilter') }}</span>
+        </div>
+      </UButton>
       <template #content>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-          <UInput
-            v-model="filters.title"
-            :placeholder="t('common.table.title')"
-            @update:model-value="onFilterChange"
-          />
-          <USelectMenu
-            v-model="filters.categoryId"
-            :items="categoryOptions"
-            value-key="value"
-            clearable
-            option-attribute="label"
-            :placeholder="t('common.table.category')"
-            @update:model-value="onFilterChange"
-          />
+        <div
+          class="p-4 bg-white dark:bg-gray-800 rounded-b-lg shadow-sm border-t border-gray-200 dark:border-gray-700"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <UInput v-model="filters.title" :placeholder="t('common.table.title')" class="w-full" />
+            <USelectMenu
+              v-model="filters.categoryId"
+              :items="categoryOptions"
+              value-key="value"
+              clearable
+              option-attribute="label"
+              :placeholder="t('common.table.category')"
+              class="w-full"
+            />
+            <UButton @click="handleSearch" color="primary" class="w-full">
+              {{ $t('common.button.search') }}
+            </UButton>
+          </div>
         </div>
       </template>
     </UCollapsible>
+
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
         {{ t('admin.menu.articles') }}
@@ -47,18 +58,17 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :pagination-options="{
-          getPaginationRowModel: getPaginationRowModel()
-        }"
+        :key="tableKey"
         class="min-w-[600px] sm:min-w-0"
       />
     </div>
+
     <div class="flex justify-center border-t border-default pt-4">
       <UPagination
-        :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
-        :items-per-page="table?.tableApi?.getState().pagination.pageSize"
-        :total="table?.tableApi?.getFilteredRowModel().rows.length"
-        @update:page="p => table?.tableApi?.setPageIndex(p - 1)"
+        :page="currentPage"
+        :items-per-page="pagination.pageSize"
+        :total="totalItems"
+        @update:page="handlePageChange"
         color="neutral"
       />
     </div>
@@ -88,10 +98,8 @@
 </template>
 
 <script setup lang="ts">
-  import { getPaginationRowModel } from '@tanstack/vue-table';
   import { debounce } from 'lodash-es';
   import type { TableColumn } from '@nuxt/ui';
-  import type { Article, ArticleStatus } from '~~/types/article';
   import type { SelectMenuItem } from '@nuxt/ui';
 
   import {
@@ -101,6 +109,10 @@
   } from '~~/api';
   import type { Row } from '@tanstack/vue-table';
   import type { Category } from '~~/types/category';
+  import type { ArticleControllerFindAllResponse } from '~/api';
+
+  type Article = ArticleControllerFindAllResponse['data']['data'][0];
+  type ArticleStatus = Article['status'];
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
@@ -110,6 +122,7 @@
   const toast = useToast();
   const table = useTemplateRef('table');
   const { t } = useI18n();
+
   definePageMeta({
     layout: 'dashboard',
     requiresAuth: true
@@ -122,12 +135,32 @@
     categoryId: null as number | null
   });
 
-  // 分页状态
-  const pagination = ref({ pageIndex: 0, pageSize: 20 });
+  // 分页状态 - 关键修改点1: 简化分页状态管理
+  const pagination = ref({
+    pageIndex: 0,
+    pageSize: 20
+  });
+
+  // 关键修改点2: 添加当前页面计算属性和表格key
+  const currentPage = computed(() => pagination.value.pageIndex + 1);
+  const tableKey = ref(0); // 强制重新渲染表格
 
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentArticleId = ref<number | null>(null);
+
+  // 搜索功能 - 关键修改点3: 修改搜索逻辑
+  const handleSearch = () => {
+    pagination.value.pageIndex = 0;
+    tableKey.value++; // 强制重新渲染
+    // 不需要手动刷新，reactive query会自动处理
+  };
+
+  // 关键修改点4: 添加页面变化处理函数
+  const handlePageChange = (newPage: number) => {
+    pagination.value.pageIndex = newPage - 1;
+    tableKey.value++; // 强制重新渲染
+  };
 
   const columns: TableColumn<Article>[] = [
     {
@@ -164,7 +197,7 @@
       accessorKey: 'author',
       header: t('common.table.author'),
       cell: ({ row }) => {
-        return row.original.author?.nickname || row.original.author?.name || '-';
+        return row.original.author?.nickname || row.original.author?.username || '-';
       }
     },
     {
@@ -185,7 +218,6 @@
     },
     {
       id: 'actions',
-
       cell: ({ row }) => {
         return h(
           'div',
@@ -277,10 +309,8 @@
   });
 
   // 分类选项
-
   const categoryOptions = computed<SelectMenuItem[]>(() => {
     const allCategories = categories.value?.data.data || [];
-    // 展平分类树结构
     const flattened: SelectMenuItem[] = [];
 
     const flattenCategories = (cats: Category[], prefix = '') => {
@@ -301,38 +331,28 @@
     return flattened;
   });
 
-  const onFilterChange = debounce(() => {
-    // 重置到第一页
-    pagination.value.pageIndex = 0;
-    // 刷新数据
-    articles.refresh?.();
-  }, 300);
-
+  // 关键修改点5: 优化数据获取逻辑
   const articles = await articleControllerFindAll({
     composable: 'useFetch',
     key: 'articles',
     query: computed(() => ({
       page: pagination.value.pageIndex + 1,
       limit: pagination.value.pageSize,
-      title: filters.value.title || undefined,
-      categoryId: filters.value.categoryId || undefined
+      ...(filters.value.title && { title: filters.value.title }),
+      ...(filters.value.categoryId && { categoryId: filters.value.categoryId })
     }))
   });
 
   // 计算属性：表格数据
   const tableData = computed(() => {
     const data = articles.data.value?.data?.data || [];
-    return data as Article[];
+    return [...data];
   });
 
-  // 监听分页变化
-  watch(
-    [() => pagination.value.pageIndex, () => pagination.value.pageSize],
-    () => {
-      articles.refresh?.();
-    },
-    { deep: true }
-  );
+  // 计算属性：总条目数
+  const totalItems = computed(() => {
+    return articles.data.value?.data?.meta?.total || 0;
+  });
 
   const onCreate = () => {
     router.push('articles/create');

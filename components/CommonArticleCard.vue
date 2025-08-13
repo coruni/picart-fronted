@@ -28,7 +28,8 @@
       <div class="flex-grow flex flex-col justify-end">
         <div class="flex items-center justify-between flex-wrap">
           <div class="flex items-center space-x-4">
-            <button
+            <UButton
+              variant="ghost"
               class="cursor-pointer text-gray-500 dark:text-white/70 flex items-center gap-2 hover:text-pink-400 rounded-full px-3 py-1.5 hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300 whitespace-nowrap group/like"
               :class="article.isLiked ? 'text-pink-500' : 'text-gray-500 dark:text-white/70'"
             >
@@ -37,15 +38,15 @@
                 class="transition-transform duration-300 group-hover/like:scale-110 group-hover/like:text-pink-500"
               />
               <span class="text-sm font-medium">{{ article.likes }}</span>
-            </button>
+            </UButton>
           </div>
-          <div class="flex items-center">
+          <NuxtLinkLocale :to="`/author/${article.author?.id}`" class="flex items-center">
             <UAvatar
               :src="article.author?.avatar ?? ''"
               :alt="article.author?.nickname ?? article.author?.username"
               class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
             />
-          </div>
+          </NuxtLinkLocale>
         </div>
       </div>
     </div>

@@ -104,6 +104,47 @@
       "backgroundPlaceholder": "Please upload background",
       "avatarPlaceholder": "Please upload avatar",
       "namePlaceholder": "Please input name"
+    },
+    "users": {
+      "searchAndFilter": "Search & Filter",
+      "searchUsername": "Search username"
+    },
+    "articles": {
+      "searchAndFilter": "Search & Filter"
+    },
+    "categories": {
+      "searchAndFilter": "Search & Filter"
+    },
+    "tags": {
+      "searchAndFilter": "Search & Filter"
+    },
+    "banners": {
+      "searchAndFilter": "Search & Filter"
+    },
+    "orders": {
+      "orderNo": "Order No",
+      "userId": "User ID",
+      "type": "Order Type",
+      "status": "Order Status",
+      "amount": "Amount",
+      "createdAt": "Created At",
+      "description": "Order Description",
+      "orderDetail": "Order Detail",
+      "viewDetail": "View Detail",
+      "selectStatus": "Select Status",
+      "selectType": "Select Type",
+      "searchUserId": "Search User ID",
+      "searchAndFilter": "Search & Filter",
+      "allStatus": "All Status",
+      "allTypes": "All Types",
+      "pending": "Pending",
+      "paid": "Paid",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "membership": "Membership",
+      "product": "Product",
+      "service": "Service",
+      "article": "Article"
     }
   },
   "common": {
@@ -150,7 +191,9 @@
       "confirm": "Confirm",
       "cancel": "Cancel",
       "create": "Create",
-      "update": "Update"
+      "update": "Update",
+      "search": "Search",
+      "close": "Close"
     },
     "save": "Save",
     "loading": {
@@ -491,6 +534,10 @@
   "response": {
     "error": {
       "followSelf": "Cannot follow yourself"
+    },
+    "success": {
+      "verificationCodeSent": "Verification code sent"
     }
-  }
+  },
+  "Unauthorized": "Unauthorized"
 }

@@ -6,12 +6,12 @@
       <div class="flex justify-center mb-8 md:justify-end">
         <UTabs
           v-model="currentTab"
-          :items="tabs"
+          :items="mobileTabs"
           variant="pill"
           class="w-auto"
           :default-value="0"
           :ui="{ trigger: 'cursor-pointer' }"
-        </UTabs>
+        />
       </div>
       <!-- 瀑布流展示 -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
@@ -47,17 +47,40 @@
 
 <script lang="ts" setup>
   import type { TabsItem } from '@nuxt/ui';
-import { articleControllerFindAll } from '~~/api';
+  import { articleControllerFindAll } from '~~/api';
 
   // 首页使用默认的全局SEO设置，不需要额外设置
   const toast = useToast();
-const {t} = useI18n();
+  const { t } = useI18n();
   const tabs: TabsItem[] = [
     { id: 'all', label: t('home.tab.all'), value: 'all', icon: 'mynaui:brand-trello' },
-    { id: 'popular', label: t('home.tab.popular'), value: 'popular', icon: 'mynaui:brand-trello' },
-    { id: 'latest', label: t('home.tab.latest'), value: 'latest', icon: 'mynaui:brand-trello' },
-    { id: 'following', label: t('home.tab.following'), value: 'following', icon: 'mynaui:brand-trello' }
+    { id: 'popular', label: t('home.tab.popular'), value: 'popular', icon: 'mynaui:fire' },
+    { id: 'latest', label: t('home.tab.latest'), value: 'latest', icon: 'mynaui:plus' },
+    {
+      id: 'following',
+      label: t('home.tab.following'),
+      value: 'following',
+      icon: 'mynaui:heart'
+    }
   ];
+
+  // 响应式处理移动端和桌面端的标签显示
+  const windowWidth = ref(import.meta.client ? window.innerWidth : 1024);
+
+  // 窗口大小变化处理函数
+  const handleResize = () => {
+    windowWidth.value = window.innerWidth;
+  };
+
+  const mobileTabs = computed(() => {
+    const isMobile = windowWidth.value < 768;
+    return tabs.map(tab => ({
+      ...tab,
+      label: isMobile ? '' : tab.label, // 移动端只显示图标，桌面端显示完整标签
+      icon: tab.icon
+    }));
+  });
+
   const currentTab = ref('all');
   const pagination = ref({
     page: 1,
@@ -144,7 +167,7 @@ const {t} = useI18n();
       title:
         '用户数据已导入，部分账号有重复。可以使用邮箱登录，昵称可以修改但是用户名目前无法修改。有效期会员已补充一个月会员，其余不变。',
       duration: 30000,
-        actions: [
+      actions: [
         {
           label: '打开',
           color: 'primary',
@@ -158,6 +181,9 @@ const {t} = useI18n();
 
   onMounted(() => {
     notify();
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', handleResize);
 
     // 初始化 Intersection Observer
     if (observerTarget.value) {
@@ -182,6 +208,8 @@ const {t} = useI18n();
     if (observer) {
       observer.disconnect();
     }
+    // 清理窗口大小监听器
+    window.removeEventListener('resize', handleResize);
   });
 </script>
 

@@ -161,6 +161,7 @@
   import type { ConfigControllerGetPublicResponse } from '~~/api';
   import { z } from 'zod';
   const userStore = useUserStore();
+  const localePath = useLocalePath();
   const { t } = useI18n();
   const router = useRouter();
   const toast = useToast();
@@ -237,17 +238,17 @@
       sendingCode.value = true;
 
       // 调用发送验证码API
-      await userControllerSendVerificationCode({
+      const { data } = await userControllerSendVerificationCode({
         composable: '$fetch',
         body: {
           email: registerForm.value.email,
-          type: 'verificationCode'
+          type: 'verification'
         }
       });
 
       toast.add({
-        title: t('register.codeSent'),
-        color: 'success'
+        title: t(data.message),
+        color: 'primary'
       });
 
       // 开始倒计时
@@ -260,10 +261,6 @@
       }, 1000);
     } catch (error: any) {
       console.error('发送验证码失败:', error);
-      toast.add({
-        title: error?.data?.message || t('register.sendCodeFailed'),
-        color: 'error'
-      });
     } finally {
       sendingCode.value = false;
     }
@@ -299,17 +296,9 @@
       if (data.token) {
         // 注册成功后直接登录并跳转到用户主页
         userStore.login(data.token, data.refreshToken, data as any);
-        router.push('/user');
+        router.push(localePath('/user'));
       }
     } catch (error: any) {
-      console.error('Register failed:', error);
-
-      // 显示错误消息
-      const errorMessage = error?.data?.message || t('register.registerFailed');
-      toast.add({
-        title: errorMessage,
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }
