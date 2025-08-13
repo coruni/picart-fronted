@@ -96,7 +96,7 @@
           <div
             class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
           >
-            <div class="flex items-center">
+            <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="flex items-center">
               <UAvatar
                 :src="article?.data.author.avatar"
                 alt="作者头像"
@@ -107,7 +107,7 @@
                 placeholder
               />
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
-            </div>
+            </NuxtLinkLocale>
             <div>{{ $t('article.publishAt') }} {{ article?.data.createdAt }}</div>
             <div class="flex items-center">
               <Icon name="mynaui:eye" class="mr-1" />
@@ -216,6 +216,7 @@
                     <UButton
                       type="submit"
                       class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 !rounded-button whitespace-nowrap"
+                      :loading="isCommentSubmitting"
                     >
                       {{ $t('article.comment') }}
                     </UButton>
@@ -225,43 +226,30 @@
             </div>
           </div>
           <!-- 评论列表 -->
-          <!-- <div class="space-y-6">
-            <div v-for="comment in comments" :key="comment.id" class="flex space-x-4">
-              <NuxtImg
-                :src="comment.avatar"
-                :alt="comment.author"
-                class="w-10 h-10 rounded-full"
-                loading="lazy"
-                format="webp"
-                sizes="40px"
-                @error="handleImageError($event as Event, 'avatar')"
-              />
-              <div class="flex-1">
-                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="font-medium text-gray-900 dark:text-gray-100">{{
-                      comment.author
-                    }}</span>
-                    <span class="text-sm text-gray-500">{{ comment.time }}</span>
-                  </div>
-                  <p class="text-gray-700 dark:text-gray-300">{{ comment.content }}</p>
-                </div>
-                <div class="flex items-center space-x-4 mt-2 ml-2">
-                  <button
-                    class="text-gray-500 hover:text-primary-500 text-sm flex items-center !rounded-button whitespace-nowrap"
-                  >
-                    <i class="far fa-heart mr-1"></i>
-                    <span>{{ comment.likes }}</span>
-                  </button>
-                  <button
-                    class="text-gray-500 hover:text-primary-500 text-sm !rounded-button whitespace-nowrap"
-                  >
-                    {{ $t('article.reply') }}
-                  </button>
-                </div>
-              </div>
+          <div class="space-y-6">
+            <CommentItem
+              v-for="comment in comments"
+              :key="comment.id"
+              :comment="comment"
+              :article-id="route.params.id"
+              @comment-deleted="handleCommentDeleted"
+              @reply-added="handleReplyAdded"
+            />
+            <div v-if="isLoadingComments" class="flex justify-center py-8">
+              <div
+                class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
+              ></div>
             </div>
-          </div> -->
+            <div v-if="hasMoreComments" class="flex justify-center py-8">
+              <UButton
+                @click="loadMoreComments"
+                :loading="commentsPending"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
+              >
+                {{ $t('article.loadMoreComments') }}
+              </UButton>
+            </div>
+          </div>
         </div>
       </div>
       <!-- 右侧边栏 -->
@@ -363,13 +351,19 @@
 
 <script lang="ts" setup>
   import zod from 'zod';
+  import { useUserStore } from '~/stores/user';
+  import { useToast } from '#imports';
   import {
     articleControllerFindOne,
     articleControllerFindRecommend,
     articleControllerLike,
-    userControllerFollow
+    commentControllerCreate,
+    userControllerFollow,
+    commentControllerFindAll
   } from '~/api';
   import type { ArticleControllerFindOneResponse } from '~/api';
+  import type { CommentControllerFindAllResponse } from '~/api';
+  import type { FormSubmitEvent } from '@nuxt/ui';
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
@@ -514,8 +508,103 @@
     commentText: ''
   });
 
-  const handleSubmit = (payload: SubmitEvent) => {
-    console.log(payload);
+  // 评论相关状态
+  const isCommentSubmitting = ref(false);
+  const comments = ref<
+    (CommentControllerFindAllResponse['data']['data'][0] & {
+      isLiked: boolean;
+    })[]
+  >([]);
+  const commentsPage = ref(1);
+  const hasMoreComments = ref(true);
+  const isLoadingComments = ref(false);
+  const toast = useToast();
+
+  // 获取评论列表
+  const {
+    data: commentsData,
+    pending: commentsPending,
+    refresh: refreshComments
+  } = commentControllerFindAll({
+    composable: 'useFetch',
+    key: `comments_${route.params.id}`,
+    path: { id: Number(route.params.id) },
+    query: {
+      page: 1,
+      limit: 20
+    }
+  });
+
+  // 监听评论数据变化
+  watch(
+    commentsData,
+    newData => {
+      if (newData?.data?.data) {
+        comments.value = newData.data.data.map(item => ({
+          ...item,
+          isLiked: false
+        }));
+        hasMoreComments.value = newData.data.meta.page < newData.data.meta.totalPages;
+      }
+    },
+    { immediate: true }
+  );
+
+  const handleSubmit = async (payload: FormSubmitEvent<{ commentText: string }>) => {
+    if (!isLoggedIn.value) {
+      toast.add({
+        title: t('article.loginRequired'),
+        color: 'error'
+      });
+      return;
+    }
+
+    try {
+      isCommentSubmitting.value = true;
+      const text = payload.data.commentText;
+
+      await commentControllerCreate({
+        composable: 'useFetch',
+        key: `comment_create_${Date.now()}`,
+        body: {
+          articleId: Number(article.value?.data.id),
+          content: text
+        }
+      });
+
+      // 清空输入框
+      state.commentText = '';
+
+      // 刷新评论列表
+      await refreshComments();
+
+      toast.add({
+        title: t('article.commentSuccess'),
+        color: 'success'
+      });
+    } catch (error) {
+      console.error('发布评论失败:', error);
+      toast.add({
+        title: t('article.commentFailed'),
+        color: 'error'
+      });
+    } finally {
+      isCommentSubmitting.value = false;
+    }
+  };
+
+  // 处理评论删除
+  const handleCommentDeleted = (commentId: number) => {
+    comments.value = comments.value.filter(comment => comment.id !== commentId);
+  };
+
+  // 处理回复添加
+  const handleReplyAdded = (newReply: any) => {
+    // 找到对应的评论并更新回复数量
+    const comment = comments.value.find(c => c.id === newReply.parentId);
+    if (comment) {
+      comment.replyCount = (comment.replyCount || 0) + 1;
+    }
   };
 
   const handleFollow = async () => {
@@ -558,6 +647,37 @@
       console.error('点赞操作失败:', error);
     } finally {
       isLikeLoading.value = false;
+    }
+  };
+
+  // 加载更多评论
+  const loadMoreComments = async () => {
+    if (!hasMoreComments.value || commentsPending.value) return;
+
+    isLoadingComments.value = true;
+    try {
+      const nextPage = commentsPage.value + 1;
+      const response = await commentControllerFindAll({
+        composable: 'useFetch',
+        key: `comments_${route.params.id}_${nextPage}`,
+        path: { id: Number(route.params.id) },
+        query: {
+          page: nextPage,
+          limit: 20
+        }
+      });
+
+      // 正确处理响应数据
+      const responseData = response as any;
+      if (responseData?.data?.data) {
+        comments.value = [...comments.value, ...responseData.data.data];
+        hasMoreComments.value = responseData.data.meta.page < responseData.data.meta.totalPages;
+        commentsPage.value = nextPage;
+      }
+    } catch (error) {
+      console.error('加载更多评论失败:', error);
+    } finally {
+      isLoadingComments.value = false;
     }
   };
 </script>

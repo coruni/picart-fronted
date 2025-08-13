@@ -85,37 +85,16 @@
       "saveFailed": "设置保存失败"
     },
     "categories": {
-      "name": "名称",
-      "description": "描述",
-      "avatar": "头像",
-      "parent": "上级分类",
-      "createdAt": "创建时间",
-      "edit": "编辑分类",
-      "title": "分类",
-      "avatarPlaceholder": "请上传头像",
-      "descriptionPlaceholder": "请输入说明",
-      "namePlaceholder": "请输入名称",
-      "selectParent": "请选择父级类别",
-      "coverPlaceholder": "上传封面",
-      "coverRequired": "请选择图片"
+      "searchAndFilter": "搜索和筛选"
     },
     "tags": {
-      "avatarPlaceholder": "请上传头像",
-      "backgroundPlaceholder": "请上传背景",
-      "descriptionPlaceholder": "请输入说明",
-      "namePlaceholder": "请输入名称"
+      "searchAndFilter": "搜索和筛选"
     },
     "users": {
       "searchAndFilter": "搜索和筛选",
       "searchUsername": "搜索用户名"
     },
     "articles": {
-      "searchAndFilter": "搜索和筛选"
-    },
-    "categories": {
-      "searchAndFilter": "搜索和筛选"
-    },
-    "tags": {
       "searchAndFilter": "搜索和筛选"
     },
     "banners": {
@@ -212,7 +191,10 @@
     "status": {
       "active": "启用",
       "inactive": "禁用"
-    }
+    },
+    "close": "关闭",
+    "delete": "删除",
+    "edit": "编辑"
   },
   "filter": {
     "title": "筛选"
@@ -286,6 +268,26 @@
     "commentText": "请输入评论内容",
     "like": "点赞",
     "liked": "已点赞",
+    "unliked": "已取消点赞",
+    "loginRequired": "请先登录",
+    "commentSuccess": "评论发布成功",
+    "commentFailed": "评论发布失败",
+    "loadMoreComments": "加载更多评论",
+    "replies": "回复",
+    "loadMoreReplies": "加载更多回复",
+    "viewAllReplies": "查看全部回复",
+    "allReplies": "全部回复",
+    "replyPlaceholder": "写下你的回复...",
+    "replySuccess": "回复发布成功",
+    "replyFailed": "回复发布失败",
+    "editSuccess": "编辑成功",
+    "editFailed": "编辑失败",
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败",
+    "likeFailed": "点赞失败",
+    "loadRepliesFailed": "加载回复失败",
+    "commentDetail": "评论详情",
+    "loadCommentDetailFailed": "加载评论详情失败",
     "restrictions": {
       "loginRequired": {
         "title": "需要登录查看",
@@ -317,7 +319,8 @@
         "description": "该内容暂时无法访问，请稍后再试",
         "contactText": "如有疑问，请联系客服"
       }
-    }
+    },
+    "deleteConfirm": "删除确认"
   },
   "validation": {
     "required": "此字段为必填项",
@@ -355,7 +358,7 @@
   "login": {
     "title": "用户登录",
     "account": "账号",
-    "accountPlaceholder": "请输入账号",
+    "accountPlaceholder": "邮箱或用户名",
     "password": "密码",
     "passwordPlaceholder": "请输入密码",
     "rememberMe": "记住我",
@@ -609,10 +612,16 @@
   },
   "response": {
     "error": {
-      "followSelf": "不能关注自己"
+      "followSelf": "不能关注自己",
+      "emailAlreadyExists": "邮箱已存在",
+      "usernameAlreadyExists": "用户名已存在",
+      "emailNotExists": "邮箱不存在",
+      "articleNotFound": "文章不存在"
     },
     "success": {
-      "verificationCodeSent": "验证码已发送"
+      "verificationCodeSent": "验证码已发送",
+      "profileSaved": "资料保存成功",
+      "profileSavedFailed": "资料保存失败"
     }
   },
   "Unauthorized": "未授权"

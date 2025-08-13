@@ -8,7 +8,7 @@ export default {
     './pages/**/*.vue',
     './plugins/**/*.{js,ts}',
     './app.vue',
-    './error.vue',
+    './error.vue'
   ],
   theme: {
     extend: {
@@ -16,9 +16,13 @@ export default {
         background: {
           light: 'white',
           dark: 'gray-900'
-        },
-      },
-    },
+        }
+      }
+    }
   },
   plugins: [],
+  // 添加 sourcemap 配置
+  future: {
+    hoverOnlyWhenSupported: true
+  }
 } satisfies Config;

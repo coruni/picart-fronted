@@ -788,13 +788,13 @@
 
       // 显示成功提示
       toast.add({
-        title: t('user.profileSaved'),
-        color: 'success',
+        title: t('response.success.profileSaved'),
+        color: 'primary',
         duration: 2000
       });
     } catch (error) {
       toast.add({
-        title: t('user.saveProfileFailed'),
+        title: t('response.error.profileSavedFailed'),
         color: 'error',
         duration: 2000
       });

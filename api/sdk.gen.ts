@@ -81,9 +81,11 @@ import type {
   ArticleControllerFindArticleByAuthorResponse,
   ArticleControllerLikeData,
   CommentControllerFindAllData,
+  CommentControllerFindAllResponse,
   CommentControllerRemoveData,
   CommentControllerRemoveResponse,
   CommentControllerFindOneData,
+  CommentControllerFindOneResponse,
   CommentControllerUpdateData,
   CommentControllerGetRepliesData,
   CommentControllerGetRepliesResponse,
@@ -1200,11 +1202,24 @@ export const articleControllerLike = <TComposable extends Composable, DefaultT =
 /**
  * 获取文章评论列表
  */
-export const commentControllerFindAll = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, CommentControllerFindAllData, unknown, DefaultT>
+export const commentControllerFindAll = <
+  TComposable extends Composable,
+  DefaultT extends CommentControllerFindAllResponse = CommentControllerFindAllResponse
+>(
+  options: Options<
+    TComposable,
+    CommentControllerFindAllData,
+    CommentControllerFindAllResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
-    url: '/comments/article/{id}',
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    CommentControllerFindAllResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/comment/article/{id}',
     ...options
   });
 };
@@ -1229,7 +1244,7 @@ export const commentControllerRemove = <
     unknown,
     DefaultT
   >({
-    url: '/comments/{id}',
+    url: '/comment/{id}',
     ...options
   });
 };
@@ -1237,11 +1252,24 @@ export const commentControllerRemove = <
 /**
  * 获取评论详情
  */
-export const commentControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, CommentControllerFindOneData, unknown, DefaultT>
+export const commentControllerFindOne = <
+  TComposable extends Composable,
+  DefaultT extends CommentControllerFindOneResponse = CommentControllerFindOneResponse
+>(
+  options: Options<
+    TComposable,
+    CommentControllerFindOneData,
+    CommentControllerFindOneResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
-    url: '/comments/{id}',
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    CommentControllerFindOneResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/comment/{id}',
     ...options
   });
 };
@@ -1258,7 +1286,7 @@ export const commentControllerUpdate = <TComposable extends Composable, DefaultT
     unknown,
     DefaultT
   >({
-    url: '/comments/{id}',
+    url: '/comment/{id}',
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -1268,7 +1296,7 @@ export const commentControllerUpdate = <TComposable extends Composable, DefaultT
 };
 
 /**
- * 获取评论回复列表
+ * 获取评论回复列表（弃用）
  */
 export const commentControllerGetReplies = <
   TComposable extends Composable,
@@ -1287,7 +1315,7 @@ export const commentControllerGetReplies = <
     unknown,
     DefaultT
   >({
-    url: '/comments/{id}/replies',
+    url: '/comment/{id}/replies',
     ...options
   });
 };
@@ -1313,7 +1341,7 @@ export const commentControllerGetUserComments = <
     unknown,
     DefaultT
   >({
-    url: '/comments/user/{userId}',
+    url: '/comment/user/{userId}',
     ...options
   });
 };
@@ -1328,7 +1356,7 @@ export const commentControllerGetCommentCount = <
   options: Options<TComposable, CommentControllerGetCommentCountData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
-    url: '/comments/article/{id}/count',
+    url: '/comment/article/{id}/count',
     ...options
   });
 };
@@ -1341,7 +1369,7 @@ export const commentControllerLike = <TComposable extends Composable, DefaultT =
 ) => {
   return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
     {
-      url: '/comments/{id}/like',
+      url: '/comment/{id}/like',
       ...options
     }
   );
@@ -1355,7 +1383,7 @@ export const commentControllerCreate = <TComposable extends Composable, DefaultT
 ) => {
   return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
     {
-      url: '/comments',
+      url: '/comment',
       ...options,
       headers: {
         'Content-Type': 'application/json',

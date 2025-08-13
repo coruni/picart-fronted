@@ -85,37 +85,16 @@
       "saveFailed": "Failed to save settings"
     },
     "categories": {
-      "name": "Name",
-      "description": "Description",
-      "avatar": "Avatar",
-      "parent": "Parent",
-      "createdAt": "Created At",
-      "edit": "Edit",
-      "title": "Category",
-      "namePlaceholder": "Please input name",
-      "descriptionPlaceholder": "Please input description",
-      "selectParent": "Please select parent category",
-      "avatarPlaceholder": "Please upload avatar",
-      "coverPlaceholder": "Upload Cover",
-      "coverRequired": "Please Select Image"
+      "searchAndFilter": "Search & Filter"
     },
     "tags": {
-      "descriptionPlaceholder": "Please input description",
-      "backgroundPlaceholder": "Please upload background",
-      "avatarPlaceholder": "Please upload avatar",
-      "namePlaceholder": "Please input name"
+      "searchAndFilter": "Search & Filter"
     },
     "users": {
       "searchAndFilter": "Search & Filter",
       "searchUsername": "Search username"
     },
     "articles": {
-      "searchAndFilter": "Search & Filter"
-    },
-    "categories": {
-      "searchAndFilter": "Search & Filter"
-    },
-    "tags": {
       "searchAndFilter": "Search & Filter"
     },
     "banners": {
@@ -212,7 +191,10 @@
     "status": {
       "active": "Active",
       "inactive": "Inactive"
-    }
+    },
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "filter": {
     "title": "Filter"
@@ -273,20 +255,39 @@
     }
   },
   "article": {
-    "publishAt": "Publish At",
+    "publishAt": "Published at",
     "views": "Views",
     "comments": "Comments",
     "followers": "Followers",
     "likes": "Likes",
-    "goodReviews": "Reviews",
-    "followAuthor": "Follow Author",
-    "relatedPosts": "Related Articles",
+    "goodReviews": "Good Reviews",
     "relatedArticles": "Related Articles",
+    "followAuthor": "Follow Author",
     "comment": "Comment",
     "reply": "Reply",
-    "commentText": "Please input content",
+    "commentText": "Please enter your comment",
     "like": "Like",
     "liked": "Liked",
+    "unliked": "Unliked",
+    "loginRequired": "Please login first",
+    "commentSuccess": "Comment published successfully",
+    "commentFailed": "Failed to publish comment",
+    "loadMoreComments": "Load more comments",
+    "replies": "Replies",
+    "loadMoreReplies": "Load more replies",
+    "viewAllReplies": "View all replies",
+    "allReplies": "All replies",
+    "replyPlaceholder": "Write your reply...",
+    "replySuccess": "Reply published successfully",
+    "replyFailed": "Failed to publish reply",
+    "editSuccess": "Edit successful",
+    "editFailed": "Edit failed",
+    "deleteSuccess": "Delete successful",
+    "deleteFailed": "Delete failed",
+    "likeFailed": "Like failed",
+    "loadRepliesFailed": "Failed to load replies",
+    "commentDetail": "Comment Detail",
+    "loadCommentDetailFailed": "Failed to load comment detail",
     "restrictions": {
       "loginRequired": {
         "title": "Login Required",
@@ -313,7 +314,8 @@
         "description": "This content is temporarily unavailable, please try again later",
         "contactText": "If you have any questions, please contact customer service"
       }
-    }
+    },
+    "deleteConfirm": "Delete Confirm"
   },
   "validation": {
     "required": "This field is required",
@@ -350,6 +352,8 @@
   },
   "login": {
     "title": "User Login",
+    "accountPlaceholder": "Email or username",
+    "account": "Account",
     "username": "Username",
     "usernamePlaceholder": "Please enter your username",
     "password": "Password",
@@ -533,10 +537,16 @@
   },
   "response": {
     "error": {
-      "followSelf": "Cannot follow yourself"
+      "followSelf": "Cannot follow yourself",
+      "emailAlreadyExists": "Email already exists",
+      "usernameAlreadyExists": "Username already exists",
+      "emailNotExists": "Email not exists",
+      "articleNotFound": "Article not found"
     },
     "success": {
-      "verificationCodeSent": "Verification code sent"
+      "verificationCodeSent": "Verification code sent",
+      "profileSaved": "Profile saved successfully",
+      "profileSavedFailed": "Failed to save profile"
     }
   },
   "Unauthorized": "Unauthorized"

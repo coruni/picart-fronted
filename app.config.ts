@@ -7,6 +7,7 @@ export default defineAppConfig({
     colors: {
       primary: 'indigo'
     },
+    close: 'cursor-pointer',
     icons: {
       arrowLeft: 'mynaui:arrow-left',
       arrowRight: 'mynaui:arrow-right',

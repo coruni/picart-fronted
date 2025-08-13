@@ -14,7 +14,7 @@
     <div class="relative">
       <swiper-container
         ref="swiperContainerRef"
-        class="h-80 md:h-[500px] transition-all duration-300"
+        class="h-80 md:h-[500px] transition-all duration-300 bg-gray-100 dark:bg-gray-900"
         :autoplay="{ delay: 3000 }"
         :slides-per-view="1"
         :loop="true"

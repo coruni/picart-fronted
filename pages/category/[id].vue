@@ -138,13 +138,13 @@
 
   const route = useRoute();
   const categoryId = computed(() => route.params.id as string);
-
+  const { t } = useI18n();
   // 简化状态管理，参考index.vue
   const articles = ref<any[]>([]);
   const loading = ref(false);
   const tabs = [
-    { label: 'category.latest', value: 'latest' },
-    { label: 'category.popular', value: 'popular' }
+    { label: t('category.latest'), value: 'latest' },
+    { label: t('category.popular'), value: 'popular' }
   ];
   const currentTab = ref('latest');
   const viewMode = ref<'grid' | 'list'>('grid');

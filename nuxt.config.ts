@@ -24,7 +24,10 @@ export default defineNuxtConfig({
     url: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc',
     name: process.env.NUXT_PUBLIC_APP_NAME || 'PicArt',
     description: process.env.NUXT_PUBLIC_DESCRIPTION || '图片分享社区',
-    defaultLocale: process.env.NUXT_PUBLIC_DEFAULT_LOCALE || 'zh'
+    defaultLocale: process.env.NUXT_PUBLIC_DEFAULT_LOCALE || 'zh',
+    exclude: ['/admin/**', '/user/**'],
+    cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
+    autoLastmod: true
   },
 
   // Robots 配置
@@ -33,6 +36,28 @@ export default defineNuxtConfig({
       UserAgent: '*',
       Allow: '/',
       Disallow: ['/admin/', '/api/', '/user/']
+    }
+  },
+
+  sitemap: {
+    exclude: ['/admin/**', '/user/**'],
+    cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
+    sitemaps: {
+      articles: {
+        include: ['/article/**'],
+        includeAppSources: true,
+        sources: ['/api/__sitemap__/articles']
+      },
+      authors: {
+        include: ['/author/**'],
+        includeAppSources: true,
+        sources: ['/api/__sitemap__/authors']
+      },
+      categories: {
+        include: ['/category/**'],
+        includeAppSources: true,
+        sources: ['/api/__sitemap__/categories']
+      }
     }
   },
 
@@ -82,7 +107,13 @@ export default defineNuxtConfig({
     // 语言文件目录
     langDir: 'locales/',
     // 检测浏览器语言
-    detectBrowserLanguage: false,
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      fallbackLocale: 'zh',
+      alwaysRedirect: true,
+      redirectOn: 'all'
+    },
     // 编译优化
     compilation: {
       strictMessage: false,
@@ -99,7 +130,7 @@ export default defineNuxtConfig({
 
     // 公共配置（客户端和服务端都可用）
     public: {
-      apiBaseUrl: '',
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://picend.cosfan.cc/api/v1',
       appName: 'PicArt',
       appVersion: '1.0.1'
     }
@@ -128,6 +159,9 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
     server: {
       allowedHosts: true
+    },
+    css: {
+      devSourcemap: true
     }
   },
 

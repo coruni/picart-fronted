@@ -40,13 +40,16 @@
               <span class="text-sm font-medium">{{ article.likes }}</span>
             </UButton>
           </div>
-          <NuxtLinkLocale :to="`/author/${article.author?.id}`" class="flex items-center">
+          <div
+            @click.stop="$router.push(`/author/${article.author?.id}`)"
+            class="flex items-center cursor-pointer"
+          >
             <UAvatar
               :src="article.author?.avatar ?? ''"
               :alt="article.author?.nickname ?? article.author?.username"
               class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm transition-transform duration-300 hover:scale-110"
             />
-          </NuxtLinkLocale>
+          </div>
         </div>
       </div>
     </div>

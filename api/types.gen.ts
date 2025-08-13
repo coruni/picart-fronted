@@ -2190,20 +2190,12 @@ export type ArticleControllerFindAllResponses = {
         requireLogin: boolean;
         requireFollow: boolean;
         requirePayment: boolean;
+        requireMembership: boolean;
         viewPrice: string;
         type: string;
         content: string | null;
         images: Array<string>;
-        summary?:
-          | string
-          | number
-          | boolean
-          | Array<unknown>
-          | {
-              [key: string]: unknown;
-            }
-          | number
-          | null;
+        summary: unknown;
         views: number;
         likes: number;
         status: string;
@@ -2213,7 +2205,9 @@ export type ArticleControllerFindAllResponses = {
           id: number;
           username: string;
           nickname: string;
-          avatar: string;
+          avatar?: string;
+          level: number;
+          membershipLevel: number;
           status: string;
           createdAt: string;
           updatedAt: string;
@@ -2251,15 +2245,7 @@ export type ArticleControllerFindAllResponses = {
           createdAt: string;
           updatedAt: string;
         };
-        tags: Array<{
-          /**
-           * ID 编号
-           */
-          id: number;
-          name: string;
-          avatar: string;
-          cover: string;
-        }>;
+        tags: Array<string>;
         createdAt: string;
         updatedAt: string;
         isLiked: boolean;
@@ -2372,7 +2358,7 @@ export type ArticleControllerFindOneResponses = {
       requireMembership: boolean;
       viewPrice: string;
       type: string;
-      content?: string;
+      content: unknown;
       images: Array<string>;
       summary: unknown;
       views: number;
@@ -2384,7 +2370,9 @@ export type ArticleControllerFindOneResponses = {
         id: number;
         username: string;
         nickname: string;
-        avatar: string;
+        avatar?: string;
+        level: number;
+        membershipLevel: number;
         status: string;
         createdAt: string;
         updatedAt: string;
@@ -2422,7 +2410,19 @@ export type ArticleControllerFindOneResponses = {
         createdAt: string;
         updatedAt: string;
       };
-      tags: Array<string>;
+      tags: Array<{
+        id: number;
+        name: string;
+        description: string;
+        avatar: string;
+        background: string;
+        cover: string;
+        sort: number;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
+      }>;
       createdAt: string;
       updatedAt: string;
       isLiked: boolean;
@@ -2939,7 +2939,7 @@ export type CommentControllerFindAllData = {
      */
     limit?: number;
   };
-  url: '/comments/article/{id}';
+  url: '/comment/article/{id}';
 };
 
 export type CommentControllerFindAllErrors = {
@@ -2961,8 +2961,118 @@ export type CommentControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        content?: string;
+        likes?: number;
+        replyCount?: number;
+        status?: string;
+        author: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          level: number;
+          membershipLevel: number;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: string;
+          followerCount: number;
+          followingCount: number;
+        };
+        article?: {
+          id: number;
+          title: string;
+          requireLogin: boolean;
+          requireFollow: boolean;
+          requirePayment: boolean;
+          requireMembership: boolean;
+          viewPrice: string;
+          views: number;
+          likes: number;
+          cover: string;
+          createdAt: string;
+          updatedAt: string;
+        };
+        parent?: unknown;
+        rootId?: number;
+        replies?: Array<{
+          id?: number;
+          content?: string;
+          likes?: number;
+          replyCount?: number;
+          status?: string;
+          author?: {
+            id: number;
+            username: string;
+            nickname: string;
+            avatar: unknown;
+            level: number;
+            membershipLevel: number;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
+            description: unknown;
+            followerCount: number;
+            followingCount: number;
+          };
+          article?: {
+            id: number;
+            title: string;
+            requireLogin: boolean;
+            requireFollow: boolean;
+            requirePayment: boolean;
+            requireMembership: boolean;
+            viewPrice: string;
+            views: number;
+            likes: number;
+            cover: string;
+            createdAt: string;
+            updatedAt: string;
+          };
+          parent?: {
+            id: number;
+            author: {
+              id: number;
+              username: string;
+              nickname: string;
+              avatar: unknown;
+              level: number;
+              membershipLevel: number;
+              status: string;
+              createdAt: string;
+              updatedAt: string;
+              description: unknown;
+              followerCount: number;
+              followingCount: number;
+            };
+          };
+          rootId?: number;
+          createdAt?: string;
+          updatedAt?: string;
+          parentId?: number;
+        }>;
+        createdAt: string;
+        updatedAt: string;
+        parentId?: unknown;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type CommentControllerFindAllResponse =
+  CommentControllerFindAllResponses[keyof CommentControllerFindAllResponses];
 
 export type CommentControllerRemoveData = {
   body?: never;
@@ -2979,7 +3089,7 @@ export type CommentControllerRemoveData = {
     id: number;
   };
   query?: never;
-  url: '/comments/{id}';
+  url: '/comment/{id}';
 };
 
 export type CommentControllerRemoveErrors = {
@@ -3025,13 +3135,13 @@ export type CommentControllerFindOneData = {
     /**
      * 子评论页码
      */
-    repliesPage?: number;
+    page?: number;
     /**
      * 每页子评论数量
      */
-    repliesLimit?: number;
+    limit?: number;
   };
-  url: '/comments/{id}';
+  url: '/comment/{id}';
 };
 
 export type CommentControllerFindOneErrors = {
@@ -3053,8 +3163,78 @@ export type CommentControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        content: string;
+        likes: number;
+        replyCount: number;
+        status: string;
+        author: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          level: number;
+          membershipLevel: number;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: string;
+          followerCount: number;
+          followingCount: number;
+        };
+        article: {
+          id: number;
+          title: string;
+          requireLogin: boolean;
+          requireFollow: boolean;
+          requirePayment: boolean;
+          requireMembership: boolean;
+          viewPrice: string;
+          views: number;
+          likes: number;
+          cover: string;
+          createdAt: string;
+          updatedAt: string;
+        };
+        parent: {
+          id: number;
+          author: {
+            id: number;
+            username: string;
+            nickname: string;
+            avatar: string;
+            level: number;
+            membershipLevel: number;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
+            description: string;
+            followerCount: number;
+            followingCount: number;
+          };
+        };
+        rootId: number;
+        createdAt: string;
+        updatedAt: string;
+        parentId: number;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
+
+export type CommentControllerFindOneResponse =
+  CommentControllerFindOneResponses[keyof CommentControllerFindOneResponses];
 
 export type CommentControllerUpdateData = {
   body?: UpdateCommentDto;
@@ -3071,7 +3251,7 @@ export type CommentControllerUpdateData = {
     id: number;
   };
   query?: never;
-  url: '/comments/{id}';
+  url: '/comment/{id}';
 };
 
 export type CommentControllerUpdateErrors = {
@@ -3124,7 +3304,7 @@ export type CommentControllerGetRepliesData = {
      */
     limit?: number;
   };
-  url: '/comments/{id}/replies';
+  url: '/comment/{id}/replies';
 };
 
 export type CommentControllerGetRepliesErrors = {
@@ -3168,7 +3348,7 @@ export type CommentControllerGetUserCommentsData = {
      */
     limit?: number;
   };
-  url: '/comments/user/{userId}';
+  url: '/comment/user/{userId}';
 };
 
 export type CommentControllerGetUserCommentsResponses = {
@@ -3196,7 +3376,7 @@ export type CommentControllerGetCommentCountData = {
     id: number;
   };
   query?: never;
-  url: '/comments/article/{id}/count';
+  url: '/comment/article/{id}/count';
 };
 
 export type CommentControllerGetCommentCountResponses = {
@@ -3221,7 +3401,7 @@ export type CommentControllerLikeData = {
     id: number;
   };
   query?: never;
-  url: '/comments/{id}/like';
+  url: '/comment/{id}/like';
 };
 
 export type CommentControllerLikeErrors = {
@@ -3252,7 +3432,7 @@ export type CommentControllerCreateData = {
   };
   path?: never;
   query?: never;
-  url: '/comments';
+  url: '/comment';
 };
 
 export type CommentControllerCreateErrors = {
