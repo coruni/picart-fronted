@@ -48,7 +48,7 @@
     v-else-if="type === 'membership'"
     class="bg-gradient-to-br from-purple-50/50 to-purple-100/50 dark:from-purple-900/10 dark:to-purple-800/10 rounded-xl p-6 text-center my-8 border border-purple-200/50 dark:border-purple-800/30"
   >
-    <Icon name="mynaui:crown" class="text-3xl text-purple-600 dark:text-purple-400 mb-3" />
+    <Icon name="mynaui:heart-waves" class="text-3xl text-purple-600 dark:text-purple-400 mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
       {{ $t('article.restrictions.membershipRequired.title') }}
     </h3>

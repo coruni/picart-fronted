@@ -1,5 +1,11 @@
 {
-  "cSpell.words": ["mynaui", "Nuxt"],
+  "cSpell.words": [
+    "epay",
+    "fingerprintjs",
+    "mynaui",
+    "Nuxt",
+    "wechat"
+  ],
   "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
   "editor.formatOnType": false, // required
   "editor.formatOnPaste": true, // optional

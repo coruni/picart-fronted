@@ -1,3 +1,4 @@
+import { usePinia } from '#imports';
 import type { CreateClientConfig } from './api/client.gen';
 import appConfig from './app.config';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
@@ -27,6 +28,7 @@ export const createClientConfig: CreateClientConfig = config => {
 
       // 更新请求headers
       await updateRequestHeaders(context, deviceId, token);
+
       return context;
     },
     onRequestError: context => {
@@ -35,6 +37,15 @@ export const createClientConfig: CreateClientConfig = config => {
       if (context.response && context.response.status === 500) {
         console.error('Internal Server Error: Backend server encountered an error');
         // 可以在这里添加用户通知逻辑
+        const toast = useToast();
+        const { $i18n } = useNuxtApp();
+        const t = $i18n.t;
+        toast.add({
+          title: t('error.serverError'),
+          color: 'error',
+          icon: 'mynaui:slash-circle',
+          ui: { close: 'cursor-pointer' }
+        });
       }
       return context;
     },
@@ -45,11 +56,11 @@ export const createClientConfig: CreateClientConfig = config => {
         // 将响应数据附加到错误上以便调用者访问
         Object.assign(error, { response: context.response });
         // 发起提示
-        const taost = useToast();
+        const toast = useToast();
         const { $i18n } = useNuxtApp();
         const t = $i18n.t;
 
-        taost.add({
+        toast.add({
           title: t(error.message),
           color: 'error',
           icon: 'mynaui:slash-circle',
@@ -65,46 +76,51 @@ export const createClientConfig: CreateClientConfig = config => {
 
 // 获取或创建设备ID
 async function getOrCreateDeviceId(appStore: any): Promise<string> {
+  // 统一使用 Nuxt 的 useCookie
+  const deviceIdCookie = useCookie('device-id', {
+    default: () => '',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 365, // 1年
+    httpOnly: false // 需要在客户端访问
+  });
+
   if (import.meta.client) {
     // 客户端：优先从store获取
     if (appStore?.getDeviceId && appStore.getDeviceId !== 'unknown') {
       return appStore.getDeviceId;
     }
 
-    // 从cookie获取
-    let deviceId = getCookieValue('device-id');
-
-    if (!deviceId) {
-      // 生成新的设备ID
-      try {
-        const fp = await FingerprintJS.load();
-        const result = await fp.get();
-        deviceId = result.visitorId;
-      } catch (error) {
-        console.warn('Failed to generate fingerprint, using fallback:', error);
-        deviceId = 'device-' + Math.random().toString(36).slice(2, 10);
-      }
-
-      // 存储到cookie和store
-      setDeviceIdToCookie(deviceId);
+    // 如果cookie中已经有值，同步到store
+    if (deviceIdCookie.value) {
       if (appStore?.setDeviceId) {
-        appStore.setDeviceId(deviceId);
+        appStore.setDeviceId(deviceIdCookie.value);
       }
-    } else if (appStore?.setDeviceId) {
-      // 同步到store
+      return deviceIdCookie.value;
+    }
+
+    // 生成新的设备ID
+    let deviceId: string;
+    try {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      deviceId = result.visitorId;
+    } catch (error) {
+      console.warn('Failed to generate fingerprint, using fallback:', error);
+      deviceId = 'device-' + Math.random().toString(36).slice(2, 10);
+    }
+
+    // 设置到cookie和store
+    deviceIdCookie.value = deviceId;
+    if (appStore?.setDeviceId) {
+      console.log('Setting device-id cookie:', deviceId);
+
       appStore.setDeviceId(deviceId);
     }
 
     return deviceId;
   } else {
-    // 服务器端：从cookie获取
-    const deviceIdCookie = useCookie('device-id', {
-      default: () => '',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 365 // 1年
-    });
-
+    // 服务器端：直接从cookie获取
     const deviceId = deviceIdCookie.value || 'unknown-device';
 
     if (!deviceIdCookie.value) {
@@ -120,97 +136,67 @@ async function getOrCreateDeviceId(appStore: any): Promise<string> {
 // 从cookie获取token
 async function getTokenFromCookie(userStore: any): Promise<string | null> {
   // 优先从store获取
-  if (userStore?.isAuthenticated && userStore?.token) {
-    return userStore.token;
+  if (userStore?.isLoggedIn) {
+    return userStore.userToken;
   }
 
-  if (import.meta.client) {
-    // 客户端：从cookie获取
-    return getCookieValue('auth-token') || getCookieValue('token') || null;
-  } else {
-    // 服务器端：使用useCookie获取
-    const authTokenCookie = useCookie('auth-token', {
-      default: () => null,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7 // 7天
-    });
+  // 统一使用 Nuxt 的 useCookie
+  const authTokenCookie = useCookie('auth-token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7, // 7天
+    httpOnly: false // 需要在客户端访问
+  });
 
-    if (authTokenCookie.value) {
-      return authTokenCookie.value;
-    }
-
-    // 尝试其他token cookie名称
-    const tokenCookie = useCookie('token', {
-      default: () => null,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7 // 7天
-    });
-
-    return tokenCookie.value || null;
+  if (authTokenCookie.value) {
+    return authTokenCookie.value;
   }
-}
 
-// 客户端获取cookie值的辅助函数
-function getCookieValue(name: string): string | null {
-  if (typeof document === 'undefined') return null;
+  // 尝试其他token cookie名称
+  const tokenCookie = useCookie('token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7, // 7天
+    httpOnly: false
+  });
 
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop()?.split(';').shift() || null;
-  }
-  return null;
-}
-
-// 设置设备ID到cookie
-function setDeviceIdToCookie(deviceId: string): void {
-  if (typeof document === 'undefined') return;
-
-  const expires = new Date();
-  expires.setFullYear(expires.getFullYear() + 1); // 1年后过期
-
-  document.cookie = `device-id=${deviceId}; path=/; expires=${expires.toUTCString()}; SameSite=Strict${
-    window.location.protocol === 'https:' ? '; Secure' : ''
-  }`;
+  return tokenCookie.value || null;
 }
 
 // 设置token到cookie的辅助函数
 export function setTokenToCookie(token: string): void {
-  if (import.meta.client) {
-    // 客户端设置
-    const expires = new Date();
-    expires.setDate(expires.getDate() + 7); // 7天后过期
-
-    document.cookie = `auth-token=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Strict${
-      window.location.protocol === 'https:' ? '; Secure' : ''
-    }`;
-  } else {
-    // 服务器端设置
-    const authTokenCookie = useCookie('auth-token', {
-      default: () => '',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24 * 7 // 7天
-    });
-    authTokenCookie.value = token;
-  }
+  const authTokenCookie = useCookie('auth-token', {
+    default: () => '',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7, // 7天
+    httpOnly: false
+  });
+  authTokenCookie.value = token;
 }
 
 // 清除token cookie的辅助函数
 export function clearTokenCookie(): void {
-  if (import.meta.client) {
-    // 客户端清除
-    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict';
-    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict';
-  } else {
-    // 服务器端清除
-    const authTokenCookie = useCookie('auth-token');
-    const tokenCookie = useCookie('token');
-    authTokenCookie.value = null;
-    tokenCookie.value = null;
-  }
+  const authTokenCookie = useCookie('auth-token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+
+  const tokenCookie = useCookie('token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+
+  authTokenCookie.value = null;
+  tokenCookie.value = null;
 }
 
 // 辅助函数：更新请求headers
@@ -248,15 +234,6 @@ export function setAuthToken(token: string, userStore?: any): void {
   // 设置到store
   if (userStore?.setToken) {
     userStore.setToken(token);
-  }
-
-  // 客户端还可以设置到localStorage作为备份
-  if (import.meta.client) {
-    try {
-      localStorage.setItem('auth-token', token);
-    } catch (error) {
-      console.warn('Failed to set token to localStorage:', error);
-    }
   }
 }
 

@@ -368,7 +368,9 @@
     "noAccount": "没有账户？",
     "register": "立即注册",
     "loginFailed": "登录失败，请检查账号和密码",
-    "loginFailedDescription": "请检查账号和密码是否正确"
+    "loginFailedDescription": "请检查账号和密码是否正确",
+    "username": "用户名",
+    "usernamePlaceholder": "请输入您的用户名"
   },
   "forgotPassword": {
     "title": "忘记密码",
@@ -605,7 +607,8 @@
     "image": "图片",
     "edit": "编辑轮播",
     "sortOrder": "排序",
-    "titlePlaceholder": "输入标题"
+    "titlePlaceholder": "输入标题",
+    "titleRequired": "请输入标题"
   },
   "categories": {
     "create": "创建分类"

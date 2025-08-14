@@ -141,7 +141,6 @@
               v-model="config.payment_alipay_private_key"
               :disabled="!config.payment_alipay_enabled"
               class="w-full"
-              rows="3"
             />
           </UFormField>
 
@@ -154,7 +153,6 @@
               v-model="config.payment_alipay_public_key"
               :disabled="!config.payment_alipay_enabled"
               class="w-full"
-              rows="3"
             />
           </UFormField>
 
@@ -449,18 +447,19 @@
 
   // 标签页配置
   const tabs = ref<TabsItem[]>([
-    { label: t('admin.settings.tabs.general'), slot: 'general', icon: 'i-mynaui-cog' },
-    { label: t('admin.settings.tabs.user'), slot: 'user', icon: 'i-mynaui-users' },
-    { label: t('admin.settings.tabs.content'), slot: 'content', icon: 'i-mynaui-document' },
-    { label: t('admin.settings.tabs.payment'), slot: 'payment', icon: 'i-mynaui-credit-card' },
-    { label: t('admin.settings.tabs.commission'), slot: 'commission', icon: 'i-mynaui-percentage' },
-    { label: t('admin.settings.tabs.membership'), slot: 'membership', icon: 'i-mynaui-crown' },
+    { label: t('admin.settings.tabs.general'), slot: 'general', icon: 'mynaui:cog' },
+    { label: t('admin.settings.tabs.user'), slot: 'user', icon: 'mynaui:users' },
+    { label: t('admin.settings.tabs.content'), slot: 'content', icon: 'mynaui:file' },
+    { label: t('admin.settings.tabs.payment'), slot: 'payment', icon: 'mynaui:credit-card' },
+    { label: t('admin.settings.tabs.commission'), slot: 'commission', icon: 'mynaui:percentage' },
+    { label: t('admin.settings.tabs.membership'), slot: 'membership', icon: 'mynaui:heart-waves' },
+
     {
       label: t('admin.settings.tabs.maintenance'),
       slot: 'maintenance',
-      icon: 'i-mynaui-wrench'
+      icon: 'mynaui:wrench'
     },
-    { label: t('admin.settings.tabs.invite'), slot: 'invite', icon: 'i-mynaui-gift' }
+    { label: t('admin.settings.tabs.invite'), slot: 'invite', icon: 'mynaui:gift' }
   ]);
 
   // 配置数据

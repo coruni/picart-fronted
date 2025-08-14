@@ -5,6 +5,7 @@ export const useAppStore = defineStore('app', {
     language: 'zh' as string,
     loading: false as boolean,
     error: null as string | null,
+    deviceId: '' as string,
     // i18n相关状态
     i18n: {
       availableLocales: ['zh', 'en', 'ja'] as string[],
@@ -15,61 +16,63 @@ export const useAppStore = defineStore('app', {
   }),
 
   getters: {
-    isDarkMode: (state) => state.theme === 'dark',
-    isLoading: (state) => state.loading,
-    hasError: (state) => !!state.error,
-    currentLocale: (state) => state.language,
-    supportedLocales: (state) => state.i18n.availableLocales
+    isDarkMode: state => state.theme === 'dark',
+    isLoading: state => state.loading,
+    hasError: state => !!state.error,
+    currentLocale: state => state.language,
+    getDeviceId: state => state.deviceId,
+    supportedLocales: state => state.i18n.availableLocales
   },
 
   actions: {
     setTheme(newTheme: 'light' | 'dark') {
-      this.theme = newTheme
+      this.theme = newTheme;
       if (import.meta.client) {
-        const html = document.documentElement
+        const html = document.documentElement;
         if (newTheme === 'dark') {
-          html.classList.add('dark')
+          html.classList.add('dark');
         } else {
-          html.classList.remove('dark')
+          html.classList.remove('dark');
         }
       }
     },
+    setDeviceId(deviceId: string) {
+      this.deviceId = deviceId;
+    },
 
     toggleTheme() {
-      this.theme = this.theme === 'light' ? 'dark' : 'light'
+      this.theme = this.theme === 'light' ? 'dark' : 'light';
     },
 
     setLanguage(newLanguage: string) {
-      this.language = newLanguage
+      this.language = newLanguage;
     },
 
     setLoading(isLoading: boolean) {
-      this.loading = isLoading
+      this.loading = isLoading;
     },
 
     setError(errorMessage: string | null) {
-      this.error = errorMessage
+      this.error = errorMessage;
     },
 
     clearError() {
-      this.error = null
+      this.error = null;
     },
 
     // i18n相关操作
     setI18nFormat(type: 'date' | 'number' | 'currency', format: string) {
-      this.i18n[`${type}Format`] = format
+      this.i18n[`${type}Format`] = format;
     },
 
     updateAvailableLocales(locales: string[]) {
-      this.i18n.availableLocales = locales
+      this.i18n.availableLocales = locales;
     }
   },
 
-  // 持久化配置 - 确保数据安全，只在客户端存储
   persist: {
-    // 自定义key，防止冲突
-    key: 'picart-app-settings',
-    // 只持久化必要的状态，不包含敏感信息
-    pick: ['theme', 'language', 'i18n'],
+    storage: import.meta.client
+      ? piniaPluginPersistedstate.localStorage()
+      : piniaPluginPersistedstate.cookies()
   }
-})
+});

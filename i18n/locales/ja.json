@@ -85,37 +85,16 @@
       "saveFailed": "設定の保存に失敗しました"
     },
     "categories": {
-      "name": "名前",
-      "description": "説明",
-      "avatar": "アバター",
-      "parent": "親カテゴリー",
-      "createdAt": "作成日時",
-      "edit": "編集",
-      "title": "カテゴリー",
-      "namePlaceholder": "名前を入力してください",
-      "descriptionPlaceholder": "説明を入力してください",
-      "selectParent": "親カテゴリーを選択してください",
-      "avatarPlaceholder": "アバターをアップロードしてください",
-      "coverPlaceholder": "カバーをアップロード",
-      "coverRequired": "画像を選択してください"
+      "searchAndFilter": "検索・フィルター"
     },
     "tags": {
-      "descriptionPlaceholder": "説明を入力してください",
-      "backgroundPlaceholder": "背景をアップロードしてください",
-      "avatarPlaceholder": "アバターをアップロードしてください",
-      "namePlaceholder": "名前を入力してください"
+      "searchAndFilter": "検索・フィルター"
     },
     "users": {
       "searchAndFilter": "検索・フィルター",
       "searchUsername": "ユーザー名を検索"
     },
     "articles": {
-      "searchAndFilter": "検索・フィルター"
-    },
-    "categories": {
-      "searchAndFilter": "検索・フィルター"
-    },
-    "tags": {
       "searchAndFilter": "検索・フィルター"
     },
     "banners": {
@@ -209,7 +188,13 @@
     "loadMore": "もっと読み込む",
     "cancel": "キャンセル",
     "saving": "保存中...",
-    "close": "閉じる"
+    "close": "閉じる",
+    "delete": "消去",
+    "edit": "編集",
+    "status": {
+      "active": "有効にする",
+      "inactive": "無効"
+    }
   },
   "filter": {
     "title": "フィルター"
@@ -328,8 +313,14 @@
         "title": "コンテンツが制限されています",
         "description": "このコンテンツは一時的に利用できません。後でもう一度お試しください",
         "contactText": "ご質問がございましたら、カスタマーサービスにお問い合わせください"
+      },
+      "membershipRequired": {
+        "title": "メンバー限定コンテンツ",
+        "description": "このコンテンツはメンバーのみが利用でき、メンバーにアップグレードすることで表示できます",
+        "upgradeButton": "メンバーシップをアップグレードします"
       }
-    }
+    },
+    "deleteConfirm": "確認確認を削除します"
   },
   "validation": {
     "required": "このフィールドは必須です",
@@ -377,7 +368,9 @@
     "noAccount": "アカウントをお持ちでない場合",
     "register": "今すぐ登録",
     "loginFailed": "ログインに失敗しました。ユーザー名とパスワードを確認してください",
-    "loginFailedDescription": "ユーザー名とパスワードが正しいかご確認ください"
+    "loginFailedDescription": "ユーザー名とパスワードが正しいかご確認ください",
+    "account": "アカウント",
+    "accountPlaceholder": "電子メールまたはユーザー名"
   },
   "forgotPassword": {
     "title": "パスワードを忘れた場合",
@@ -471,7 +464,89 @@
       "changing": "変更中...",
       "success": "パスワードの変更が成功しました",
       "failed": "パスワードの変更に失敗しました"
-    }
+    },
+    "favorites": "私のコレクション",
+    "orders": {
+      "amount": "注文金額",
+      "articleAccess": "記事アクセス許可",
+      "cancel": "注文をキャンセルします",
+      "cancelFailed": "注文キャンセルは失敗しました",
+      "cancelSuccess": "キャンセルを正常に注文します",
+      "cancelling": "キャンセル...",
+      "confirmCancel": "キャンセル注文を確認します",
+      "confirmCancelButton": "キャンセルを確認します",
+      "confirmCancelMessage": "この注文をキャンセルしたいですか？キャンセルは復元されません。",
+      "createTime": "作成時間",
+      "description": "すべての注文を表示および管理します",
+      "empty": {
+        "browseArticles": "行って記事を読んでください",
+        "description": "注文記録はまだありません",
+        "title": "まだ注文はありません"
+      },
+      "loadFailed": "注文の読み込みは失敗しました",
+      "membership": "メンバーシップサービス",
+      "membershipAccess": "メンバーシップ許可",
+      "orderDetail": "詳細を注文します",
+      "orderNumber": "注文番号",
+      "pay": "今すぐ支払います",
+      "payTime": "支払い時間",
+      "paymentFailed": "支払いは失敗しました",
+      "paymentId": "支払い注文番号",
+      "paymentInfo": "支払い情報",
+      "paymentRedirect": "支払いページにリダイレクト...",
+      "productInfo": "製品情報",
+      "searchPlaceholder": "注文番号または製品名を検索...",
+      "status": {
+        "all": "全て",
+        "cancelled": "キャンセル",
+        "paid": "有料",
+        "pending": "支払われる",
+        "refunded": "返金"
+      },
+      "title": "私の注文",
+      "unknownProduct": "未知の製品",
+      "viewDetail": "詳細を確認してください"
+    },
+    "profileSaved": "データは正常に保存されます",
+    "quickNav": "クイックナビゲーション",
+    "recharge": {
+      "alipay": "アリパイ",
+      "balance": "残高支払い",
+      "balancePaymentSuccess": "残高の支払いは成功しました",
+      "confirmOrder": "注文を確認します",
+      "confirmRecharge": "充電を確認します",
+      "currentStatus": "現在のステータス",
+      "description": "メンバーシップ特権を享受するには、リチャージパッケージを選択してください",
+      "epay": "簡単な支払い",
+      "expireDate": "有効期限",
+      "failed": "リチャージに失敗しました",
+      "insufficientBalance": "バランスが不十分です",
+      "membershipLevel": "メンバーシップレベル",
+      "membershipRecharge": "メンバーリチャージ",
+      "month": "数ヶ月",
+      "noMembership": "メンバーはまだいません",
+      "package": "コンボ",
+      "package12Description": "年次パッケージ",
+      "package1Description": "基本パッケージ",
+      "package3Description": "四半期パッケージ",
+      "paymentMethod": "支払方法",
+      "perMonth": "毎月の平均",
+      "processing": "処理...",
+      "redirectToPayment": "支払いページにリダイレクト...",
+      "save": "保存",
+      "save10": "10％",
+      "save15": "15％",
+      "selectPackage": "パッケージを選択してください",
+      "selectPackageAndPayment": "パッケージと支払い方法を選択してください",
+      "selectPayment": "支払い方法を選択します",
+      "successMessage": "正常に充電します",
+      "title": "メンバーリチャージ",
+      "totalAmount": "一時金",
+      "walletBalance": "ウォレットバランス",
+      "wechat": "wechatの支払い"
+    },
+    "saveProfileFailed": "データの保存に失敗しました",
+    "settings": "設定"
   },
   "author": {
     "title": "作者プロフィール",
@@ -501,7 +576,6 @@
     "unfollowFailed": "フォロー解除に失敗しました",
     "defaultDescription": "作者の素晴らしい作品を見る"
   },
-
   "search": {
     "title": "検索",
     "placeholder": "画像、記事、ユーザーを検索...",
@@ -517,7 +591,6 @@
       "description": "別のキーワードを試すか、検索条件を調整してください"
     }
   },
-
   "banners": {
     "imageRequired": "画像をアップロードしてください",
     "urlInvalid": "リンクエラー",
@@ -542,10 +615,16 @@
   },
   "response": {
     "error": {
-      "followSelf": "自分をフォローすることはできません"
+      "followSelf": "自分をフォローすることはできません",
+      "articleNotFound": "記事は存在しません",
+      "emailAlreadyExists": "メールアドレスはすでに存在しています",
+      "emailNotExists": "メールアドレスは存在しません",
+      "usernameAlreadyExists": "ユーザー名はすでに存在しています"
     },
     "success": {
-      "verificationCodeSent": "認証コードを送信しました"
+      "verificationCodeSent": "認証コードを送信しました",
+      "profileSaved": "データは正常に保存されます",
+      "profileSavedFailed": "データの保存に失敗しました"
     }
   },
   "Unauthorized": "未認証"

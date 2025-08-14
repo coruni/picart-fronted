@@ -11,8 +11,8 @@
             >
               <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
                 <UAvatar
-                  :src="userInfo?.avatar"
-                  :alt="userInfo?.nickname || userInfo?.username"
+                  :src="userProfile?.data?.avatar"
+                  :alt="userProfile?.data?.nickname || userProfile?.data?.username"
                   class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
@@ -27,15 +27,15 @@
               </div>
               <div class="flex-1">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                  {{ userInfo?.nickname || userInfo?.username }}
+                  {{ userProfile?.data?.nickname || userProfile?.data?.username }}
                 </h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {{ userInfo?.description || $t('user.noDescription') }}
+                  {{ userProfile?.data?.description || $t('user.noDescription') }}
                 </p>
                 <div class="flex flex-wrap items-center gap-4 mt-3">
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userInfo?.articleCount || 0 }}
+                      {{ userProfile?.data?.articleCount || 0 }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.articles') }}
@@ -43,7 +43,7 @@
                   </div>
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userInfo?.followerCount || 0 }}
+                      {{ userProfile?.data?.followerCount || 0 }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.followers') }}
@@ -51,7 +51,7 @@
                   </div>
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userInfo?.followingCount || 0 }}
+                      {{ userProfile?.data?.followingCount || 0 }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.following') }}
@@ -59,7 +59,7 @@
                   </div>
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userInfo?.wallet || 0 }}
+                      {{ userProfile?.data?.wallet! }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.wallet') }}
@@ -205,21 +205,21 @@
             </div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                userInfo?.membershipLevelName || $t('user.basicMember')
+                userProfile?.data?.membershipLevelName || $t('user.basicMember')
               }}</span>
               <span class="text-sm font-medium text-primary-500"
-                >Lv.{{ userInfo?.membershipLevel || 0 }}</span
+                >Lv.{{ userProfile?.data?.membershipLevel || 0 }}</span
               >
             </div>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div
                 class="bg-primary h-2 rounded-full"
-                :style="{ width: `${(userInfo?.experience || 0) % 100}%` }"
+                :style="{ width: `${(userProfile?.data?.experience || 0) % 100}%` }"
               ></div>
             </div>
             <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-              <span>{{ userInfo?.experience || 0 }} {{ $t('user.experience') }}</span>
-              <span>{{ userInfo?.score || 0 }} {{ $t('user.score') }}</span>
+              <span>{{ userProfile?.data?.experience || 0 }} {{ $t('user.experience') }}</span>
+              <span>{{ userProfile?.data?.score || 0 }} {{ $t('user.score') }}</span>
             </div>
           </div>
 
@@ -234,7 +234,7 @@
                   $t('user.inviteCode')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userInfo?.inviteCode || $t('user.noInviteCode')
+                  userProfile?.data?.inviteCode || $t('user.noInviteCode')
                 }}</span>
               </div>
               <div class="flex items-center justify-between">
@@ -242,7 +242,7 @@
                   $t('user.inviteCount')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userInfo?.inviteCount || 0
+                  userProfile?.data?.inviteCount || 0
                 }}</span>
               </div>
               <div class="flex items-center justify-between">
@@ -250,7 +250,7 @@
                   $t('user.inviteEarnings')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userInfo?.inviteEarnings || 0
+                  userProfile?.data?.inviteEarnings || 0
                 }}</span>
               </div>
             </div>
@@ -279,8 +279,8 @@
           <div class="flex items-center space-x-4">
             <div class="relative">
               <UAvatar
-                :src="editForm.avatar || userInfo?.avatar"
-                :alt="userInfo?.nickname || userInfo?.username"
+                :src="editForm.avatar || userProfile?.data?.avatar"
+                :alt="userProfile?.data?.nickname || userProfile?.data?.username"
                 fit="cover"
                 class="w-20 h-20 rounded-full ring-2 object-cover ring-white"
                 loading="lazy"
@@ -436,8 +436,8 @@
         <div class="space-y-4">
           <!-- 当前状态 -->
           <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>{{ userInfo?.membershipLevelName || $t('user.basicMember') }}</span>
-            <span>¥{{ userInfo?.wallet || 0 }}</span>
+            <span>{{ userProfile?.data?.membershipLevelName || $t('user.basicMember') }}</span>
+            <span>¥{{ userProfile?.data?.wallet || 0 }}</span>
           </div>
 
           <!-- 套餐选择 -->
@@ -527,19 +527,19 @@
     articleControllerFindArticleByAuthor,
     userControllerUpdate,
     orderControllerCreateMembershipOrder
-  } from '~~/api';
-  import type { ConfigControllerGetPublicResponse } from '~~/api';
+  } from '~/api';
+  import type { ConfigControllerGetPublicResponse } from '~/api';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
-  import { watch, nextTick } from 'vue';
+  import { watch } from 'vue';
   import type { FormError } from '@nuxt/ui';
-  import { uploadControllerUploadFile } from '~~/api';
+  import { uploadControllerUploadFile } from '~/api';
   import { z } from 'zod';
   const toast = useToast();
 
   const { t } = useI18n();
   const router = useRouter();
   const userStore = useUserStore();
-  const userInfo = computed(() => userStore.userInfo);
+  const userInfo = userStore.currentUser;
   const localPath = useLocalePath();
 
   const pagination = ref({
@@ -602,7 +602,7 @@
   });
   // 处理用户资料
   if (userProfile.value?.data) {
-    userStore.userInfo = userProfile.value?.data;
+    userStore.setUserInfo(userProfile.value?.data);
   }
 
   // 重置数据
@@ -621,9 +621,9 @@
     try {
       const response = await articleControllerFindArticleByAuthor({
         composable: 'useFetch',
-        key: `user-articles-${userProfile.value?.data?.id?.toString() || userInfo.value?.id?.toString()}-${pagination.value.page}`,
+        key: `user-articles-${userProfile.value?.data?.id?.toString() || userInfo?.id?.toString()}-${pagination.value.page}`,
         path: {
-          id: userProfile.value?.data?.id?.toString() || userInfo.value?.id?.toString()!
+          id: userProfile.value?.data?.id?.toString() || userInfo?.id?.toString()!
         },
         query: {
           page: pagination.value.page,
@@ -698,12 +698,12 @@
 
   // 监听模态框打开，初始化表单数据
   watch(isEditModalOpen, newValue => {
-    if (newValue && userInfo.value) {
+    if (newValue && userInfo) {
       editForm.value = {
-        username: userInfo.value.username || '',
-        nickname: userInfo.value.nickname || '',
-        description: (userInfo.value.description as string) || '',
-        avatar: userInfo.value.avatar || ''
+        username: userInfo?.username || '',
+        nickname: userInfo?.nickname || '',
+        description: (userInfo?.description as string) || '',
+        avatar: userInfo?.avatar || ''
       };
     }
   });
@@ -770,17 +770,17 @@
       await userControllerUpdate({
         composable: '$fetch',
         path: {
-          id: userInfo.value?.id?.toString()!
+          id: userInfo?.id?.toString()!
         },
         body: editForm.value
       });
 
       // 更新本地用户信息
-      if (userInfo.value) {
-        userStore.userInfo = {
-          ...userInfo.value,
+      if (userInfo) {
+        userStore.setUserInfo({
+          ...userInfo,
           ...editForm.value
-        };
+        });
       }
 
       // 关闭模态框
@@ -871,7 +871,7 @@
 
     // 检查余额支付
     if (selectedPaymentMethod.value.value === 'BALANCE') {
-      if ((userInfo.value?.wallet || 0) < selectedRechargePackage.value.price) {
+      if (userProfile.value?.data?.wallet! < selectedRechargePackage.value.price) {
         toast.add({ title: t('user.recharge.insufficientBalance'), color: 'error' });
         return;
       }

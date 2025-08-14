@@ -106,62 +106,81 @@
         body: loginForm.value
       });
 
-      // 保存token到用户store
+      // 保存token和用户信息
       if (data?.token) {
-        // 登录用户
-        userStore.login(data.token, data.refreshToken, data as any);
-
-        // 设置cookie以支持SSR环境下的token传递
+        // 使用统一的token设置函数
         const authToken = useCookie('auth-token', {
-          expires: rememberMe.value ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : undefined, // 30天或会话cookie
-          secure: true, // HTTPS only
-          sameSite: 'lax', // 防止CSRF攻击
-          httpOnly: false // 允许JavaScript访问
+          default: () => '',
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          httpOnly: false
         });
         authToken.value = data.token;
 
-        // 如果有refresh token，也设置到cookie
+        // 如果有refresh token，设置到cookie
         if (data.refreshToken) {
           const refreshToken = useCookie('refresh-token', {
-            expires: rememberMe.value ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : undefined,
-            secure: true,
-            sameSite: 'lax',
+            default: () => '',
+            expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
             httpOnly: false
           });
           refreshToken.value = data.refreshToken;
         }
 
-        // 如果选择了记住我，保存账号
+        // 登录用户并保存用户信息到store
+        userStore.login(data.token, data.refreshToken, data as any);
+
+        // 处理"记住我"功能
         if (rememberMe.value) {
           userStore.setRememberedUsername(loginForm.value.account);
         } else {
           userStore.clearRememberedUsername();
         }
 
-        // 跳转到用户中心
-        if (route.query.redirect) {
-          router.push(localePath(route.query.redirect as string));
+        // 显示登录成功消息
+        // toast.add({
+        //   title: t('login.loginSuccess'),
+        //   description: t('login.welcomeBack'),
+        //   color: 'primary'
+        // });
+
+        // 跳转处理
+        const redirectPath = route.query.redirect as string;
+        if (redirectPath && redirectPath !== '/login') {
+          await router.push(localePath(redirectPath));
         } else {
-          router.push(localePath('/user'));
+          await router.push(localePath('/user'));
         }
+      } else {
+        throw new Error('No token received from server');
       }
-    } catch (error) {
-      console.error('Login failed:', error);
-      // 显示错误消息
-      toast.add({
-        title: t('login.loginFailed'),
-        description: t('login.loginFailedDescription')
-      });
+    } catch (error: any) {
     } finally {
       loading.value = false;
     }
   };
 
-  // 页面加载时，如果之前选择了记住我，填充账号
-  onMounted(() => {
+  // 处理记住的用户名
+  const loadRememberedUser = () => {
     if (userStore.hasRememberedUsername) {
       loginForm.value.account = userStore.rememberedUsername || '';
       rememberMe.value = true;
+    }
+  };
+
+  // 页面加载时处理记住的用户信息
+  onMounted(() => {
+    loadRememberedUser();
+  });
+
+  // 监听记住我状态变化
+  watch(rememberMe, newValue => {
+    if (!newValue) {
+      // 如果取消记住我，清除记住的用户名
+      userStore.clearRememberedUsername();
     }
   });
 </script>

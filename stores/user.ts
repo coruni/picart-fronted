@@ -66,7 +66,6 @@ export const useUserStore = defineStore('user', {
         document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         const route = useRoute();
-        const router = useRouter();
         const localePath = useLocalePath();
         // 根据当前页面决定跳转行为
         const currentPath = route.path;
@@ -82,6 +81,8 @@ export const useUserStore = defineStore('user', {
   },
 
   persist: {
-    storage: import.meta.client ? piniaPluginPersistedstate.localStorage() : undefined
+    storage: import.meta.client
+      ? piniaPluginPersistedstate.localStorage()
+      : piniaPluginPersistedstate.cookies()
   }
 });

@@ -28,17 +28,13 @@
     ogSiteName: configs.data.value?.data?.site_name || 'PicArt',
     ogLocale: 'zh_CN',
     ogType: 'website',
-    twitterCard: 'summary_large_image'
-  });
-
-  useHead({
-    link: [
-      {
-        rel: 'icon',
-        href: configs.data.value?.data?.site_favicon || '/favicon.ico',
-        type: 'image/x-icon',
-        sizes: '64x64'
-      }
-    ]
+    twitterCard: 'summary_large_image',
+    twitterSite: '@PicArt',
+    twitterCreator: '@PicArt',
+    twitterTitle: configs.data.value?.data?.site_name || 'PicArt',
+    twitterDescription:
+      configs.data.value?.data?.site_description || '发现和分享精美图片，探索创意艺术作品',
+    twitterImage: configs.data.value?.data?.site_favicon || '/favicon.ico',
+    twitterImageAlt: configs.data.value?.data?.site_name || 'PicArt'
   });
 </script>
