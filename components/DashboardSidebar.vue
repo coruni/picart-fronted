@@ -25,7 +25,7 @@
       <button
         v-if="$attrs.class?.includes('fixed')"
         @click="$emit('close')"
-        class="p-1 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 lg:hidden"
+        class="p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 lg:hidden"
       >
         <Icon name="mynaui:panel-left-close" class="w-5 h-5" />
       </button>

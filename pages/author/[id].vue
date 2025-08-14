@@ -95,7 +95,7 @@
                   v-if="!isFollowing"
                   @click="handleFollow"
                   :loading="followLoading"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
+                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
                 >
                   {{ $t('author.follow') }}
                 </UButton>
@@ -103,7 +103,7 @@
                   v-else
                   @click="handleUnfollow"
                   :loading="followLoading"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button whitespace-nowrap"
+                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
                 >
                   {{ $t('author.unfollow') }}
                 </UButton>
@@ -150,7 +150,7 @@
                 @click="loadAuthorArticles"
                 :disabled="loading"
                 color="primary"
-                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
               >
                 <div
                   v-if="loading"

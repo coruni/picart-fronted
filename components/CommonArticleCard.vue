@@ -1,7 +1,7 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
-    class="bg-white rounded-lg shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 group border border-primary-100/50 dark:border-primary-900/30"
+    class="bg-white rounded-md shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 group border border-primary-100/50 dark:border-primary-900/30"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
       <NuxtImg

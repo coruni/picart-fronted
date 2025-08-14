@@ -3,7 +3,7 @@
     <!-- 搜索和筛选面板 -->
     <UCollapsible v-model:open="showFilters" class="mb-6">
       <UButton
-        class="group w-full justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm"
+        class="group w-full justify-between p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm"
         color="neutral"
         variant="ghost"
         trailing-icon="i-lucide-chevron-down"

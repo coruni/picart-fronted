@@ -39,7 +39,7 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <UButton
             @click="handleGoHome"
-            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -54,7 +54,7 @@
 
           <UButton
             @click="handleGoBack"
-            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -71,7 +71,7 @@
         <!-- 错误详情（开发环境显示） -->
         <div
           v-if="error?.message && isDev"
-          class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-left"
+          class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-md text-left"
         >
           <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
             {{ $t('error.details') }}:

@@ -16,7 +16,7 @@
         </p>
         <NuxtLinkLocale
           to="/user/login"
-          class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
+          class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
         >
           {{ $t('register.backToLogin') }}
         </NuxtLinkLocale>

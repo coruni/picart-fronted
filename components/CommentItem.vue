@@ -30,7 +30,7 @@
         </div>
         <div class="flex-1 min-w-0">
           <div
-            class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow duration-200"
+            class="bg-gray-50 dark:bg-gray-700 rounded-md p-4 hover:shadow-md transition-shadow duration-200"
           >
             <div class="flex items-center justify-between mb-2">
               <div class="flex items-center space-x-2">
@@ -169,7 +169,7 @@
                 </p>
               </div>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mt-3">
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-md mt-3">
               <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line">
                 {{ comment.content }}
               </p>
@@ -212,7 +212,7 @@
               <div
                 v-for="reply in replies"
                 :key="reply.id"
-                class="flex space-x-3 bg-gray-50 dark:bg-gray-800 rounded-lg p-3"
+                class="flex space-x-3 bg-gray-50 dark:bg-gray-800 rounded-md p-3"
               >
                 <div class="relative h-8 w-8">
                   <UAvatar
@@ -348,7 +348,7 @@
                         <UTextarea
                           v-model="replyToReplyState.content"
                           :placeholder="$t('article.replyPlaceholder')"
-                          class="w-full p-2 rounded-lg bg-gray-100 dark:bg-gray-600 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-xs"
+                          class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-600 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-xs"
                         />
                       </UFormField>
                       <div class="flex justify-end space-x-2 mt-2">
@@ -378,7 +378,7 @@
                         <UTextarea
                           v-model="editReplyState.content"
                           :placeholder="$t('article.commentText')"
-                          class="w-full p-2 rounded-lg bg-gray-100 dark:bg-gray-600 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-xs"
+                          class="w-full p-2 rounded-md bg-gray-100 dark:bg-gray-600 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-xs"
                         />
                       </UFormField>
                       <div class="flex justify-end space-x-2 mt-2">
@@ -428,7 +428,7 @@
           <UTextarea
             v-model="replyState.content"
             :placeholder="$t('article.replyPlaceholder')"
-            class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm"
+            class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm"
           />
         </UFormField>
         <div class="flex justify-end space-x-2 mt-2">
@@ -454,7 +454,7 @@
           <UTextarea
             v-model="editState.content"
             :placeholder="$t('article.commentText')"
-            class="w-full p-3 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm"
+            class="w-full p-3 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm"
           />
         </UFormField>
         <div class="flex justify-end space-x-2 mt-2">

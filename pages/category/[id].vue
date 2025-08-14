@@ -9,8 +9,23 @@
     <Meta name="og:type" content="website" />
     <Meta name="og:image" :content="category?.data?.cover" />
     <!-- 分类头部信息 -->
-    <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
-      <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+    <div
+      class="relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"
+    >
+      <!-- 背景 Cover -->
+      <div v-if="category?.data?.cover" class="absolute inset-0 z-0">
+        <NuxtImg
+          :src="category.data.cover"
+          :alt="category.data.name"
+          class="w-full h-full object-cover opacity-20 dark:opacity-30"
+          loading="lazy"
+        />
+        <div
+          class="absolute inset-0 backdrop-blur-xs bg-gradient-to-br from-gray-50/10 to-gray-100/10 dark:from-gray-800/10 dark:to-gray-900/10"
+        ></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 py-12 md:py-16">
         <div class="text-center">
           <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             {{ category?.data?.name || $t('category.loading') }}
@@ -37,7 +52,7 @@
         <div class="flex items-center space-x-2 ml-4">
           <button
             @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'"
-            class="p-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            class="p-2 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <Icon :name="viewMode === 'grid' ? 'mynaui:grid' : 'mynaui:list'" class="w-5 h-5" />
           </button>
@@ -90,7 +105,7 @@
                 <NuxtImg
                   :src="item.cover || item.images[0]"
                   :alt="item.title"
-                  class="w-full h-48 md:h-32 object-cover rounded-lg"
+                  class="w-full h-48 md:h-32 object-cover rounded-md"
                   loading="lazy"
                   format="webp"
                 />

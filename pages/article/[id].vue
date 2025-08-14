@@ -40,7 +40,7 @@
         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
         <UButton
           @click="handleRetry"
-          class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
+          class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
         >
           {{ $t('common.retry') }}
         </UButton>
@@ -122,7 +122,7 @@
               v-for="(img, index) in article?.data.images"
               :key="index"
               :class="[
-                'rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity',
+                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity',
                 index === 0 && article?.data.images.length > 1
                   ? 'sm:col-span-2 aspect-[16/9]'
                   : 'aspect-square'
@@ -207,7 +207,7 @@
                   <UFormField name="commentText">
                     <UTextarea
                       v-model="state.commentText"
-                      class="w-full p-3 md:p-4 rounded-lg bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
+                      class="w-full p-3 md:p-4 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
                       placeholder="分享你的想法..."
                     ></UTextarea>
                   </UFormField>
@@ -215,7 +215,7 @@
                   <div class="flex justify-end mt-2">
                     <UButton
                       type="submit"
-                      class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 !rounded-button whitespace-nowrap"
+                      class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 whitespace-nowrap"
                       :loading="isCommentSubmitting"
                     >
                       {{ $t('article.comment') }}
@@ -244,7 +244,7 @@
               <UButton
                 @click="loadMoreComments"
                 :loading="commentsPending"
-                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
+                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
               >
                 {{ $t('article.loadMoreComments') }}
               </UButton>
@@ -300,7 +300,7 @@
             </div>
             <UButton
               @click="handleFollow"
-              class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
+              class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
             >
               {{ $t('article.followAuthor') }}
             </UButton>
@@ -320,7 +320,7 @@
                 :to="`/article/${item.id}`"
                 class="group cursor-pointer flex items-center space-x-3"
               >
-                <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md overflow-hidden">
                   <NuxtImg
                     :src="item.cover"
                     :alt="item.title"

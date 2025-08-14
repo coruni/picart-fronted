@@ -70,13 +70,13 @@
               <div class="flex space-x-2">
                 <UButton
                   @click="isEditModalOpen = true"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-lg hover:bg-primary-600 transition-colors !rounded-button whitespace-nowrap"
+                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
                 >
                   {{ $t('user.editProfile') }}
                 </UButton>
                 <UButton
                   @click="handleLogout"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button whitespace-nowrap"
+                  class="rounded-md px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
                 >
                   {{ $t('user.logout') }}
                 </UButton>
@@ -92,7 +92,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <NuxtLinkLocale
                 to="/user/orders"
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
               >
                 <Icon name="mynaui:cart" class="w-8 h-8 text-primary mb-2" />
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
@@ -100,26 +100,26 @@
                 }}</span>
               </NuxtLinkLocale>
               <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:credit-card" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.wallet') }}</span>
               </div>
               <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
               </div>
               <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg opacity-50"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:cog" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
               </div>
               <div
                 @click="isChangePasswordModalOpen = true"
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
               >
                 <Icon name="mynaui:lock" class="w-8 h-8 text-primary mb-2" />
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
@@ -163,7 +163,7 @@
                 @click="loadUserArticles"
                 :disabled="loading"
                 color="primary"
-                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
               >
                 <div
                   v-if="loading"
@@ -255,7 +255,7 @@
               </div>
             </div>
             <UButton
-              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-lg hover:bg-primary-600 transition-colors !rounded-button"
+              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-md hover:bg-primary-600 transition-colors"
             >
               {{ $t('user.copyInviteLink') }}
             </UButton>
@@ -331,14 +331,14 @@
             <UButton
               type="submit"
               :loading="isSaving"
-              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
             >
               {{ isSaving ? $t('common.saving') : $t('common.save') }}
             </UButton>
             <UButton
               type="button"
               @click="isEditModalOpen = false"
-              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               {{ $t('common.cancel') }}
             </UButton>
@@ -410,7 +410,7 @@
             <UButton
               type="submit"
               :loading="changingPassword"
-              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 !rounded-button"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
             >
               {{
                 changingPassword
@@ -421,7 +421,7 @@
             <UButton
               type="button"
               @click="isChangePasswordModalOpen = false"
-              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors !rounded-button"
+              class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
             >
               {{ $t('common.cancel') }}
             </UButton>
@@ -447,7 +447,7 @@
               :key="pkg.duration"
               @click="selectRechargePackage(pkg)"
               :class="[
-                'p-3 border rounded-lg cursor-pointer text-center transition-all',
+                'p-3 border rounded-md cursor-pointer text-center transition-all',
                 selectedRechargePackage?.duration === pkg.duration
                   ? 'border-primary bg-primary/5'
                   : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
@@ -471,7 +471,7 @@
                 :key="method.value"
                 @click="selectPaymentMethod(method)"
                 :class="[
-                  'p-3 border rounded-lg cursor-pointer text-center transition-all',
+                  'p-3 border rounded-md cursor-pointer text-center transition-all',
                   selectedPaymentMethod?.value === method.value
                     ? 'border-primary bg-primary/5'
                     : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
@@ -486,7 +486,7 @@
           <!-- 确认信息 -->
           <div
             v-if="selectedRechargePackage && selectedPaymentMethod"
-            class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3"
+            class="bg-gray-50 dark:bg-gray-800 rounded-md p-3"
           >
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-600 dark:text-gray-400">
@@ -596,10 +596,11 @@
     });
 
   // 用户资料
-  const { data: userProfile } = userControllerGetProfile({
-    composable: 'useFetch',
+  const { data: userProfile } = await userControllerGetProfile({
+    composable: 'useAsyncData',
     key: 'user-profile'
   });
+
   // 处理用户资料
   if (userProfile.value?.data) {
     userStore.setUserInfo(userProfile.value?.data);
@@ -617,13 +618,19 @@
     // 添加额外的检查，确保不会重复触发
     if (loading.value || !hasMore.value) return;
 
+    // 确保用户信息已加载
+    const userId = userProfile.value?.data?.id || userInfo?.id;
+    if (!userId) {
+      return;
+    }
+
     loading.value = true;
     try {
       const response = await articleControllerFindArticleByAuthor({
-        composable: 'useFetch',
-        key: `user-articles-${userProfile.value?.data?.id?.toString() || userInfo?.id?.toString()}-${pagination.value.page}`,
+        composable: 'useAsyncData',
+        key: `user-articles-${userId}-${pagination.value.page}`,
         path: {
-          id: userProfile.value?.data?.id?.toString() || userInfo?.id?.toString()!
+          id: userId.toString()
         },
         query: {
           page: pagination.value.page,
@@ -647,21 +654,77 @@
         pagination.value.page++;
       }
     } catch (error) {
-      console.error('加载用户文章失败:', error);
     } finally {
       loading.value = false;
     }
   };
 
+  // 等待用户信息加载完成后再加载文章
+  const loadArticlesWhenReady = async () => {
+    // 如果用户信息已加载，直接加载文章
+    if (userProfile.value?.data?.id || userInfo?.id) {
+      await loadUserArticles();
+    } else {
+      // 如果用户信息还未加载，等待一下再尝试
+      await new Promise(resolve => setTimeout(resolve, 100));
+      if (userProfile.value?.data?.id || userInfo?.id) {
+        await loadUserArticles();
+      } else {
+        // 如果仍然没有用户信息，可能是SSR问题，在客户端重新尝试
+        if (import.meta.client) {
+          // 延迟更长时间等待store状态恢复
+          setTimeout(async () => {
+            if (userProfile.value?.data?.id || userInfo?.id) {
+              await loadUserArticles();
+            }
+          }, 500);
+        }
+      }
+    }
+  };
+
+  // 监听用户信息变化，重新加载文章
+  watch(
+    () => userProfile.value?.data?.id || userInfo?.id,
+    async (newUserId, oldUserId) => {
+      if (newUserId && newUserId !== oldUserId) {
+        resetData();
+        await loadUserArticles();
+      }
+    },
+    { immediate: false }
+  );
+
+  // 监听用户认证状态变化
+  watch(
+    () => userStore.isAuthenticated,
+    async isAuthenticated => {
+      if (isAuthenticated && displayArticles.value.length === 0) {
+        await loadArticlesWhenReady();
+      }
+    },
+    { immediate: false }
+  );
+
+  // 初始加载文章
+  await loadArticlesWhenReady();
   // 计算显示的文章
   const displayArticles = computed(() => {
     return allArticles.value;
   });
 
-  loadUserArticles();
-
   onMounted(() => {
-    // 移除 Intersection Observer，改为手动加载
+    // 在客户端挂载后，如果文章为空且用户信息已加载，重新尝试加载文章
+    if (displayArticles.value.length === 0 && (userProfile.value?.data?.id || userInfo?.id)) {
+      loadArticlesWhenReady();
+    } else if (displayArticles.value.length === 0) {
+      // 如果文章为空且用户信息也未加载，可能是SSR问题，延迟重试
+      setTimeout(async () => {
+        if (displayArticles.value.length === 0) {
+          await loadArticlesWhenReady();
+        }
+      }, 1000);
+    }
   });
 
   // 页面元数据

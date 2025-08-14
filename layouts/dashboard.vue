@@ -39,7 +39,7 @@
         <div class="flex items-center space-x-3">
           <button
             @click="toggleMobileSidebar = !toggleMobileSidebar"
-            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
+            class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
           >
             <Icon name="mynaui:menu" class="w-5 h-5" />
           </button>
@@ -51,7 +51,7 @@
         <div class="flex items-center space-x-2 sm:space-x-4">
           <!-- 通知 -->
           <button
-            class="p-2 text-gray-500 hover:text-gray-700 relative rounded-lg hover:bg-gray-50 transition-all duration-200"
+            class="p-2 text-gray-500 hover:text-gray-700 relative rounded-md hover:bg-gray-50 transition-all duration-200"
           >
             <Icon name="mynaui:bell" class="w-4 h-4 sm:w-5 sm:h-5" />
             <span
@@ -63,7 +63,7 @@
           <div class="relative">
             <button
               @click="toggleUserMenu"
-              class="flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200"
+              class="flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-50 transition-all duration-200"
             >
               <Icon name="mynaui:user" class="w-4 h-4 sm:w-5 sm:h-5" />
               <Icon name="mynaui:chevron-down" class="w-3 h-3 sm:w-4 sm:h-4 ml-1 hidden sm:block" />
@@ -72,7 +72,7 @@
             <!-- 下拉菜单 -->
             <div
               v-show="showUserMenu"
-              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-100"
+              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100"
             >
               <a
                 href="#"
@@ -98,7 +98,7 @@
       <!-- 页面内容 -->
       <div class="flex-1 p-4 sm:p-6 overflow-auto flex flex-col">
         <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
+          class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
         >
           <NuxtPage />
         </div>

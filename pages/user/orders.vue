@@ -97,7 +97,7 @@
                       <NuxtImg
                         :src="order.article?.cover || '/placeholder.svg'"
                         :alt="order.article?.title"
-                        class="w-16 h-16 object-cover rounded-lg"
+                        class="w-16 h-16 object-cover rounded-md"
                         loading="lazy"
                         format="webp"
                         sizes="64px"
@@ -176,7 +176,7 @@
           </p>
           <NuxtLinkLocale
             to="/"
-            class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
+            class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
           >
             {{ $t('user.orders.empty.browseArticles') }}
           </NuxtLinkLocale>
@@ -253,7 +253,7 @@
                 <NuxtImg
                   :src="selectedOrder.article?.cover || '/placeholder.svg'"
                   :alt="selectedOrder.article?.title"
-                  class="w-20 h-20 object-cover rounded-lg"
+                  class="w-20 h-20 object-cover rounded-md"
                   loading="lazy"
                   format="webp"
                   sizes="80px"
@@ -301,7 +301,7 @@
           <p class="text-gray-600 dark:text-gray-400">
             {{ $t('user.orders.confirmCancelMessage') }}
           </p>
-          <div v-if="orderToCancel" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div v-if="orderToCancel" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
             <div class="flex items-center space-x-3">
               <div v-if="orderToCancel.articleId">
                 <NuxtImg

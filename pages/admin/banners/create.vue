@@ -32,7 +32,7 @@
             :loading="uploading"
           />
           <!-- <div v-if="state.imageUrl" class="mt-2">
-            <img :src="state.imageUrl" alt="预览图片" class="w-32 h-32 object-cover rounded-lg" />
+            <img :src="state.imageUrl" alt="预览图片" class="w-32 h-32 object-cover rounded-md" />
           </div> -->
         </UFormField>
 
