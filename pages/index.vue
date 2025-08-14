@@ -159,29 +159,7 @@
     return allItems.value;
   });
 
-  // 移除了节流函数和滚动检查函数，因为现在使用 Intersection Observer
-
-  const notify = () => {
-    toast.add({
-      ui: { close: 'cursor-pointer' },
-      title:
-        '用户数据已导入，部分账号有重复。可以使用邮箱登录，昵称可以修改但是用户名目前无法修改。有效期会员已补充一个月会员，其余不变。',
-      duration: 30000,
-      actions: [
-        {
-          label: '打开',
-          color: 'primary',
-          onClick: () => {
-            window.open('https://drive.cosfan.cc');
-          }
-        }
-      ]
-    });
-  };
-
   onMounted(() => {
-    notify();
-
     // 监听窗口大小变化
     window.addEventListener('resize', handleResize);
 
