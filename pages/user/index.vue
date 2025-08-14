@@ -198,16 +198,18 @@
                 @click="isRechargeModalOpen = true"
                 size="sm"
                 color="primary"
-                class="cursor-pointer"
+                class="cursor-pointer dark:text-white"
               >
                 {{ $t('user.recharge.title') }}
               </UButton>
             </div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                userProfile?.data?.membershipLevelName || $t('user.basicMember')
+                (userProfile?.data?.membershipLevel || 0) > 0
+                  ? $t('user.vipMember')
+                  : $t('user.basicMember')
               }}</span>
-              <span class="text-sm font-medium text-primary-500"
+              <span class="text-sm font-medium text-primary-500 dark:text-white"
                 >Lv.{{ userProfile?.data?.membershipLevel || 0 }}</span
               >
             </div>

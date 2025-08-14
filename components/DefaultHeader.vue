@@ -298,9 +298,7 @@
   });
 
   // 用户头像 - 使用computed确保响应式
-  const currentUserAvatar = computed(
-    () => userStore.userInfo?.avatar || '/images/default-avatar.png'
-  );
+  const currentUserAvatar = computed(() => userStore.userInfo?.avatar);
   const isMobileMenuOpen = ref(false);
 
   // 可用语言列表

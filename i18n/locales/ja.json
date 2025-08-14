@@ -161,7 +161,10 @@
       "createFailed": "作成失敗",
       "createSuccess": "作成成功",
       "uploadFailed": "アップロード失敗",
-      "uploadSuccess": "アップロード成功"
+      "uploadSuccess": "アップロード成功",
+      "fetchFailed": "データの取得に失敗しました",
+      "networkError": "ネットワーク接続に失敗しました",
+      "networkErrorDescription": "サーバーに接続できません。ネットワーク接続を確認してください"
     },
     "modal": {
       "confirmDelete": "削除確認",
@@ -216,7 +219,8 @@
     },
     "tag": {
       "name": "タグ",
-      "placeholder": "タグを選択してください"
+      "placeholder": "タグを選択してください",
+      "searchPlaceholder": "タグを検索..."
     },
     "parentCategory": {
       "placeholder": "親カテゴリーを選択してください",
@@ -439,6 +443,7 @@
     "noArticles": "まだ記事がありません",
     "membershipLevel": "メンバーシップレベル",
     "basicMember": "基本メンバー",
+    "vipMember": "シニアメンバーシップ",
     "experience": "経験値",
     "score": "スコア",
     "inviteRewards": "招待報酬",

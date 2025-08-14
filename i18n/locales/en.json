@@ -10,7 +10,7 @@
       "admin": "Admin Center",
       "message": "Message Center",
       "setting": "Setting",
-      "language": "Language"
+      "language": "language"
     }
   },
   "home": {
@@ -161,7 +161,10 @@
       "createFailed": "Create Failed",
       "createSuccess": "Create Success",
       "uploadFailed": "Upload Failed",
-      "uploadSuccess": "Upload Success"
+      "uploadSuccess": "Upload Success",
+      "fetchFailed": "Failed to obtain data",
+      "networkError": "Network connection failed",
+      "networkErrorDescription": "Cannot connect to the server, please check the network connection"
     },
     "modal": {
       "confirmDelete": "Confirm Delete",
@@ -216,7 +219,8 @@
     },
     "tag": {
       "name": "Tag",
-      "placeholder": "Please select tags"
+      "placeholder": "Please select tags",
+      "searchPlaceholder": "Search tags..."
     },
     "parentCategory": {
       "placeholder": "Please select parent category",
@@ -439,6 +443,7 @@
     "noArticles": "No articles yet",
     "membershipLevel": "Membership Level",
     "basicMember": "Basic Member",
+    "vipMember": "Senior Membership",
     "experience": "Experience",
     "score": "Score",
     "inviteRewards": "Invite Rewards",

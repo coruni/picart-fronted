@@ -34,7 +34,7 @@
           >
             <div class="flex items-center justify-between mb-2">
               <div class="flex items-center space-x-2">
-                <span class="font-medium text-gray-900 dark:text-gray-100">
+                <span class="font-medium text-gray-900 dark:text-gray-100 text-sm">
                   {{ comment.author?.nickname || comment.author?.username }}
                 </span>
               </div>
@@ -342,7 +342,7 @@
                     <UForm
                       :schema="replyToReplySchema"
                       :state="replyToReplyState"
-                      @submit="handleReplyToReplySubmit(reply)"
+                      @submit="payload => handleReplyToReplySubmit(reply, payload)"
                     >
                       <UFormField name="content">
                         <UTextarea
@@ -356,11 +356,16 @@
                           type="button"
                           variant="ghost"
                           @click="reply.showReplyInput = false"
-                          class="text-xs cursor-pointer"
+                          class="text-xs cursor-pointer dark:text-white"
                         >
                           {{ $t('common.cancel') }}
                         </UButton>
-                        <UButton type="submit" :loading="isReplyLoading" class="text-xs">
+                        <UButton
+                          type="submit"
+                          size="sm"
+                          :loading="isReplyLoading"
+                          class="text-xs cursor-pointer dark:text-white"
+                        >
                           {{ $t('article.reply') }}
                         </UButton>
                       </div>
@@ -372,7 +377,7 @@
                     <UForm
                       :schema="editReplySchema"
                       :state="editReplyState"
-                      @submit="handleEditReplySubmit(reply)"
+                      @submit="payload => handleEditReplySubmit(reply, payload)"
                     >
                       <UFormField name="content">
                         <UTextarea
@@ -386,14 +391,14 @@
                           type="button"
                           variant="ghost"
                           @click="reply.showEditInput = false"
-                          class="text-xs cursor-pointer"
+                          class="text-xs cursor-pointer dark:text-white"
                         >
                           {{ $t('common.cancel') }}
                         </UButton>
                         <UButton
                           type="submit"
                           :loading="isEditLoading"
-                          class="text-xs cursor-pointer"
+                          class="text-xs cursor-pointer dark:text-white"
                         >
                           {{ $t('common.save') }}
                         </UButton>
@@ -436,11 +441,15 @@
             type="button"
             variant="ghost"
             @click="showReplyInput = false"
-            class="text-sm cursor-pointer"
+            class="text-sm cursor-pointer dark:text-white"
           >
             {{ $t('common.cancel') }}
           </UButton>
-          <UButton type="submit" :loading="isReplyLoading" class="text-sm">
+          <UButton
+            type="submit"
+            :loading="isReplyLoading"
+            class="text-sm cursor-pointer dark:text-white"
+          >
             {{ $t('article.reply') }}
           </UButton>
         </div>
@@ -462,11 +471,15 @@
             type="button"
             variant="ghost"
             @click="showEditInput = false"
-            class="text-sm cursor-pointer"
+            class="text-sm cursor-pointer dark:text-white"
           >
             {{ $t('common.cancel') }}
           </UButton>
-          <UButton type="submit" :loading="isEditLoading" class="text-sm cursor-pointer">
+          <UButton
+            type="submit"
+            :loading="isEditLoading"
+            class="text-sm cursor-pointer dark:text-white"
+          >
             {{ $t('common.save') }}
           </UButton>
         </div>
@@ -690,14 +703,14 @@
     }
   };
 
-  const handleReplySubmit = async (payload: any) => {
+  const handleReplySubmit = async (payload: FormSubmitEvent<{ content: string }>) => {
     try {
       isReplyLoading.value = true;
       await commentControllerCreate({
         composable: '$fetch',
         key: `comment_reply_create_${props.comment.id}`,
         body: {
-          content: payload.content,
+          content: payload.data.content,
           articleId: Number(props.comment.article?.id || 0),
           parentId: props.comment.id || 0
         }
@@ -890,14 +903,17 @@
     return isOwner || isAdmin;
   };
 
-  const handleReplyToReplySubmit = async (reply: Comment) => {
+  const handleReplyToReplySubmit = async (
+    reply: Comment,
+    payload: FormSubmitEvent<{ content: string }>
+  ) => {
     try {
       isReplyLoading.value = true;
       await commentControllerCreate({
         composable: '$fetch',
         key: `comment_reply_to_reply_${reply.id}`,
         body: {
-          content: replyToReplyState.content,
+          content: payload.data.content,
           articleId: Number(props.comment.article?.id),
           parentId: reply.id // 传递子评论的 ID 作为 parentId
         }
@@ -910,7 +926,6 @@
       const currentReplyCount = props.comment.replyCount || 0;
       props.comment.replyCount = currentReplyCount + 1;
 
-      replyToReplyState.content = '';
       reply.showReplyInput = false;
       toast.add({
         title: t('article.replySuccess'),
@@ -922,20 +937,21 @@
     }
   };
 
-  const handleEditReplySubmit = async (reply: Comment) => {
+  const handleEditReplySubmit = async (
+    reply: Comment,
+    payload: FormSubmitEvent<{ content: string }>
+  ) => {
     try {
       isEditLoading.value = true;
       await commentControllerUpdate({
         composable: '$fetch',
         path: { id: reply.id! },
         body: {
-          content: editReplyState.content,
+          content: payload.data.content,
           articleId: Number(props.comment.article?.id)
         }
       });
 
-      // 更新本地状态
-      reply.content = editReplyState.content;
       reply.showEditInput = false;
       toast.add({
         title: t('article.editSuccess'),
