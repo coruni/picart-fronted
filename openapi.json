@@ -8477,6 +8477,15 @@
             }
           },
           {
+            "name": "name",
+            "in": "query",
+            "description": "名字",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "Authorization",
             "in": "header",
             "description": "",

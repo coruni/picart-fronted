@@ -6,11 +6,19 @@
       </UFormField>
 
       <UFormField :label="t('common.table.avatar')" name="avatar">
-        <UInput v-model="form.avatar" :placeholder="t('admin.tags.avatarPlaceholder')" class="w-full" />
+        <UInput
+          v-model="form.avatar"
+          :placeholder="t('admin.tags.avatarPlaceholder')"
+          class="w-full"
+        />
       </UFormField>
 
       <UFormField :label="t('common.table.background')" name="background">
-        <UInput v-model="form.background" :placeholder="t('admin.tags.backgroundPlaceholder')" class="w-full" />
+        <UInput
+          v-model="form.background"
+          :placeholder="t('admin.tags.backgroundPlaceholder')"
+          class="w-full"
+        />
       </UFormField>
 
       <UFormField :label="t('common.table.description')" name="description">
@@ -105,10 +113,6 @@
 
       router.push('/admin/tags');
     } catch (error) {
-      toast.add({
-        title: t('common.message.updateFailed'),
-        color: 'error'
-      });
       console.error('Failed to update tag:', error);
     } finally {
       loading.value = false;

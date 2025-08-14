@@ -41,6 +41,9 @@ importers:
       '@tanstack/vue-table':
         specifier: ^8.21.3
         version: 8.21.3(vue@3.5.18(typescript@5.8.3))
+      '@tinymce/tinymce-vue':
+        specifier: ^6.3.0
+        version: 6.3.0(vue@3.5.18(typescript@5.8.3))
       '@unhead/vue':
         specifier: ^2.0.12
         version: 2.0.12(vue@3.5.18(typescript@5.8.3))
@@ -74,9 +77,6 @@ importers:
       vue-router:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.18(typescript@5.8.3))
-      vue3-toastify:
-        specifier: ^0.2.8
-        version: 0.2.8(vue@3.5.18(typescript@5.8.3))
       zod:
         specifier: ^4.0.10
         version: 4.0.10
@@ -1837,6 +1837,15 @@ packages:
     resolution: {integrity: sha512-vhF7kEU9EXWXh+HdAwKJ2m3xaOnTTmgcdXcF2pim8g4GvI7eRrk2YRuV5nUlZnd/NbCIX4/Ja2OZu5EjJL06Ww==}
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
+
+  '@tinymce/tinymce-vue@6.3.0':
+    resolution: {integrity: sha512-DSP8Jhd3XqCCliTnusfbmz3D8GqQ4iRzkc4aadYHDcJPVjkaqopJ61McOdH82CSy599vGLkPjGzqJYWJkRMiUA==}
+    peerDependencies:
+      tinymce: ^8.0.0 || ^7.0.0 || ^6.0.0 || ^5.5.1
+      vue: ^3.0.0
+    peerDependenciesMeta:
+      tinymce:
+        optional: true
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -5819,15 +5828,6 @@ packages:
     peerDependencies:
       vue: ^3.2.0
 
-  vue3-toastify@0.2.8:
-    resolution: {integrity: sha512-8jDOqsJaBZEbGpCbhWDETJc11D1lZefvgFPq/IPdM+U7+qyXoVPDvK6uq/FIgyV7qV0NcNzvGBMEzjsLQqGROw==}
-    engines: {node: '>=20', npm: '>=9.0.0'}
-    peerDependencies:
-      vue: '>=3.2.0'
-    peerDependenciesMeta:
-      vue:
-        optional: true
-
   vue@3.5.18:
     resolution: {integrity: sha512-7W4Y4ZbMiQ3SEo+m9lnoNpV9xG7QVMLa+/0RFwwiAVkeYoyGXqWE85jabU4pllJNUzqfLShJ5YLptewhCWUgNA==}
     peerDependencies:
@@ -8077,6 +8077,10 @@ snapshots:
   '@tanstack/vue-virtual@3.13.12(vue@3.5.18(typescript@5.8.3))':
     dependencies:
       '@tanstack/virtual-core': 3.13.12
+      vue: 3.5.18(typescript@5.8.3)
+
+  '@tinymce/tinymce-vue@6.3.0(vue@3.5.18(typescript@5.8.3))':
+    dependencies:
       vue: 3.5.18(typescript@5.8.3)
 
   '@trysound/sax@0.2.0':
@@ -12685,10 +12689,6 @@ snapshots:
   vue-router@4.5.1(vue@3.5.18(typescript@5.8.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
-      vue: 3.5.18(typescript@5.8.3)
-
-  vue3-toastify@0.2.8(vue@3.5.18(typescript@5.8.3)):
-    optionalDependencies:
       vue: 3.5.18(typescript@5.8.3)
 
   vue@3.5.18(typescript@5.8.3):

@@ -260,10 +260,6 @@
       });
       users.refresh?.();
     } catch (error) {
-      toast.add({
-        title: t('common.message.deleteFailed'),
-        color: 'error'
-      });
       console.error('Failed to delete user:', error);
     } finally {
       showDeleteModal.value = false;

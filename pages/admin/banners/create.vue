@@ -166,10 +166,7 @@
     } catch (error: any) {
       // 处理上传错误
       console.error('Failed to upload image:', error);
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
+
       // 重置文件选择（保留原有表单数据）
       file.value = null;
     } finally {

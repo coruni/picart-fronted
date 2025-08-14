@@ -210,9 +210,7 @@
     requireFollow: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
     viewPrice: z.number().min(0).default(0),
-    status: z
-      .enum(['PUBLISHED', 'DRAFT', 'ARCHIVED', 'REJECTED', 'BANNED', 'DELETED'])
-      .default('PUBLISHED')
+    status: z.enum(['PUBLISHED', 'DRAFT']).default('PUBLISHED')
   });
 
   type Schema = z.output<typeof schema>;
@@ -255,32 +253,7 @@
       label: t('form.status.draft'),
       icon: 'mynaui:edit',
       class: 'cursor-pointer',
-
       value: 'DRAFT'
-    },
-    {
-      label: t('form.status.archived'),
-      icon: 'mynaui:archive',
-      value: 'ARCHIVED',
-      class: 'cursor-pointer'
-    },
-    {
-      label: t('form.status.rejected'),
-      class: 'cursor-pointer',
-      icon: 'mynaui:x',
-      value: 'REJECTED'
-    },
-    {
-      label: t('form.status.banned'),
-      class: 'cursor-pointer',
-      icon: 'mynaui:ban',
-      value: 'BANNED'
-    },
-    {
-      label: t('form.status.deleted'),
-      class: 'cursor-pointer',
-      icon: 'mynaui:trash',
-      value: 'DELETED'
     }
   ]);
 
@@ -516,10 +489,6 @@
       });
       router.push(localePath('/admin/articles'));
     } catch (error) {
-      toast.add({
-        title: t('common.message.updateFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }

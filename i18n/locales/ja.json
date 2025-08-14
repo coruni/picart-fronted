@@ -9,7 +9,8 @@
       "logout": "ログアウト",
       "admin": "管理者センター",
       "message": "メッセージセンター",
-      "setting": "設定"
+      "setting": "設定",
+      "language": "言語"
     }
   },
   "home": {

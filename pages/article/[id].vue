@@ -584,10 +584,6 @@
       });
     } catch (error) {
       console.error('发布评论失败:', error);
-      toast.add({
-        title: t('article.commentFailed'),
-        color: 'error'
-      });
     } finally {
       isCommentSubmitting.value = false;
     }

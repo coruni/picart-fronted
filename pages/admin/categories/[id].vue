@@ -281,11 +281,6 @@
     } catch (error: any) {
       console.error('Failed to upload image:', error);
       displayFile.value = null;
-
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
     } finally {
       uploading.value = false;
     }
@@ -378,11 +373,6 @@
     } catch (error: any) {
       console.error('Failed to upload cover:', error);
       coverFile.value = null;
-
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
     } finally {
     }
   };
@@ -418,10 +408,6 @@
 
       router.push('/admin/categories');
     } catch (error) {
-      toast.add({
-        title: t('common.message.updateFailed'),
-        color: 'error'
-      });
       console.error('Failed to update category:', error);
     } finally {
       loading.value = false;

@@ -287,10 +287,6 @@
       });
       articles.refresh?.();
     } catch (error) {
-      toast.add({
-        title: t('common.message.deleteFailed'),
-        color: 'error'
-      });
       console.error('Failed to delete article:', error);
     } finally {
       showDeleteModal.value = false;

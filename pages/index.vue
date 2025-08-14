@@ -147,7 +147,6 @@
         observer.disconnect();
       }
     } catch (error) {
-      console.error('加载文章失败:', error);
     } finally {
       loading.value = false;
     }

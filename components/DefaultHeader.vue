@@ -40,7 +40,7 @@
         </template>
       </div>
 
-      <!-- 桌面端搜索和用户 -->
+      <!-- 桌面端搜索、语言切换和用户 -->
       <div class="hidden md:flex items-center space-x-4">
         <div class="relative">
           <input
@@ -56,6 +56,44 @@
             @click="handleSearch"
           />
         </div>
+
+        <!-- 语言切换器 -->
+        <div class="relative group language-switcher">
+          <button
+            class="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
+          >
+            <span class="text-lg">{{ currentLanguageFlag }}</span>
+            <span class="hidden sm:inline">{{ currentLanguageName }}</span>
+            <Icon
+              name="mynaui:chevron-down"
+              class="w-4 h-4 transition-transform group-hover:rotate-180"
+            />
+          </button>
+
+          <!-- 语言选择菜单 -->
+          <div
+            class="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl border border-gray-200 dark:border-gray-700 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
+          >
+            <div class="py-1">
+              <button
+                v-for="locale in availableLocales"
+                :key="locale.code"
+                @click="handleLanguageSwitch(locale.code)"
+                class="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                :class="{ 'bg-primary/10 text-primary': locale.code === currentLocale }"
+              >
+                <span class="text-lg">{{ getLanguageFlag(locale.code) }}</span>
+                <span>{{ locale.name }}</span>
+                <Icon
+                  v-if="locale.code === currentLocale"
+                  name="mynaui:check"
+                  class="w-4 h-4 ml-auto text-primary"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
         <template v-if="userStore.isLoggedIn">
           <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
             <UAvatar
@@ -157,6 +195,28 @@
             </template>
 
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+              <!-- 移动端语言切换 -->
+              <div class="px-4">
+                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {{ $t('header.nav.language') || '语言' }}
+                </div>
+                <div class="flex space-x-2">
+                  <button
+                    v-for="locale in availableLocales"
+                    :key="locale.code"
+                    @click="handleLanguageSwitch(locale.code)"
+                    class="w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors cursor-pointer"
+                    :class="
+                      locale.code === currentLocale
+                        ? 'bg-primary text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                    "
+                  >
+                    {{ locale.flag }}
+                  </button>
+                </div>
+              </div>
+
               <div class="relative px-4">
                 <input
                   v-model="searchQuery"
@@ -218,6 +278,9 @@
   const route = useRoute();
   const router = useRouter();
 
+  // 语言切换相关
+  const { locale: currentLocale, locales, setLocale } = useI18n();
+
   // 搜索相关
   const searchQuery = ref('');
 
@@ -239,6 +302,50 @@
     () => userStore.userInfo?.avatar || '/images/default-avatar.png'
   );
   const isMobileMenuOpen = ref(false);
+
+  // 可用语言列表
+  const availableLocales = computed(() => {
+    return locales.value.map(locale => ({
+      code: locale.code,
+      name: locale.name || locale.code,
+      flag: getLanguageFlag(locale.code)
+    }));
+  });
+
+  // 当前语言名称
+  const currentLanguageName = computed(() => {
+    const current = availableLocales.value.find(l => l.code === currentLocale.value);
+    return current?.name || currentLocale.value;
+  });
+
+  // 当前语言旗帜
+  const currentLanguageFlag = computed(() => {
+    return getLanguageFlag(currentLocale.value);
+  });
+
+  // 获取语言旗帜
+  const getLanguageFlag = (code: string): string => {
+    const flagMap: Record<string, string> = {
+      zh: '🇨🇳',
+      en: '🇺🇸',
+      ja: '🇯🇵'
+    };
+    return flagMap[code] || '🌐';
+  };
+
+  // 处理语言切换
+  const handleLanguageSwitch = async (newLocale: string) => {
+    if (newLocale === currentLocale.value) {
+      return;
+    }
+
+    try {
+      await setLocale(newLocale as 'zh' | 'en' | 'ja');
+      closeMobileMenu(); // 关闭移动端菜单
+    } catch (error) {
+      console.error('语言切换失败:', error);
+    }
+  };
 
   const toggleMobileMenu = () => {
     isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -277,8 +384,7 @@
   const handleLogout = () => {
     userStore.clearAuth();
     closeMobileMenu();
-    // 登出后跳转到首页
-    router.push('/');
+    // clearAuth 方法已经处理了页面跳转，这里不需要额外的跳转
   };
   // 组件卸载时清理事件监听
   onUnmounted(() => {

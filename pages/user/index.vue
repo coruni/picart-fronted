@@ -136,7 +136,7 @@
                 {{ $t('user.myArticles') }}
               </h2>
               <NuxtLinkLocale
-                to="/article/create"
+                to="/user/articles/create"
                 class="text-primary-500 hover:text-primary-600 text-sm md:text-base"
               >
                 {{ $t('user.createArticle') }}
@@ -816,10 +816,6 @@
     } catch (error: any) {
       // 处理上传错误
       console.error('Failed to upload avatar:', error);
-      toast.add({
-        title: error?.message || '头像上传失败',
-        color: 'error'
-      });
     } finally {
       avatarUploading.value = false;
     }
@@ -858,11 +854,6 @@
       // 刷新用户资料
       userRefresh();
     } catch (error) {
-      toast.add({
-        title: t('response.error.profileSavedFailed'),
-        color: 'error',
-        duration: 2000
-      });
     } finally {
       isSaving.value = false;
     }
@@ -965,7 +956,6 @@
       toast.add({ title: t('user.recharge.successMessage'), color: 'success' });
     } catch (error: any) {
       console.error('充值失败:', error);
-      toast.add({ title: error?.message || t('user.recharge.failed'), color: 'error' });
     } finally {
       recharging.value = false;
     }
@@ -1009,10 +999,6 @@
       };
     } catch (error: any) {
       console.error('修改密码失败:', error);
-      toast.add({
-        title: error?.data?.message || t('user.changePassword.failed'),
-        color: 'error'
-      });
     } finally {
       changingPassword.value = false;
     }

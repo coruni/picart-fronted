@@ -414,10 +414,6 @@
       });
       categories.refresh?.();
     } catch (error) {
-      toast.add({
-        title: t('common.message.deleteFailed'),
-        color: 'error'
-      });
       console.error('Failed to delete category:', error);
     } finally {
       showDeleteModal.value = false;

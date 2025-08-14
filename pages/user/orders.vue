@@ -497,10 +497,6 @@
       }
     } catch (error) {
       console.error('加载订单失败:', error);
-      toast.add({
-        title: t('user.orders.loadFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }
@@ -559,10 +555,6 @@
       loadOrders(true);
     } catch (error: any) {
       console.error('取消订单失败:', error);
-      toast.add({
-        title: error?.message || t('user.orders.cancelFailed'),
-        color: 'error'
-      });
     } finally {
       cancelling.value = false;
     }
@@ -576,12 +568,7 @@
         title: t('user.orders.paymentRedirect'),
         color: 'info'
       });
-    } catch (error) {
-      toast.add({
-        title: t('user.orders.paymentFailed'),
-        color: 'error'
-      });
-    }
+    } catch (error) {}
   };
 
   // 初始化加载

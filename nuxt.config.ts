@@ -149,7 +149,12 @@ export default defineNuxtConfig({
   nitro: {
     // 可以在这里配置服务端相关设置
     routeRules: {
-      '/admin/**': { prerender: false }
+      '/admin/**': { prerender: false },
+      '/user/articles/**': { prerender: false }
+    },
+    // 确保cookie在SSR阶段正确传递
+    experimental: {
+      wasm: true
     }
   },
 

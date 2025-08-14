@@ -202,7 +202,7 @@
         composable: '$fetch',
         body: {
           ...data,
-          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
+          tagIds: existingTagIds.length > 0 ? existingTagIds.map(id => id.toString()) : undefined,
           tagNames: newTagNames.length > 0 ? newTagNames : undefined
         }
       });
@@ -214,10 +214,6 @@
 
       router.push('/admin/articles');
     } catch (error) {
-      toast.add({
-        title: t('common.message.createFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }

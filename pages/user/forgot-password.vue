@@ -162,10 +162,6 @@
       }, 1000);
     } catch (error: any) {
       console.error('发送验证码失败:', error);
-      toast.add({
-        title: error?.data?.message || t('forgotPassword.sendCodeFailed'),
-        color: 'error'
-      });
     } finally {
       sendingCode.value = false;
     }
@@ -194,10 +190,6 @@
       router.push(localePath('/user/login'));
     } catch (error: any) {
       console.error('密码重置失败:', error);
-      toast.add({
-        title: error?.data?.message || t('forgotPassword.resetFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }

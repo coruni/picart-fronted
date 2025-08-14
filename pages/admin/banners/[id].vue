@@ -328,10 +328,6 @@
       // 返回列表页
       router.push('/admin/banners');
     } catch (error) {
-      toast.add({
-        title: t('common.message.updateFailed'),
-        color: 'error'
-      });
       console.error('Failed to update banner:', error);
     } finally {
       loading.value = false;

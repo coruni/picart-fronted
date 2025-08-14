@@ -63,19 +63,25 @@ export const useUserStore = defineStore('user', {
 
       // 清除认证相关的cookie
       if (import.meta.client) {
+        // 清除所有认证相关的cookie
         document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        const route = useRoute();
-        const localePath = useLocalePath();
-        // 根据当前页面决定跳转行为
-        const currentPath = route.path;
-        if (currentPath === localePath('/')) {
-          // 如果在首页，则重新加载页面
-          window.location.reload();
-        } else {
-          // 如果不在首页，则跳转到首页
-          window.location.href = localePath('/');
+        document.cookie = 'device-id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+        // 清除localStorage
+        try {
+          localStorage.removeItem('auth-token');
+          localStorage.removeItem('token');
+          localStorage.removeItem('device-id');
+          localStorage.removeItem('user');
+          localStorage.removeItem('app');
+        } catch (error) {
+          console.warn('Failed to clear localStorage:', error);
         }
+
+        // 强制刷新页面，确保所有状态都被重置
+        window.location.href = '/';
       }
     }
   },

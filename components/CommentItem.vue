@@ -685,11 +685,6 @@
         color: 'primary'
       });
     } catch (error) {
-      console.error('点赞失败:', error);
-      toast.add({
-        title: t('article.likeFailed'),
-        color: 'error'
-      });
     } finally {
       isLikeLoading.value = false;
     }
@@ -722,11 +717,6 @@
         color: 'primary'
       });
     } catch (error) {
-      console.error('回复失败:', error);
-      toast.add({
-        title: t('article.replyFailed'),
-        color: 'error'
-      });
     } finally {
       isReplyLoading.value = false;
     }
@@ -752,11 +742,6 @@
         color: 'primary'
       });
     } catch (error) {
-      console.error('编辑失败:', error);
-      toast.add({
-        title: t('article.editFailed'),
-        color: 'error'
-      });
     } finally {
       isEditLoading.value = false;
     }
@@ -776,11 +761,6 @@
         color: 'primary'
       });
     } catch (error) {
-      console.error('删除失败:', error);
-      toast.add({
-        title: t('article.deleteFailed'),
-        color: 'error'
-      });
     } finally {
       isDeleteLoading.value = false;
     }
@@ -808,11 +788,6 @@
       // 增加页码
       currentPage.value++;
     } catch (error) {
-      console.error('加载回复失败:', error);
-      toast.add({
-        title: t('article.loadRepliesFailed'),
-        color: 'error'
-      });
     } finally {
       isLoadingReplies.value = false;
     }
@@ -867,11 +842,6 @@
         color: 'primary'
       });
     } catch (error) {
-      console.error('点赞失败:', error);
-      toast.add({
-        title: t('article.likeFailed'),
-        color: 'error'
-      });
     } finally {
       isLikeLoading.value = false;
     }
@@ -947,11 +917,6 @@
         color: 'success'
       });
     } catch (error) {
-      console.error('回复失败:', error);
-      toast.add({
-        title: t('article.replyFailed'),
-        color: 'error'
-      });
     } finally {
       isReplyLoading.value = false;
     }
@@ -977,11 +942,6 @@
         color: 'success'
       });
     } catch (error) {
-      console.error('编辑失败:', error);
-      toast.add({
-        title: t('article.editFailed'),
-        color: 'error'
-      });
     } finally {
       isEditLoading.value = false;
     }
@@ -1010,11 +970,6 @@
         color: 'success'
       });
     } catch (error) {
-      console.error('删除失败:', error);
-      toast.add({
-        title: t('article.deleteFailed'),
-        color: 'error'
-      });
     } finally {
       isDeleteLoading.value = false;
     }

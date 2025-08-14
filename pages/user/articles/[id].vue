@@ -1,0 +1,717 @@
+<template>
+  <ClientOnly>
+    <div class="flex-1 flex flex-col w-full">
+      <div class="w-full flex-1 max-w-4xl mx-auto p-4">
+        <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+          <div class="flex items-start space-x-4">
+            <UFormField name="title" class="flex-1">
+              <UInput
+                v-model="state.title"
+                size="xl"
+                :placeholder="$t('form.title.placeholder')"
+                variant="soft"
+                class="w-full"
+              />
+            </UFormField>
+            <UFormField name="type">
+              <USelect
+                v-model="state.type"
+                :items="typeOptions"
+                :placeholder="$t('form.type.placeholder')"
+                value-key="value"
+                variant="soft"
+                size="xl"
+                class="w-full h-full"
+              />
+            </UFormField>
+          </div>
+
+          <UFormField name="content" v-show="state.type === 'mixed'">
+            <div class="w-full">
+              <ClientOnly>
+                <Editor
+                  tinymce-script-src="/tinymce/tinymce.min.js"
+                  v-model="state.content"
+                  :init="editorConfig"
+                  :placeholder="$t('form.content.placeholder')"
+                  class="min-h-[400px]"
+                />
+                <template #fallback>
+                  <div class="min-h-[400px] border border-gray-300 rounded-lg p-4 bg-gray-50">
+                    <div class="text-gray-500 text-center">编辑器加载中...</div>
+                  </div>
+                </template>
+              </ClientOnly>
+            </div>
+          </UFormField>
+
+          <UFormField name="images" :label="$t('form.image.name')" v-show="state.type === 'image'">
+            <UFileUpload
+              v-model:modelValue="displayFiles"
+              draggable
+              dropzone
+              :placeholder="$t('form.image.placeholder')"
+              accept="image/*"
+              @update:modelValue="onImageUpload"
+              :loading="uploading"
+              multiple
+              :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
+            >
+            </UFileUpload>
+          </UFormField>
+
+          <div class="flex items-center space-x-2">
+            <UFormField name="parentCategory" class="flex-1">
+              <USelectMenu
+                v-model="state.parentCategory"
+                :items="parentCategoriesOptions"
+                :placeholder="$t('form.parentCategory.placeholder')"
+                value-key="id"
+                variant="soft"
+                class="w-full"
+                size="lg"
+                searchable
+                :search-placeholder="$t('form.parentCategory.searchPlaceholder')"
+              />
+            </UFormField>
+            <UFormField name="category" v-show="state.parentCategory" class="flex-1">
+              <USelectMenu
+                v-model="state.categoryId"
+                :items="subCategoriesOptions"
+                :placeholder="$t('form.category.placeholder')"
+                value-key="id"
+                variant="soft"
+                class="w-full"
+                size="lg"
+                searchable
+                :search-placeholder="$t('form.category.searchPlaceholder')"
+              />
+            </UFormField>
+          </div>
+
+          <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
+            <div class="space-y-2">
+              <USelectMenu
+                v-model="state.tagIds"
+                :items="tagsOptions"
+                size="lg"
+                class="w-full"
+                value-key="id"
+                variant="soft"
+                multiple
+                create-item
+                searchable
+                :search-placeholder="$t('form.tag.searchPlaceholder')"
+                :placeholder="$t('form.tag.placeholder')"
+                @create="onCreate"
+                @update:searchTerm="
+                  (query: string) => {
+                    tagSearchQuery = query;
+                    searchTags(query);
+                  }
+                "
+              />
+            </div>
+          </UFormField>
+
+          <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
+            <template #advanced>
+              <div class="space-y-4 mt-4">
+                <UFormField
+                  name="requireLogin"
+                  :label="$t('form.requireLogin')"
+                  class="flex items-center justify-between"
+                >
+                  <USwitch v-model="state.requireLogin" />
+                </UFormField>
+
+                <UFormField
+                  name="requireFollow"
+                  :label="$t('form.requireFollow')"
+                  class="flex items-center justify-between"
+                >
+                  <USwitch v-model="state.requireFollow" />
+                </UFormField>
+
+                <UFormField
+                  name="requirePayment"
+                  :label="$t('form.requirePayment')"
+                  class="flex items-center justify-between"
+                >
+                  <USwitch v-model="state.requirePayment" />
+                </UFormField>
+
+                <UFormField
+                  name="viewPrice"
+                  :label="$t('form.viewPrice.name')"
+                  v-show="state.requirePayment"
+                  class="flex items-center justify-between"
+                >
+                  <UInput
+                    v-model="state.viewPrice"
+                    type="number"
+                    variant="soft"
+                    :min="0"
+                    :placeholder="$t('form.viewPrice.placeholder')"
+                  />
+                </UFormField>
+              </div>
+            </template>
+          </UAccordion>
+
+          <UButton
+            type="submit"
+            icon="mynaui:save"
+            class="w-full cursor-pointer justify-center"
+            size="lg"
+            :loading="loading"
+          >
+            {{ $t('form.submit') }}
+          </UButton>
+        </UForm>
+      </div>
+    </div>
+  </ClientOnly>
+</template>
+
+<script lang="ts" setup>
+  import * as z from 'zod';
+  import {
+    categoryControllerFindAll,
+    tagControllerFindAll,
+    articleControllerFindOne,
+    articleControllerUpdate,
+    uploadControllerUploadFile
+  } from '~~/api';
+
+  import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+  import Editor from '@tinymce/tinymce-vue';
+  import { debounce } from 'lodash-es';
+
+  const router = useRouter();
+  const localePath = useLocalePath();
+  const toast = useToast();
+  const { t } = useI18n();
+  const route = useRoute();
+  const articleId = route.params.id as string;
+
+  definePageMeta({
+    layout: 'default',
+    requiresAuth: true
+  });
+
+  const schema = z.object({
+    title: z.string().min(8, t('form.title.placeholder')),
+    content: z.string().optional(),
+    parentCategory: z.number().optional(),
+    categoryId: z.number().min(1, t('form.category.placeholder')),
+    images: z.any().optional(),
+    type: z.enum(['mixed', 'image']).optional().default('mixed'),
+    tagIds: z
+      .array(z.union([z.string(), z.number()]))
+      .optional()
+      .default([]),
+    requireLogin: z.boolean().default(false),
+    requireFollow: z.boolean().default(false),
+    requirePayment: z.boolean().default(false),
+    viewPrice: z.number().min(0).default(0)
+  });
+
+  type Schema = z.output<typeof schema>;
+
+  const state = reactive<Partial<Schema>>({
+    title: '',
+    content: '',
+    parentCategory: undefined,
+    categoryId: undefined,
+    images: '',
+    type: 'mixed',
+    tagIds: []
+  });
+
+  const loading = ref(false);
+
+  // 扩展File接口，添加自定义属性
+  interface ExtendedFile extends File {
+    _url?: string;
+    _uploaded?: boolean;
+    _uploading?: boolean;
+    _id?: string;
+  }
+
+  // 文件列表，用于FileUpload组件展示
+  const displayFiles = ref<ExtendedFile[]>([]);
+  const uploading = ref(false);
+
+  const { locale } = useI18n();
+  // TinyMCE 编辑器配置
+  const editorConfig = {
+    // 基础路径配置 - 指向 public/tinymce 目录
+    base_url: '/tinymce',
+    suffix: '.min',
+
+    // 插件配置
+    plugins: [
+      'advlist',
+      'autolink',
+      'lists',
+      'link',
+      'image',
+      'charmap',
+      'preview',
+      'anchor',
+      'searchreplace',
+      'visualblocks',
+      'code',
+      'fullscreen',
+      'insertdatetime',
+      'media',
+      'table',
+      'help',
+      'wordcount'
+    ],
+
+    // 工具栏配置
+    toolbar:
+      'undo redo | formatselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat | help',
+
+    // 内容样式
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
+    // 基础配置
+    height: 400,
+    menubar: false,
+    branding: false,
+    promotion: false,
+
+    // 中文界面
+    language: locale.value,
+
+    // 图片上传配置（使用服务器上传）
+    images_upload_handler: async (blobInfo: any, progress: any) => {
+      try {
+        const formData = new FormData();
+        formData.append('files', blobInfo.blob(), blobInfo.filename());
+
+        const res = await uploadControllerUploadFile({
+          composable: '$fetch',
+          body: {},
+          bodySerializer: () => formData
+        });
+
+        if (res.data && res.data[0]) {
+          return res.data[0].url;
+        } else {
+          throw new Error('上传失败');
+        }
+      } catch (error) {
+        console.error('图片上传失败:', error);
+
+        throw error;
+      }
+    },
+
+    // 启用在线功能
+    automatic_uploads: true,
+    file_picker_types: 'image',
+
+    // 编辑器设置
+    paste_data_images: true, // 允许粘贴图片
+    paste_as_text: false,
+
+    // 响应式配置
+    width: '100%',
+    min_height: 300,
+    max_height: 600,
+
+    // 移除不需要的功能
+    elementpath: false,
+    resize: true,
+    statusbar: false,
+
+    // 禁用在线验证
+    verify_html: false,
+    cleanup: false,
+
+    // 设置编辑器为可编辑
+    readonly: false
+  };
+
+  const typeOptions = ref<SelectMenuItem[]>([
+    {
+      label: t('form.type.mixed'),
+      value: 'mixed'
+    },
+    {
+      label: t('form.type.image'),
+      value: 'image'
+    }
+  ]);
+
+  // 将URL转换为File对象
+  const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
+    try {
+      // 从URL获取图片数据
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+
+      // 将响应转换为Blob
+      const blob = await response.blob();
+
+      // 从URL获取文件名
+      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
+
+      // 从Blob创建File对象
+      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+
+      return file;
+    } catch (error) {
+      console.error('Error converting URL to File:', error);
+      // 创建一个默认的虚拟文件作为备选
+      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
+      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+      return file;
+    }
+  };
+
+  // 获取文件预览URL
+  const getFilePreview = (file: ExtendedFile): string => {
+    if (file._url) {
+      return file._url;
+    }
+
+    if (file.size > 0) {
+      return URL.createObjectURL(file);
+    }
+
+    return '';
+  };
+
+  // 图片上传处理
+  const onImageUpload = async (files: any) => {
+    if (!files || files.length === 0) return;
+
+    // 找出新添加的文件（没有_uploaded标记的）
+    const newFiles = files.filter((file: unknown): file is ExtendedFile => {
+      if (file instanceof File) {
+        const extendedFile = file as ExtendedFile;
+        return !extendedFile._uploaded && !extendedFile._uploading;
+      }
+      return false;
+    });
+
+    if (newFiles.length === 0) return;
+
+    // 标记新文件为正在上传
+    newFiles.forEach((file: ExtendedFile) => {
+      file._uploading = true;
+    });
+
+    uploading.value = true;
+
+    try {
+      // 一次上传多个文件
+      const formData = new FormData();
+      newFiles.forEach((file: ExtendedFile) => {
+        formData.append('files', file);
+      });
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      // 更新所有文件状态
+      newFiles.forEach((file: ExtendedFile, index: number) => {
+        if (res.data && res.data[index]) {
+          file._url = res.data[index].url!;
+          file._uploaded = true;
+          file._uploading = false;
+          file._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        } else {
+          // 上传失败的文件标记
+          file._uploading = false;
+        }
+      });
+
+      // 更新state.images
+      updateStateImages();
+
+      toast.add({
+        title: t('common.message.uploadSuccess'),
+        color: 'success'
+      });
+    } catch (error: any) {
+      console.error('Failed to upload image:', error);
+
+      // 移除上传失败的文件
+      newFiles.forEach((failedFile: ExtendedFile) => {
+        const index = displayFiles.value.findIndex(f => f === failedFile);
+        if (index > -1) {
+          displayFiles.value.splice(index, 1);
+        }
+      });
+
+      toast.add({
+        title: error?.message || t('common.message.uploadFailed'),
+        color: 'error'
+      });
+    } finally {
+      uploading.value = false;
+    }
+  };
+
+  // 更新state.images
+  const updateStateImages = () => {
+    const urls = displayFiles.value
+      .filter(file => file._url) // 只包含已上传或已存在的图片
+      .map(file => file._url!);
+    state.images = urls.join(',');
+  };
+
+  // 监听displayFiles变化
+  watch(
+    () => displayFiles.value,
+    () => {
+      updateStateImages();
+    },
+    { deep: true }
+  );
+
+  // 若 articleId 存在，请求文章详情数据
+  if (articleId) {
+    try {
+      const { data: articleData } = await articleControllerFindOne({
+        composable: 'useFetch',
+        key: 'articleDetail',
+        path: { id: articleId }
+      });
+
+      if (articleData.value?.data) {
+        const data = articleData.value.data;
+
+        Object.assign(state, {
+          title: data.title ?? '',
+          content: data.content ?? '',
+          parentCategory: data.category?.parent?.id,
+          categoryId: data.category?.id,
+          images: data.images ?? '',
+          type: data.type ?? 'mixed',
+          tagIds: data.tags?.map(tag => tag.id) ?? [],
+          requireLogin: data.requireLogin ?? false,
+          requireFollow: data.requireFollow ?? false,
+          requirePayment: data.requirePayment ?? false,
+          viewPrice: Number(data.viewPrice) ?? 0
+        });
+
+        // 初始化已有图片
+        if (state.images) {
+          // 创建虚拟File对象
+          const virtualFiles = await Promise.all(
+            state.images.map((url: string, index: number) => createVirtualFile(url.trim(), index))
+          );
+
+          displayFiles.value = virtualFiles;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load article:', error);
+    }
+  }
+
+  const onSubmit = debounce(async () => {
+    try {
+      loading.value = true;
+      const { parentCategory, ...data } = await schema.parseAsync(state);
+
+      // 分离现有标签ID和新标签名称
+      const existingTagIds: string[] = [];
+      const newTagNames: string[] = [];
+
+      state.tagIds?.forEach(id => {
+        const tag = tagsOptions.value.find((t: TagMenuItem) => t.id === id);
+        if (tag?.flag) {
+          // 临时标签，使用名称
+          newTagNames.push(tag.label as string);
+        } else {
+          // 现有标签，使用ID
+          const stringId = typeof id === 'number' ? id.toString() : id;
+          existingTagIds.push(stringId);
+        }
+      });
+
+      // 编辑文章
+      await articleControllerUpdate({
+        composable: '$fetch',
+        path: { id: articleId },
+        body: {
+          ...data,
+          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
+          tagNames: newTagNames.length > 0 ? newTagNames : undefined,
+          images: data.images.join(',')
+        }
+      });
+
+      toast.add({
+        title: t('common.message.updateSuccess'),
+        color: 'primary'
+      });
+      router.push(localePath('/user/articles'));
+    } catch (error) {
+      console.error('Failed to update article:', error);
+      toast.add({
+        title: t('common.message.updateFailed'),
+        color: 'error'
+      });
+    } finally {
+      loading.value = false;
+    }
+  }, 500);
+
+  // 获取分类数据
+  const { data: categories } = await categoryControllerFindAll({
+    composable: 'useFetch',
+    key: 'categories',
+    query: computed(() => ({}))
+  });
+
+  const parentCategoriesOptions = computed<SelectMenuItem[]>(() => {
+    return (
+      categories?.value?.data.data
+        ?.filter(item => !item.parentId || item.parentId === item.id)
+        ?.map(
+          ({ id, name, avatar, description }) =>
+            ({
+              id,
+              label: name,
+              value: id,
+              ...(avatar ? { avatar: { src: avatar } } : {}),
+              ...(description ? { description } : {})
+            }) as SelectMenuItem
+        ) || []
+    );
+  });
+
+  const subCategoriesOptions = computed<SelectMenuItem[]>(() => {
+    if (!state.parentCategory) return [];
+
+    const parentCategory = categories?.value?.data.data?.find(
+      item => item.id === state.parentCategory
+    );
+
+    return (
+      parentCategory?.children?.map(
+        item =>
+          ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar ? { avatar: { src: item.avatar } } : {}),
+            ...(item.description ? { description: item.description } : {})
+          }) as SelectMenuItem
+      ) || []
+    );
+  });
+
+  interface TagMenuItem {
+    id: string | number;
+    label: string;
+    value: string | number;
+    avatar?: { src: string };
+    flag?: boolean;
+  }
+
+  const tagsOptions = ref<TagMenuItem[]>([]);
+  const tagSearchQuery = ref('');
+
+  // 搜索标签函数
+  const searchTags = async (query: string = '') => {
+    try {
+      const { data: tagsData } = await tagControllerFindAll({
+        composable: '$fetch',
+        query: {
+          limit: 50,
+          ...(query?.trim() && { name: query.trim() })
+        }
+      });
+
+      if (tagsData?.data) {
+        tagsOptions.value = tagsData.data.map((item: any) => ({
+          id: item.id,
+          label: item.name,
+          value: item.id,
+          ...(item.avatar && { avatar: { src: item.avatar } })
+        }));
+      }
+    } catch (error) {
+      console.error('搜索标签失败:', error);
+    }
+  };
+
+  await searchTags();
+
+  // 监听搜索输入
+  watch(tagSearchQuery, debounce(searchTags, 500));
+
+  // 监听父分类变化
+  watch(
+    () => state.parentCategory,
+    () => (state.categoryId = undefined)
+  );
+
+  // 创建新标签的函数
+  const onCreate = (item: string) => {
+    const tempId = `temp_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+    const existingTag = tagsOptions.value.find(t => t.label === item);
+
+    if (existingTag) {
+      if (!state.tagIds) state.tagIds = [];
+      if (!state.tagIds.includes(existingTag.id)) {
+        state.tagIds.push(existingTag.id);
+      }
+      return;
+    }
+
+    const tag: TagMenuItem = {
+      id: tempId,
+      label: item,
+      value: tempId,
+      flag: true
+    };
+
+    tagsOptions.value.push(tag);
+    if (!state.tagIds) state.tagIds = [];
+    state.tagIds.push(tempId);
+  };
+
+  // 组件卸载时清理URL对象
+  onUnmounted(() => {
+    displayFiles.value.forEach(file => {
+      if (file.size > 0 && !file._url) {
+        const url = getFilePreview(file);
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      }
+    });
+  });
+</script>
+
+<style scoped>
+  .cursor-move {
+    cursor: move;
+  }
+
+  .cursor-move:active {
+    cursor: grabbing;
+  }
+</style>

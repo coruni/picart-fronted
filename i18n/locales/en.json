@@ -9,7 +9,8 @@
       "logout": "Logout",
       "admin": "Admin Center",
       "message": "Message Center",
-      "setting": "Setting"
+      "setting": "Setting",
+      "language": "Language"
     }
   },
   "home": {

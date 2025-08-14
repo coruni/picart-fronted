@@ -9,7 +9,8 @@
       "logout": "退出登录",
       "admin": "管理员中心",
       "message": "消息中心",
-      "setting": "设置"
+      "setting": "设置",
+      "language": "语言"
     }
   },
   "home": {
@@ -160,7 +161,10 @@
       "createFailed": "创建失败",
       "createSuccess": "创建完成",
       "uploadFailed": "上传失败",
-      "uploadSuccess": "上传成功"
+      "uploadSuccess": "上传成功",
+      "fetchFailed": "获取数据失败",
+      "networkError": "网络连接失败",
+      "networkErrorDescription": "无法连接到服务器，请检查网络连接"
     },
     "modal": {
       "confirmDelete": "确认删除",
@@ -199,6 +203,36 @@
   "filter": {
     "title": "筛选"
   },
+  "user": {
+    "articles": {
+      "title": "我的文章",
+      "create": "创建文章",
+      "searchPlaceholder": "搜索文章标题...",
+      "statusPlaceholder": "选择状态",
+      "categoryPlaceholder": "选择分类",
+      "empty": "暂无文章",
+      "status": {
+        "all": "全部状态",
+        "published": "已发布",
+        "draft": "草稿",
+        "pending": "待审核",
+        "rejected": "已拒绝"
+      },
+      "columns": {
+        "title": "标题",
+        "category": "分类",
+        "status": "状态",
+        "createdAt": "创建时间",
+        "updatedAt": "更新时间",
+        "actions": "操作"
+      },
+      "actions": {
+        "view": "查看",
+        "edit": "编辑",
+        "delete": "删除"
+      }
+    }
+  },
   "form": {
     "title": {
       "name": "标题",
@@ -215,7 +249,8 @@
     },
     "tag": {
       "name": "标签",
-      "placeholder": "请选择标签"
+      "placeholder": "请选择标签",
+      "searchPlaceholder": "搜索标签..."
     },
     "parentCategory": {
       "placeholder": "请选择主分类",

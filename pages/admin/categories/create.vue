@@ -164,10 +164,7 @@
     } catch (error: any) {
       // 处理上传错误
       console.error('Failed to upload image:', error);
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
+
       // 重置文件选择
       file.value = null;
     } finally {
@@ -210,10 +207,7 @@
     } catch (error: any) {
       // 处理上传错误
       console.error('Failed to upload cover:', error);
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
+
       // 重置文件选择
       coverFile.value = null;
     } finally {
@@ -240,10 +234,6 @@
 
       router.push('/admin/categories');
     } catch (error) {
-      toast.add({
-        title: t('common.message.createFailed'),
-        color: 'error'
-      });
       console.error('Failed to create category:', error);
     } finally {
       loading.value = false;

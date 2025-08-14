@@ -126,7 +126,6 @@
         pagination.value.page++;
       }
     } catch (error) {
-      console.error('搜索失败:', error);
     } finally {
       loading.value = false;
     }

@@ -86,10 +86,6 @@
 
       router.push('/admin/tags');
     } catch (error) {
-      toast.add({
-        title: t('common.message.createFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }

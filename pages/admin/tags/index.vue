@@ -265,10 +265,6 @@
       });
       tags.refresh?.();
     } catch (error) {
-      toast.add({
-        title: t('common.message.deleteFailed'),
-        color: 'error'
-      });
       console.error('Failed to delete tag:', error);
     } finally {
       showDeleteModal.value = false;

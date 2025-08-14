@@ -3479,6 +3479,10 @@ export type TagControllerFindAllData = {
      * 每页数量
      */
     limit?: number;
+    /**
+     * 名字
+     */
+    name?: string;
   };
   url: '/tag';
 };
