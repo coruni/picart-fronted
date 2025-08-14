@@ -99,7 +99,7 @@
             <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="flex items-center">
               <UAvatar
                 :src="article?.data.author.avatar"
-                alt="作者头像"
+                :alt="article?.data.author.nickname ?? article?.data.author.username"
                 class="w-8 h-8 rounded-full mr-2 object-cover"
                 loading="lazy"
                 format="webp"

@@ -120,7 +120,7 @@
 
       <UButton
         type="submit"
-        icon="i-mynaui-save"
+        icon="mynaui:save"
         class="w-full cursor-pointer justify-center"
         size="lg"
         :loading="loading"

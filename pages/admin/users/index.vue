@@ -6,7 +6,7 @@
         class="group w-full justify-between p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm"
         color="neutral"
         variant="ghost"
-        trailing-icon="i-lucide-chevron-down"
+        trailing-icon="mynaui:chevron-down"
         :ui="{
           trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
         }"

@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-08',
   devtools: { enabled: true },
-
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -75,6 +74,9 @@ export default defineNuxtConfig({
     format: ['webp', 'jpg', 'png', 'avif'],
     domains: ['*.cosfan.cc'],
     provider: 'ipx'
+  },
+  features: {
+    inlineStyles: false
   },
 
   // i18n 国际化配置
@@ -153,6 +155,8 @@ export default defineNuxtConfig({
   // 配置Vite
   vite: {
     // 可以在这里配置Vite相关设置
+    experimental: {},
+
     define: {
       __DEV__: process.env.NODE_ENV === 'development'
     },

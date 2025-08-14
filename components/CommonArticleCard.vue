@@ -18,11 +18,11 @@
     </div>
 
     <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden line-clamp-2">
-      <h3
+      <h2
         class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 mb-2 sm:mb-3 transition-all duration-300"
       >
         {{ article.title }}
-      </h3>
+      </h2>
 
       <!-- 描述内容区域 -->
       <div class="flex-grow flex flex-col justify-end">
