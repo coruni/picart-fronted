@@ -40,6 +40,7 @@ export default defineNuxtConfig({
 
   sitemap: {
     exclude: ['/admin/**', '/user/**'],
+    sitemapsPathPrefix: '/',
     cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     sitemaps: {
       articles: {
