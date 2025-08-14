@@ -18,12 +18,12 @@
                   format="webp"
                   sizes="96px md:128px"
                 />
-                <div
+                <!-- <div
                   class="absolute bottom-2 right-2 w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer"
                   @click="triggerAvatarUpload"
                 >
                   <Icon name="mynaui:camera" class="text-white text-xs md:text-sm" />
-                </div>
+                </div> -->
               </div>
               <div class="flex-1">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
@@ -596,7 +596,7 @@
     });
 
   // 用户资料
-  const { data: userProfile } = await userControllerGetProfile({
+  const { data: userProfile, refresh: userRefresh } = await userControllerGetProfile({
     composable: 'useAsyncData',
     key: 'user-profile'
   });
@@ -855,6 +855,8 @@
         color: 'primary',
         duration: 2000
       });
+      // 刷新用户资料
+      userRefresh();
     } catch (error) {
       toast.add({
         title: t('response.error.profileSavedFailed'),
