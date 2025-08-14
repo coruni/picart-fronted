@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 
   // SEO 配置
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc',
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.picart.cc',
     name: process.env.NUXT_PUBLIC_APP_NAME || 'PicArt',
     description: process.env.NUXT_PUBLIC_DESCRIPTION || '图片分享社区',
     defaultLocale: process.env.NUXT_PUBLIC_DEFAULT_LOCALE || 'zh',
@@ -133,7 +133,7 @@ export default defineNuxtConfig({
 
     // 公共配置（客户端和服务端都可用）
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://picend.cosfan.cc/api/v1',
+      apiBaseUrl: '',
       appName: 'PicArt',
       appVersion: '1.0.1'
     }
