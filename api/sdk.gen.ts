@@ -38,6 +38,7 @@ import type {
   UserControllerCreateData,
   UserControllerRemoveData,
   UserControllerFindOneData,
+  UserControllerFindOneResponse,
   UserControllerUpdateData,
   UserControllerGetProfileData,
   UserControllerGetProfileResponse,
@@ -587,10 +588,18 @@ export const userControllerRemove = <TComposable extends Composable, DefaultT = 
 /**
  * 获取用户详情
  */
-export const userControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, UserControllerFindOneData, unknown, DefaultT>
+export const userControllerFindOne = <
+  TComposable extends Composable,
+  DefaultT extends UserControllerFindOneResponse = UserControllerFindOneResponse
+>(
+  options: Options<TComposable, UserControllerFindOneData, UserControllerFindOneResponse, DefaultT>
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    UserControllerFindOneResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     url: '/user/{id}',
     ...options
   });

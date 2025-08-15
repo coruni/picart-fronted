@@ -110,11 +110,7 @@
     title: z.string().min(1, t('banners.titleRequired')),
     description: z.string().optional(),
     imageUrl: z.string().min(1, t('banners.imageRequired')),
-    linkUrl: z
-      .string()
-      .optional()
-      .refine(val => !val || val === '' || /^https?:\/\/.+/.test(val), t('banners.urlInvalid'))
-      .transform(val => (val === '' ? undefined : val)),
+    linkUrl: z.string().optional(),
     sortOrder: z.number().min(0, t('banners.sortOrderMin')),
     status: z.string().optional()
   });

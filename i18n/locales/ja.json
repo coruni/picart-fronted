@@ -86,14 +86,81 @@
       "saveFailed": "設定の保存に失敗しました"
     },
     "categories": {
-      "searchAndFilter": "検索・フィルター"
+      "searchAndFilter": "検索・フィルター",
+      "title": "カテゴリー管理",
+      "edit": "カテゴリー編集",
+      "editDescription": "カテゴリーの基本情報とメディアリソースを変更",
+      "basicInfo": "基本情報",
+      "media": "メディアリソース",
+      "preview": "プレビュー",
+      "namePlaceholder": "カテゴリー名を入力",
+      "descriptionPlaceholder": "カテゴリーの説明を入力",
+      "sortPlaceholder": "ソート値を入力",
+      "selectParent": "親カテゴリーを選択",
+      "avatarPlaceholder": "アバターをアップロード",
+      "coverPlaceholder": "カバーをアップロード",
+      "avatarHelp": "推奨サイズ：200x200px、JPG、PNG形式をサポート",
+      "coverHelp": "推奨サイズ：800x400px、JPG、PNG形式をサポート",
+      "cannotBeOwnParent": "カテゴリーは自分自身を親として選択できません",
+      "subCategories": "サブカテゴリー",
+      "parentCategory": "親カテゴリー",
+      "noDescription": "説明なし",
+      "totalArticles": "総記事数",
+      "noCategory": "カテゴリーなし"
     },
     "tags": {
-      "searchAndFilter": "検索・フィルター"
+      "searchAndFilter": "検索・フィルター",
+      "create": "タグ作成",
+      "createDescription": "基本情報とメディアリソースで新しいタグを作成",
+      "edit": "タグ編集",
+      "editDescription": "タグの基本情報とメディアリソースを変更",
+      "basicInfo": "基本情報",
+      "media": "メディアリソース",
+      "preview": "プレビュー",
+      "namePlaceholder": "タグ名を入力",
+      "descriptionPlaceholder": "タグの説明を入力",
+      "sortPlaceholder": "ソート値を入力",
+      "avatarPlaceholder": "アバターURLを入力",
+      "backgroundPlaceholder": "背景画像URLを入力",
+      "avatarHelp": "有効な画像URLを入力してください",
+      "backgroundHelp": "有効な背景画像URLを入力してください"
     },
     "users": {
       "searchAndFilter": "検索・フィルター",
-      "searchUsername": "ユーザー名を検索"
+      "searchUsername": "ユーザー名を検索",
+      "editUser": "ユーザー編集",
+      "userDetails": "ユーザー詳細",
+      "basicInfo": "基本情報",
+      "membershipInfo": "メンバーシップ情報",
+      "banInfo": "禁止情報",
+      "avatar": "アバター",
+      "statistics": "統計情報",
+      "timestamps": "タイムスタンプ",
+      "username": "ユーザー名",
+      "nickname": "ニックネーム",
+      "email": "メールアドレス",
+      "phone": "電話番号",
+      "status": "ステータス",
+      "gender": "性別",
+      "description": "説明",
+      "address": "住所",
+      "birthDate": "生年月日",
+      "membershipLevel": "メンバーシップレベル",
+      "membershipStatus": "メンバーシップステータス",
+      "membershipStartDate": "メンバーシップ開始日",
+      "membershipEndDate": "メンバーシップ終了日",
+      "banReason": "禁止理由",
+      "bannedAt": "禁止日時",
+      "followerCount": "フォロワー数",
+      "followingCount": "フォロー数",
+      "articleCount": "記事数",
+      "score": "スコア",
+      "wallet": "ウォレット",
+      "level": "レベル",
+      "experience": "経験値",
+      "createdAt": "作成日時",
+      "updatedAt": "更新日時",
+      "lastLoginAt": "最終ログイン日時"
     },
     "articles": {
       "searchAndFilter": "検索・フィルター"
@@ -138,6 +205,7 @@
       "createdAt": "作成日時",
       "updatedAt": "更新日時",
       "edit": "編集",
+      "view": "表示",
       "articleCount": "記事",
       "sort": "並び替え",
       "title": "タイトル",
@@ -164,7 +232,8 @@
       "uploadSuccess": "アップロード成功",
       "fetchFailed": "データの取得に失敗しました",
       "networkError": "ネットワーク接続に失敗しました",
-      "networkErrorDescription": "サーバーに接続できません。ネットワーク接続を確認してください"
+      "networkErrorDescription": "サーバーに接続できません。ネットワーク接続を確認してください",
+      "loadError": "読み込み失敗"
     },
     "modal": {
       "confirmDelete": "削除確認",
@@ -176,7 +245,9 @@
       "create": "作成",
       "update": "更新",
       "search": "検索",
-      "close": "閉じる"
+      "close": "閉じる",
+      "save": "保存",
+      "back": "戻る"
     },
     "save": "保存",
     "loading": {
@@ -334,7 +405,12 @@
     "emailInvalid": "有効なメールアドレスを入力してください",
     "passwordMin": "パスワードは6文字以上である必要があります",
     "passwordMax": "パスワードは50文字を超えることはできません",
-    "passwordMismatch": "パスワードが一致しません"
+    "passwordMismatch": "パスワードが一致しません",
+    "minLength": "最低{min}文字である必要があります",
+    "maxLength": "{max}文字を超えることはできません",
+    "min": "最小値は{min}未満にすることはできません",
+    "max": "最大値は{max}を超えることはできません",
+    "url": "有効なURLを入力してください"
   },
   "error": {
     "pageNotFound": "申し訳ありません、お探しのページは存在しません",

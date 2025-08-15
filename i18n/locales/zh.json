@@ -86,14 +86,81 @@
       "saveFailed": "设置保存失败"
     },
     "categories": {
-      "searchAndFilter": "搜索和筛选"
+      "searchAndFilter": "搜索和筛选",
+      "title": "分类管理",
+      "edit": "编辑分类",
+      "editDescription": "修改分类的基本信息和媒体资源",
+      "basicInfo": "基本信息",
+      "media": "媒体资源",
+      "preview": "预览",
+      "namePlaceholder": "请输入分类名称",
+      "descriptionPlaceholder": "请输入分类描述",
+      "sortPlaceholder": "请输入排序值",
+      "selectParent": "请选择父分类",
+      "avatarPlaceholder": "上传头像",
+      "coverPlaceholder": "上传封面",
+      "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
+      "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
+      "cannotBeOwnParent": "分类不能选择自己作为父分类",
+      "subCategories": "子分类",
+      "parentCategory": "父分类",
+      "noDescription": "无描述",
+      "totalArticles": "总文章数",
+      "noCategory": "无分类"
     },
     "tags": {
-      "searchAndFilter": "搜索和筛选"
+      "searchAndFilter": "搜索和筛选",
+      "create": "创建标签",
+      "createDescription": "创建新的标签，设置基本信息和媒体资源",
+      "edit": "编辑标签",
+      "editDescription": "修改标签的基本信息和媒体资源",
+      "basicInfo": "基本信息",
+      "media": "媒体资源",
+      "preview": "预览",
+      "namePlaceholder": "请输入标签名称",
+      "descriptionPlaceholder": "请输入标签描述",
+      "sortPlaceholder": "请输入排序值",
+      "avatarPlaceholder": "请输入头像URL",
+      "backgroundPlaceholder": "请输入背景图片URL",
+      "avatarHelp": "请输入有效的图片URL地址",
+      "backgroundHelp": "请输入有效的背景图片URL地址"
     },
     "users": {
       "searchAndFilter": "搜索和筛选",
-      "searchUsername": "搜索用户名"
+      "searchUsername": "搜索用户名",
+      "editUser": "编辑用户",
+      "userDetails": "用户详情",
+      "basicInfo": "基本信息",
+      "membershipInfo": "会员信息",
+      "banInfo": "封禁信息",
+      "avatar": "头像",
+      "statistics": "统计信息",
+      "timestamps": "时间信息",
+      "username": "用户名",
+      "nickname": "昵称",
+      "email": "邮箱",
+      "phone": "电话",
+      "status": "状态",
+      "gender": "性别",
+      "description": "描述",
+      "address": "地址",
+      "birthDate": "生日",
+      "membershipLevel": "会员等级",
+      "membershipStatus": "会员状态",
+      "membershipStartDate": "会员开始时间",
+      "membershipEndDate": "会员结束时间",
+      "banReason": "封禁原因",
+      "bannedAt": "封禁时间",
+      "followerCount": "粉丝数",
+      "followingCount": "关注数",
+      "articleCount": "文章数",
+      "score": "积分",
+      "wallet": "钱包余额",
+      "level": "等级",
+      "experience": "经验值",
+      "createdAt": "创建时间",
+      "updatedAt": "更新时间",
+      "lastLoginAt": "最后登录时间"
     },
     "articles": {
       "searchAndFilter": "搜索和筛选"
@@ -138,6 +205,7 @@
       "description": "描述",
       "parent": "上级分类",
       "edit": "编辑",
+      "view": "查看",
       "articleCount": "文章",
       "sort": "排序",
       "title": "标题",
@@ -164,7 +232,8 @@
       "uploadSuccess": "上传成功",
       "fetchFailed": "获取数据失败",
       "networkError": "网络连接失败",
-      "networkErrorDescription": "无法连接到服务器，请检查网络连接"
+      "networkErrorDescription": "无法连接到服务器，请检查网络连接",
+      "loadError": "加载失败"
     },
     "modal": {
       "confirmDelete": "确认删除",
@@ -176,7 +245,9 @@
       "create": "新增",
       "update": "更新",
       "search": "搜索",
-      "close": "关闭"
+      "close": "关闭",
+      "save": "保存",
+      "back": "返回"
     },
     "save": "保存",
     "loading": {
@@ -460,7 +531,12 @@
     "emailInvalid": "请输入有效的邮箱地址",
     "passwordMin": "密码至少需要6个字符",
     "passwordMax": "密码最多不能超过50个字符",
-    "passwordMismatch": "两次输入的密码不一致"
+    "passwordMismatch": "两次输入的密码不一致",
+    "minLength": "最少需要 {min} 个字符",
+    "maxLength": "最多只能输入 {max} 个字符",
+    "min": "最小值不能小于 {min}",
+    "max": "最大值不能大于 {max}",
+    "url": "请输入有效的URL地址"
   },
   "error": {
     "pageNotFound": "抱歉，您访问的页面不存在",

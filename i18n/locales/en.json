@@ -86,14 +86,81 @@
       "saveFailed": "Failed to save settings"
     },
     "categories": {
-      "searchAndFilter": "Search & Filter"
+      "searchAndFilter": "Search & Filter",
+      "title": "Category Management",
+      "edit": "Edit Category",
+      "editDescription": "Modify category basic information and media resources",
+      "basicInfo": "Basic Information",
+      "media": "Media Resources",
+      "preview": "Preview",
+      "namePlaceholder": "Enter category name",
+      "descriptionPlaceholder": "Enter category description",
+      "sortPlaceholder": "Enter sort value",
+      "selectParent": "Select parent category",
+      "avatarPlaceholder": "Upload avatar",
+      "coverPlaceholder": "Upload cover",
+      "avatarHelp": "Recommended size: 200x200px, supports JPG, PNG format",
+      "coverHelp": "Recommended size: 800x400px, supports JPG, PNG format",
+      "cannotBeOwnParent": "Category cannot select itself as parent",
+      "subCategories": "Sub Categories",
+      "parentCategory": "Parent Category",
+      "noDescription": "No Description",
+      "totalArticles": "Total Articles",
+      "noCategory": "No Category"
     },
     "tags": {
-      "searchAndFilter": "Search & Filter"
+      "searchAndFilter": "Search & Filter",
+      "create": "Create Tag",
+      "createDescription": "Create a new tag with basic information and media resources",
+      "edit": "Edit Tag",
+      "editDescription": "Modify tag basic information and media resources",
+      "basicInfo": "Basic Information",
+      "media": "Media Resources",
+      "preview": "Preview",
+      "namePlaceholder": "Enter tag name",
+      "descriptionPlaceholder": "Enter tag description",
+      "sortPlaceholder": "Enter sort value",
+      "avatarPlaceholder": "Enter avatar URL",
+      "backgroundPlaceholder": "Enter background image URL",
+      "avatarHelp": "Please enter a valid image URL",
+      "backgroundHelp": "Please enter a valid background image URL"
     },
     "users": {
       "searchAndFilter": "Search & Filter",
-      "searchUsername": "Search username"
+      "searchUsername": "Search username",
+      "editUser": "Edit User",
+      "userDetails": "User Details",
+      "basicInfo": "Basic Information",
+      "membershipInfo": "Membership Information",
+      "banInfo": "Ban Information",
+      "avatar": "Avatar",
+      "statistics": "Statistics",
+      "timestamps": "Timestamps",
+      "username": "Username",
+      "nickname": "Nickname",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "gender": "Gender",
+      "description": "Description",
+      "address": "Address",
+      "birthDate": "Birth Date",
+      "membershipLevel": "Membership Level",
+      "membershipStatus": "Membership Status",
+      "membershipStartDate": "Membership Start Date",
+      "membershipEndDate": "Membership End Date",
+      "banReason": "Ban Reason",
+      "bannedAt": "Banned At",
+      "followerCount": "Followers",
+      "followingCount": "Following",
+      "articleCount": "Articles",
+      "score": "Score",
+      "wallet": "Wallet",
+      "level": "Level",
+      "experience": "Experience",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "lastLoginAt": "Last Login At"
     },
     "articles": {
       "searchAndFilter": "Search & Filter"
@@ -138,6 +205,7 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "edit": "Edit",
+      "view": "View",
       "articleCount": "Articles",
       "sort": "Sort",
       "title": "Title",
@@ -164,7 +232,8 @@
       "uploadSuccess": "Upload Success",
       "fetchFailed": "Failed to obtain data",
       "networkError": "Network connection failed",
-      "networkErrorDescription": "Cannot connect to the server, please check the network connection"
+      "networkErrorDescription": "Cannot connect to the server, please check the network connection",
+      "loadError": "Load Failed"
     },
     "modal": {
       "confirmDelete": "Confirm Delete",
@@ -176,7 +245,9 @@
       "create": "Create",
       "update": "Update",
       "search": "Search",
-      "close": "Close"
+      "close": "Close",
+      "save": "Save",
+      "back": "Back"
     },
     "save": "Save",
     "loading": {
@@ -334,7 +405,12 @@
     "emailInvalid": "Please enter a valid email address",
     "passwordMin": "Password must be at least 6 characters",
     "passwordMax": "Password must not exceed 50 characters",
-    "passwordMismatch": "Passwords do not match"
+    "passwordMismatch": "Passwords do not match",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must not exceed {max} characters",
+    "min": "Minimum value cannot be less than {min}",
+    "max": "Maximum value cannot be greater than {max}",
+    "url": "Please enter a valid URL"
   },
   "error": {
     "pageNotFound": "Sorry, the page you're looking for doesn't exist",

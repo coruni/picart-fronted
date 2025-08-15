@@ -53,7 +53,7 @@
       loading-animation="carousel"
       :data="tableData"
       :columns="columns"
-      :grouping="['groupKey']"
+      :grouping="['parentId']"
       :grouping-options="groupingOptions"
       :key="tableKey"
       :ui="{
@@ -64,14 +64,14 @@
     >
       <!-- 分组标题模板 -->
       <template #title-cell="{ row }">
-        <div v-if="row.getIsGrouped()" class="flex items-center justify-between w-full">
-          <div class="flex items-center">
-            <span class="inline-block" :style="{ width: `calc(${row.depth} * 1rem)` }" />
-
+        <div
+          v-if="row.getIsGrouped()"
+          class="flex items-center justify-between w-full p-2 bg-gray-50 dark:bg-gray-800 rounded-lg"
+        >
+          <div class="flex items-center gap-3">
             <UButton
               variant="outline"
               color="neutral"
-              class="mr-2"
               size="xs"
               :icon="row.getIsExpanded() ? 'mynaui:minus' : 'mynaui:plus'"
               @click="row.toggleExpanded()"
@@ -79,22 +79,28 @@
 
             <div class="flex items-center gap-2">
               <img
-                v-if="getMainCategory(row)?.avatar"
-                :src="getMainCategory(row)?.avatar"
-                :alt="getMainCategory(row)?.name"
+                v-if="getParentCategory(row)?.avatar"
+                :src="getParentCategory(row)?.avatar"
+                :alt="getParentCategory(row)?.name"
                 class="w-8 h-8 rounded-full object-cover"
               />
-              <strong class="text-lg">{{ getGroupTitle(row) }}</strong>
-              <UBadge color="blue" variant="subtle"> 主分类 </UBadge>
+              <div class="flex flex-col">
+                <strong class="text-lg font-semibold">{{ getGroupTitle(row) }}</strong>
+                <span class="text-sm text-gray-500">{{
+                  getParentCategory(row)?.description || $t('admin.categories.noDescription')
+                }}</span>
+              </div>
+              <UBadge color="blue" variant="subtle"
+                >{{ row.subRows?.length || 0 }} {{ $t('admin.categories.subCategories') }}</UBadge
+              >
             </div>
           </div>
 
           <!-- 主分类操作按钮 -->
           <div class="flex items-center gap-2">
-            <span class="text-sm text-gray-500">{{ row.subRows?.length || 0 }} 个子分类</span>
             <UDropdownMenu
               :content="{ align: 'end' }"
-              :items="getMainCategoryActions(row)"
+              :items="getParentCategoryActions(row)"
               aria-label="Actions dropdown"
             >
               <template #default>
@@ -176,7 +182,7 @@
     pageSize: 20
   });
 
-  // 关键修改点2: 添加当前页面计算属性和表格key
+  // 当前页面计算属性和表格key
   const currentPage = computed(() => pagination.value.pageIndex + 1);
   const tableKey = ref(0); // 强制重新渲染表格
 
@@ -191,22 +197,26 @@
   const showDeleteModal = ref(false);
   const currentCategoryId = ref<number | null>(null);
 
-  // 搜索功能 - 关键修改点3: 修改搜索逻辑
+  // 搜索功能
   const handleSearch = () => {
     pagination.value.pageIndex = 0;
     tableKey.value++; // 强制重新渲染
   };
 
-  // 关键修改点4: 添加页面变化处理函数
+  // 页面变化处理函数
   const handlePageChange = (newPage: number) => {
     pagination.value.pageIndex = newPage - 1;
     tableKey.value++; // 强制重新渲染
   };
 
-  // 分组选项
+  // 分组选项 - 优化配置
   const groupingOptions = ref<GroupingOptions>({
     groupedColumnMode: 'remove',
-    getGroupedRowModel: getGroupedRowModel()
+    getGroupedRowModel: getGroupedRowModel(),
+    manualGrouping: false,
+    onGroupingChange: () => {
+      // 分组变化时的处理
+    }
   });
 
   // 防抖筛选
@@ -214,29 +224,29 @@
     table.value?.tableApi?.setPageIndex(0);
   }, 300);
 
-  // 获取主分类信息（用于分组标题）
-  const getMainCategory = (row: Row<Category>) => {
-    if (row.groupingColumnId === 'groupKey') {
-      // 根据 groupKey 查找主分类
-      return tableData.value.find(cat => cat.id === row.groupingValue) || row.original;
+  // 获取父分类信息（用于分组标题）
+  const getParentCategory = (row: Row<Category>) => {
+    if (row.groupingColumnId === 'parentId') {
+      const parentId = row.groupingValue;
+      // 查找父分类
+      return tableData.value.find(cat => cat.id === parentId) || null;
     }
     return null;
   };
 
   // 获取分组标题
   const getGroupTitle = (row: Row<Category>) => {
-    if (row.groupingColumnId === 'groupKey') {
-      // 根据 groupKey 查找主分类名称
-      const mainCategory = getMainCategory(row);
-      return mainCategory?.name || '未知分类';
+    if (row.groupingColumnId === 'parentId') {
+      const parentCategory = getParentCategory(row);
+      return parentCategory?.name || '未分类';
     }
     return row.original.name;
   };
 
-  // 获取主分类的操作菜单
-  const getMainCategoryActions = (row: Row<Category>) => {
-    const mainCategory = getMainCategory(row);
-    if (!mainCategory) return [];
+  // 获取父分类的操作菜单
+  const getParentCategoryActions = (row: Row<Category>) => {
+    const parentCategory = getParentCategory(row);
+    if (!parentCategory) return [];
 
     return [
       {
@@ -247,7 +257,7 @@
         label: t('common.table.edit'),
         class: 'cursor-pointer',
         onClick: () => {
-          navigateTo(`/admin/categories/${mainCategory.id}`);
+          navigateTo(`/admin/categories/${parentCategory.id}`);
         }
       },
       {
@@ -255,7 +265,7 @@
         class: 'cursor-pointer',
         color: 'error',
         onClick: () => {
-          currentCategoryId.value = mainCategory.id!;
+          currentCategoryId.value = parentCategory.id!;
           showDeleteModal.value = true;
         }
       }
@@ -264,18 +274,18 @@
 
   const columns: TableColumn<Category>[] = [
     {
-      id: 'title',
-      header: '分类信息'
-    },
-    {
-      id: 'groupKey',
-      accessorKey: 'groupKey'
-    },
-    {
       accessorKey: 'id',
       header: '#',
-      cell: ({ row }) =>
-        row.getIsGrouped() ? `${row.subRows?.length || 0} 个分类` : `#${row.getValue('id')}`,
+      cell: ({ row }) => {
+        if (row.getIsGrouped()) {
+          return h(
+            'div',
+            { class: 'text-sm text-gray-500' },
+            `${row.subRows?.length || 0} ${t('admin.categories.subCategories')}`
+          );
+        }
+        return h('span', { class: 'font-mono' }, `#${row.getValue('id')}`);
+      },
       aggregationFn: 'count'
     },
     {
@@ -283,7 +293,17 @@
       header: t('common.table.name'),
       cell: ({ row }) => {
         if (row.getIsGrouped()) return null;
-        return row.getValue('name');
+        const avatar = row.getValue('avatar') as string;
+        const name = row.getValue('name') as string;
+        return h('div', { class: 'flex items-center gap-2' }, [
+          avatar &&
+            h('img', {
+              src: avatar,
+              alt: name,
+              class: 'w-6 h-6 rounded-full object-cover'
+            }),
+          h('span', { class: 'font-medium' }, name)
+        ]);
       },
       aggregationFn: 'count'
     },
@@ -292,28 +312,30 @@
       header: t('common.table.description'),
       cell: ({ row }) => {
         if (row.getIsGrouped()) return null;
-        return row.getValue('description') || '-';
+        const description = row.getValue('description') as string;
+        return h(
+          'span',
+          {
+            class: 'text-sm text-gray-600 dark:text-gray-400',
+            title: description || t('admin.categories.noDescription')
+          },
+          description || '-'
+        );
       },
       aggregationFn: 'uniqueCount'
-    },
-    {
-      accessorKey: 'avatar',
-      header: t('common.table.avatar'),
-      cell: ({ row }) => {
-        if (row.getIsGrouped()) return null;
-        return h('img', {
-          src: row.getValue('avatar'),
-          alt: row.getValue('name'),
-          class: 'w-10 h-10 rounded-full object-cover'
-        });
-      }
     },
     {
       accessorKey: 'articleCount',
       header: t('common.table.articleCount'),
       cell: ({ row }) => {
         const count = Number(row.getValue('articleCount') || 0);
-        return count;
+        if (row.getIsGrouped()) {
+          return h('div', { class: 'text-center' }, [
+            h('div', { class: 'text-lg font-bold text-primary' }, count),
+            h('div', { class: 'text-xs text-gray-500' }, t('admin.categories.totalArticles'))
+          ]);
+        }
+        return h('span', { class: 'font-mono' }, count);
       },
       aggregationFn: 'sum'
     },
@@ -322,21 +344,41 @@
       header: t('common.table.sort'),
       cell: ({ row }) => {
         if (row.getIsGrouped()) return null;
-        return row.getValue('sort');
+        const sort = row.getValue('sort') as number;
+        return h('span', { class: 'font-mono text-sm' }, sort);
       },
       aggregationFn: 'mean'
+    },
+    {
+      accessorKey: 'status',
+      header: t('common.table.status'),
+      cell: ({ row }) => {
+        if (row.getIsGrouped()) return null;
+        const status = row.getValue('status') as string;
+        return h(
+          UBadge,
+          {
+            color: status === 'ACTIVE' ? 'green' : 'gray',
+            variant: 'subtle',
+            class: 'text-xs'
+          },
+          status || 'UNKNOWN'
+        );
+      }
     },
     {
       accessorKey: 'createdAt',
       header: t('common.table.createdAt'),
       cell: ({ row }) => {
         if (row.getIsGrouped()) return null;
+        const date = row.getValue('createdAt') as string;
         return h(
           'time',
           {
-            datetime: row.getValue('createdAt')
+            datetime: date,
+            class: 'text-sm text-gray-500'
           },
-          new Date(row.getValue('createdAt')).toLocaleDateString()
+          new Date(date).toLocaleDateString()
         );
       },
       aggregationFn: 'max'
@@ -432,19 +474,25 @@
     }))
   });
 
-  // 将嵌套数据扁平化 - 直接使用原始的 parentId 字段
+  // 优化数据扁平化逻辑 - 更好地处理父子关系
   const flattenedData = computed(() => {
     const data = categories.data.value?.data?.data || [];
-    const flattened: (Category & { groupKey?: number })[] = [];
+    const flattened: (Category & { parentId?: number | null })[] = [];
 
     data.forEach(category => {
-      // 为主分类添加 groupKey
-      flattened.push({ ...category, groupKey: category.id });
+      // 添加主分类（parentId 为 null 或 undefined）
+      flattened.push({
+        ...category,
+        parentId: category.parentId || null
+      });
 
-      // 为子分类添加 groupKey（使用 parentId 关联主分类）
+      // 添加子分类
       if (category.children && category.children.length > 0) {
         category.children.forEach(child => {
-          flattened.push({ ...child, groupKey: child.parentId });
+          flattened.push({
+            ...child,
+            parentId: child.parentId || category.id
+          });
         });
       }
     });
@@ -461,8 +509,6 @@
   const totalItems = computed(() => {
     return categories.data.value?.data?.meta?.total || 0;
   });
-
-  // 移除 watch，让 reactive query 自动处理数据获取
 
   const onCreate = () => {
     router.push('categories/create');

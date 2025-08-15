@@ -1294,26 +1294,62 @@ export type UserControllerFindAllResponses = {
     message: string;
     data: {
       data: Array<{
-        id?: number;
-        username?: string;
-        nickname?: string;
-        status?: string;
-        avatar?: string;
-        description?: unknown;
-        roles?: Array<{
-          id?: number;
-          name?: string;
-          displayName?: unknown;
-          description?: string;
-          permissions?: Array<{
+        id: number;
+        username: string;
+        nickname: string;
+        password: string;
+        email: string;
+        phone?: string;
+        status: string;
+        banned?: string;
+        banReason?: string;
+        avatar: string | null;
+        description?: string;
+        address?: string;
+        gender: string;
+        birthDate: string;
+        articleCount: number;
+        followerCount: number;
+        followingCount: number;
+        level: number;
+        experience: number;
+        score?: number;
+        wallet?: number;
+        membershipLevel: number;
+        membershipLevelName?: string;
+        membershipStatus: string;
+        membershipStartDate?: string;
+        membershipEndDate?: string;
+        lastLoginAt: string | null;
+        lastActiveAt: string;
+        refreshToken?: string;
+        inviterId?: number;
+        inviteCode?: string;
+        inviteEarnings: string;
+        inviteCount: number;
+        roles: Array<{
+          id: number;
+          name: string;
+          displayName: unknown;
+          description: string;
+          permissions: Array<{
             id: number;
             name: string;
             description: string;
           }>;
-          createdAt?: string;
-          updatedAt?: string;
+          createdAt: string;
+          updatedAt: string;
         }>;
-        config?: unknown;
+        config?:
+          | string
+          | number
+          | boolean
+          | Array<unknown>
+          | {
+              [key: string]: unknown;
+            }
+          | number
+          | null;
         createdAt?: string;
         updatedAt?: string;
       }>;
@@ -1414,8 +1450,65 @@ export type UserControllerFindOneData = {
 };
 
 export type UserControllerFindOneResponses = {
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      username: string;
+      nickname: string;
+      password: string;
+      email: string;
+      phone: unknown;
+      status: string;
+      banned: unknown;
+      banReason: unknown;
+      avatar: string;
+      description: unknown;
+      address: unknown;
+      gender: string;
+      birthDate: unknown;
+      articleCount: number;
+      followerCount: number;
+      followingCount: number;
+      level: number;
+      experience: number;
+      score: number;
+      wallet: number;
+      membershipLevel: number;
+      membershipLevelName: string;
+      membershipStatus: string;
+      membershipStartDate: unknown;
+      membershipEndDate: unknown;
+      lastLoginAt: string;
+      lastActiveAt: unknown;
+      refreshToken: unknown;
+      inviterId: unknown;
+      inviteCode: unknown;
+      inviteEarnings: string;
+      inviteCount: number;
+      roles: Array<{
+        id?: number;
+        name?: string;
+        displayName?: unknown;
+        description?: string;
+        permissions?: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+      config: unknown;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+export type UserControllerFindOneResponse =
+  UserControllerFindOneResponses[keyof UserControllerFindOneResponses];
 
 export type UserControllerUpdateData = {
   body?: UpdateUserDto;

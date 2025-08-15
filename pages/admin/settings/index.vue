@@ -133,6 +133,18 @@
           </UFormField>
 
           <UFormField
+            :label="t('admin.settings.paymentAlipayGateway')"
+            name="payment_alipay_gateway"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.payment_alipay_gateway"
+              :disabled="!config.payment_alipay_enabled"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField
             :label="t('admin.settings.paymentAlipayPrivateKey')"
             name="payment_alipay_private_key"
             class="w-full"
@@ -193,26 +205,74 @@
             />
           </UFormField>
 
-          <!-- 易支付配置 -->
           <UFormField
-            :label="t('admin.settings.paymentEpayPid')"
-            name="payment_epay_pid"
+            :label="t('admin.settings.paymentWechatPrivateKey')"
+            name="payment_wechat_private_key"
+            class="w-full"
+          >
+            <UTextarea
+              v-model="config.payment_wechat_private_key"
+              :disabled="!config.payment_wechat_enabled"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentWechatPublicKey')"
+            name="payment_wechat_public_key"
+            class="w-full"
+          >
+            <UTextarea
+              v-model="config.payment_wechat_public_key"
+              :disabled="!config.payment_wechat_enabled"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentWechatSerialNo')"
+            name="payment_wechat_serial_no"
             class="w-full"
           >
             <UInput
-              v-model="config.payment_epay_pid"
+              v-model="config.payment_wechat_serial_no"
+              :disabled="!config.payment_wechat_enabled"
+              class="w-full"
+            />
+          </UFormField>
+
+          <!-- 易支付配置 -->
+          <UFormField
+            :label="t('admin.settings.paymentEpayAppId')"
+            name="payment_epay_app_id"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.payment_epay_app_id"
               :disabled="!config.payment_epay_enabled"
               class="w-full"
             />
           </UFormField>
 
           <UFormField
-            :label="t('admin.settings.paymentEpayKey')"
-            name="payment_epay_key"
+            :label="t('admin.settings.paymentEpayAppKey')"
+            name="payment_epay_app_key"
             class="w-full"
           >
             <UInput
-              v-model="config.payment_epay_key"
+              v-model="config.payment_epay_app_key"
+              :disabled="!config.payment_epay_enabled"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentEpayGateway')"
+            name="payment_epay_gateway"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.payment_epay_gateway"
               :disabled="!config.payment_epay_enabled"
               class="w-full"
             />
@@ -230,16 +290,21 @@
             />
           </UFormField>
 
+          <!-- 通用支付配置 -->
           <UFormField
-            :label="t('admin.settings.paymentEpayReturnUrl')"
-            name="payment_epay_return_url"
+            :label="t('admin.settings.paymentNotifyUrl')"
+            name="payment_notify_url"
             class="w-full"
           >
-            <UInput
-              v-model="config.payment_epay_return_url"
-              :disabled="!config.payment_epay_enabled"
-              class="w-full"
-            />
+            <UInput v-model="config.payment_notify_url" class="w-full" />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentReturnUrl')"
+            name="payment_return_url"
+            class="w-full"
+          >
+            <UInput v-model="config.payment_return_url" class="w-full" />
           </UFormField>
         </div>
       </template>
@@ -489,16 +554,26 @@
     // 新增配置项
     commission_author_rate: 0,
     commission_platform_rate: 0,
+    // 支付宝配置
     payment_alipay_app_id: '',
+    payment_alipay_gateway: 'https://openapi.alipay.com/gateway.do',
     payment_alipay_private_key: '',
     payment_alipay_public_key: '',
+    // 微信支付配置
     payment_wechat_app_id: '',
     payment_wechat_api_key: '',
     payment_wechat_mch_id: '',
-    payment_epay_pid: '',
-    payment_epay_key: '',
+    payment_wechat_private_key: '',
+    payment_wechat_public_key: '',
+    payment_wechat_serial_no: '',
+    // 易支付配置
+    payment_epay_app_id: '',
+    payment_epay_app_key: '',
+    payment_epay_gateway: 'https://pay.example.com',
     payment_epay_notify_url: '',
-    payment_epay_return_url: ''
+    // 通用支付配置
+    payment_notify_url: 'https://your-domain.com/api/payment/notify',
+    payment_return_url: 'https://your-domain.com/payment/result'
   });
 
   // 将URL转换为File对象

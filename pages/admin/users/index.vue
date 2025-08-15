@@ -56,6 +56,106 @@
       />
     </div>
 
+    <!-- 用户详情模态框 -->
+    <UModal v-model:open="showDetailModal" size="2xl">
+      <template #header>
+        {{ $t('admin.users.userDetails') }}
+      </template>
+      <template #body>
+        <div v-if="selectedUser" class="space-y-6">
+          <!-- 基本信息 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.username') }}
+              </label>
+              <p class="text-sm text-gray-900 dark:text-white">{{ selectedUser.username }}</p>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.nickname') }}
+              </label>
+              <p class="text-sm text-gray-900 dark:text-white">
+                {{ selectedUser.nickname || '-' }}
+              </p>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.status') }}
+              </label>
+              <UBadge :color="getStatusColor(selectedUser.status)" variant="subtle" class="mt-1">
+                {{ selectedUser.status }}
+              </UBadge>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.description') }}
+              </label>
+              <p class="text-sm text-gray-900 dark:text-white">
+                {{ selectedUser.description || '-' }}
+              </p>
+            </div>
+          </div>
+
+          <!-- 统计信息 -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">
+                {{ selectedUser.followerCount || 0 }}
+              </div>
+              <div class="text-sm text-gray-500">{{ $t('admin.users.followerCount') }}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">
+                {{ selectedUser.followingCount || 0 }}
+              </div>
+              <div class="text-sm text-gray-500">{{ $t('admin.users.followingCount') }}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">{{ selectedUser.score || 0 }}</div>
+              <div class="text-sm text-gray-500">{{ $t('admin.users.score') }}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">{{ selectedUser.wallet || 0 }}</div>
+              <div class="text-sm text-gray-500">{{ $t('admin.users.wallet') }}</div>
+            </div>
+          </div>
+
+          <!-- 时间信息 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.createdAt') }}
+              </label>
+              <p class="text-sm text-gray-900 dark:text-white">
+                {{
+                  selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleString() : '-'
+                }}
+              </p>
+            </div>
+            <div>
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {{ $t('admin.users.updatedAt') }}
+              </label>
+              <p class="text-sm text-gray-900 dark:text-white">
+                {{
+                  selectedUser.updatedAt ? new Date(selectedUser.updatedAt).toLocaleString() : '-'
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template #footer>
+        <UButton variant="outline" @click="showDetailModal = false">
+          {{ $t('common.button.close') }}
+        </UButton>
+        <UButton @click="navigateTo(`/admin/users/${selectedUser?.id}`)" color="primary">
+          {{ $t('common.button.edit') }}
+        </UButton>
+      </template>
+    </UModal>
+
     <!-- 删除确认模态框 -->
     <UModal
       v-model:open="showDeleteModal"
@@ -116,6 +216,10 @@
   // 删除确认模态框状态
   const showDeleteModal = ref(false);
   const currentUserId = ref<number | null>(null);
+
+  // 用户详情模态框状态
+  const showDetailModal = ref(false);
+  const selectedUser = ref<User | null>(null);
 
   definePageMeta({
     layout: 'dashboard',
@@ -227,9 +331,19 @@
         label: t('common.table.actions')
       },
       {
+        label: t('common.table.view'),
+        class: 'cursor-pointer',
+        onClick: () => {
+          selectedUser.value = row.original;
+          showDetailModal.value = true;
+        }
+      },
+      {
         label: t('common.table.edit'),
         class: 'cursor-pointer',
-        onClick: () => {}
+        onClick: () => {
+          navigateTo(`/admin/users/${row.original.id}`);
+        }
       },
       {
         label: t('common.table.delete'),
@@ -241,6 +355,16 @@
         }
       }
     ];
+  };
+
+  // 获取状态颜色
+  const getStatusColor = (status: string) => {
+    const statusColors: Record<string, string> = {
+      ACTIVE: 'success',
+      INACTIVE: 'error',
+      BANNED: 'warning'
+    };
+    return statusColors[status] || 'neutral';
   };
 
   // 确认删除用户
