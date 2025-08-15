@@ -21,8 +21,48 @@
       :imgs="lightboxImages"
       :index="lightboxIndex"
       @hide="lightboxVisible = false"
-    />
+    >
+      <!-- 自定义左右导航按钮 -->
+      <!-- <template #prev-btn="{ prev }">
+        <button @click="prev" v-if="lightboxImages.length > 1">
+          <Icon name="mynaui:chevron-left" />
+        </button>
+      </template>
 
+      <template #next-btn="{ next }">
+        <button @click="next" v-if="lightboxImages.length > 1">
+          <Icon name="mynaui:chevron-right" />
+        </button>
+      </template> -->
+
+      <!-- 自定义工具栏按钮 -->
+      <!-- <template #toolbar="{ toolbarMethods }">
+        <div class="vel-toolbar">
+          <button @click="toolbarMethods.zoomIn">
+            <Icon name="mynaui:plus" />
+          </button>
+          <button @click="toolbarMethods.zoomOut">
+            <Icon name="mynaui:minus" />
+          </button>
+          <button @click="toolbarMethods.rotateLeft">
+            <Icon name="mynaui:arrow-counter-clockwise" />
+          </button>
+          <button @click="toolbarMethods.rotateRight">
+            <Icon name="mynaui:arrow-clockwise" />
+          </button>
+          <button @click="toolbarMethods.reset">
+            <Icon name="mynaui:arrow-clockwise" />
+          </button>
+        </div>
+      </template> -->
+
+      <!-- 自定义关闭按钮 -->
+      <!-- <template #close-btn>
+        <button @click="lightboxVisible = false">
+          <Icon name="mynaui:x" />
+        </button>
+      </template> -->
+    </VueEasyLightbox>
     <!-- 加载状态 -->
     <div v-if="isLoading" class="flex items-center justify-center py-20">
       <div class="flex items-center justify-center flex-col gap-8">
