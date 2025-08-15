@@ -22,7 +22,7 @@ export default defineNuxtPlugin(() => {
               const sameSite = 'Lax';
               const maxAge = name === 'device-id' ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 7;
 
-              const cookieString = `${name}=${value}; Path=/; HttpOnly=false; Secure=${secure}; SameSite=${sameSite}; Max-Age=${maxAge}`;
+              const cookieString = `${name}=${value}; Path=/; SameSite=${sameSite}; Max-Age=${maxAge}${secure ? '; Secure' : ''}`;
 
               // 添加到响应头中
               const existingCookies = (event.node.res.getHeader('Set-Cookie') as string[]) || [];

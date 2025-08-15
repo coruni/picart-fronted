@@ -113,7 +113,7 @@
           default: () => '',
           expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: 'lax',
           httpOnly: false
         });
         authToken.value = data.token;
@@ -124,7 +124,7 @@
             default: () => '',
             expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'lax',
             httpOnly: false
           });
           refreshToken.value = data.refreshToken;
@@ -139,13 +139,6 @@
         } else {
           userStore.clearRememberedUsername();
         }
-
-        // 显示登录成功消息
-        // toast.add({
-        //   title: t('login.loginSuccess'),
-        //   description: t('login.welcomeBack'),
-        //   color: 'primary'
-        // });
 
         // 跳转处理
         const redirectPath = route.query.redirect as string;

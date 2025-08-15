@@ -56,9 +56,11 @@
             v-model="state.status"
             class="w-full"
             :items="[
-              { label: t('banners.active'), value: 'active' },
-              { label: t('banners.inactive'), value: 'inactive' }
+              { label: t('common.status.active'), value: 'active' },
+              { label: t('common.status.inactive'), value: 'inactive' }
             ]"
+            option-attribute="label"
+            value-attribute="value"
           />
         </UFormField>
       </div>
@@ -96,7 +98,7 @@
     imageUrl: '',
     linkUrl: '',
     sortOrder: 0,
-    status: 'active'
+    status: 'active' as 'active' | 'inactive'
   });
 
   // 文件
@@ -112,7 +114,7 @@
     imageUrl: z.string().min(1, t('banners.imageRequired')),
     linkUrl: z.string().optional(),
     sortOrder: z.number().min(0, t('banners.sortOrderMin')),
-    status: z.string().optional()
+    status: z.enum(['active', 'inactive'])
   });
 
   // 加载状态

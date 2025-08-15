@@ -127,6 +127,12 @@
   const isPaid = ref(false);
   const isPaymentLoading = ref(false);
 
+  // 确保在客户端才执行交互逻辑
+  const isClient = ref(false);
+  onMounted(() => {
+    isClient.value = true;
+  });
+
   // 处理登录
   const handleLogin = () => {
     router.push(localePath('/user/login?redirect=' + route.path));
@@ -134,7 +140,7 @@
 
   // 处理关注
   const handleFollow = async () => {
-    if (isFollowing.value || isFollowLoading.value) return;
+    if (!isClient.value || isFollowing.value || isFollowLoading.value) return;
 
     isFollowLoading.value = true;
     // TODO: 调用关注API
@@ -145,7 +151,7 @@
 
   // 处理付费
   const handlePayment = async () => {
-    if (isPaid.value || isPaymentLoading.value) return;
+    if (!isClient.value || isPaid.value || isPaymentLoading.value) return;
 
     isPaymentLoading.value = true;
     // TODO: 调用支付API
@@ -156,6 +162,7 @@
 
   // 处理会员升级
   const handleMembership = () => {
+    if (!isClient.value) return;
     router.push(localePath('/user'));
   };
 </script>

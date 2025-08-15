@@ -212,11 +212,9 @@
         </div>
 
         <!-- 内容限制组件 -->
-        <ArticleContentRestriction
-          v-else-if="restrictionType"
-          :type="restrictionType"
-          :price="article?.data.viewPrice"
-        />
+        <ClientOnly v-else-if="restrictionType">
+          <ArticleContentRestriction :type="restrictionType" :price="article?.data.viewPrice" />
+        </ClientOnly>
 
         <!-- 移动端点赞按钮 -->
         <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
@@ -287,8 +285,8 @@
           <div class="mb-6 md:mb-8">
             <div class="flex items-start space-x-3 md:space-x-4">
               <UAvatar
-                :src="article?.data.author.avatar"
-                alt="当前用户头像"
+                :src="userInfo?.avatar"
+                :alt="userInfo?.nickname ?? userInfo?.username"
                 class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
                 loading="lazy"
                 format="webp"
@@ -454,7 +452,6 @@
     commentControllerFindAll,
     articleControllerRemove
   } from '~/api';
-  import type { ArticleControllerFindOneResponse } from '~/api';
   import type { CommentControllerFindAllResponse } from '~/api';
   import type { FormSubmitEvent } from '@nuxt/ui';
   const route = useRoute();
@@ -463,6 +460,7 @@
 
   // 用户状态管理
   const userStore = useUserStore();
+  const userInfo = computed(() => userStore.currentUser);
   const isLoggedIn = computed(() => userStore.isLoggedIn);
   const localePath = useLocalePath();
   // 判断当前用户是否是文章作者

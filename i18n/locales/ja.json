@@ -396,7 +396,9 @@
         "upgradeButton": "メンバーシップをアップグレードします"
       }
     },
-    "deleteConfirm": "確認確認を削除します"
+    "deleteConfirm": "確認確認を削除します",
+    "edit": "编辑",
+    "delete": "删除"
   },
   "validation": {
     "required": "このフィールドは必須です",

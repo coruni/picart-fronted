@@ -62,27 +62,49 @@ export const useUserStore = defineStore('user', {
       this.rememberedUsername = null;
       this.refreshToken = null;
       if (import.meta.client) {
-        const authToken = useCookie('auth-token');
-        const refreshToken = useCookie('refresh-token');
-        authToken.value = null;
-        refreshToken.value = null;
+        // 使用与登录时相同的配置来清除 cookie
+        const authToken = useCookie('auth-token', {
+          default: () => '',
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          httpOnly: false
+        });
 
-        // 清除所有认证相关的cookie
-        document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        // document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'device-id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        const refreshToken = useCookie('refresh-token', {
+          default: () => '',
+          expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          httpOnly: false
+        });
 
-        // 清除localStorage
+        // 清除 cookie 值
+        authToken.value = '';
+        refreshToken.value = '';
+
+        // 使用更简单的方式清除 cookie（保留 device-id）
+        const cookiesToClear = ['auth-token', 'refresh-token', 'token'];
+
+        cookiesToClear.forEach(cookieName => {
+          // 使用 document.cookie 直接清除，不设置额外的属性
+          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        });
+
+        // 清除localStorage（保留 device-id）
         try {
           localStorage.removeItem('auth-token');
-          localStorage.removeItem('token');
-          localStorage.removeItem('device-id');
+          localStorage.removeItem('refresh-token');
           localStorage.removeItem('user');
           localStorage.removeItem('app');
+          // 注意：不删除 device-id，保持设备标识
         } catch (error) {
           console.warn('Failed to clear localStorage:', error);
         }
+
+        // 添加调试信息
+        console.log('清除认证信息完成');
+        console.log('当前 cookies:', document.cookie);
 
         // 强制刷新页面，确保所有状态都被重置
         window.location.href = '/';

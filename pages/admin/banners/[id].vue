@@ -13,6 +13,15 @@
           />
         </UFormField>
 
+        <!-- 描述 -->
+        <UFormField :label="t('banners.description')" name="description" class="md:col-span-2">
+          <UTextarea
+            class="w-full"
+            v-model="state.description"
+            :placeholder="t('banners.descriptionPlaceholder')"
+          />
+        </UFormField>
+
         <!-- 图片上传 -->
         <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
           <UFileUpload
@@ -113,6 +122,7 @@
   // 表单状态
   const state = reactive({
     title: bannerData.value?.data?.title || '',
+    description: bannerData.value?.data?.description || '',
     imageUrl: bannerData.value?.data?.imageUrl || '',
     linkUrl: bannerData.value?.data?.linkUrl || '',
     sortOrder: bannerData.value?.data?.sortOrder || 0,
@@ -185,6 +195,7 @@
   // 表单验证规则
   const schema = z.object({
     title: z.string().min(1, t('banners.titleRequired')),
+    description: z.string().optional(),
     imageUrl: z.string().min(1, t('banners.imageRequired')),
     linkUrl: z.string().optional(),
     sortOrder: z.number().min(0, t('banners.sortOrderMin')),

@@ -396,7 +396,9 @@
         "upgradeButton": "Upgrade membership"
       }
     },
-    "deleteConfirm": "Delete Confirm"
+    "deleteConfirm": "Delete Confirm",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "validation": {
     "required": "This field is required",
