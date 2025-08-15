@@ -1,7 +1,20 @@
 <template>
-  <div v-if="shouldShow" :class="adContainerClass" :style="adStyle">
-    <div v-html="adContent" class="ad-content"></div>
-  </div>
+  <ClientOnly>
+    <template #fallback>
+      <!-- SSR时的占位符 -->
+      <div v-if="shouldShow" :class="adContainerClass" :style="adStyle">
+        <div
+          class="ad-content-placeholder bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center text-gray-500 dark:text-gray-400"
+        >
+          {{ $t('common.loading.loading') }}
+        </div>
+      </div>
+    </template>
+
+    <div v-if="shouldShow" :class="adContainerClass" :style="adStyle">
+      <div v-html="adContent" class="ad-content"></div>
+    </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
