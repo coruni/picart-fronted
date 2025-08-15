@@ -66,6 +66,15 @@
           />
         </UFormField>
 
+        <UFormField :label="t('common.table.link')" name="link">
+          <UInput
+            v-model="form.link"
+            class="w-full"
+            size="lg"
+            :placeholder="t('admin.categories.linkPlaceholder')"
+          />
+        </UFormField>
+
         <UFormField :label="t('common.table.parent')" name="parentId">
           <USelectMenu
             v-model="form.parentId"
@@ -249,6 +258,11 @@
       .max(200, t('validation.maxLength', { max: 200 }))
       .optional()
       .nullable(),
+    link: z
+      .string()
+
+      .optional()
+      .nullable(),
     parentId: z
       .number()
       .optional()
@@ -270,6 +284,7 @@
   const form = ref<Schema>({
     name: '',
     description: '',
+    link: '',
     parentId: null,
     sort: 0,
     avatar: '',
@@ -318,6 +333,7 @@
         form.value = {
           name: data.name || '',
           description: data.description || '',
+          link: data.link || '',
           parentId: data.parentId || null,
           sort: data.sort || 0,
           avatar: data.avatar || '',
@@ -525,9 +541,14 @@
         composable: '$fetch',
         path: { id: id.value },
         body: {
-          ...body,
-          parentId: body.parentId !== null ? body.parentId : undefined
-        }
+          name: body.name,
+          description: body.description || undefined,
+          sort: body.sort,
+          parentId: body.parentId !== null ? body.parentId : undefined,
+          avatar: body.avatar || undefined,
+          cover: body.cover || undefined,
+          link: body.link || undefined
+        } as any
       });
 
       toast.add({

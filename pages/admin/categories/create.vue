@@ -20,6 +20,15 @@
         />
       </UFormField>
 
+      <UFormField :label="t('common.table.link')" name="link" class="w-full">
+        <UInput
+          v-model="form.link"
+          :placeholder="t('admin.categories.linkPlaceholder')"
+          class="w-full"
+          size="lg"
+        />
+      </UFormField>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField :label="t('common.table.parent')" name="parentId" class="w-full">
           <USelectMenu
@@ -92,6 +101,7 @@
   const schema = z.object({
     name: z.string().min(1, t('form.name.placeholder')),
     description: z.string().optional(),
+    link: z.string().url(t('validation.invalidUrl')).optional().nullable(),
     parentId: z.number().optional().nullable(),
     sort: z.number().min(0).default(0),
     avatar: z.string().optional(),
@@ -103,6 +113,7 @@
   const form = ref<Schema>({
     name: '',
     description: '',
+    link: '',
     parentId: null,
     sort: 0,
     avatar: '',
@@ -223,8 +234,9 @@
         body: {
           ...form.value,
           parentId: form.value.parentId !== null ? form.value.parentId : undefined,
+          link: form.value.link || undefined,
           status: 'ENABLED'
-        }
+        } as any
       });
 
       toast.add({

@@ -1255,6 +1255,17 @@ export type ConfigControllerGetPublicResponses = {
       membership_price: number;
       membership_name: string;
       membership_enabled: boolean;
+      ad_homepage_enabled: boolean;
+      ad_homepage_content: string;
+      ad_homepage_position: string;
+      ad_article_top_enabled: boolean;
+      ad_article_top_content: string;
+      ad_article_bottom_enabled: boolean;
+      ad_article_bottom_content: string;
+      ad_global_enabled: boolean;
+      ad_global_content: string;
+      ad_global_position: string;
+      ad_global_style: string;
     };
   };
 };
@@ -3903,15 +3914,17 @@ export type CategoryControllerFindAllResponses = {
     message: string;
     data: {
       data: Array<{
-        id?: number;
-        name?: string;
-        description?: string;
-        parentId?: number;
-        children?: Array<{
+        id: number;
+        name: string;
+        description: string;
+        parentId: unknown;
+        link: unknown;
+        children: Array<{
           id?: number;
           name?: string;
           description?: string;
           parentId?: number;
+          link?: unknown;
           avatar?: string;
           background?: string;
           cover?: string;
@@ -3922,15 +3935,15 @@ export type CategoryControllerFindAllResponses = {
           createdAt?: string;
           updatedAt?: string;
         }>;
-        avatar?: string;
-        background?: string;
-        cover?: string;
-        sort?: number;
-        status?: string;
-        articleCount?: number;
-        followCount?: number;
-        createdAt?: string;
-        updatedAt?: string;
+        avatar: string;
+        background: string | null;
+        cover: string;
+        sort: number;
+        status: string;
+        articleCount: number;
+        followCount: number;
+        createdAt: string;
+        updatedAt: string;
       }>;
       meta: {
         total: number;
@@ -4050,12 +4063,15 @@ export type CategoryControllerFindOneResponses = {
       id: number;
       name: string;
       description: string;
-      parentId: number;
+      parentId: unknown;
+      link: unknown;
+      parent: unknown;
       children: Array<{
         id?: number;
         name?: string;
         description?: string;
         parentId?: number;
+        link?: unknown;
         avatar?: string;
         background?: string;
         cover?: string;

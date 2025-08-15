@@ -32,7 +32,6 @@ export default defineSitemapEventHandler(async () => {
         lastmod: article.updatedAt || article.createdAt || new Date().toISOString(),
         changefreq: 'weekly',
         priority: 0.8,
-        _sitemap: 'articles',
         _i18nTransform: true
       });
     });
@@ -73,7 +72,6 @@ export default defineSitemapEventHandler(async () => {
               })),
               changefreq: 'weekly',
               priority: 0.8,
-              _sitemap: 'articles',
               _i18nTransform: true
             });
           });

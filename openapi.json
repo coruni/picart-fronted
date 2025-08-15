@@ -1559,6 +1559,39 @@
                         },
                         "membership_enabled": {
                           "type": "boolean"
+                        },
+                        "ad_homepage_enabled": {
+                          "type": "boolean"
+                        },
+                        "ad_homepage_content": {
+                          "type": "string"
+                        },
+                        "ad_homepage_position": {
+                          "type": "string"
+                        },
+                        "ad_article_top_enabled": {
+                          "type": "boolean"
+                        },
+                        "ad_article_top_content": {
+                          "type": "string"
+                        },
+                        "ad_article_bottom_enabled": {
+                          "type": "boolean"
+                        },
+                        "ad_article_bottom_content": {
+                          "type": "string"
+                        },
+                        "ad_global_enabled": {
+                          "type": "boolean"
+                        },
+                        "ad_global_content": {
+                          "type": "string"
+                        },
+                        "ad_global_position": {
+                          "type": "string"
+                        },
+                        "ad_global_style": {
+                          "type": "string"
                         }
                       },
                       "required": [
@@ -1581,7 +1614,18 @@
                         "payment_epay_enabled",
                         "membership_price",
                         "membership_name",
-                        "membership_enabled"
+                        "membership_enabled",
+                        "ad_homepage_enabled",
+                        "ad_homepage_content",
+                        "ad_homepage_position",
+                        "ad_article_top_enabled",
+                        "ad_article_top_content",
+                        "ad_article_bottom_enabled",
+                        "ad_article_bottom_content",
+                        "ad_global_enabled",
+                        "ad_global_content",
+                        "ad_global_position",
+                        "ad_global_style"
                       ]
                     }
                   },
@@ -9739,7 +9783,10 @@
                                 "type": "string"
                               },
                               "parentId": {
-                                "type": "integer"
+                                "type": "null"
+                              },
+                              "link": {
+                                "type": "null"
                               },
                               "children": {
                                 "type": "array",
@@ -9757,6 +9804,9 @@
                                     },
                                     "parentId": {
                                       "type": "integer"
+                                    },
+                                    "link": {
+                                      "type": "null"
                                     },
                                     "avatar": {
                                       "type": "string"
@@ -9792,7 +9842,8 @@
                                 "type": "string"
                               },
                               "background": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "cover": {
                                 "type": "string"
@@ -9815,7 +9866,24 @@
                               "updatedAt": {
                                 "type": "string"
                               }
-                            }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "parentId",
+                              "link",
+                              "children",
+                              "avatar",
+                              "background",
+                              "cover",
+                              "sort",
+                              "status",
+                              "articleCount",
+                              "followCount",
+                              "createdAt",
+                              "updatedAt"
+                            ]
                           }
                         },
                         "meta": {
@@ -10029,7 +10097,13 @@
                           "type": "string"
                         },
                         "parentId": {
-                          "type": "integer"
+                          "type": "null"
+                        },
+                        "link": {
+                          "type": "null"
+                        },
+                        "parent": {
+                          "type": "null"
                         },
                         "children": {
                           "type": "array",
@@ -10047,6 +10121,9 @@
                               },
                               "parentId": {
                                 "type": "integer"
+                              },
+                              "link": {
+                                "type": "null"
                               },
                               "avatar": {
                                 "type": "string"
@@ -10111,6 +10188,8 @@
                         "name",
                         "description",
                         "parentId",
+                        "link",
+                        "parent",
                         "children",
                         "avatar",
                         "background",

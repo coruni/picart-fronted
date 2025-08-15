@@ -43,6 +43,7 @@
         "payment": "支払い",
         "commission": "コミッション",
         "membership": "メンバーシップ",
+        "advertisement": "広告",
         "maintenance": "メンテナンス",
         "invite": "招待"
       },
@@ -82,6 +83,42 @@
       "inviteCodeRequired": "登録に招待コードが必要",
       "inviteDefaultCommissionRate": "デフォルトコミッション率",
       "inviteCodeExpireDays": "招待コード有効期限（日）",
+      "adHomepage": "ホームページ広告",
+      "adHomepageEnabled": "ホームページ広告を有効にする",
+      "adHomepageContent": "ホームページ広告コンテンツ",
+      "adHomepagePosition": "ホームページ広告位置",
+      "adArticleTop": "記事上部広告",
+      "adArticleTopEnabled": "記事上部広告を有効にする",
+      "adArticleTopContent": "記事上部広告コンテンツ",
+      "adArticleBottom": "記事下部広告",
+      "adArticleBottomEnabled": "記事下部広告を有効にする",
+      "adArticleBottomContent": "記事下部広告コンテンツ",
+      "adGlobal": "グローバル広告",
+      "adGlobalEnabled": "グローバル広告を有効にする",
+      "adGlobalContent": "グローバル広告コンテンツ",
+      "adGlobalPosition": "グローバル広告位置",
+      "adGlobalStyle": "グローバル広告スタイル",
+      "adPositionTop": "上部",
+      "adPositionBottom": "下部",
+      "adPositionSidebar": "サイドバー",
+      "adPositionFixedTop": "固定上部",
+      "adPositionFixedBottom": "固定下部",
+      "adPositionFloating": "フローティング",
+      "adContentPlaceholder": "広告コンテンツを入力（HTML対応）",
+      "adStylePlaceholder": "CSSスタイルを入力",
+      "adPreview": "広告プレビュー",
+      "adPreviewContainer": "プレビューコンテナ",
+      "adPreviewEmpty": "広告コンテンツがありません。広告コンテンツを入力してプレビューを確認してください",
+      "adStats": {
+        "title": "広告統計",
+        "impressions": "表示回数",
+        "clicks": "クリック回数",
+        "ctr": "CTR",
+        "last7Days": "過去7日間",
+        "last30Days": "過去30日間",
+        "last90Days": "過去90日間",
+        "chartPlaceholder": "チャートエリア（チャートライブラリを統合可能）"
+      },
       "saveSuccess": "設定が正常に保存されました",
       "saveFailed": "設定の保存に失敗しました"
     },
@@ -99,6 +136,7 @@
       "selectParent": "親カテゴリーを選択",
       "avatarPlaceholder": "アバターをアップロード",
       "coverPlaceholder": "カバーをアップロード",
+      "linkPlaceholder": "リンクアドレスを入力（オプション）",
       "avatarHelp": "推奨サイズ：200x200px、JPG、PNG形式をサポート",
       "coverHelp": "推奨サイズ：800x400px、JPG、PNG形式をサポート",
       "cannotBeOwnParent": "カテゴリーは自分自身を親として選択できません",
@@ -219,7 +257,8 @@
       "category": "カテゴリー",
       "filter": "フィルター",
       "background": "背景",
-      "cover": "カバー"
+      "cover": "カバー",
+      "link": "リンク"
     },
     "message": {
       "deleteSuccess": "削除成功",
@@ -301,6 +340,11 @@
       "placeholder": "画像をアップロードしてください",
       "name": "画像"
     },
+    "cover": {
+      "placeholder": "カバー画像をアップロードしてください",
+      "name": "カバー画像",
+      "help": "推奨サイズ 1200x630 ピクセル、JPG、PNG 形式をサポート"
+    },
     "submit": "送信",
     "type": {
       "placeholder": "タイプを選択してください",
@@ -312,6 +356,10 @@
     "requireLogin": "ログインが必要",
     "requireFollow": "フォローが必要",
     "requirePayment": "支払いが必要",
+    "sort": {
+      "name": "ソート",
+      "placeholder": "ソート値を入力してください"
+    },
     "viewPrice": {
       "placeholder": "価格を入力してください",
       "name": "有料金額"
@@ -412,7 +460,8 @@
     "maxLength": "{max}文字を超えることはできません",
     "min": "最小値は{min}未満にすることはできません",
     "max": "最大値は{max}を超えることはできません",
-    "url": "有効なURLを入力してください"
+    "url": "有効なURLを入力してください",
+    "invalidUrl": "有効なURLを入力してください"
   },
   "error": {
     "pageNotFound": "申し訳ありません、お探しのページは存在しません",

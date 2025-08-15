@@ -43,6 +43,7 @@
         "payment": "支付设置",
         "commission": "抽成",
         "membership": "会员设置",
+        "advertisement": "广告设置",
         "maintenance": "维护模式",
         "invite": "邀请设置"
       },
@@ -82,6 +83,42 @@
       "inviteCodeRequired": "注册需要邀请码",
       "inviteDefaultCommissionRate": "默认佣金比例",
       "inviteCodeExpireDays": "邀请码有效期（天）",
+      "adHomepage": "首页广告",
+      "adHomepageEnabled": "启用首页广告",
+      "adHomepageContent": "首页广告内容",
+      "adHomepagePosition": "首页广告位置",
+      "adArticleTop": "文章顶部广告",
+      "adArticleTopEnabled": "启用文章顶部广告",
+      "adArticleTopContent": "文章顶部广告内容",
+      "adArticleBottom": "文章底部广告",
+      "adArticleBottomEnabled": "启用文章底部广告",
+      "adArticleBottomContent": "文章底部广告内容",
+      "adGlobal": "全局广告",
+      "adGlobalEnabled": "启用全局广告",
+      "adGlobalContent": "全局广告内容",
+      "adGlobalPosition": "全局广告位置",
+      "adGlobalStyle": "全局广告样式",
+      "adPositionTop": "顶部",
+      "adPositionBottom": "底部",
+      "adPositionSidebar": "侧边栏",
+      "adPositionFixedTop": "固定顶部",
+      "adPositionFixedBottom": "固定底部",
+      "adPositionFloating": "浮动",
+      "adContentPlaceholder": "请输入广告内容（支持HTML）",
+      "adStylePlaceholder": "请输入CSS样式",
+      "adPreview": "广告预览",
+      "adPreviewContainer": "预览容器",
+      "adPreviewEmpty": "暂无广告内容，请输入广告内容后查看预览效果",
+      "adStats": {
+        "title": "广告统计",
+        "impressions": "展示次数",
+        "clicks": "点击次数",
+        "ctr": "点击率",
+        "last7Days": "最近7天",
+        "last30Days": "最近30天",
+        "last90Days": "最近90天",
+        "chartPlaceholder": "图表区域（可集成图表库）"
+      },
       "saveSuccess": "设置保存成功",
       "saveFailed": "设置保存失败"
     },
@@ -99,6 +136,7 @@
       "selectParent": "请选择父分类",
       "avatarPlaceholder": "上传头像",
       "coverPlaceholder": "上传封面",
+      "linkPlaceholder": "请输入链接地址（可选）",
       "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
       "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
       "cannotBeOwnParent": "分类不能选择自己作为父分类",
@@ -219,7 +257,8 @@
       "category": "分类",
       "filter": "筛选",
       "background": "背景",
-      "cover": "封面"
+      "cover": "封面",
+      "link": "链接"
     },
     "message": {
       "deleteSuccess": "删除成功",
@@ -427,6 +466,11 @@
       "placeholder": "请上传图片",
       "name": "图片"
     },
+    "cover": {
+      "placeholder": "请上传封面图片",
+      "name": "封面图片",
+      "help": "建议尺寸 1200x630 像素，支持 JPG、PNG 格式"
+    },
     "submit": "提交",
     "type": {
       "placeholder": "请选择类型",
@@ -442,6 +486,10 @@
       "name": "付费金额"
     },
     "requireLogin": "登录查看",
+    "sort": {
+      "name": "排序",
+      "placeholder": "请输入排序值"
+    },
     "name": {
       "placeholder": "请输入名称"
     },
@@ -536,7 +584,8 @@
     "maxLength": "最多只能输入 {max} 个字符",
     "min": "最小值不能小于 {min}",
     "max": "最大值不能大于 {max}",
-    "url": "请输入有效的URL地址"
+    "url": "请输入有效的URL地址",
+    "invalidUrl": "请输入有效的URL地址"
   },
   "error": {
     "pageNotFound": "抱歉，您访问的页面不存在",

@@ -89,6 +89,8 @@
 
     <!-- 内容区域 -->
     <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
+      <!-- 文章顶部广告 -->
+      <Advertisement type="article-top" />
       <!-- 点赞悬浮按钮 - 仅在PC端显示 -->
       <div
         ref="likeButtonContainer"
@@ -249,32 +251,11 @@
                 }})
               </span>
             </button>
-
-            <!-- 移动端管理按钮 -->
-            <div v-if="isAuthor" class="flex items-center space-x-2">
-              <UButton
-                @click="handleEdit"
-                variant="soft"
-                size="sm"
-                class="flex items-center space-x-1"
-              >
-                <Icon name="mynaui:edit" class="w-4 h-4" />
-                <span class="text-xs">{{ $t('article.edit') }}</span>
-              </UButton>
-
-              <UButton
-                @click="handleDelete"
-                variant="soft"
-                color="error"
-                size="sm"
-                class="flex items-center space-x-1"
-              >
-                <Icon name="mynaui:trash" class="w-4 h-4" />
-                <span class="text-xs">{{ $t('article.delete') }}</span>
-              </UButton>
-            </div>
           </div>
         </div>
+
+        <!-- 文章底部广告 -->
+        <Advertisement type="article-bottom" />
 
         <!-- 评论区 -->
         <div class="mb-6 md:mb-8 comments-section">

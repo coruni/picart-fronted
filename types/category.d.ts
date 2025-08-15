@@ -3,6 +3,7 @@ export interface Category {
   id?: number;
   name?: string;
   description?: string;
+  link?: string;
   parentId?: unknown;
   parent?: {
     id?: number;
@@ -12,6 +13,7 @@ export interface Category {
     id?: number;
     name?: string;
     description?: string;
+    link?: string;
     parentId?: number;
     avatar?: string;
     background?: string;

@@ -385,6 +385,209 @@
         </div>
       </template>
 
+      <template #advertisement="{ item }">
+        <div class="space-y-8">
+          <!-- 首页广告 -->
+          <UCard>
+            <h3 class="text-lg font-semibold mb-4">{{ t('admin.settings.adHomepage') }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormField
+                :label="t('admin.settings.adHomepageEnabled')"
+                name="ad_homepage_enabled"
+                class="w-full"
+              >
+                <USwitch v-model="config.ad_homepage_enabled" />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.adHomepagePosition')"
+                name="ad_homepage_position"
+                class="w-full"
+              >
+                <USelect
+                  v-model="config.ad_homepage_position"
+                  :disabled="!config.ad_homepage_enabled"
+                  class="w-full"
+                  :items="[
+                    { label: t('admin.settings.adPositionTop'), value: 'top' },
+                    { label: t('admin.settings.adPositionBottom'), value: 'bottom' },
+                    { label: t('admin.settings.adPositionSidebar'), value: 'sidebar' }
+                  ]"
+                  option-attribute="label"
+                  value-attribute="value"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.adHomepageContent')"
+                name="ad_homepage_content"
+                class="md:col-span-2"
+              >
+                <UTextarea
+                  v-model="config.ad_homepage_content"
+                  :disabled="!config.ad_homepage_enabled"
+                  class="w-full"
+                  :placeholder="t('admin.settings.adContentPlaceholder')"
+                  :rows="4"
+                />
+              </UFormField>
+            </div>
+
+            <!-- 广告预览 -->
+            <AdvertisementPreview
+              type="homepage"
+              :content="config.ad_homepage_content"
+              :enabled="config.ad_homepage_enabled"
+              :position="config.ad_homepage_position"
+            />
+          </UCard>
+
+          <!-- 文章顶部广告 -->
+          <UCard>
+            <h3 class="text-lg font-semibold mb-4">{{ t('admin.settings.adArticleTop') }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormField
+                :label="t('admin.settings.adArticleTopEnabled')"
+                name="ad_article_top_enabled"
+                class="w-full"
+              >
+                <USwitch v-model="config.ad_article_top_enabled" />
+              </UFormField>
+
+              <div></div>
+
+              <UFormField
+                :label="t('admin.settings.adArticleTopContent')"
+                name="ad_article_top_content"
+                class="md:col-span-2"
+              >
+                <UTextarea
+                  v-model="config.ad_article_top_content"
+                  :disabled="!config.ad_article_top_enabled"
+                  class="w-full"
+                  :placeholder="t('admin.settings.adContentPlaceholder')"
+                  :rows="4"
+                />
+              </UFormField>
+            </div>
+
+            <!-- 广告预览 -->
+            <AdvertisementPreview
+              type="article-top"
+              :content="config.ad_article_top_content"
+              :enabled="config.ad_article_top_enabled"
+            />
+          </UCard>
+
+          <!-- 文章底部广告 -->
+          <UCard>
+            <h3 class="text-lg font-semibold mb-4">{{ t('admin.settings.adArticleBottom') }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormField
+                :label="t('admin.settings.adArticleBottomEnabled')"
+                name="ad_article_bottom_enabled"
+                class="w-full"
+              >
+                <USwitch v-model="config.ad_article_bottom_enabled" />
+              </UFormField>
+
+              <div></div>
+
+              <UFormField
+                :label="t('admin.settings.adArticleBottomContent')"
+                name="ad_article_bottom_content"
+                class="md:col-span-2"
+              >
+                <UTextarea
+                  v-model="config.ad_article_bottom_content"
+                  :disabled="!config.ad_article_bottom_enabled"
+                  class="w-full"
+                  :placeholder="t('admin.settings.adContentPlaceholder')"
+                  :rows="4"
+                />
+              </UFormField>
+            </div>
+
+            <!-- 广告预览 -->
+            <AdvertisementPreview
+              type="article-bottom"
+              :content="config.ad_article_bottom_content"
+              :enabled="config.ad_article_bottom_enabled"
+            />
+          </UCard>
+
+          <!-- 全局广告 -->
+          <UCard>
+            <h3 class="text-lg font-semibold mb-4">{{ t('admin.settings.adGlobal') }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormField
+                :label="t('admin.settings.adGlobalEnabled')"
+                name="ad_global_enabled"
+                class="w-full"
+              >
+                <USwitch v-model="config.ad_global_enabled" />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.adGlobalPosition')"
+                name="ad_global_position"
+                class="w-full"
+              >
+                <USelect
+                  v-model="config.ad_global_position"
+                  :disabled="!config.ad_global_enabled"
+                  class="w-full"
+                  :items="[
+                    { label: t('admin.settings.adPositionFixedTop'), value: 'fixed-top' },
+                    { label: t('admin.settings.adPositionFixedBottom'), value: 'fixed-bottom' },
+                    { label: t('admin.settings.adPositionFloating'), value: 'floating' }
+                  ]"
+                  option-attribute="label"
+                  value-attribute="value"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.adGlobalContent')"
+                name="ad_global_content"
+                class="md:col-span-2"
+              >
+                <UTextarea
+                  v-model="config.ad_global_content"
+                  :disabled="!config.ad_global_enabled"
+                  class="w-full"
+                  :placeholder="t('admin.settings.adContentPlaceholder')"
+                  :rows="4"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.adGlobalStyle')"
+                name="ad_global_style"
+                class="md:col-span-2"
+              >
+                <UTextarea
+                  v-model="config.ad_global_style"
+                  :disabled="!config.ad_global_enabled"
+                  class="w-full"
+                  :placeholder="t('admin.settings.adStylePlaceholder')"
+                  :rows="3"
+                />
+              </UFormField>
+            </div>
+
+            <!-- 广告预览 -->
+            <AdvertisementPreview
+              type="global"
+              :content="config.ad_global_content"
+              :enabled="config.ad_global_enabled"
+              :position="config.ad_global_position"
+              :style="config.ad_global_style"
+            />
+          </UCard>
+        </div>
+      </template>
+
       <template #maintenance="{ item }">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField
@@ -518,7 +721,11 @@
     { label: t('admin.settings.tabs.payment'), slot: 'payment', icon: 'mynaui:credit-card' },
     { label: t('admin.settings.tabs.commission'), slot: 'commission', icon: 'mynaui:percentage' },
     { label: t('admin.settings.tabs.membership'), slot: 'membership', icon: 'mynaui:heart-waves' },
-
+    {
+      label: t('admin.settings.tabs.advertisement'),
+      slot: 'advertisement',
+      icon: 'mynaui:megaphone'
+    },
     {
       label: t('admin.settings.tabs.maintenance'),
       slot: 'maintenance',
@@ -573,7 +780,19 @@
     payment_epay_notify_url: '',
     // 通用支付配置
     payment_notify_url: 'https://your-domain.com/api/payment/notify',
-    payment_return_url: 'https://your-domain.com/payment/result'
+    payment_return_url: 'https://your-domain.com/payment/result',
+    // 广告配置
+    ad_homepage_enabled: false,
+    ad_homepage_content: '',
+    ad_homepage_position: 'top',
+    ad_article_top_enabled: false,
+    ad_article_top_content: '',
+    ad_article_bottom_enabled: false,
+    ad_article_bottom_content: '',
+    ad_global_enabled: false,
+    ad_global_content: '',
+    ad_global_position: 'fixed-bottom',
+    ad_global_style: 'background: #f8f9fa; padding: 10px; text-align: center;'
   });
 
   // 将URL转换为File对象

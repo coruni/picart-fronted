@@ -1,6 +1,10 @@
 <template>
   <div>
     <CommonSwiperClient />
+
+    <!-- 首页顶部广告 -->
+    <Advertisement type="homepage" position="top" />
+
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Tab切换 -->
       <div class="flex justify-center mb-8 md:justify-end">

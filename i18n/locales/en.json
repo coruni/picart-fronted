@@ -43,6 +43,7 @@
         "payment": "Payment",
         "commission": "Commission",
         "membership": "Membership",
+        "advertisement": "Advertisement",
         "maintenance": "Maintenance",
         "invite": "Invite"
       },
@@ -82,6 +83,42 @@
       "inviteCodeRequired": "Invite Code Required",
       "inviteDefaultCommissionRate": "Default Commission Rate",
       "inviteCodeExpireDays": "Invite Code Expire Days",
+      "adHomepage": "Homepage Advertisement",
+      "adHomepageEnabled": "Enable Homepage Advertisement",
+      "adHomepageContent": "Homepage Advertisement Content",
+      "adHomepagePosition": "Homepage Advertisement Position",
+      "adArticleTop": "Article Top Advertisement",
+      "adArticleTopEnabled": "Enable Article Top Advertisement",
+      "adArticleTopContent": "Article Top Advertisement Content",
+      "adArticleBottom": "Article Bottom Advertisement",
+      "adArticleBottomEnabled": "Enable Article Bottom Advertisement",
+      "adArticleBottomContent": "Article Bottom Advertisement Content",
+      "adGlobal": "Global Advertisement",
+      "adGlobalEnabled": "Enable Global Advertisement",
+      "adGlobalContent": "Global Advertisement Content",
+      "adGlobalPosition": "Global Advertisement Position",
+      "adGlobalStyle": "Global Advertisement Style",
+      "adPositionTop": "Top",
+      "adPositionBottom": "Bottom",
+      "adPositionSidebar": "Sidebar",
+      "adPositionFixedTop": "Fixed Top",
+      "adPositionFixedBottom": "Fixed Bottom",
+      "adPositionFloating": "Floating",
+      "adContentPlaceholder": "Enter advertisement content (HTML supported)",
+      "adStylePlaceholder": "Enter CSS styles",
+      "adPreview": "Ad Preview",
+      "adPreviewContainer": "Preview Container",
+      "adPreviewEmpty": "No ad content, please enter ad content to see preview",
+      "adStats": {
+        "title": "Ad Statistics",
+        "impressions": "Impressions",
+        "clicks": "Clicks",
+        "ctr": "CTR",
+        "last7Days": "Last 7 Days",
+        "last30Days": "Last 30 Days",
+        "last90Days": "Last 90 Days",
+        "chartPlaceholder": "Chart Area (can integrate chart library)"
+      },
       "saveSuccess": "Settings saved successfully",
       "saveFailed": "Failed to save settings"
     },
@@ -99,6 +136,7 @@
       "selectParent": "Select parent category",
       "avatarPlaceholder": "Upload avatar",
       "coverPlaceholder": "Upload cover",
+      "linkPlaceholder": "Enter link address (optional)",
       "avatarHelp": "Recommended size: 200x200px, supports JPG, PNG format",
       "coverHelp": "Recommended size: 800x400px, supports JPG, PNG format",
       "cannotBeOwnParent": "Category cannot select itself as parent",
@@ -219,7 +257,8 @@
       "category": "Category",
       "filter": "Filter",
       "background": "Background",
-      "cover": "Cover"
+      "cover": "Cover",
+      "link": "Link"
     },
     "message": {
       "deleteSuccess": "Delete Successful",
@@ -301,6 +340,11 @@
       "placeholder": "Please upload images",
       "name": "Images"
     },
+    "cover": {
+      "placeholder": "Please upload cover image",
+      "name": "Cover Image",
+      "help": "Recommended size 1200x630 pixels, supports JPG, PNG format"
+    },
     "submit": "Submit",
     "type": {
       "placeholder": "Please select type",
@@ -312,6 +356,10 @@
     "requireLogin": "Require Login",
     "requireFollow": "Require Follow",
     "requirePayment": "Require Payment",
+    "sort": {
+      "name": "Sort",
+      "placeholder": "Please input sort value"
+    },
     "viewPrice": {
       "placeholder": "Please input price",
       "name": "Payment Amount"
@@ -412,7 +460,8 @@
     "maxLength": "Must not exceed {max} characters",
     "min": "Minimum value cannot be less than {min}",
     "max": "Maximum value cannot be greater than {max}",
-    "url": "Please enter a valid URL"
+    "url": "Please enter a valid URL",
+    "invalidUrl": "Please enter a valid URL"
   },
   "error": {
     "pageNotFound": "Sorry, the page you're looking for doesn't exist",

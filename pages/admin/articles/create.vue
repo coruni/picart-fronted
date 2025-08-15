@@ -69,6 +69,27 @@
           </UFileUpload>
         </UFormField>
       </template>
+
+      <!-- Cover Image Upload -->
+      <UFormField name="cover" :label="$t('form.cover.name')">
+        <div class="space-y-2">
+          <UFileUpload
+            v-model:modelValue="coverFile"
+            :placeholder="$t('form.cover.placeholder')"
+            accept="image/*"
+            @update:modelValue="onCoverUpload"
+            :loading="coverUploading"
+            :ui="{
+              base: 'w-32 h-32',
+              root: 'w-32 h-32',
+              file: 'w-32 h-32 h-32'
+            }"
+          />
+          <p class="text-xs text-gray-500">
+            {{ $t('form.cover.help') }}
+          </p>
+        </div>
+      </UFormField>
       <div class="flex items-center space-x-2">
         <UFormField name="parentCategory" class="flex-1">
           <USelectMenu
@@ -97,6 +118,20 @@
           />
         </UFormField>
       </div>
+
+      <!-- Sort Field -->
+      <UFormField name="sort" :label="$t('form.sort.name')">
+        <UInput
+          v-model="state.sort"
+          type="number"
+          :min="0"
+          :placeholder="$t('form.sort.placeholder')"
+          variant="soft"
+          class="w-full"
+          size="lg"
+        />
+      </UFormField>
+
       <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
         <div class="space-y-2">
           <USelectMenu
@@ -206,11 +241,12 @@
   });
 
   const schema = z.object({
-    title: z.string().min(8, t('form.title.placeholder')),
+    title: z.string().min(4, t('form.title.placeholder')),
     content: z.string().min(10, t('form.content.placeholder')),
     parentCategory: z.number().min(1, t('form.parentCategory.placeholder')),
     categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
+    cover: z.string().optional(),
     type: z.enum(['mixed', 'image']).optional().default('mixed'),
 
     tagIds: z
@@ -221,7 +257,8 @@
     requireFollow: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
     requireMembership: z.boolean().default(false),
-    viewPrice: z.number().min(0).default(0)
+    viewPrice: z.number().min(0).default(0),
+    sort: z.number().min(0).default(0)
   });
 
   type Schema = z.output<typeof schema>;
@@ -232,13 +269,15 @@
     parentCategory: undefined,
     categoryId: undefined,
     images: '',
+    cover: '',
     type: 'mixed',
     tagIds: [],
     requireLogin: false,
     requireFollow: false,
     requirePayment: false,
     requireMembership: false,
-    viewPrice: 0
+    viewPrice: 0,
+    sort: 0
   });
 
   const loading = ref(false);
@@ -253,7 +292,9 @@
 
   // 文件列表，用于FileUpload组件展示
   const displayFiles = ref<ExtendedFile[]>([]);
+  const coverFile = ref<ExtendedFile | null>(null);
   const uploading = ref(false);
+  const coverUploading = ref(false);
 
   const typeOptions = ref<SelectMenuItem[]>([
     {
@@ -435,6 +476,70 @@
     }
   };
 
+  // Cover upload handler
+  const onCoverUpload = async (files: unknown) => {
+    if (!files || (Array.isArray(files) && files.length === 0)) return;
+
+    let newFile: ExtendedFile | null = null;
+
+    if (Array.isArray(files) && files[0] instanceof File) {
+      newFile = files[0] as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    } else if (files instanceof File) {
+      newFile = files as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    }
+
+    if (!newFile) return;
+
+    newFile._uploading = true;
+    coverFile.value = newFile;
+    coverUploading.value = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('files', newFile);
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      if (res.data && res.data[0]) {
+        newFile._url = res.data[0].url!;
+        newFile._uploaded = true;
+        newFile._uploading = false;
+        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+        state.cover = newFile._url;
+        coverFile.value = newFile;
+
+        toast.add({
+          title: t('common.message.uploadSuccess'),
+          color: 'success'
+        });
+      } else {
+        newFile._uploading = false;
+        coverFile.value = null;
+        toast.add({
+          title: t('common.message.uploadFailed'),
+          color: 'error'
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to upload cover:', error);
+      coverFile.value = null;
+      toast.add({
+        title: t('common.message.uploadFailed'),
+        description: error.message,
+        color: 'error'
+      });
+    } finally {
+      coverUploading.value = false;
+    }
+  };
+
   // 更新state.images
   const updateStateImages = () => {
     const urls = displayFiles.value
@@ -450,6 +555,16 @@
       updateStateImages();
     },
     { deep: true }
+  );
+
+  // 监听cover文件变化
+  watch(
+    () => coverFile.value?._url,
+    newUrl => {
+      if (newUrl && coverFile.value?._uploaded) {
+        state.cover = newUrl;
+      }
+    }
   );
 
   const onSubmit = debounce(async () => {
@@ -480,7 +595,8 @@
           tagIds: existingTagIds.length > 0 ? existingTagIds : [],
           tagNames: newTagNames.length > 0 ? newTagNames : [],
           content: data.content ?? '',
-          images: data.images
+          images: data.images,
+          cover: coverFile.value?._url || data.cover || ''
         }
       });
 
@@ -686,5 +802,9 @@
         }
       }
     });
+
+    if (coverFile.value?._url && coverFile.value._url.startsWith('blob:')) {
+      URL.revokeObjectURL(coverFile.value._url);
+    }
   });
 </script>

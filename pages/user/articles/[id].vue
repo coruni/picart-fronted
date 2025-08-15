@@ -71,6 +71,27 @@
             </UFormField>
           </template>
 
+          <!-- Cover Image Upload -->
+          <UFormField name="cover" :label="$t('form.cover.name')">
+            <div class="space-y-2">
+              <UFileUpload
+                v-model:modelValue="coverFile"
+                :placeholder="$t('form.cover.placeholder')"
+                accept="image/*"
+                @update:modelValue="onCoverUpload"
+                :loading="coverUploading"
+                :ui="{
+                  base: 'w-32 h-32',
+                  root: 'w-32 h-32',
+                  file: 'w-32 h-32 h-32'
+                }"
+              />
+              <p class="text-xs text-gray-500">
+                {{ $t('form.cover.help') }}
+              </p>
+            </div>
+          </UFormField>
+
           <div class="flex items-center space-x-2">
             <UFormField name="parentCategory" class="flex-1">
               <USelectMenu
@@ -225,6 +246,7 @@
     parentCategory: z.number().optional(),
     categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
+    cover: z.string().optional(),
     type: z.enum(['mixed', 'image']).optional().default('mixed'),
     tagIds: z
       .array(z.union([z.string(), z.number()]))
@@ -245,6 +267,7 @@
     parentCategory: undefined,
     categoryId: undefined,
     images: '',
+    cover: '',
     type: 'mixed',
     tagIds: [],
     requireLogin: false,
@@ -266,7 +289,9 @@
 
   // 文件列表，用于FileUpload组件展示
   const displayFiles = ref<ExtendedFile[]>([]);
+  const coverFile = ref<ExtendedFile | null>(null);
   const uploading = ref(false);
+  const coverUploading = ref(false);
 
   const { locale } = useI18n();
   // TinyMCE 编辑器配置
@@ -495,6 +520,70 @@
     }
   };
 
+  // Cover upload handler
+  const onCoverUpload = async (files: unknown) => {
+    if (!files || (Array.isArray(files) && files.length === 0)) return;
+
+    let newFile: ExtendedFile | null = null;
+
+    if (Array.isArray(files) && files[0] instanceof File) {
+      newFile = files[0] as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    } else if (files instanceof File) {
+      newFile = files as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    }
+
+    if (!newFile) return;
+
+    newFile._uploading = true;
+    coverFile.value = newFile;
+    coverUploading.value = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('files', newFile);
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      if (res.data && res.data[0]) {
+        newFile._url = res.data[0].url!;
+        newFile._uploaded = true;
+        newFile._uploading = false;
+        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+        state.cover = newFile._url;
+        coverFile.value = newFile;
+
+        toast.add({
+          title: t('common.message.uploadSuccess'),
+          color: 'primary'
+        });
+      } else {
+        newFile._uploading = false;
+        coverFile.value = null;
+        toast.add({
+          title: t('common.message.uploadFailed'),
+          color: 'error'
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to upload cover:', error);
+      coverFile.value = null;
+      toast.add({
+        title: t('common.message.uploadFailed'),
+        description: error.message,
+        color: 'error'
+      });
+    } finally {
+      coverUploading.value = false;
+    }
+  };
+
   // 更新state.images
   const updateStateImages = () => {
     const urls = displayFiles.value
@@ -510,6 +599,16 @@
       updateStateImages();
     },
     { deep: true }
+  );
+
+  // 监听cover文件变化
+  watch(
+    () => coverFile.value?._url,
+    newUrl => {
+      if (newUrl && coverFile.value?._uploaded) {
+        state.cover = newUrl;
+      }
+    }
   );
 
   // 若 articleId 存在，请求文章详情数据
@@ -530,6 +629,7 @@
           parentCategory: data.category?.parent?.id,
           categoryId: data.category?.id,
           images: data.images ?? '',
+          cover: data.cover ?? '',
           type: data.type ?? 'mixed',
           tagIds: data.tags?.map(tag => tag.id) ?? [],
           requireLogin: data.requireLogin ?? false,
@@ -547,6 +647,11 @@
           );
 
           displayFiles.value = virtualFiles;
+        }
+
+        // 初始化封面图片
+        if (state.cover) {
+          coverFile.value = await createVirtualFile(state.cover, 0);
         }
       }
     } catch (error) {
@@ -583,7 +688,8 @@
           ...data,
           tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
           tagNames: newTagNames.length > 0 ? newTagNames : undefined,
-          images: data.images.join(',')
+          images: data.images.join(','),
+          cover: coverFile.value?._url || data.cover || ''
         }
       });
 
@@ -745,6 +851,10 @@
         }
       }
     });
+
+    if (coverFile.value?._url && coverFile.value._url.startsWith('blob:')) {
+      URL.revokeObjectURL(coverFile.value._url);
+    }
   });
 </script>
 

@@ -11,11 +11,24 @@
       <div class="hidden md:flex items-center space-x-8">
         <NuxtLinkLocale to="/">{{ $t('header.nav.home') }}</NuxtLinkLocale>
         <template v-for="item in categories" :key="item.id">
-          <NuxtLinkLocale v-if="!item.children">
-            <span>{{ item.name }}</span>
-          </NuxtLinkLocale>
+          <template v-if="!item.children">
+            <NuxtLinkLocale
+              :to="item.link || `/category/${item.id}`"
+              :target="item.link ? '_blank' : '_self'"
+            >
+              <span>{{ item.name }}</span>
+            </NuxtLinkLocale>
+          </template>
           <div class="group relative cursor-pointer flex items-center gap-1" v-else>
-            <span>{{ item.name }}</span>
+            <NuxtLinkLocale
+              v-if="item.link"
+              :to="item.link"
+              :target="item.link ? '_blank' : '_self'"
+              class="hover:text-primary dark:hover:text-primary-400 transition-colors"
+            >
+              <span>{{ item.name }}</span>
+            </NuxtLinkLocale>
+            <span v-else>{{ item.name }}</span>
             <Icon
               v-if="item.children?.length"
               name="mynaui:chevron-down"
@@ -27,9 +40,10 @@
             >
               <div class="py-1">
                 <NuxtLinkLocale
+                  :target="child.link ? '_blank' : '_self'"
                   v-for="child in item.children"
                   :key="child.id"
-                  :to="`/category/${child.id}`"
+                  :to="child.link || `/category/${child.id}`"
                   class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary transition-colors duration-200"
                 >
                   {{ child.name }}
@@ -59,8 +73,9 @@
 
         <!-- 语言切换器 -->
         <div class="relative group language-switcher">
-          <button
-            class="flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
+          <UButton
+            variant="ghost"
+            class="rounded-none flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
           >
             <span class="text-lg">{{ currentLanguageFlag }}</span>
             <span class="hidden sm:inline">{{ currentLanguageName }}</span>
@@ -68,18 +83,19 @@
               name="mynaui:chevron-down"
               class="w-4 h-4 transition-transform group-hover:rotate-180"
             />
-          </button>
+          </UButton>
 
           <!-- 语言选择菜单 -->
           <div
             class="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl border border-gray-200 dark:border-gray-700 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
           >
             <div class="py-1">
-              <button
+              <UButton
+                variant="ghost"
                 v-for="locale in availableLocales"
                 :key="locale.code"
                 @click="handleLanguageSwitch(locale.code)"
-                class="w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                class="rounded-none w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                 :class="{ 'bg-primary/10 text-primary': locale.code === currentLocale }"
               >
                 <span class="text-lg">{{ getLanguageFlag(locale.code) }}</span>
@@ -89,7 +105,7 @@
                   name="mynaui:check"
                   class="w-4 h-4 ml-auto text-primary"
                 />
-              </button>
+              </UButton>
             </div>
           </div>
         </div>
@@ -113,12 +129,14 @@
                   <span>{{ $t('header.nav.profile') }}</span>
                 </NuxtLinkLocale>
 
-                <button
+                <UButton
+                  color="error"
+                  variant="ghost"
                   @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
                 >
                   <span>{{ $t('user.logout') }}</span>
-                </button>
+                </UButton>
               </div>
             </div>
           </div>
@@ -169,22 +187,31 @@
             <template v-for="item in categories" :key="item.id">
               <div v-if="!item.children">
                 <NuxtLinkLocale
-                  :to="`/category/${item.id}`"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                  :to="item.link || `/category/${item.id}`"
+                  class="rounded-none block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                   @click="closeMobileMenu"
                 >
                   {{ item.name }}
                 </NuxtLinkLocale>
               </div>
               <div v-else class="space-y-2">
-                <div class="px-4 py-2 text-gray-700 dark:text-gray-300 font-medium">
+                <div v-if="item.link" class="px-4 py-2">
+                  <NuxtLinkLocale
+                    :to="item.link"
+                    class="block text-gray-700 dark:text-gray-300 font-medium hover:text-primary dark:hover:text-primary-400 transition-colors"
+                    @click="closeMobileMenu"
+                  >
+                    {{ item.name }}
+                  </NuxtLinkLocale>
+                </div>
+                <div v-else class="px-4 py-2 text-gray-700 dark:text-gray-300 font-medium">
                   {{ item.name }}
                 </div>
                 <div class="pl-4 space-y-1">
                   <NuxtLinkLocale
                     v-for="child in item.children"
                     :key="child.id"
-                    :to="`/category/${child.id}`"
+                    :to="child.link || `/category/${child.id}`"
                     class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                     @click="closeMobileMenu"
                   >
@@ -201,7 +228,8 @@
                   {{ $t('header.nav.language') || '语言' }}
                 </div>
                 <div class="flex space-x-2">
-                  <button
+                  <UButton
+                    variant="ghost"
                     v-for="locale in availableLocales"
                     :key="locale.code"
                     @click="handleLanguageSwitch(locale.code)"
@@ -213,7 +241,7 @@
                     "
                   >
                     {{ locale.flag }}
-                  </button>
+                  </UButton>
                 </div>
               </div>
 
@@ -384,6 +412,7 @@
     closeMobileMenu();
     // clearAuth 方法已经处理了页面跳转，这里不需要额外的跳转
   };
+
   // 组件卸载时清理事件监听
   onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
