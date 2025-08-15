@@ -45,20 +45,31 @@
             </div>
           </UFormField>
 
-          <UFormField name="images" :label="$t('form.image.name')" v-show="state.type === 'image'">
-            <UFileUpload
-              v-model:modelValue="displayFiles"
-              draggable
-              dropzone
-              :placeholder="$t('form.image.placeholder')"
-              accept="image/*"
-              @update:modelValue="onImageUpload"
-              :loading="uploading"
-              multiple
-              :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
-            >
-            </UFileUpload>
-          </UFormField>
+          <template v-if="state.type === 'image'">
+            <UFormField name="content">
+              <UTextarea
+                v-model="state.content"
+                :placeholder="$t('form.content.placeholder')"
+                variant="soft"
+                class="w-full"
+                size="xl"
+              />
+            </UFormField>
+            <UFormField name="images" :label="$t('form.image.name')">
+              <UFileUpload
+                v-model:modelValue="displayFiles"
+                draggable
+                dropzone
+                :placeholder="$t('form.image.placeholder')"
+                accept="image/*"
+                @update:modelValue="onImageUpload"
+                :loading="uploading"
+                multiple
+                :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
+              >
+              </UFileUpload>
+            </UFormField>
+          </template>
 
           <div class="flex items-center space-x-2">
             <UFormField name="parentCategory" class="flex-1">
@@ -134,6 +145,14 @@
                 </UFormField>
 
                 <UFormField
+                  name="requireMembership"
+                  :label="$t('form.requireMembership')"
+                  class="flex items-center justify-between"
+                >
+                  <USwitch v-model="state.requireMembership" />
+                </UFormField>
+
+                <UFormField
                   name="requirePayment"
                   :label="$t('form.requirePayment')"
                   class="flex items-center justify-between"
@@ -151,7 +170,7 @@
                     v-model="state.viewPrice"
                     type="number"
                     variant="soft"
-                    :min="0"
+                    :min="1"
                     :placeholder="$t('form.viewPrice.placeholder')"
                   />
                 </UFormField>
@@ -201,7 +220,7 @@
   });
 
   const schema = z.object({
-    title: z.string().min(8, t('form.title.placeholder')),
+    title: z.string().min(4, t('form.title.placeholder')),
     content: z.string().optional(),
     parentCategory: z.number().optional(),
     categoryId: z.number().min(1, t('form.category.placeholder')),
@@ -213,6 +232,7 @@
       .default([]),
     requireLogin: z.boolean().default(false),
     requireFollow: z.boolean().default(false),
+    requireMembership: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
     viewPrice: z.number().min(0).default(0)
   });
@@ -226,7 +246,12 @@
     categoryId: undefined,
     images: '',
     type: 'mixed',
-    tagIds: []
+    tagIds: [],
+    requireLogin: false,
+    requireFollow: false,
+    requireMembership: false,
+    requirePayment: false,
+    viewPrice: 0
   });
 
   const loading = ref(false);
@@ -509,6 +534,7 @@
           tagIds: data.tags?.map(tag => tag.id) ?? [],
           requireLogin: data.requireLogin ?? false,
           requireFollow: data.requireFollow ?? false,
+          requireMembership: data.requireMembership ?? false,
           requirePayment: data.requirePayment ?? false,
           viewPrice: Number(data.viewPrice) ?? 0
         });
@@ -634,7 +660,7 @@
   const tagSearchQuery = ref('');
 
   // 搜索标签函数
-  const searchTags = async (query: string = '') => {
+  const searchTags = debounce(async (query: string = '') => {
     try {
       const { data: tagsData } = await tagControllerFindAll({
         composable: '$fetch',
@@ -644,19 +670,35 @@
         }
       });
 
-      if (tagsData?.data) {
-        tagsOptions.value = tagsData.data.map((item: any) => ({
-          id: item.id,
-          label: item.name,
-          value: item.id,
-          ...(item.avatar && { avatar: { src: item.avatar } })
-        }));
-      }
+      // 获取现有的临时标签
+      const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
+
+      // 获取现有的真实标签
+      const existingRealTags = tagsData?.data
+        ? tagsData.data.map((item: any) => ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar && { avatar: { src: item.avatar } })
+          }))
+        : [];
+
+      // 合并：临时标签 + 搜索结果中的真实标签（去重）
+      const allTags = [...existingTempTags];
+
+      // 添加搜索结果，避免重复
+      existingRealTags.forEach((newTag: TagMenuItem) => {
+        const exists = allTags.some(t => t.id === newTag.id || t.label === newTag.label);
+        if (!exists) {
+          allTags.push(newTag);
+        }
+      });
+
+      tagsOptions.value = allTags;
     } catch (error) {
       console.error('搜索标签失败:', error);
     }
-  };
-
+  }, 500);
   await searchTags();
 
   // 监听搜索输入

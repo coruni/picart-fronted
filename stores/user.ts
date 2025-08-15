@@ -60,9 +60,13 @@ export const useUserStore = defineStore('user', {
       this.userInfo = null;
       this.isAuthenticated = false;
       this.rememberedUsername = null;
-
-      // 清除认证相关的cookie
+      this.refreshToken = null;
       if (import.meta.client) {
+        const authToken = useCookie('auth-token');
+        const refreshToken = useCookie('refresh-token');
+        authToken.value = null;
+        refreshToken.value = null;
+
         // 清除所有认证相关的cookie
         document.cookie = 'auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         // document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';

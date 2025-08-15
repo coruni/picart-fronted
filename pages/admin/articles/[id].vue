@@ -25,29 +25,49 @@
       </div>
 
       <UFormField name="content" v-show="state.type === 'mixed'">
-        <UTextarea
-          v-model="state.content"
-          size="xl"
-          :rows="16"
-          :placeholder="$t('form.content.placeholder')"
-          variant="soft"
-          class="w-full"
-        />
+        <div class="w-full">
+          <ClientOnly>
+            <Editor
+              tinymce-script-src="/tinymce/tinymce.min.js"
+              v-model="state.content"
+              :init="editorConfig"
+              :placeholder="$t('form.content.placeholder')"
+              class="min-h-[400px]"
+            />
+            <template #fallback>
+              <div class="min-h-[400px] border border-gray-300 rounded-lg p-4 bg-gray-50">
+                <div class="text-gray-500 text-center">编辑器加载中...</div>
+              </div>
+            </template>
+          </ClientOnly>
+        </div>
       </UFormField>
-      <UFormField name="images" :label="$t('form.image.name')">
-        <UFileUpload
-          v-model:modelValue="displayFiles"
-          draggable
-          dropzone
-          :placeholder="$t('form.image.placeholder')"
-          accept="image/*"
-          @update:modelValue="onImageUpload"
-          :loading="uploading"
-          multiple
-          :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
-        >
-        </UFileUpload>
-      </UFormField>
+
+      <template v-if="state.type === 'image'">
+        <UFormField name="content">
+          <UTextarea
+            v-model="state.content"
+            :placeholder="$t('form.content.placeholder')"
+            variant="soft"
+            class="w-full"
+            size="xl"
+          />
+        </UFormField>
+        <UFormField name="images" :label="$t('form.image.name')">
+          <UFileUpload
+            v-model:modelValue="displayFiles"
+            draggable
+            dropzone
+            :placeholder="$t('form.image.placeholder')"
+            accept="image/*"
+            @update:modelValue="onImageUpload"
+            :loading="uploading"
+            multiple
+            :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
+          >
+          </UFileUpload>
+        </UFormField>
+      </template>
 
       <div class="flex items-center space-x-2">
         <UFormField name="parentCategory" class="flex-1">
@@ -92,18 +112,28 @@
       </UFormField>
 
       <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
-        <USelectMenu
-          v-model="state.tagIds"
-          :items="tagsOptions"
-          size="lg"
-          class="w-full"
-          value-key="id"
-          variant="soft"
-          multiple
-          create-item
-          :placeholder="$t('form.tag.placeholder')"
-          @create="onCreate"
-        />
+        <div class="space-y-2">
+          <USelectMenu
+            v-model="state.tagIds"
+            :items="tagsOptions"
+            size="lg"
+            class="w-full"
+            value-key="id"
+            variant="soft"
+            multiple
+            create-item
+            searchable
+            :search-placeholder="$t('form.tag.searchPlaceholder')"
+            :placeholder="$t('form.tag.placeholder')"
+            @create="onCreate"
+            @update:searchTerm="
+              (query: string) => {
+                tagSearchQuery = query;
+                searchTags(query);
+              }
+            "
+          />
+        </div>
       </UFormField>
 
       <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
@@ -126,6 +156,14 @@
             </UFormField>
 
             <UFormField
+              name="requireMembership"
+              :label="$t('form.requireMembership')"
+              class="flex items-center justify-between"
+            >
+              <USwitch v-model="state.requireMembership" />
+            </UFormField>
+
+            <UFormField
               name="requirePayment"
               :label="$t('form.requirePayment')"
               class="flex items-center justify-between"
@@ -143,7 +181,7 @@
                 v-model="state.viewPrice"
                 type="number"
                 variant="soft"
-                :min="0"
+                :min="1"
                 :placeholder="$t('form.viewPrice.placeholder')"
               />
             </UFormField>
@@ -175,6 +213,8 @@
   } from '~~/api';
 
   import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+  import Editor from '@tinymce/tinymce-vue';
+  import { debounce } from 'lodash-es';
   const router = useRouter();
   const localePath = useLocalePath();
   const toast = useToast();
@@ -208,6 +248,7 @@
       .default([]),
     requireLogin: z.boolean().default(false),
     requireFollow: z.boolean().default(false),
+    requireMembership: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
     viewPrice: z.number().min(0).default(0),
     status: z.enum(['PUBLISHED', 'DRAFT']).default('PUBLISHED')
@@ -223,6 +264,11 @@
     images: '',
     type: 'mixed',
     tagIds: [],
+    requireLogin: false,
+    requireFollow: false,
+    requireMembership: false,
+    requirePayment: false,
+    viewPrice: 0,
     status: 'PUBLISHED'
   });
 
@@ -256,6 +302,100 @@
       value: 'DRAFT'
     }
   ]);
+
+  const { locale } = useI18n();
+  // TinyMCE 编辑器配置
+  const editorConfig = {
+    // 基础路径配置 - 指向 public/tinymce 目录
+    base_url: '/tinymce',
+    suffix: '.min',
+
+    // 插件配置
+    plugins: [
+      'advlist',
+      'autolink',
+      'lists',
+      'link',
+      'image',
+      'charmap',
+      'preview',
+      'anchor',
+      'searchreplace',
+      'visualblocks',
+      'code',
+      'fullscreen',
+      'insertdatetime',
+      'media',
+      'table',
+      'help',
+      'wordcount'
+    ],
+
+    // 工具栏配置
+    toolbar:
+      'undo redo | formatselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat | help',
+
+    // 内容样式
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+
+    // 基础配置
+    height: 400,
+    menubar: false,
+    branding: false,
+    promotion: false,
+
+    // 中文界面
+    language: locale.value,
+
+    // 图片上传配置（使用服务器上传）
+    images_upload_handler: async (blobInfo: any, progress: any) => {
+      try {
+        const formData = new FormData();
+        formData.append('files', blobInfo.blob(), blobInfo.filename());
+
+        const res = await uploadControllerUploadFile({
+          composable: '$fetch',
+          body: {},
+          bodySerializer: () => formData
+        });
+
+        if (res.data && res.data[0]) {
+          return res.data[0].url;
+        } else {
+          throw new Error('上传失败');
+        }
+      } catch (error) {
+        console.error('图片上传失败:', error);
+
+        throw error;
+      }
+    },
+
+    // 启用在线功能
+    automatic_uploads: true,
+    file_picker_types: 'image',
+
+    // 编辑器设置
+    paste_data_images: true, // 允许粘贴图片
+    paste_as_text: false,
+
+    // 响应式配置
+    width: '100%',
+    min_height: 300,
+    max_height: 600,
+
+    // 移除不需要的功能
+    elementpath: false,
+    resize: true,
+    statusbar: false,
+
+    // 禁用在线验证
+    verify_html: false,
+    cleanup: false,
+
+    // 设置编辑器为可编辑
+    readonly: false
+  };
 
   // 将URL转换为File对象
   const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
@@ -313,6 +453,7 @@
           tagIds: data.tags?.map(tag => tag.id) ?? [],
           requireLogin: data.requireLogin ?? false,
           requireFollow: data.requireFollow ?? false,
+          requireMembership: data.requireMembership ?? false,
           requirePayment: data.requirePayment ?? false,
           viewPrice: Number(data.viewPrice) ?? 0,
           status: data.status
@@ -441,33 +582,24 @@
   );
 
   // 提交表单
-  const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-    console.log('onSubmit', event);
-    loading.value = true;
-
-    if (state.type === 'mixed' && state.content!.length < 10) {
-      toast.add({
-        title: t('form.content.placeholder'),
-        color: 'error'
-      });
-      return;
-    }
+  const onSubmit = debounce(async () => {
     try {
+      loading.value = true;
       const { parentCategory, ...data } = await schema.parseAsync(state);
 
-      // 分离现有标签 ID 和新标签名称
-      const existingTagIds: number[] = [];
+      // 分离现有标签ID和新标签名称
+      const existingTagIds: string[] = [];
       const newTagNames: string[] = [];
 
       state.tagIds?.forEach(id => {
         const tag = tagsOptions.value.find((t: TagMenuItem) => t.id === id);
         if (tag?.flag) {
+          // 临时标签，使用名称
           newTagNames.push(tag.label as string);
         } else {
-          const numericId = typeof id === 'string' ? parseInt(id) : id;
-          if (!isNaN(numericId)) {
-            existingTagIds.push(numericId);
-          }
+          // 现有标签，使用ID
+          const stringId = typeof id === 'number' ? id.toString() : id;
+          existingTagIds.push(stringId);
         }
       });
 
@@ -477,9 +609,9 @@
         path: { id: articleId },
         body: {
           ...data,
-          tagIds: existingTagIds.length > 0 ? existingTagIds.map(id => id.toString()) : undefined,
+          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
           tagNames: newTagNames.length > 0 ? newTagNames : undefined,
-          images: data.images.join(',')
+          images: data.images
         }
       });
 
@@ -489,10 +621,15 @@
       });
       router.push(localePath('/admin/articles'));
     } catch (error) {
+      console.error('Failed to update article:', error);
+      toast.add({
+        title: t('common.message.updateFailed'),
+        color: 'error'
+      });
     } finally {
       loading.value = false;
     }
-  };
+  }, 500);
 
   // 获取分类数据
   const { data: categories } = await categoryControllerFindAll({
@@ -555,6 +692,48 @@
   }
 
   const tagsOptions = ref<TagMenuItem[]>([]);
+  const tagSearchQuery = ref('');
+
+  // 搜索标签函数
+  const searchTags = debounce(async (query: string = '') => {
+    try {
+      const { data: tagsData } = await tagControllerFindAll({
+        composable: '$fetch',
+        query: {
+          limit: 50,
+          ...(query?.trim() && { name: query.trim() })
+        }
+      });
+
+      // 获取现有的临时标签
+      const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
+
+      // 获取现有的真实标签
+      const existingRealTags = tagsData?.data
+        ? tagsData.data.map((item: any) => ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar && { avatar: { src: item.avatar } })
+          }))
+        : [];
+
+      // 合并：临时标签 + 搜索结果中的真实标签（去重）
+      const allTags = [...existingTempTags];
+
+      // 添加搜索结果，避免重复
+      existingRealTags.forEach((newTag: TagMenuItem) => {
+        const exists = allTags.some(t => t.id === newTag.id || t.label === newTag.label);
+        if (!exists) {
+          allTags.push(newTag);
+        }
+      });
+
+      tagsOptions.value = allTags;
+    } catch (error) {
+      console.error('搜索标签失败:', error);
+    }
+  }, 500);
 
   // 初始化标签选项
   watch(
@@ -574,6 +753,9 @@
     },
     { immediate: true }
   );
+
+  // 监听搜索输入
+  watch(tagSearchQuery, debounce(searchTags, 500));
 
   // 监听父分类变化，重置子分类
   watch(

@@ -113,6 +113,30 @@
               <Icon name="mynaui:eye" class="mr-1" />
               <span>{{ article?.data.views }} {{ $t('article.views') }}</span>
             </div>
+
+            <!-- 作者管理按钮 -->
+            <div v-if="isAuthor" class="flex items-center space-x-2">
+              <UButton
+                @click="handleEdit"
+                variant="link"
+                size="sm"
+                class="flex items-center cursor-pointer"
+              >
+                <Icon name="mynaui:edit" class="w-4 h-4" />
+                <span class="hidden sm:inline">{{ $t('article.edit') }}</span>
+              </UButton>
+
+              <UButton
+                @click="handleDelete"
+                variant="link"
+                color="error"
+                size="sm"
+                class="flex items-center cursor-pointer"
+              >
+                <Icon name="mynaui:trash" class="w-4 h-4" />
+                <span class="hidden sm:inline">{{ $t('article.delete') }}</span>
+              </UButton>
+            </div>
           </div>
         </div>
         <!-- 图片展示区 -->
@@ -122,7 +146,7 @@
               v-for="(img, index) in article?.data.images"
               :key="index"
               :class="[
-                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity',
+                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-gray-100 dark:bg-gray-900',
                 index === 0 && article?.data.images.length > 1
                   ? 'sm:col-span-2 aspect-[16/9]'
                   : 'aspect-square'
@@ -156,34 +180,62 @@
 
         <!-- 移动端点赞按钮 -->
         <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
-          <button
-            @click="handleLike"
-            :disabled="isLikeLoading"
-            class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
-            :class="{ 'pointer-events-none': isLikeLoading }"
-          >
-            <div class="relative flex items-center justify-center">
-              <Icon
-                :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
-                class="text-xl transition-all duration-300 transform group-hover:scale-110"
-                :class="[
-                  article.data.isLiked ? 'text-red-500' : 'text-gray-400 group-hover:text-red-500',
-                  isLikeLoading ? 'animate-pulse' : ''
-                ]"
-              />
-              <!-- 点赞动画效果 -->
-              <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
-                <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
-              </div>
-            </div>
-            <span
-              class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+          <div class="flex items-center space-x-4">
+            <button
+              @click="handleLike"
+              :disabled="isLikeLoading"
+              class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
+              :class="{ 'pointer-events-none': isLikeLoading }"
             >
-              {{ article.data.isLiked ? $t('article.liked') : $t('article.like') }} ({{
-                article?.data.likes
-              }})
-            </span>
-          </button>
+              <div class="relative flex items-center justify-center">
+                <Icon
+                  :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                  class="text-xl transition-all duration-300 transform group-hover:scale-110"
+                  :class="[
+                    article.data.isLiked
+                      ? 'text-red-500'
+                      : 'text-gray-400 group-hover:text-red-500',
+                    isLikeLoading ? 'animate-pulse' : ''
+                  ]"
+                />
+                <!-- 点赞动画效果 -->
+                <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
+                  <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
+                </div>
+              </div>
+              <span
+                class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+              >
+                {{ article.data.isLiked ? $t('article.liked') : $t('article.like') }} ({{
+                  article?.data.likes
+                }})
+              </span>
+            </button>
+
+            <!-- 移动端管理按钮 -->
+            <div v-if="isAuthor" class="flex items-center space-x-2">
+              <UButton
+                @click="handleEdit"
+                variant="soft"
+                size="sm"
+                class="flex items-center space-x-1"
+              >
+                <Icon name="mynaui:edit" class="w-4 h-4" />
+                <span class="text-xs">{{ $t('article.edit') }}</span>
+              </UButton>
+
+              <UButton
+                @click="handleDelete"
+                variant="soft"
+                color="error"
+                size="sm"
+                class="flex items-center space-x-1"
+              >
+                <Icon name="mynaui:trash" class="w-4 h-4" />
+                <span class="text-xs">{{ $t('article.delete') }}</span>
+              </UButton>
+            </div>
+          </div>
         </div>
 
         <!-- 评论区 -->
@@ -359,7 +411,8 @@
     articleControllerLike,
     commentControllerCreate,
     userControllerFollow,
-    commentControllerFindAll
+    commentControllerFindAll,
+    articleControllerRemove
   } from '~/api';
   import type { ArticleControllerFindOneResponse } from '~/api';
   import type { CommentControllerFindAllResponse } from '~/api';
@@ -370,7 +423,13 @@
 
   // 用户状态管理
   const userStore = useUserStore();
-  const isLoggedIn = computed(() => userStore.isAuthenticated);
+  const isLoggedIn = computed(() => userStore.isLoggedIn);
+  const localePath = useLocalePath();
+  // 判断当前用户是否是文章作者
+  const isAuthor = computed(() => {
+    if (!isLoggedIn.value || !article.value?.data) return false;
+    return userStore.userInfo?.id === article.value.data.author.id;
+  });
 
   // 内容访问控制
   const shouldShowContent = computed(() => {
@@ -675,5 +734,38 @@
     } finally {
       isLoadingComments.value = false;
     }
+  };
+
+  // 处理编辑文章
+  const handleEdit = () => {
+    if (!isAuthor.value) return;
+
+    // 跳转到编辑页面
+    router.push(`/user/articles/${route.params.id}`);
+  };
+
+  // 处理删除文章
+  const handleDelete = async () => {
+    if (!isAuthor.value) return;
+
+    // 显示确认对话框
+    const confirmed = confirm(t('article.deleteConfirm.message'));
+
+    if (!confirmed) return;
+
+    try {
+      await articleControllerRemove({
+        composable: '$fetch',
+        path: { id: String(route.params.id) }
+      });
+
+      toast.add({
+        title: t('article.deleteSuccess') || '删除成功',
+        color: 'primary'
+      });
+
+      // 跳转到用户文章列表页面
+      router.push(localePath('/user/articles'));
+    } catch (error) {}
   };
 </script>

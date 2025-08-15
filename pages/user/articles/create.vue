@@ -26,7 +26,7 @@
             </UFormField>
           </div>
 
-          <UFormField name="content" v-show="state.type === 'mixed'">
+          <UFormField name="content" v-if="state.type === 'mixed'">
             <div class="w-full">
               <ClientOnly>
                 <Editor
@@ -37,25 +37,40 @@
                   class="min-h-[400px]"
                 />
                 <template #fallback>
-                  <div class="min-h-[400px] border border-gray-300 rounded-lg p-4 bg-gray-50">
-                    <div class="text-gray-500 text-center">编辑器加载中...</div>
+                  <div class="min-h-[400px] rounded-lg p-4 bg-gray-100 dark:bg-gray-900">
+                    <div class="text-gray-500 dark:text-white text-center">
+                      {{ $t('common.loading.loading') }}
+                    </div>
                   </div>
                 </template>
               </ClientOnly>
             </div>
           </UFormField>
-
-          <UFormField name="images" :label="$t('form.image.name')" v-show="state.type === 'image'">
-            <UFileUpload
-              v-model="state.images"
-              dropzone
-              size="sm"
-              accept="images/*"
-              :placeholder="$t('form.image.placeholder')"
-              multiple
-              :ui="{ files: 'md:grid-cols-6' }"
-            />
-          </UFormField>
+          <template v-if="state.type === 'image'">
+            <UFormField name="content">
+              <UTextarea
+                v-model="state.content"
+                :placeholder="$t('form.content.placeholder')"
+                variant="soft"
+                class="w-full"
+                size="xl"
+              />
+            </UFormField>
+            <UFormField name="images" :label="$t('form.image.name')">
+              <UFileUpload
+                v-model:modelValue="displayFiles"
+                draggable
+                dropzone
+                :placeholder="$t('form.image.placeholder')"
+                accept="image/*"
+                @update:modelValue="onImageUpload"
+                :loading="uploading"
+                multiple
+                :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
+              >
+              </UFileUpload>
+            </UFormField>
+          </template>
 
           <div class="flex items-center space-x-2">
             <UFormField name="parentCategory" class="flex-1">
@@ -129,7 +144,13 @@
                 >
                   <USwitch v-model="state.requireFollow" />
                 </UFormField>
-
+                <UFormField
+                  name="requireMembership"
+                  :label="$t('form.requireMembership')"
+                  class="flex items-center justify-between"
+                >
+                  <USwitch v-model="state.requireMembership" />
+                </UFormField>
                 <UFormField
                   name="requirePayment"
                   :label="$t('form.requirePayment')"
@@ -184,6 +205,7 @@
   import Editor from '@tinymce/tinymce-vue';
 
   const router = useRouter();
+  const localePath = useLocalePath();
   const { t } = useI18n();
   const toast = useToast();
 
@@ -193,8 +215,8 @@
   });
 
   const schema = z.object({
-    title: z.string().min(8, t('form.title.placeholder')),
-    content: z.string().min(10, t('form.content.placeholder')),
+    title: z.string().min(4, t('form.title.placeholder')),
+    content: z.string().optional(),
     parentCategory: z.number().min(1, t('form.parentCategory.placeholder')),
     categoryId: z.number().min(1, t('form.category.placeholder')),
     images: z.any().optional(),
@@ -206,6 +228,7 @@
     requireLogin: z.boolean().default(false),
     requireFollow: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
+    requireMembership: z.boolean().default(false),
     viewPrice: z.number().min(0).default(0)
   });
 
@@ -218,10 +241,27 @@
     categoryId: undefined,
     images: '',
     type: 'mixed',
-    tagIds: []
+    tagIds: [],
+    requireLogin: false,
+    requireFollow: false,
+    requirePayment: false,
+    requireMembership: false,
+    viewPrice: 0
   });
 
   const loading = ref(false);
+
+  // 扩展File接口，添加自定义属性
+  interface ExtendedFile extends File {
+    _url?: string;
+    _uploaded?: boolean;
+    _uploading?: boolean;
+    _id?: string;
+  }
+
+  // 文件列表，用于FileUpload组件展示
+  const displayFiles = ref<ExtendedFile[]>([]);
+  const uploading = ref(false);
 
   const typeOptions = ref<SelectMenuItem[]>([
     {
@@ -327,6 +367,98 @@
     readonly: false
   };
 
+  // 图片上传处理
+  const onImageUpload = async (files: any) => {
+    if (!files || files.length === 0) return;
+
+    // 找出新添加的文件（没有_uploaded标记的）
+    const newFiles = files.filter((file: unknown): file is ExtendedFile => {
+      if (file instanceof File) {
+        const extendedFile = file as ExtendedFile;
+        return !extendedFile._uploaded && !extendedFile._uploading;
+      }
+      return false;
+    });
+
+    if (newFiles.length === 0) return;
+
+    // 标记新文件为正在上传
+    newFiles.forEach((file: ExtendedFile) => {
+      file._uploading = true;
+    });
+
+    uploading.value = true;
+
+    try {
+      // 一次上传多个文件
+      const formData = new FormData();
+      newFiles.forEach((file: ExtendedFile) => {
+        formData.append('files', file);
+      });
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      // 更新所有文件状态
+      newFiles.forEach((file: ExtendedFile, index: number) => {
+        if (res.data && res.data[index]) {
+          file._url = res.data[index].url!;
+          file._uploaded = true;
+          file._uploading = false;
+          file._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        } else {
+          // 上传失败的文件标记
+          file._uploading = false;
+        }
+      });
+
+      // 更新state.images
+      updateStateImages();
+
+      toast.add({
+        title: t('common.message.uploadSuccess'),
+        color: 'success'
+      });
+    } catch (error: any) {
+      console.error('Failed to upload image:', error);
+
+      // 移除上传失败的文件
+      newFiles.forEach((failedFile: ExtendedFile) => {
+        const index = displayFiles.value.findIndex(f => f === failedFile);
+        if (index > -1) {
+          displayFiles.value.splice(index, 1);
+        }
+      });
+
+      toast.add({
+        title: error?.message || t('common.message.uploadFailed'),
+        color: 'error'
+      });
+    } finally {
+      uploading.value = false;
+    }
+  };
+
+  // 更新state.images
+  const updateStateImages = () => {
+    const urls = displayFiles.value
+      .filter(file => file._url) // 只包含已上传或已存在的图片
+      .map(file => file._url!);
+    state.images = urls.join(',');
+  };
+
+  // 监听displayFiles变化
+  watch(
+    () => displayFiles.value,
+    () => {
+      updateStateImages();
+    },
+    { deep: true }
+  );
+
   const onSubmit = debounce(async () => {
     try {
       loading.value = true;
@@ -352,23 +484,20 @@
         composable: '$fetch',
         body: {
           ...data,
-          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
-          tagNames: newTagNames.length > 0 ? newTagNames : undefined
+          tagIds: existingTagIds.length > 0 ? existingTagIds : [],
+          tagNames: newTagNames.length > 0 ? newTagNames : [],
+          content: data.content ?? '',
+          images: data.images
         }
       });
 
       toast.add({
         title: t('common.message.createSuccess'),
-        color: 'success'
+        color: 'primary'
       });
 
-      router.push('/user/articles');
+      router.push(localePath('/user'));
     } catch (error) {
-      console.error('Failed to create article:', error);
-      toast.add({
-        title: t('common.message.createFailed'),
-        color: 'error'
-      });
     } finally {
       loading.value = false;
     }
@@ -434,7 +563,7 @@
   const tagSearchQuery = ref('');
 
   // 搜索标签函数
-  const searchTags = async (query: string = '') => {
+  const searchTags = debounce(async (query: string = '') => {
     try {
       const { data: tagsData } = await tagControllerFindAll({
         composable: '$fetch',
@@ -444,19 +573,35 @@
         }
       });
 
-      if (tagsData?.data) {
-        tagsOptions.value = tagsData.data.map((item: any) => ({
-          id: item.id,
-          label: item.name,
-          value: item.id,
-          ...(item.avatar && { avatar: { src: item.avatar } })
-        }));
-      }
+      // 获取现有的临时标签
+      const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
+
+      // 获取现有的真实标签
+      const existingRealTags = tagsData?.data
+        ? tagsData.data.map((item: any) => ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+            ...(item.avatar && { avatar: { src: item.avatar } })
+          }))
+        : [];
+
+      // 合并：临时标签 + 搜索结果中的真实标签（去重）
+      const allTags = [...existingTempTags];
+
+      // 添加搜索结果，避免重复
+      existingRealTags.forEach((newTag: TagMenuItem) => {
+        const exists = allTags.some(t => t.id === newTag.id || t.label === newTag.label);
+        if (!exists) {
+          allTags.push(newTag);
+        }
+      });
+
+      tagsOptions.value = allTags;
     } catch (error) {
       console.error('搜索标签失败:', error);
     }
-  };
-
+  }, 500);
   await searchTags();
 
   // 监听搜索输入
@@ -490,6 +635,18 @@
 
     tagsOptions.value.push(tag);
     if (!state.tagIds) state.tagIds = [];
-    state.tagIds.push(tempId);
+    state.tagIds.push(tempId); // 这里保持原样，因为onSubmit会正确处理
   };
+
+  // 组件卸载时清理URL对象
+  onUnmounted(() => {
+    displayFiles.value.forEach(file => {
+      if (file.size > 0 && !file._url) {
+        const url = URL.createObjectURL(file);
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      }
+    });
+  });
 </script>

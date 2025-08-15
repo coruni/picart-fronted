@@ -22,25 +22,29 @@
       />
 
       <!-- 移动端关闭按钮 -->
-      <button
+      <UButton
+        variant="link"
+        color="neutral"
         v-if="$attrs.class?.includes('fixed')"
         @click="$emit('close')"
-        class="p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 lg:hidden"
+        class="cursor-pointer p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 lg:hidden"
       >
         <Icon name="mynaui:panel-left-close" class="w-5 h-5" />
-      </button>
+      </UButton>
 
       <!-- 收起/展开按钮 - 移动端隐藏 -->
-      <button
+      <UButton
+        variant="link"
+        color="neutral"
         v-if="!$attrs.class?.includes('fixed')"
         @click="handleToggle"
-        class="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm hidden lg:flex"
+        class="cursor-pointer absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm hidden lg:flex"
       >
         <Icon
           :name="sidebarCollapsed ? 'mynaui:chevron-right' : 'mynaui:chevron-left'"
           class="w-3 h-3 text-gray-600"
         />
-      </button>
+      </UButton>
     </div>
 
     <!-- 导航菜单 -->

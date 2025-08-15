@@ -37,12 +37,14 @@
         class="bg-white shadow-sm border-b border-gray-200 dark:border-gray-600 h-16 dark:bg-gray-800 flex items-center justify-between px-6"
       >
         <div class="flex items-center space-x-3">
-          <button
+          <UButton
+            variant="link"
+            color="neutral"
             @click="toggleMobileSidebar = !toggleMobileSidebar"
-            class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
+            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
           >
             <Icon name="mynaui:menu" class="w-5 h-5" />
-          </button>
+          </UButton>
           <h2 class="text-lg font-semibold text-gray-800 dark:text-white/80">
             {{ $t(pageTitle) }}
           </h2>
@@ -50,24 +52,28 @@
 
         <div class="flex items-center space-x-2 sm:space-x-4">
           <!-- 通知 -->
-          <button
-            class="p-2 text-gray-500 hover:text-gray-700 relative rounded-md hover:bg-gray-50 transition-all duration-200"
+          <UButton
+            variant="link"
+            color="neutral"
+            class="cursor-pointer p-2 text-gray-500 hover:text-gray-700 relative rounded-md hover:bg-gray-50 transition-all duration-200"
           >
             <Icon name="mynaui:bell" class="w-4 h-4 sm:w-5 sm:h-5" />
             <span
               class="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"
             ></span>
-          </button>
+          </UButton>
 
           <!-- 用户菜单 -->
           <div class="relative">
-            <button
+            <UButton
+              variant="link"
+              color="neutral"
               @click="toggleUserMenu"
-              class="flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-50 transition-all duration-200"
+              class="cursor-pointer flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-50 transition-all duration-200"
             >
               <Icon name="mynaui:user" class="w-4 h-4 sm:w-5 sm:h-5" />
               <Icon name="mynaui:chevron-down" class="w-3 h-3 sm:w-4 sm:h-4 ml-1 hidden sm:block" />
-            </button>
+            </UButton>
 
             <!-- 下拉菜单 -->
             <div
@@ -148,19 +154,19 @@
       text: 'admin.menu.orders'
     },
     {
-      path: '/admin/analytics',
-      icon: 'mynaui:chart-line',
-      text: 'admin.menu.analytics'
+      path: '/admin/banners',
+      icon: 'mynaui:image',
+      text: 'admin.menu.banners'
     },
+    // {
+    //   path: '/admin/analytics',
+    //   icon: 'mynaui:chart-line',
+    //   text: 'admin.menu.analytics'
+    // },
     {
       path: '/admin/settings',
       icon: 'mynaui:cog-four',
       text: 'admin.menu.settings'
-    },
-    {
-      path: '/admin/banners',
-      icon: 'mynaui:image',
-      text: 'admin.menu.banners'
     }
   ];
 
