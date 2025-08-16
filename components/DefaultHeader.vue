@@ -75,7 +75,7 @@
         <div class="relative group language-switcher">
           <UButton
             variant="ghost"
-            class="rounded-none flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
+            class="rounded-none hover:bg-transparent flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
           >
             <span class="text-lg">{{ currentLanguageFlag }}</span>
             <span class="hidden sm:inline">{{ currentLanguageName }}</span>
