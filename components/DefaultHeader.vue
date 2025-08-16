@@ -72,22 +72,17 @@
         </div>
 
         <!-- 语言切换器 -->
-        <div class="relative group language-switcher">
-          <UButton
-            variant="ghost"
-            class="rounded-none hover:bg-transparent flex items-center space-x-1 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors cursor-pointer"
-          >
-            <span class="text-lg">{{ currentLanguageFlag }}</span>
-            <span class="hidden sm:inline">{{ currentLanguageName }}</span>
-            <Icon
-              name="mynaui:chevron-down"
-              class="w-4 h-4 transition-transform group-hover:rotate-180"
-            />
-          </UButton>
+        <div class="group relative cursor-pointer flex items-center gap-1">
+          <span class="text-lg">{{ currentLanguageFlag }}</span>
+          <span class="hidden sm:inline">{{ currentLanguageName }}</span>
+          <Icon
+            name="mynaui:chevron-down"
+            class="w-4 h-4 transition-transform group-hover:rotate-180"
+          />
 
           <!-- 语言选择菜单 -->
           <div
-            class="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl border border-gray-200 dark:border-gray-700 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
+            class="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
           >
             <div class="py-1">
               <UButton
@@ -111,15 +106,15 @@
         </div>
 
         <template v-if="userStore.isLoggedIn">
-          <div class="w-8 h-8 rounded-full overflow-hidden cursor-pointer group">
+          <div class="group relative cursor-pointer flex items-center gap-1">
             <UAvatar
               :src="currentUserAvatar"
               :alt="userStore.userInfo?.nickname || userStore.userInfo?.username"
               fit="cover"
-              class="w-full h-full object-cover"
+              class="w-8 h-8 rounded-full object-cover"
             />
             <div
-              class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-200 dark:border-gray-700"
+              class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
             >
               <div class="py-1">
                 <NuxtLinkLocale
