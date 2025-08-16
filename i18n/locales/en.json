@@ -97,8 +97,37 @@
       "adGlobalEnabled": "Enable Global Advertisement",
       "adGlobalContent": "Global Advertisement Content",
       "adGlobalPosition": "Global Advertisement Position",
-      "adGlobalStyle": "Global Advertisement Style",
-      "adPositionTop": "Top",
+      "adGlobalStyle": "Global Advertisement Style"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderInfo": "Order Information",
+      "defaultRemark": "Order Payment",
+      "selectPaymentMethod": "Select Payment Method",
+      "balance": "Balance Payment",
+      "balanceDesc": "Current Balance",
+      "alipay": "Alipay",
+      "alipayDesc": "Alipay Secure Payment",
+      "wechat": "WeChat Pay",
+      "wechatDesc": "WeChat Secure Payment",
+      "epay": "Easy Pay",
+      "epayAlipay": "Alipay",
+      "epayWechat": "WeChat",
+      "epayQQ": "QQ Wallet",
+      "selectEpayType": "Please select Easy Pay type",
+      "insufficientBalance": "Insufficient Balance",
+      "processing": "Processing...",
+      "confirmPayment": "Confirm Payment",
+      "balancePaymentSuccess": "Balance payment successful",
+      "redirectToPayment": "Redirecting to payment page...",
+      "scanQRCode": "Please scan QR code to complete payment",
+      "failed": "Payment failed",
+      "paymentFailed": "Payment failed",
+      "paymentSuccess": "Payment successful",
+      "networkError": "Network error",
+      "unknownError": "Unknown error"
+    },
+    "adPositionTop": {
       "adPositionBottom": "Bottom",
       "adPositionSidebar": "Sidebar",
       "adPositionFixedTop": "Fixed Top",
@@ -760,5 +789,13 @@
       "profileSavedFailed": "Failed to save profile"
     }
   },
-  "Unauthorized": "Unauthorized"
+  "Unauthorized": "Unauthorized",
+  "payment": {
+    "epay": "Epay",
+    "alipay": "Alipay",
+    "balance": "Balance",
+    "epayAlipay": "Alipay",
+    "epayWechat": "Wxpay",
+    "wechat": "Wxpay"
+  }
 }

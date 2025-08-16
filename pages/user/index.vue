@@ -195,7 +195,7 @@
                 {{ $t('user.membershipLevel') }}
               </h3>
               <UButton
-                @click="isRechargeModalOpen = true"
+                @click="handleRecharge"
                 size="sm"
                 color="primary"
                 class="cursor-pointer dark:text-white"
@@ -432,94 +432,12 @@
       </template>
     </UModal>
 
-    <!-- 会员充值模态框 -->
-    <UModal v-model:open="isRechargeModalOpen" :title="$t('user.recharge.title')" size="lg">
-      <template #body>
-        <div class="space-y-4">
-          <!-- 当前状态 -->
-          <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-            <span>{{ userProfile?.data?.membershipLevelName || $t('user.basicMember') }}</span>
-            <span>¥{{ userProfile?.data?.wallet || 0 }}</span>
-          </div>
-
-          <!-- 套餐选择 -->
-          <div class="grid grid-cols-3 gap-2">
-            <div
-              v-for="pkg in rechargePackages"
-              :key="pkg.duration"
-              @click="selectRechargePackage(pkg)"
-              :class="[
-                'p-3 border rounded-md cursor-pointer text-center transition-all',
-                selectedRechargePackage?.duration === pkg.duration
-                  ? 'border-primary bg-primary/5'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
-              ]"
-            >
-              <div class="text-lg font-bold text-gray-900 dark:text-white">
-                {{ pkg.duration }}{{ $t('user.recharge.month') }}
-              </div>
-              <div class="text-xl font-bold text-primary">¥{{ pkg.price }}</div>
-            </div>
-          </div>
-
-          <!-- 支付方式 -->
-          <div v-if="selectedRechargePackage" class="space-y-2">
-            <div class="text-sm font-medium text-gray-900 dark:text-white">
-              {{ $t('user.recharge.selectPayment') }}
-            </div>
-            <div class="grid grid-cols-4 gap-2">
-              <div
-                v-for="method in paymentMethods"
-                :key="method.value"
-                @click="selectPaymentMethod(method)"
-                :class="[
-                  'p-3 border rounded-md cursor-pointer text-center transition-all',
-                  selectedPaymentMethod?.value === method.value
-                    ? 'border-primary bg-primary/5'
-                    : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
-                ]"
-              >
-                <Icon :name="method.icon" class="w-6 h-6 text-primary mx-auto mb-1" />
-                <div class="text-xs text-gray-900 dark:text-white">{{ method.label }}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 确认信息 -->
-          <div
-            v-if="selectedRechargePackage && selectedPaymentMethod"
-            class="bg-gray-50 dark:bg-gray-800 rounded-md p-3"
-          >
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-gray-600 dark:text-gray-400">
-                {{ selectedRechargePackage.duration }}{{ $t('user.recharge.month') }} +
-                {{ selectedPaymentMethod.label }}
-              </span>
-              <span class="text-lg font-bold text-primary"
-                >¥{{ selectedRechargePackage.price }}</span
-              >
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <template #footer>
-        <div class="flex space-x-3">
-          <UButton
-            @click="handleRecharge"
-            :disabled="!selectedRechargePackage || !selectedPaymentMethod || recharging"
-            :loading="recharging"
-            color="primary"
-            class="flex-1"
-          >
-            {{ recharging ? $t('user.recharge.processing') : $t('user.recharge.confirmRecharge') }}
-          </UButton>
-          <UButton @click="isRechargeModalOpen = false" variant="outline">
-            {{ $t('common.cancel') }}
-          </UButton>
-        </div>
-      </template>
-    </UModal>
+    <!-- 会员充值弹窗 -->
+    <MembershipRechargeModal
+      v-model="showPaymentModal"
+      @recharge-success="onPaymentSuccess"
+      @recharge-failed="onPaymentFailed"
+    />
   </div>
 </template>
 
@@ -527,8 +445,7 @@
   import {
     userControllerGetProfile,
     articleControllerFindArticleByAuthor,
-    userControllerUpdate,
-    orderControllerCreateMembershipOrder
+    userControllerUpdate
   } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
@@ -557,11 +474,8 @@
   const avatarUploading = ref(false);
   const avatarInput = ref<HTMLInputElement>();
 
-  // 充值模态框状态
-  const isRechargeModalOpen = ref(false);
-  const selectedRechargePackage = ref<any>(null);
-  const selectedPaymentMethod = ref<any>(null);
-  const recharging = ref(false);
+  // 充值状态
+  const showPaymentModal = ref(false);
 
   // 修改密码模态框状态
   const isChangePasswordModalOpen = ref(false);
@@ -861,58 +775,6 @@
     }
   };
   const siteConfig = inject<SiteConfig>('siteConfig');
-  // 充值套餐
-  const rechargePackages = computed(() => {
-    const basePrice = siteConfig?.membership_price || 19.9; // 默认价格19.9元
-    return [
-      {
-        duration: 1,
-        price: basePrice
-      },
-      {
-        duration: 3,
-        price: basePrice * 3
-      },
-      {
-        duration: 12,
-        price: basePrice * 12
-      }
-    ];
-  });
-
-  // 支付方式
-  const paymentMethods = computed(() => [
-    {
-      value: 'ALIPAY',
-      label: t('user.recharge.alipay'),
-      icon: 'mynaui:brand-alipay'
-    },
-    {
-      value: 'WECHAT',
-      label: t('user.recharge.wechat'),
-      icon: 'mynaui:brand-wechat'
-    },
-    {
-      value: 'EPAY',
-      label: t('user.recharge.epay'),
-      icon: 'mynaui:credit-card'
-    },
-    {
-      value: 'BALANCE',
-      label: t('user.recharge.balance'),
-      icon: 'mynaui:wallet'
-    }
-  ]);
-
-  // 选择充值套餐
-  const selectRechargePackage = (pkg: any) => {
-    selectedRechargePackage.value = pkg;
-  };
-
-  // 选择支付方式
-  const selectPaymentMethod = (method: any) => {
-    selectedPaymentMethod.value = method;
-  };
 
   // 格式化日期
   const formatDate = (dateString: string | null | undefined) => {
@@ -921,58 +783,31 @@
   };
 
   // 处理充值
-  const handleRecharge = async () => {
-    if (!selectedRechargePackage.value || !selectedPaymentMethod.value) {
-      toast.add({ title: t('user.recharge.selectPackageAndPayment'), color: 'error' });
-      return;
-    }
-
-    // 检查余额支付
-    if (selectedPaymentMethod.value.value === 'BALANCE') {
-      if (userProfile.value?.data?.wallet! < selectedRechargePackage.value.price) {
-        toast.add({ title: t('user.recharge.insufficientBalance'), color: 'error' });
-        return;
-      }
-    }
-
-    recharging.value = true;
-    try {
-      const response = await orderControllerCreateMembershipOrder({
-        composable: '$fetch',
-        body: {
-          duration: selectedRechargePackage.value.duration,
-          remark: `${t('user.recharge.membershipRecharge')} ${selectedRechargePackage.value.duration}${t('user.recharge.month')}`
-        }
-      });
-
-      const order = (response as any).data;
-
-      // 根据支付方式处理
-      if (selectedPaymentMethod.value.value === 'BALANCE') {
-        await handleBalancePayment(order);
-      } else {
-        await handleThirdPartyPayment(order);
-      }
-
-      isRechargeModalOpen.value = false;
-      toast.add({ title: t('user.recharge.successMessage'), color: 'success' });
-    } catch (error: any) {
-      console.error('充值失败:', error);
-    } finally {
-      recharging.value = false;
-    }
+  const handleRecharge = () => {
+    showPaymentModal.value = true;
   };
 
-  // 处理余额支付
-  const handleBalancePayment = async (order: any) => {
-    // TODO: 调用余额支付API
-    toast.add({ title: t('user.recharge.balancePaymentSuccess'), color: 'success' });
+  // 支付成功回调
+  const onPaymentSuccess = (orderId: number) => {
+    showPaymentModal.value = false;
+
+    toast.add({
+      title: t('user.recharge.successMessage'),
+      color: 'success'
+    });
+
+    // 刷新用户资料
+    userRefresh();
   };
 
-  // 处理第三方支付
-  const handleThirdPartyPayment = async (order: any) => {
-    // TODO: 跳转到第三方支付页面
-    toast.add({ title: t('user.recharge.redirectToPayment'), color: 'info' });
+  // 支付失败回调
+  const onPaymentFailed = (error: string) => {
+    showPaymentModal.value = false;
+
+    toast.add({
+      title: error,
+      color: 'error'
+    });
   };
 
   // 处理修改密码

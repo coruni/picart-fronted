@@ -11844,12 +11844,135 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateArticleOrderDto"
-              }
+              },
+              "examples": {}
             }
-          },
-          "required": true
+          }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "userId": {
+                          "type": "integer"
+                        },
+                        "authorId": {
+                          "type": "integer"
+                        },
+                        "articleId": {
+                          "type": "null"
+                        },
+                        "orderNo": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "amount": {
+                          "type": "integer"
+                        },
+                        "paymentMethod": {
+                          "type": "null"
+                        },
+                        "paymentOrderNo": {
+                          "type": "null"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "paidAt": {
+                          "type": "null"
+                        },
+                        "details": {
+                          "type": "object",
+                          "properties": {
+                            "membershipLevel": {
+                              "type": "integer"
+                            },
+                            "membershipName": {
+                              "type": "string"
+                            },
+                            "duration": {
+                              "type": "integer"
+                            },
+                            "basePrice": {
+                              "type": "integer"
+                            },
+                            "totalAmount": {
+                              "type": "integer"
+                            },
+                            "remark": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "membershipLevel",
+                            "membershipName",
+                            "duration",
+                            "basePrice",
+                            "totalAmount",
+                            "remark"
+                          ]
+                        },
+                        "remark": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "userId",
+                        "authorId",
+                        "articleId",
+                        "orderNo",
+                        "type",
+                        "title",
+                        "amount",
+                        "paymentMethod",
+                        "paymentOrderNo",
+                        "status",
+                        "paidAt",
+                        "details",
+                        "remark",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
           "201": {
             "description": "创建成功",
             "headers": {}
@@ -15080,6 +15203,10 @@
               "mixed"
             ],
             "default": "mixed"
+          },
+          "sort": {
+            "type": "number",
+            "description": "排序"
           }
         },
         "required": [
@@ -15776,6 +15903,10 @@
           "details": {
             "type": "string",
             "description": "支付详情"
+          },
+          "type": {
+            "type": "string",
+            "description": "payment方式为EPAY时这里填alipay，wxpay，qqpay 中的一个"
           }
         },
         "required": [

@@ -5,8 +5,8 @@ export default defineSitemapEventHandler(async () => {
   const urls: SitemapUrl[] = [];
 
   try {
-    const apiBaseUrl = process.env.NUXT_PUBLIC_API_BASE_URL || 'https://picend.cosfan.cc/api/v1';
-    const limit = 100;
+    const config = useAppConfig();
+    const apiBaseUrl = config.apiBaseUrl;
 
     // 首先获取第一页来了解总数据量
     const firstPage = await $fetch<{

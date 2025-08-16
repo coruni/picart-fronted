@@ -97,8 +97,37 @@
       "adGlobalEnabled": "启用全局广告",
       "adGlobalContent": "全局广告内容",
       "adGlobalPosition": "全局广告位置",
-      "adGlobalStyle": "全局广告样式",
-      "adPositionTop": "顶部",
+      "adGlobalStyle": "全局广告样式"
+    },
+    "payment": {
+      "title": "支付",
+      "orderInfo": "订单信息",
+      "defaultRemark": "订单支付",
+      "selectPaymentMethod": "选择支付方式",
+      "balance": "余额支付",
+      "balanceDesc": "当前余额",
+      "alipay": "支付宝",
+      "alipayDesc": "支付宝安全支付",
+      "wechat": "微信支付",
+      "wechatDesc": "微信安全支付",
+      "epay": "易支付",
+      "epayAlipay": "支付宝",
+      "epayWechat": "微信",
+      "epayQQ": "QQ钱包",
+      "selectEpayType": "请选择易支付类型",
+      "insufficientBalance": "余额不足",
+      "processing": "处理中...",
+      "confirmPayment": "确认支付",
+      "balancePaymentSuccess": "余额支付成功",
+      "redirectToPayment": "正在跳转到支付页面...",
+      "scanQRCode": "请扫描二维码完成支付",
+      "failed": "支付失败",
+      "paymentFailed": "支付失败",
+      "paymentSuccess": "支付成功",
+      "networkError": "网络错误",
+      "unknownError": "未知错误"
+    },
+    "adPositionTop": {
       "adPositionBottom": "底部",
       "adPositionSidebar": "侧边栏",
       "adPositionFixedTop": "固定顶部",
@@ -570,7 +599,9 @@
         "contactText": "如有疑问，请联系客服"
       }
     },
-    "deleteConfirm": "删除确认"
+    "deleteConfirm": "删除确认",
+    "edit": "编辑",
+    "delete": "删除"
   },
   "validation": {
     "required": "此字段为必填项",
@@ -758,5 +789,14 @@
       "profileSavedFailed": "资料保存失败"
     }
   },
-  "Unauthorized": "未授权"
+  "Unauthorized": "未授权",
+  "payment": {
+    "alipay": "支付宝",
+    "wechat": "微信支付",
+    "balance": "余额",
+    "epay": "易支付",
+    "epayAlipay": "支付宝",
+    "epayWechat": "微信支付",
+    "balanceDesc": "账户余额"
+  }
 }

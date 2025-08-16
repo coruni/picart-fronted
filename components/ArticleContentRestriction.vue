@@ -104,13 +104,30 @@
       {{ $t('article.restrictions.contentRestricted.description') }}
     </p>
   </div>
+
+  <!-- 支付弹窗 -->
+  <PaymentModal
+    v-model="showPaymentModal"
+    :order-info="currentOrder"
+    :user-wallet="userStore.currentUser?.wallet"
+    @payment-success="onPaymentSuccess"
+    @payment-failed="onPaymentFailed"
+  />
 </template>
 
 <script lang="ts" setup>
+  import { orderControllerCreateMembershipOrder } from '~/api';
+  import type { ConfigControllerGetPublicResponse } from '~/api';
+  type SiteConfig = ConfigControllerGetPublicResponse['data'];
   interface Props {
     type: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
     price?: string | number;
+    articleTitle?: string;
   }
+
+  // 注入配置
+  const siteConfig = inject<SiteConfig>('siteConfig');
+  const userStore = useUserStore();
 
   const props = withDefaults(defineProps<Props>(), {
     price: 0
@@ -120,12 +137,15 @@
   const router = useRouter();
   const localePath = useLocalePath();
   const { t } = useI18n();
+  const toast = useToast();
 
   // 简单状态管理
   const isFollowing = ref(false);
   const isFollowLoading = ref(false);
   const isPaid = ref(false);
   const isPaymentLoading = ref(false);
+  const showPaymentModal = ref(false);
+  const currentOrder = ref<any>(null);
 
   // 确保在客户端才执行交互逻辑
   const isClient = ref(false);
@@ -153,11 +173,61 @@
   const handlePayment = async () => {
     if (!isClient.value || isPaid.value || isPaymentLoading.value) return;
 
-    isPaymentLoading.value = true;
-    // TODO: 调用支付API
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // 创建订单
+    try {
+      isPaymentLoading.value = true;
+
+      // 调用创建订单API
+      const orderResponse = await orderControllerCreateMembershipOrder({
+        composable: '$fetch',
+        body: {
+          duration: 1, // 临时设置为1个月，实际应该根据文章配置
+          remark: `查看文章: ${props.articleTitle || '未知文章'}`
+        }
+      });
+
+      const order = (orderResponse as any).data;
+
+      // 显示支付弹窗
+      showPaymentModal.value = true;
+      currentOrder.value = {
+        orderId: order.id,
+        orderNo: order.orderNo,
+        amount: order.amount,
+        remark: order.remark
+      };
+    } catch (error: any) {
+      console.error('创建订单失败:', error);
+      toast.add({
+        title: error?.message || '创建订单失败',
+        color: 'error'
+      });
+    } finally {
+      isPaymentLoading.value = false;
+    }
+  };
+
+  // 支付成功回调
+  const onPaymentSuccess = (orderId: number) => {
     isPaid.value = true;
-    isPaymentLoading.value = false;
+    showPaymentModal.value = false;
+    currentOrder.value = null;
+
+    toast.add({
+      title: '支付成功，现在可以查看文章内容',
+      color: 'success'
+    });
+  };
+
+  // 支付失败回调
+  const onPaymentFailed = (error: string) => {
+    showPaymentModal.value = false;
+    currentOrder.value = null;
+
+    toast.add({
+      title: error,
+      color: 'error'
+    });
   };
 
   // 处理会员升级

@@ -6,7 +6,8 @@ export default defineSitemapEventHandler(async () => {
   console.log('站点地图: 作者模块被调用');
 
   try {
-    const apiBaseUrl = process.env.NUXT_PUBLIC_API_BASE_URL || 'https://picend.cosfan.cc/api/v1';
+    const config = useAppConfig();
+    const apiBaseUrl = config.apiBaseUrl;
 
     const response = await $fetch<{
       data: { data: Array<{ id: string; updatedAt?: string; createdAt?: string }> };

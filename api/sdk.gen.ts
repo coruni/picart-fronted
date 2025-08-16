@@ -132,6 +132,7 @@ import type {
   OrderControllerCancelOrderData,
   OrderControllerRequestRefundData,
   OrderControllerCreateArticleOrderData,
+  OrderControllerCreateArticleOrderResponse,
   OrderControllerCreateMembershipOrderData,
   OrderControllerCreateMembershipOrderResponse,
   InviteControllerGetMyInvitesData,
@@ -1943,26 +1944,35 @@ export const orderControllerRequestRefund = <TComposable extends Composable, Def
  */
 export const orderControllerCreateArticleOrder = <
   TComposable extends Composable,
-  DefaultT = undefined
+  DefaultT extends
+    OrderControllerCreateArticleOrderResponse = OrderControllerCreateArticleOrderResponse
 >(
-  options: Options<TComposable, OrderControllerCreateArticleOrderData, unknown, DefaultT>
+  options: Options<
+    TComposable,
+    OrderControllerCreateArticleOrderData,
+    OrderControllerCreateArticleOrderResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/order/article',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    OrderControllerCreateArticleOrderResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
       }
+    ],
+    url: '/order/article',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**

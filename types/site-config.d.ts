@@ -12,18 +12,6 @@ export interface SiteConfig {
   payment_alipay_enabled: boolean;
   payment_wechat_enabled: boolean;
   payment_epay_enabled: boolean;
-  membership_enabled: boolean;
-  membership_name: string;
-  membership_price: number;
-  maintenance_mode: boolean;
-  maintenance_message: string;
-  invite_code_required: boolean;
-  invite_code_enabled: boolean;
-  invite_default_commission_rate: number;
-  invite_code_expire_days: number;
-  // 新增配置项
-  commission_author_rate: number;
-  commission_platform_rate: number;
   payment_alipay_app_id: string;
   payment_alipay_private_key: string;
   payment_alipay_public_key: string;
@@ -34,4 +22,27 @@ export interface SiteConfig {
   payment_epay_key: string;
   payment_epay_notify_url: string;
   payment_epay_return_url: string;
+  commission_author_rate: number;
+  commission_platform_rate: number;
+  membership_enabled: boolean;
+  membership_name: string;
+  membership_price: number;
+  maintenance_mode: boolean;
+  maintenance_message: string;
+  invite_code_enabled: boolean;
+  invite_code_required: boolean;
+  invite_default_commission_rate: number;
+  invite_code_expire_days: number;
+  ad_homepage_enabled: boolean;
+  ad_homepage_content: string;
+  ad_homepage_position: string;
+  ad_article_top_enabled: boolean;
+  ad_article_top_content: string;
+  ad_article_bottom_enabled: boolean;
+  ad_article_bottom_content: string;
+  ad_global_enabled: boolean;
+  ad_global_content: string;
+  ad_global_position: string;
+  ad_global_style: string;
+  payment_balance_enabled: boolean;
 }

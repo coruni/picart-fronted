@@ -153,6 +153,10 @@ export type CreateArticleDto = {
    * 文章类型
    */
   type: 'image' | 'mixed';
+  /**
+   * 排序
+   */
+  sort?: number;
 };
 
 export type UpdateArticleDto = {
@@ -598,6 +602,10 @@ export type CreatePaymentDto = {
    * 支付详情
    */
   details?: string;
+  /**
+   * payment方式为EPAY时这里填alipay，wxpay，qqpay 中的一个
+   */
+  type?: string;
 };
 
 export type AlipayNotifyDto = {
@@ -4647,7 +4655,7 @@ export type OrderControllerRequestRefundResponses = {
 };
 
 export type OrderControllerCreateArticleOrderData = {
-  body: CreateArticleOrderDto;
+  body?: CreateArticleOrderDto;
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -4671,11 +4679,43 @@ export type OrderControllerCreateArticleOrderErrors = {
 };
 
 export type OrderControllerCreateArticleOrderResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      userId: number;
+      authorId: number;
+      articleId: unknown;
+      orderNo: string;
+      type: string;
+      title: string;
+      amount: number;
+      paymentMethod: unknown;
+      paymentOrderNo: unknown;
+      status: string;
+      paidAt: unknown;
+      details: {
+        membershipLevel: number;
+        membershipName: string;
+        duration: number;
+        basePrice: number;
+        totalAmount: number;
+        remark: string;
+      };
+      remark: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
   /**
    * 创建成功
    */
   201: unknown;
 };
+
+export type OrderControllerCreateArticleOrderResponse =
+  OrderControllerCreateArticleOrderResponses[keyof OrderControllerCreateArticleOrderResponses];
 
 export type OrderControllerCreateMembershipOrderData = {
   body: CreateMembershipOrderDto;

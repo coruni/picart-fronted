@@ -2,7 +2,7 @@
   <ClientOnly>
     <template #fallback>
       <!-- SSR时的占位符 -->
-      <div v-if="shouldShow" :class="adContainerClass" :style="adStyle">
+      <div v-if="shouldShow">
         <div
           class="ad-content-placeholder bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center text-gray-500 dark:text-gray-400"
         >
@@ -11,9 +11,9 @@
       </div>
     </template>
 
-    <div v-if="shouldShow" :class="adContainerClass" :style="adStyle">
-      <div v-html="adContent" class="ad-content"></div>
-    </div>
+    <template v-if="shouldShow">
+      <div v-html="adContent"></div>
+    </template>
   </ClientOnly>
 </template>
 
@@ -55,30 +55,4 @@
   const adContainerClass = computed(() => getAdContainerClass(props.type, props.position));
 </script>
 
-<style scoped>
-  .advertisement-container {
-    /* 基础样式 */
-  }
-
-  .advertisement-container.fixed {
-    /* 固定定位样式 */
-  }
-
-  .advertisement-container .ad-content {
-    /* 广告内容样式 */
-    width: 100%;
-  }
-
-  .advertisement-container .ad-content :deep(img) {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .advertisement-container .ad-content :deep(a) {
-    text-decoration: none;
-  }
-
-  .advertisement-container .ad-content :deep(script) {
-    display: none;
-  }
-</style>
+<style scoped></style>
