@@ -276,7 +276,7 @@
 
   const selectedPackage = ref<Package | null>(null);
   const selectedPaymentMethod = ref<'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY' | null>(null);
-  const selectedEpayType = ref<'alipay' | 'wxpay' | 'qqpay' | null>(null);
+  const selectedEpayType = ref<'alipay' | 'wxpay' | null>(null);
   const processing = ref(false);
 
   // 套餐选项
@@ -291,17 +291,20 @@
     {
       duration: 1,
       price: siteConfig?.membership_price || 30,
-      description: t('user.recharge.package1Description')
+      description: t('user.recharge.package1Description'),
+      save: undefined
     },
     {
       duration: 3,
       price: (siteConfig?.membership_price || 30) * 3,
-      description: t('user.recharge.package3Description')
+      description: t('user.recharge.package3Description'),
+      save: undefined
     },
     {
       duration: 12,
       price: (siteConfig?.membership_price || 30) * 12,
-      description: t('user.recharge.package12Description')
+      description: t('user.recharge.package12Description'),
+      save: undefined
     }
   ]);
 
@@ -316,11 +319,6 @@
       value: 'wxpay' as const,
       label: t('payment.epayWechat'),
       icon: 'mynaui:brand-wechat'
-    },
-    {
-      value: 'qqpay' as const,
-      label: t('payment.epayQQ'),
-      icon: 'mynaui:brand-qq'
     }
   ]);
 
@@ -345,7 +343,7 @@
   };
 
   // 选择易支付类型
-  const selectEpayType = (type: 'alipay' | 'wxpay' | 'qqpay') => {
+  const selectEpayType = (type: 'alipay' | 'wxpay') => {
     selectedEpayType.value = type;
     selectedPaymentMethod.value = 'EPAY';
   };
@@ -443,47 +441,23 @@
         paymentMethod: selectedPaymentMethod.value
       };
 
-      // 如果是易支付，添加type参数
-      if (selectedPaymentMethod.value === 'EPAY' && selectedEpayType.value) {
+      // 如果是易支付，必须传入type参数
+      if (selectedPaymentMethod.value === 'EPAY') {
+        if (!selectedEpayType.value) {
+          throw new Error(t('payment.selectEpayType'));
+        }
         paymentData.type = selectedEpayType.value;
       }
 
       // 调用支付API
-      const paymentResponse = (await paymentControllerCreatePayment({
+      const paymentResponse = await paymentControllerCreatePayment({
         composable: '$fetch',
         body: paymentData
-      })) as any;
+      });
 
       // 处理支付响应
-      if (paymentResponse && paymentResponse.data) {
-        const paymentResult = paymentResponse.data as any;
-
-        // 根据支付方式处理不同的响应
-        if (selectedPaymentMethod.value === 'BALANCE') {
-          // 余额支付直接成功
-          toast.add({
-            title: t('user.recharge.successMessage'),
-            color: 'primary'
-          });
-          emit('recharge-success', order.id);
-          closeModal();
-        } else {
-          // 第三方支付，跳转到支付页面
-          if (paymentResult.payUrl) {
-            window.open(paymentResult.payUrl, '_blank');
-            toast.add({
-              title: t('payment.redirectToPayment'),
-              color: 'info'
-            });
-          } else if (paymentResult.qrCode) {
-            // 显示二维码支付
-            // TODO: 实现二维码显示逻辑
-            toast.add({
-              title: t('payment.scanQRCode'),
-              color: 'info'
-            });
-          }
-        }
+      if (paymentResponse.data.paymentUrl) {
+        window.open(paymentResponse.data.paymentUrl, '_blank');
       }
     } catch (error: any) {
       console.error(t('payment.paymentFailed'), error);

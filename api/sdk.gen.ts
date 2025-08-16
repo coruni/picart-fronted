@@ -173,6 +173,7 @@ import type {
   PostPayNotifyByPaywayData,
   PostPayNotifyByPaywayResponse,
   PaymentControllerCreatePaymentData,
+  PaymentControllerCreatePaymentResponse,
   PaymentControllerAlipayNotifyData,
   PaymentControllerWechatNotifyData,
   PaymentControllerFindPaymentRecordData,
@@ -2520,26 +2521,34 @@ export const postPayNotifyByPayway = <
  */
 export const paymentControllerCreatePayment = <
   TComposable extends Composable,
-  DefaultT = undefined
+  DefaultT extends PaymentControllerCreatePaymentResponse = PaymentControllerCreatePaymentResponse
 >(
-  options: Options<TComposable, PaymentControllerCreatePaymentData, unknown, DefaultT>
+  options: Options<
+    TComposable,
+    PaymentControllerCreatePaymentData,
+    PaymentControllerCreatePaymentResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/payment/create',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    PaymentControllerCreatePaymentResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
       }
+    ],
+    url: '/payment/create',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**

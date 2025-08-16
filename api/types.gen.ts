@@ -2467,7 +2467,6 @@ export type ArticleControllerFindOneResponses = {
         description: unknown;
         followerCount: number;
         followingCount: number;
-        isFollowed: boolean;
       };
       isFollowed: boolean;
       category: {
@@ -5557,8 +5556,20 @@ export type PaymentControllerCreatePaymentResponses = {
   /**
    * 支付创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      paymentId: number;
+      paymentUrl: string;
+      paymentMethod: string;
+      message: string;
+    };
+  };
 };
+
+export type PaymentControllerCreatePaymentResponse =
+  PaymentControllerCreatePaymentResponses[keyof PaymentControllerCreatePaymentResponses];
 
 export type PaymentControllerAlipayNotifyData = {
   body: AlipayNotifyDto;
