@@ -18,7 +18,7 @@ export default defineSitemapEventHandler(async () => {
         };
       };
     }>(`${apiBaseUrl}/article`, {
-      query: { page: 1, limit }
+      query: { page: 1, limit: 100 }
     });
 
     if (!firstPage?.data?.data) {
@@ -50,7 +50,7 @@ export default defineSitemapEventHandler(async () => {
             data: Array<{ id: string; updatedAt?: string; createdAt?: string; images: string[] }>;
           };
         }>(`${apiBaseUrl}/article`, {
-          query: { page, limit }
+          query: { page, limit: 100 }
         }).catch(error => {
           console.error(`获取第 ${page} 页失败:`, error);
           return null;
