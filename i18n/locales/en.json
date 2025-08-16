@@ -124,6 +124,8 @@
       "failed": "Payment failed",
       "paymentFailed": "Payment failed",
       "paymentSuccess": "Payment successful",
+      "createOrderFailed": "Create order failed",
+      "articlePaymentSuccess": "Payment successful, you can now view the article content",
       "networkError": "Network error",
       "unknownError": "Unknown error"
     },
@@ -416,6 +418,7 @@
     "goodReviews": "Good Reviews",
     "relatedArticles": "Related Articles",
     "followAuthor": "Follow Author",
+    "following": "Following",
     "comment": "Comment",
     "reply": "Reply",
     "commentText": "Please enter your comment",

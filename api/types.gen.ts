@@ -1315,37 +1315,16 @@ export type UserControllerFindAllResponses = {
       data: Array<{
         id: number;
         username: string;
-        nickname: string;
-        password: string;
-        email: string;
-        phone?: string;
+        nickname: string | null;
         status: string;
-        banned?: string;
-        banReason?: string;
         avatar: string | null;
-        description?: string;
-        address?: string;
-        gender: string;
-        birthDate: string;
-        articleCount: number;
+        description: string;
         followerCount: number;
         followingCount: number;
-        level: number;
-        experience: number;
-        score?: number;
-        wallet?: number;
+        score: number;
+        wallet: number;
         membershipLevel: number;
-        membershipLevelName?: string;
         membershipStatus: string;
-        membershipStartDate?: string;
-        membershipEndDate?: string;
-        lastLoginAt: string | null;
-        lastActiveAt: string;
-        refreshToken?: string;
-        inviterId?: number;
-        inviteCode?: string;
-        inviteEarnings: string;
-        inviteCount: number;
         roles: Array<{
           id: number;
           name: string;
@@ -1359,18 +1338,12 @@ export type UserControllerFindAllResponses = {
           createdAt: string;
           updatedAt: string;
         }>;
-        config?:
-          | string
-          | number
-          | boolean
-          | Array<unknown>
-          | {
-              [key: string]: unknown;
-            }
-          | number
-          | null;
-        createdAt?: string;
-        updatedAt?: string;
+        config: {
+          [key: string]: unknown;
+        };
+        createdAt: string;
+        updatedAt: string;
+        isFollowed: boolean;
       }>;
       meta: {
         total: number;
@@ -1522,6 +1495,7 @@ export type UserControllerFindOneResponses = {
       config: unknown;
       createdAt: string;
       updatedAt: string;
+      isFollowed: boolean;
     };
   };
 };
@@ -2327,6 +2301,7 @@ export type ArticleControllerFindAllResponses = {
           followerCount: number;
           followingCount: number;
         };
+        isFollowed: boolean;
         category: {
           id: number;
           name: string;
@@ -2361,6 +2336,7 @@ export type ArticleControllerFindAllResponses = {
         createdAt: string;
         updatedAt: string;
         isLiked: boolean;
+        isPaid: boolean;
       }>;
       meta: {
         total: number;
@@ -2491,7 +2467,9 @@ export type ArticleControllerFindOneResponses = {
         description: unknown;
         followerCount: number;
         followingCount: number;
+        isFollowed: boolean;
       };
+      isFollowed: boolean;
       category: {
         id: number;
         name: string;
@@ -2538,6 +2516,7 @@ export type ArticleControllerFindOneResponses = {
       createdAt: string;
       updatedAt: string;
       isLiked: boolean;
+      isPaid: boolean;
     };
   };
 };

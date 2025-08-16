@@ -124,6 +124,8 @@
       "failed": "支付失败",
       "paymentFailed": "支付失败",
       "paymentSuccess": "支付成功",
+      "createOrderFailed": "创建订单失败",
+      "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
       "networkError": "网络错误",
       "unknownError": "未知错误"
     },
@@ -542,6 +544,7 @@
     "goodReviews": "好评",
     "relatedArticles": "相关推荐",
     "followAuthor": "关注作者",
+    "following": "已关注",
     "comment": "发表评论",
     "reply": "回复",
     "commentText": "请输入评论内容",

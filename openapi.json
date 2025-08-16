@@ -1755,24 +1755,10 @@
                                 "type": "string"
                               },
                               "nickname": {
-                                "type": "string"
-                              },
-                              "password": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "phone": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "status": {
-                                "type": "string"
-                              },
-                              "banned": {
-                                "type": "string"
-                              },
-                              "banReason": {
                                 "type": "string"
                               },
                               "avatar": {
@@ -1782,28 +1768,10 @@
                               "description": {
                                 "type": "string"
                               },
-                              "address": {
-                                "type": "string"
-                              },
-                              "gender": {
-                                "type": "string"
-                              },
-                              "birthDate": {
-                                "type": "string"
-                              },
-                              "articleCount": {
-                                "type": "integer"
-                              },
                               "followerCount": {
                                 "type": "integer"
                               },
                               "followingCount": {
-                                "type": "integer"
-                              },
-                              "level": {
-                                "type": "integer"
-                              },
-                              "experience": {
                                 "type": "integer"
                               },
                               "score": {
@@ -1815,39 +1783,8 @@
                               "membershipLevel": {
                                 "type": "integer"
                               },
-                              "membershipLevelName": {
-                                "type": "string"
-                              },
                               "membershipStatus": {
                                 "type": "string"
-                              },
-                              "membershipStartDate": {
-                                "type": "string"
-                              },
-                              "membershipEndDate": {
-                                "type": "string"
-                              },
-                              "lastLoginAt": {
-                                "type": "string",
-                                "nullable": true
-                              },
-                              "lastActiveAt": {
-                                "type": "string"
-                              },
-                              "refreshToken": {
-                                "type": "string"
-                              },
-                              "inviterId": {
-                                "type": "number"
-                              },
-                              "inviteCode": {
-                                "type": "string"
-                              },
-                              "inviteEarnings": {
-                                "type": "string"
-                              },
-                              "inviteCount": {
-                                "type": "integer"
                               },
                               "roles": {
                                 "type": "array",
@@ -1907,57 +1844,37 @@
                                 }
                               },
                               "config": {
-                                "nullable": true,
-                                "oneOf": [
-                                  {
-                                    "type": "string"
-                                  },
-                                  {
-                                    "type": "integer"
-                                  },
-                                  {
-                                    "type": "boolean"
-                                  },
-                                  {
-                                    "type": "array"
-                                  },
-                                  {
-                                    "type": "object"
-                                  },
-                                  {
-                                    "type": "number"
-                                  }
-                                ]
+                                "type": "object",
+                                "properties": {}
                               },
                               "createdAt": {
                                 "type": "string"
                               },
                               "updatedAt": {
                                 "type": "string"
+                              },
+                              "isFollowed": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
                               "id",
                               "username",
                               "nickname",
-                              "password",
-                              "email",
                               "status",
                               "avatar",
-                              "gender",
-                              "birthDate",
-                              "articleCount",
+                              "description",
                               "followerCount",
                               "followingCount",
-                              "level",
-                              "experience",
+                              "score",
+                              "wallet",
                               "membershipLevel",
                               "membershipStatus",
-                              "lastLoginAt",
-                              "lastActiveAt",
-                              "inviteEarnings",
-                              "inviteCount",
-                              "roles"
+                              "roles",
+                              "config",
+                              "createdAt",
+                              "updatedAt",
+                              "isFollowed"
                             ]
                           }
                         },
@@ -2317,6 +2234,9 @@
                         },
                         "updatedAt": {
                           "type": "string"
+                        },
+                        "isFollowed": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -2356,7 +2276,8 @@
                         "roles",
                         "config",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "isFollowed"
                       ]
                     }
                   },
@@ -4952,6 +4873,9 @@
                                   "followingCount"
                                 ]
                               },
+                              "isFollowed": {
+                                "type": "boolean"
+                              },
                               "category": {
                                 "type": "object",
                                 "properties": {
@@ -5085,6 +5009,9 @@
                               },
                               "isLiked": {
                                 "type": "boolean"
+                              },
+                              "isPaid": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
@@ -5109,7 +5036,9 @@
                               "tags",
                               "createdAt",
                               "updatedAt",
-                              "isLiked"
+                              "isLiked",
+                              "isFollowed",
+                              "isPaid"
                             ]
                           }
                         },
@@ -5407,6 +5336,9 @@
                             "followingCount"
                           ]
                         },
+                        "isFollowed": {
+                          "type": "boolean"
+                        },
                         "category": {
                           "type": "object",
                           "properties": {
@@ -5588,6 +5520,9 @@
                         },
                         "isLiked": {
                           "type": "boolean"
+                        },
+                        "isPaid": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -5612,7 +5547,9 @@
                         "tags",
                         "createdAt",
                         "updatedAt",
-                        "isLiked"
+                        "isLiked",
+                        "isFollowed",
+                        "isPaid"
                       ]
                     }
                   },

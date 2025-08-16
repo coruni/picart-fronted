@@ -116,13 +116,20 @@
 </template>
 
 <script lang="ts" setup>
-  import { orderControllerCreateMembershipOrder } from '~/api';
+  import {
+    orderControllerCreateMembershipOrder,
+    userControllerFollow,
+    orderControllerCreateArticleOrder
+  } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   interface Props {
     type: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
     price?: string | number;
     articleTitle?: string;
+    authorId?: number;
+    articleId?: number;
+    refreshArticle?: () => void;
   }
 
   // 注入配置
@@ -163,10 +170,38 @@
     if (!isClient.value || isFollowing.value || isFollowLoading.value) return;
 
     isFollowLoading.value = true;
-    // TODO: 调用关注API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    isFollowing.value = true;
-    isFollowLoading.value = false;
+    try {
+      // 使用传递的作者ID
+      if (!props.authorId) {
+        throw new Error('作者ID不存在');
+      }
+
+      await userControllerFollow({
+        composable: '$fetch',
+        path: {
+          id: String(props.authorId)
+        }
+      });
+      isFollowing.value = true;
+
+      // 调用刷新文章回调
+      if (props.refreshArticle) {
+        props.refreshArticle();
+      }
+
+      toast.add({
+        title: t('user.followSuccess'),
+        color: 'success'
+      });
+    } catch (error: any) {
+      console.error('关注失败:', error);
+      toast.add({
+        title: error?.message || t('user.followFailed'),
+        color: 'error'
+      });
+    } finally {
+      isFollowLoading.value = false;
+    }
   };
 
   // 处理付费
@@ -177,11 +212,11 @@
     try {
       isPaymentLoading.value = true;
 
-      // 调用创建订单API
-      const orderResponse = await orderControllerCreateMembershipOrder({
+      // 调用创建文章订单API
+      const orderResponse = await orderControllerCreateArticleOrder({
         composable: '$fetch',
         body: {
-          duration: 1, // 临时设置为1个月，实际应该根据文章配置
+          articleId: props.articleId!,
           remark: `查看文章: ${props.articleTitle || '未知文章'}`
         }
       });
@@ -199,7 +234,7 @@
     } catch (error: any) {
       console.error('创建订单失败:', error);
       toast.add({
-        title: error?.message || '创建订单失败',
+        title: error?.message || t('payment.createOrderFailed'),
         color: 'error'
       });
     } finally {
@@ -213,8 +248,13 @@
     showPaymentModal.value = false;
     currentOrder.value = null;
 
+    // 调用刷新文章回调
+    if (props.refreshArticle) {
+      props.refreshArticle();
+    }
+
     toast.add({
-      title: '支付成功，现在可以查看文章内容',
+      title: t('payment.articlePaymentSuccess'),
       color: 'success'
     });
   };

@@ -215,7 +215,14 @@
 
         <!-- 内容限制组件 -->
         <ClientOnly v-else-if="restrictionType">
-          <ArticleContentRestriction :type="restrictionType" :price="article?.data.viewPrice" />
+          <ArticleContentRestriction
+            :type="restrictionType"
+            :price="article?.data.viewPrice"
+            :article-title="article?.data.title"
+            :author-id="article?.data.author.id"
+            :article-id="article?.data.id"
+            :refresh-article="refreshArticle"
+          />
         </ClientOnly>
 
         <!-- 移动端点赞按钮 -->
@@ -371,9 +378,15 @@
             </div>
             <UButton
               @click="handleFollow"
+              :disabled="article?.data.author.isFollowed || isFollowLoading"
+              :loading="isFollowLoading"
               class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
             >
-              {{ $t('article.followAuthor') }}
+              {{
+                article?.data.author.isFollowed
+                  ? $t('article.following')
+                  : $t('article.followAuthor')
+              }}
             </UButton>
           </div>
           <!-- 相关推荐 -->
@@ -462,7 +475,7 @@
     }
 
     // 如果需要关注但用户未关注作者
-    if (data.requireFollow && !isFollowingAuthor.value) {
+    if (data.requireFollow && !data.author.isFollowed) {
       return false;
     }
 
@@ -472,7 +485,7 @@
     }
 
     // 如果需要付费但用户未付费
-    if (data.requirePayment && !hasPaid.value) {
+    if (data.requirePayment && !data.isPaid) {
       return false;
     }
 
@@ -489,7 +502,7 @@
       return 'login';
     }
 
-    if (data.requireFollow && !isFollowingAuthor.value) {
+    if (data.requireFollow && !data.author.isFollowed) {
       return 'follow';
     }
 
@@ -497,7 +510,7 @@
       return 'membership';
     }
 
-    if (data.requirePayment && !hasPaid.value) {
+    if (data.requirePayment && !data.isPaid) {
       return 'payment';
     }
 
@@ -526,14 +539,9 @@
     return false;
   });
 
-  // 关注状态
-  const isFollowingAuthor = ref(false);
-
-  // 付费状态
-  const hasPaid = ref(false);
-
   // 点赞相关状态
   const isLikeLoading = ref(false);
+  const isFollowLoading = ref(false);
 
   // lightbox相关状态
   const lightboxVisible = ref(false);
@@ -550,6 +558,7 @@
   const {
     data: article,
     pending: articlePending,
+    refresh: refreshArticle,
     error: articleError
   } = articleControllerFindOne({
     composable: 'useAsyncData',
@@ -682,6 +691,9 @@
   };
 
   const handleFollow = async () => {
+    if (isFollowLoading.value) return;
+
+    isFollowLoading.value = true;
     try {
       await userControllerFollow({
         composable: '$fetch',
@@ -690,8 +702,22 @@
           id: String(article.value?.data.author.id)
         }
       });
-    } catch (error) {
-      console.log(error);
+
+      // 刷新文章数据以更新关注状态
+      await refreshArticle();
+
+      toast.add({
+        title: t('user.followSuccess'),
+        color: 'success'
+      });
+    } catch (error: any) {
+      console.error('关注失败:', error);
+      toast.add({
+        title: error?.message || t('user.followFailed'),
+        color: 'error'
+      });
+    } finally {
+      isFollowLoading.value = false;
     }
   };
 

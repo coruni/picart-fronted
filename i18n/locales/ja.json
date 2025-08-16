@@ -124,6 +124,8 @@
       "failed": "支払い失敗",
       "paymentFailed": "支払い失敗",
       "paymentSuccess": "支払い成功",
+      "createOrderFailed": "注文作成に失敗しました",
+      "articlePaymentSuccess": "支払いが成功しました。記事の内容を確認できます",
       "networkError": "ネットワークエラー",
       "unknownError": "不明なエラー"
     },
@@ -416,6 +418,7 @@
     "goodReviews": "良いレビュー",
     "relatedArticles": "関連記事",
     "followAuthor": "作者をフォロー",
+    "following": "フォロー中",
     "comment": "コメント",
     "reply": "返信",
     "commentText": "コメントを入力してください",
