@@ -195,10 +195,6 @@
       });
     } catch (error: any) {
       console.error('关注失败:', error);
-      toast.add({
-        title: error?.message || t('user.followFailed'),
-        color: 'error'
-      });
     } finally {
       isFollowLoading.value = false;
     }
@@ -233,10 +229,6 @@
       };
     } catch (error: any) {
       console.error('创建订单失败:', error);
-      toast.add({
-        title: error?.message || t('payment.createOrderFailed'),
-        color: 'error'
-      });
     } finally {
       isPaymentLoading.value = false;
     }

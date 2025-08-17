@@ -574,11 +574,6 @@
     } catch (error: any) {
       console.error('Failed to upload cover:', error);
       coverFile.value = null;
-      toast.add({
-        title: t('common.message.uploadFailed'),
-        description: error.message,
-        color: 'error'
-      });
     } finally {
       coverUploading.value = false;
     }
@@ -631,7 +626,7 @@
           images: data.images ?? '',
           cover: data.cover ?? '',
           type: data.type ?? 'mixed',
-          tagIds: data.tags?.map(tag => tag.id) ?? [],
+          tagIds: data.tags?.map(tag => Number(tag.id)) ?? [],
           requireLogin: data.requireLogin ?? false,
           requireFollow: data.requireFollow ?? false,
           requireMembership: data.requireMembership ?? false,
@@ -665,7 +660,7 @@
       const { parentCategory, ...data } = await schema.parseAsync(state);
 
       // 分离现有标签ID和新标签名称
-      const existingTagIds: string[] = [];
+      const existingTagIds: number[] = [];
       const newTagNames: string[] = [];
 
       state.tagIds?.forEach(id => {
@@ -674,9 +669,9 @@
           // 临时标签，使用名称
           newTagNames.push(tag.label as string);
         } else {
-          // 现有标签，使用ID
-          const stringId = typeof id === 'number' ? id.toString() : id;
-          existingTagIds.push(stringId);
+          // 现有标签，确保ID是数字
+          const numericId = typeof id === 'string' ? Number(id) : id;
+          existingTagIds.push(numericId);
         }
       });
 

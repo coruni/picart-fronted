@@ -21,47 +21,107 @@
       :imgs="lightboxImages"
       :index="lightboxIndex"
       @hide="lightboxVisible = false"
+      @on-index-change="(oldIndex: number, newIndex: number) => (lightboxIndex = newIndex)"
     >
       <!-- 自定义左右导航按钮 -->
-      <!-- <template #prev-btn="{ prev }">
-        <button @click="prev" v-if="lightboxImages.length > 1">
+      <template #prev-btn="{ prev }">
+        <UButton
+          @click="prev"
+          v-if="lightboxImages.length > 1"
+          variant="link"
+          class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 left-4 text-white flex items-center justify-center"
+        >
           <Icon name="mynaui:chevron-left" />
-        </button>
+        </UButton>
       </template>
 
       <template #next-btn="{ next }">
-        <button @click="next" v-if="lightboxImages.length > 1">
+        <UButton
+          @click="next"
+          v-if="lightboxImages.length > 1"
+          variant="link"
+          class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 right-4 text-white flex items-center justify-center"
+        >
           <Icon name="mynaui:chevron-right" />
-        </button>
-      </template> -->
+        </UButton>
+      </template>
 
       <!-- 自定义工具栏按钮 -->
-      <!-- <template #toolbar="{ toolbarMethods }">
-        <div class="vel-toolbar">
-          <button @click="toolbarMethods.zoomIn">
-            <Icon name="mynaui:plus" />
-          </button>
-          <button @click="toolbarMethods.zoomOut">
-            <Icon name="mynaui:minus" />
-          </button>
-          <button @click="toolbarMethods.rotateLeft">
-            <Icon name="mynaui:arrow-counter-clockwise" />
-          </button>
-          <button @click="toolbarMethods.rotateRight">
-            <Icon name="mynaui:arrow-clockwise" />
-          </button>
-          <button @click="toolbarMethods.reset">
-            <Icon name="mynaui:arrow-clockwise" />
-          </button>
+      <template #toolbar="{ toolbarMethods }">
+        <div
+          class="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 flex items-center gap-2 bg-gray-700/80 backdrop-blur-sm rounded-full shadow-lg"
+        >
+          <!-- 放大按钮 -->
+          <UButton
+            variant="link"
+            @click="toolbarMethods.zoomIn"
+            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+            title="放大"
+          >
+            <Icon name="mynaui:plus" class="w-5 h-5" />
+          </UButton>
+
+          <!-- 缩小按钮 -->
+          <UButton
+            variant="link"
+            @click="toolbarMethods.zoomOut"
+            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+            title="缩小"
+          >
+            <Icon name="mynaui:minus" class="w-5 h-5" />
+          </UButton>
+          <!-- 指示器 -->
+          <div class="flex items-center gap-2">
+            <span class="text-white text-sm"
+              >{{ lightboxIndex + 1 }}/{{ lightboxImages.length }}</span
+            >
+          </div>
+
+          <!-- 逆时针旋转按钮 -->
+          <UButton
+            variant="link"
+            @click="toolbarMethods.rotateLeft"
+            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+            title="逆时针旋转"
+          >
+            <Icon name="mynaui:undo" class="w-5 h-5" />
+          </UButton>
+
+          <!-- 顺时针旋转按钮 -->
+          <UButton
+            variant="link"
+            @click="toolbarMethods.rotateRight"
+            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+            title="顺时针旋转"
+          >
+            <Icon name="mynaui:redo" class="w-5 h-5" />
+          </UButton>
+
+          <!-- 重置按钮 -->
         </div>
-      </template> -->
+      </template>
 
       <!-- 自定义关闭按钮 -->
-      <!-- <template #close-btn>
-        <button @click="lightboxVisible = false">
-          <Icon name="mynaui:x" />
-        </button>
-      </template> -->
+      <template #close-btn>
+        <UButton
+          variant="link"
+          @click="lightboxVisible = false"
+          class="font-bold backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full right-4 top-4 text-white flex items-center justify-center"
+        >
+          <Icon name="mynaui:x" size="24" />
+        </UButton>
+      </template>
+
+      <!-- // 自定义加载 -->
+      <template #loading>
+        <div class="flex items-center justify-center py-20">
+          <div class="flex items-center justify-center flex-col gap-8">
+            <div
+              class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
+            ></div>
+          </div>
+        </div>
+      </template>
     </VueEasyLightbox>
     <!-- 加载状态 -->
     <div v-if="isLoading" class="flex items-center justify-center py-20">
@@ -150,7 +210,7 @@
               />
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
             </NuxtLinkLocale>
-            <div>{{ $t('article.publishAt') }} {{ article?.data.createdAt }}</div>
+            <div>{{ $t('article.publishAt') }} {{ formatDate(article?.data.createdAt) }}</div>
             <div class="flex items-center">
               <Icon name="mynaui:eye" class="mr-1" />
               <span>{{ article?.data.views }} {{ $t('article.views') }}</span>
@@ -264,6 +324,32 @@
         <!-- 文章底部广告 -->
         <Advertisement type="article-bottom" />
 
+        <!-- 标签展示区 -->
+        <div v-if="article?.data.tags && article.data.tags.length > 0" class="mb-6 md:mb-8">
+          <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
+            {{ $t('article.tags') }}
+          </h3>
+          <div class="flex flex-wrap gap-2 md:gap-3">
+            <NuxtLinkLocale
+              v-for="tag in article.data.tags"
+              :key="tag.id"
+              :to="`/search?q=${encodeURIComponent(tag.name)}`"
+              class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm md:text-base rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 cursor-pointer"
+            >
+              <UAvatar
+                v-if="tag.avatar"
+                :src="tag.avatar"
+                :alt="tag.name"
+                class="w-4 h-4 md:w-5 md:h-5 rounded-full mr-2 object-cover"
+                loading="lazy"
+                format="webp"
+                sizes="20px"
+              />
+              <span class="font-medium">{{ tag.name }}</span>
+            </NuxtLinkLocale>
+          </div>
+        </div>
+
         <!-- 评论区 -->
         <div class="mb-6 md:mb-8 comments-section">
           <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
@@ -336,10 +422,10 @@
         <div class="lg:sticky top-20">
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
-              <div class="relative">
+              <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="relative">
                 <UAvatar
                   :src="article?.data.author.avatar"
-                  alt="作者头像"
+                  :alt="article?.data.author.nickname ?? article?.data.author.username"
                   class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full ring-2 ring-white"
                   loading="lazy"
                   format="webp"
@@ -348,7 +434,7 @@
                 <div
                   class="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-2 border-white"
                 ></div>
-              </div>
+              </NuxtLinkLocale>
               <div>
                 <h4 class="font-bold text-gray-900 dark:text-gray-100 text-sm md:text-base">
                   {{ article?.data.author.nickname ?? article?.data.author.username }}
@@ -712,10 +798,6 @@
       });
     } catch (error: any) {
       console.error('关注失败:', error);
-      toast.add({
-        title: error?.message || t('user.followFailed'),
-        color: 'error'
-      });
     } finally {
       isFollowLoading.value = false;
     }
@@ -814,3 +896,14 @@
     } catch (error) {}
   };
 </script>
+
+<style scoped>
+  :deep(.vel-modal) {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  :deep(.vel-img) {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  }
+</style>

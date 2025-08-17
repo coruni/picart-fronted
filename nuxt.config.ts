@@ -60,6 +60,16 @@ export default defineNuxtConfig({
       }
     }
   },
+  // 统计
+  $production: {
+    scripts: {
+      registry: {
+        clarity: {
+          id: 'sw54hoqei8'
+        }
+      }
+    }
+  },
 
   image: {
     screens: {
@@ -72,9 +82,7 @@ export default defineNuxtConfig({
       '2xl': 1536
     },
     quality: 80,
-    format: ['webp', 'jpg', 'png', 'avif'],
-    domains: ['*.cosfan.cc'],
-    provider: 'ipx'
+    format: ['webp', 'jpg', 'png', 'avif']
   },
   features: {
     inlineStyles: false

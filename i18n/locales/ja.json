@@ -234,6 +234,9 @@
     "articles": {
       "searchAndFilter": "検索・フィルター"
     },
+    "comments": {
+      "searchAndFilter": "検索・フィルター"
+    },
     "banners": {
       "searchAndFilter": "検索・フィルター"
     },
@@ -289,7 +292,14 @@
       "filter": "フィルター",
       "background": "背景",
       "cover": "カバー",
-      "link": "リンク"
+      "link": "リンク",
+      "keyword": "キーワード",
+      "userId": "ユーザーID",
+      "articleId": "記事ID",
+      "content": "コンテンツ",
+      "article": "記事",
+      "replyCount": "返信数",
+      "rootId": "ルートコメントID"
     },
     "message": {
       "deleteSuccess": "削除成功",
@@ -413,6 +423,7 @@
     "publishAt": "公開日",
     "views": "閲覧数",
     "comments": "コメント",
+    "tags": "タグ",
     "followers": "フォロワー",
     "likes": "いいね",
     "goodReviews": "良いレビュー",
@@ -781,10 +792,42 @@
   "response": {
     "error": {
       "followSelf": "自分をフォローすることはできません",
-      "articleNotFound": "記事は存在しません",
-      "emailAlreadyExists": "メールアドレスはすでに存在しています",
-      "emailNotExists": "メールアドレスは存在しません",
-      "usernameAlreadyExists": "ユーザー名はすでに存在しています"
+      "emailAlreadyExists": "メールアドレスはすでに存在します",
+      "usernameAlreadyExists": "用户名已存在",
+      "emailNotExists": "メールアドレスが存在しません",
+      "articleNotFound": "記事が存在しません",
+      "userNotExist": "ユーザーが存在しません",
+      "passwordError": "パスワードが間違っています",
+      "inviteCodeAlreadyUsed": "招待コードはすでに使用されています",
+      "inviteCodeNotExist": "招待コードが存在しません",
+      "inviteCodeInvalid": "招待コードが無効です",
+      "inviteCodeExpired": "招待コードは期限切れです",
+      "cannotUseOwnInviteCode": "自分の招待コードを使用することはできません",
+      "inviteRecordNotExist": "招待記録が存在しません",
+      "commentNotFound": "コメントが存在しません",
+      "tagNotFound": "タグが存在しません",
+      "categoryNotFound": "カテゴリーが存在しません",
+      "bannerNotFound": "バナーが存在しません",
+      "alipaySdkNotInitialized": "AlipaySDK未初期化",
+      "wechatPaySdkNotInitialized": "WeChat支払いSDK未初期化",
+      "epayConfigNotInitialized": "簡単な支払い設定未初期化",
+      "orderNotFound": "注文が存在しません",
+      "orderAlreadyPaid": "注文はすでに支払いされています",
+      "alipayNotEnabled": "Alipayは無効です",
+      "wechatPayNotEnabled": "WeChat支払いは無効です",
+      "epayNotEnabled": "簡単な支払いは無効です",
+      "unsupportedPaymentMethod": "サポートされていない支払い方法",
+      "createAlipayPaymentFailed": "Alipay支払いの作成に失敗しました",
+      "createWechatPaymentFailed": "WeChat支払いの作成に失敗しました",
+      "createEpayPaymentFailed": "簡単な支払いの作成に失敗しました",
+      "paymentRecordStatusIncorrect": "支払い記録のステータスが不正です",
+      "testEpaySignatureFailed": "簡単な支払いの署名のテストに失敗しました",
+      "noPermissionSendBroadcast": "ブロードキャストの送信権限がありません",
+      "permissionDenied": "権限がありません",
+      "unauthorized": "未認証",
+      "uploadFileEmpty": "ファイルが空です",
+      "resourceNotFound": "リソースが存在しません",
+      "resourceConflict": "リソースが競合しています"
     },
     "success": {
       "verificationCodeSent": "認証コードを送信しました",
@@ -792,5 +835,14 @@
       "profileSavedFailed": "データの保存に失敗しました"
     }
   },
-  "Unauthorized": "未認証"
+  "Unauthorized": "ユーザーがログインしていません",
+  "payment": {
+    "epayWechat": "wechatの支払い",
+    "wechat": "wechatの支払い",
+    "epay": "簡単な支払い",
+    "alipay": "アリパイ",
+    "balance": "バランス",
+    "balanceDesc": "アカウント残高",
+    "epayAlipay": "アリパイ"
+  }
 }

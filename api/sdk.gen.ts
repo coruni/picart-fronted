@@ -88,13 +88,15 @@ import type {
   CommentControllerFindOneData,
   CommentControllerFindOneResponse,
   CommentControllerUpdateData,
+  CommentControllerFindAllWithAdminData,
+  CommentControllerFindAllWithAdminResponse,
+  CommentControllerCreateData,
   CommentControllerGetRepliesData,
   CommentControllerGetRepliesResponse,
   CommentControllerGetUserCommentsData,
   CommentControllerGetUserCommentsResponse,
   CommentControllerGetCommentCountData,
   CommentControllerLikeData,
-  CommentControllerCreateData,
   TagControllerFindAllData,
   TagControllerFindAllResponse,
   TagControllerCreateData,
@@ -1307,6 +1309,50 @@ export const commentControllerUpdate = <TComposable extends Composable, DefaultT
 };
 
 /**
+ * 获取全部评论(管理)
+ */
+export const commentControllerFindAllWithAdmin = <
+  TComposable extends Composable,
+  DefaultT extends
+    CommentControllerFindAllWithAdminResponse = CommentControllerFindAllWithAdminResponse
+>(
+  options: Options<
+    TComposable,
+    CommentControllerFindAllWithAdminData,
+    CommentControllerFindAllWithAdminResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    CommentControllerFindAllWithAdminResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/comment',
+    ...options
+  });
+};
+
+/**
+ * 创建评论
+ */
+export const commentControllerCreate = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, CommentControllerCreateData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/comment',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
  * 获取评论回复列表（弃用）
  */
 export const commentControllerGetReplies = <
@@ -1382,24 +1428,6 @@ export const commentControllerLike = <TComposable extends Composable, DefaultT =
     {
       url: '/comment/{id}/like',
       ...options
-    }
-  );
-};
-
-/**
- * 创建评论
- */
-export const commentControllerCreate = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, CommentControllerCreateData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/comment',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
     }
   );
 };

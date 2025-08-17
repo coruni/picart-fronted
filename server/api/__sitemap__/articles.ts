@@ -31,8 +31,7 @@ export default defineSitemapEventHandler(async () => {
         loc: `/article/${article.id}`,
         lastmod: article.updatedAt || article.createdAt || new Date().toISOString(),
         changefreq: 'weekly',
-        priority: 0.8,
-        _i18nTransform: true
+        priority: 0.8
       });
     });
 
@@ -71,8 +70,7 @@ export default defineSitemapEventHandler(async () => {
                 title: '图片'
               })),
               changefreq: 'weekly',
-              priority: 0.8,
-              _i18nTransform: true
+              priority: 0.8
             });
           });
         }

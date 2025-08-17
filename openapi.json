@@ -4857,6 +4857,9 @@
                                   },
                                   "followingCount": {
                                     "type": "integer"
+                                  },
+                                  "isFollowed": {
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
@@ -4870,11 +4873,9 @@
                                   "updatedAt",
                                   "description",
                                   "followerCount",
-                                  "followingCount"
+                                  "followingCount",
+                                  "isFollowed"
                                 ]
-                              },
-                              "isFollowed": {
-                                "type": "boolean"
                               },
                               "category": {
                                 "type": "object",
@@ -5037,8 +5038,8 @@
                               "createdAt",
                               "updatedAt",
                               "isLiked",
-                              "isFollowed",
-                              "isPaid"
+                              "isPaid",
+                              "01K2VE6CR5FTXYYZ85WRYSGR7S"
                             ]
                           }
                         },
@@ -5320,6 +5321,9 @@
                             },
                             "followingCount": {
                               "type": "integer"
+                            },
+                            "isFollowed": {
+                              "type": "boolean"
                             }
                           },
                           "required": [
@@ -5333,11 +5337,9 @@
                             "updatedAt",
                             "description",
                             "followerCount",
-                            "followingCount"
+                            "followingCount",
+                            "isFollowed"
                           ]
-                        },
-                        "isFollowed": {
-                          "type": "boolean"
                         },
                         "category": {
                           "type": "object",
@@ -5548,7 +5550,6 @@
                         "createdAt",
                         "updatedAt",
                         "isLiked",
-                        "isFollowed",
                         "isPaid"
                       ]
                     }
@@ -8341,6 +8342,375 @@
         "security": []
       }
     },
+    "/comment": {
+      "get": {
+        "summary": "获取全部评论(管理)",
+        "deprecated": false,
+        "description": "",
+        "operationId": "commentController_findAllWithAdmin",
+        "tags": [
+          "评论管理"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "分页",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "限制",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "用户id",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "关键词",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "articleId",
+            "in": "query",
+            "description": "文章Id",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "likes": {
+                                "type": "integer"
+                              },
+                              "replyCount": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string"
+                              },
+                              "article": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "requireLogin": {
+                                    "type": "boolean"
+                                  },
+                                  "requireFollow": {
+                                    "type": "boolean"
+                                  },
+                                  "requirePayment": {
+                                    "type": "boolean"
+                                  },
+                                  "requireMembership": {
+                                    "type": "boolean"
+                                  },
+                                  "viewPrice": {
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "type": "string"
+                                  },
+                                  "content": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "images": {
+                                    "type": "string"
+                                  },
+                                  "sort": {
+                                    "type": "integer"
+                                  },
+                                  "summary": {
+                                    "type": "null"
+                                  },
+                                  "views": {
+                                    "type": "integer"
+                                  },
+                                  "likes": {
+                                    "type": "integer"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "cover": {
+                                    "type": "string"
+                                  },
+                                  "authorId": {
+                                    "type": "integer"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "title",
+                                  "requireLogin",
+                                  "requireFollow",
+                                  "requirePayment",
+                                  "requireMembership",
+                                  "viewPrice",
+                                  "type",
+                                  "content",
+                                  "images",
+                                  "sort",
+                                  "summary",
+                                  "views",
+                                  "likes",
+                                  "status",
+                                  "cover",
+                                  "authorId",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              "rootId": {
+                                "type": "integer",
+                                "nullable": true
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "content",
+                              "likes",
+                              "replyCount",
+                              "status",
+                              "article",
+                              "rootId",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        },
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer"
+                            },
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "total",
+                            "page",
+                            "limit",
+                            "totalPages"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "summary": "创建评论",
+        "deprecated": false,
+        "description": "",
+        "operationId": "CommentController_create",
+        "tags": [
+          "评论管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "评论创建成功",
+            "headers": {}
+          },
+          "400": {
+            "description": "请求参数错误",
+            "headers": {}
+          },
+          "401": {
+            "description": "未授权",
+            "headers": {}
+          },
+          "403": {
+            "description": "权限不足",
+            "headers": {}
+          },
+          "404": {
+            "description": "文章或父评论不存在",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/comment/{id}/replies": {
       "get": {
         "summary": "获取评论回复列表（弃用）",
@@ -8687,92 +9057,6 @@
           },
           "404": {
             "description": "评论不存在",
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/comment": {
-      "post": {
-        "summary": "创建评论",
-        "deprecated": false,
-        "description": "",
-        "operationId": "CommentController_create",
-        "tags": [
-          "评论管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCommentDto"
-              },
-              "examples": {}
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "评论创建成功",
-            "headers": {}
-          },
-          "400": {
-            "description": "请求参数错误",
-            "headers": {}
-          },
-          "401": {
-            "description": "未授权",
-            "headers": {}
-          },
-          "403": {
-            "description": "权限不足",
-            "headers": {}
-          },
-          "404": {
-            "description": "文章或父评论不存在",
             "headers": {}
           }
         },
@@ -15137,7 +15421,7 @@
             "description": "标签ID数组（与tagNames二选一）",
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "number"
             },
             "example": [
               1,
@@ -15249,7 +15533,7 @@
             "description": "标签ID数组（与tagNames二选一）",
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "number"
             },
             "example": [
               1,

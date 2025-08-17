@@ -154,6 +154,11 @@
       text: 'admin.menu.orders'
     },
     {
+      path: '/admin/comments',
+      icon: 'mynaui:chat',
+      text: 'admin.menu.comments'
+    },
+    {
       path: '/admin/banners',
       icon: 'mynaui:image',
       text: 'admin.menu.banners'

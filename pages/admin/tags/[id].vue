@@ -72,11 +72,17 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('common.table.avatar')" name="avatar">
             <div class="space-y-2">
-              <UInput
-                v-model="form.avatar"
-                class="w-full"
-                size="lg"
+              <UFileUpload
+                v-model:modelValue="avatarFile"
                 :placeholder="t('admin.tags.avatarPlaceholder')"
+                accept="image/*"
+                @update:modelValue="onAvatarUpload"
+                :loading="avatarUploading"
+                :ui="{
+                  base: 'w-24 h-24',
+                  root: 'w-24 h-24',
+                  file: 'w-24 h-24 h-24'
+                }"
               />
               <p class="text-xs text-gray-500">
                 {{ t('admin.tags.avatarHelp') }}
@@ -86,41 +92,23 @@
 
           <UFormField :label="t('common.table.background')" name="background">
             <div class="space-y-2">
-              <UInput
-                v-model="form.background"
-                class="w-full"
-                size="lg"
+              <UFileUpload
+                v-model:modelValue="backgroundFile"
                 :placeholder="t('admin.tags.backgroundPlaceholder')"
+                accept="image/*"
+                @update:modelValue="onBackgroundUpload"
+                :loading="backgroundUploading"
+                :ui="{
+                  base: 'w-32 h-32',
+                  root: 'w-32 h-32',
+                  file: 'w-32 h-32 h-32'
+                }"
               />
               <p class="text-xs text-gray-500">
                 {{ t('admin.tags.backgroundHelp') }}
               </p>
             </div>
           </UFormField>
-        </div>
-      </UCard>
-
-      <!-- Preview Section -->
-      <UCard v-if="form.avatar || form.background">
-        <template #header>
-          <h3 class="text-lg font-semibold">{{ t('admin.tags.preview') }}</h3>
-        </template>
-
-        <div class="flex items-center space-x-4">
-          <div v-if="form.avatar" class="text-center">
-            <div
-              class="w-16 h-16 rounded-full mx-auto bg-cover bg-center"
-              :style="{ backgroundImage: `url(${form.avatar})` }"
-            />
-            <p class="text-xs text-gray-500 mt-1">{{ t('common.table.avatar') }}</p>
-          </div>
-          <div v-if="form.background" class="text-center">
-            <div
-              class="w-24 h-16 rounded mx-auto bg-cover bg-center"
-              :style="{ backgroundImage: `url(${form.background})` }"
-            />
-            <p class="text-xs text-gray-500 mt-1">{{ t('common.table.background') }}</p>
-          </div>
         </div>
       </UCard>
 
@@ -140,9 +128,9 @@
 <script setup lang="ts">
   import { z } from 'zod';
   import { useI18n } from 'vue-i18n';
-  import { ref } from 'vue';
+  import { ref, watch, onUnmounted } from 'vue';
   import { debounce } from 'lodash-es';
-  import { tagControllerFindOne, tagControllerUpdate } from '~~/api';
+  import { tagControllerFindOne, tagControllerUpdate, uploadControllerUploadFile } from '~~/api';
   import type { Tag } from '~~/types/tag';
 
   const { t } = useI18n();
@@ -153,7 +141,21 @@
   // Loading states
   const loading = ref(true);
   const submitting = ref(false);
+  const avatarUploading = ref(false);
+  const backgroundUploading = ref(false);
   const tag = ref<Tag | null>(null);
+
+  // File refs
+  const avatarFile = ref<ExtendedFile | null>(null);
+  const backgroundFile = ref<ExtendedFile | null>(null);
+
+  // Extended File interface
+  interface ExtendedFile extends File {
+    _url?: string;
+    _uploaded?: boolean;
+    _uploading?: boolean;
+    _id?: string;
+  }
 
   const id = computed(() => route.params.id as string);
 
@@ -174,8 +176,9 @@
       .min(0, t('validation.min', { min: 0 }))
       .max(9999, t('validation.max', { max: 9999 }))
       .default(0),
-    avatar: z.string().url(t('validation.url')).optional().nullable(),
-    background: z.string().url(t('validation.url')).optional().nullable()
+    avatar: z.string().default(''),
+    background: z.string().default(''),
+    cover: z.string().default('')
   });
 
   type Schema = z.infer<typeof schema>;
@@ -185,8 +188,180 @@
     description: '',
     sort: 0,
     avatar: '',
-    background: ''
+    background: '',
+    cover: ''
   });
+
+  // 将URL转换为File对象
+  const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
+    try {
+      // 从URL获取图片数据
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+
+      // 将响应转换为Blob
+      const blob = await response.blob();
+
+      // 从URL获取文件名
+      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
+
+      // 从Blob创建File对象
+      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+
+      return file;
+    } catch (error) {
+      console.error('Error converting URL to File:', error);
+      // 创建一个默认的虚拟文件作为备选
+      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
+      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
+      file._url = url;
+      file._uploaded = true;
+      file._id = `existing_${index}_${Date.now()}`;
+      return file;
+    }
+  };
+
+  // Avatar upload handler
+  const onAvatarUpload = async (files: unknown) => {
+    if (!files || (Array.isArray(files) && files.length === 0)) return;
+
+    let newFile: ExtendedFile | null = null;
+
+    if (Array.isArray(files) && files[0] instanceof File) {
+      newFile = files[0] as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    } else if (files instanceof File) {
+      newFile = files as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    }
+
+    if (!newFile) return;
+
+    newFile._uploading = true;
+    avatarFile.value = newFile;
+    avatarUploading.value = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('files', newFile);
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      if (res.data && res.data[0]) {
+        newFile._url = res.data[0].url!;
+        newFile._uploaded = true;
+        newFile._uploading = false;
+        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+        form.value.avatar = newFile._url;
+        avatarFile.value = newFile;
+
+        toast.add({
+          title: t('common.message.uploadSuccess'),
+          color: 'success'
+        });
+      } else {
+        newFile._uploading = false;
+        avatarFile.value = null;
+        toast.add({
+          title: t('common.message.uploadFailed'),
+          color: 'error'
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to upload avatar:', error);
+      avatarFile.value = null;
+    } finally {
+      avatarUploading.value = false;
+    }
+  };
+
+  // Background upload handler
+  const onBackgroundUpload = async (files: unknown) => {
+    if (!files || (Array.isArray(files) && files.length === 0)) return;
+
+    let newFile: ExtendedFile | null = null;
+
+    if (Array.isArray(files) && files[0] instanceof File) {
+      newFile = files[0] as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    } else if (files instanceof File) {
+      newFile = files as ExtendedFile;
+      if (newFile._uploaded || newFile._uploading) return;
+    }
+
+    if (!newFile) return;
+
+    newFile._uploading = true;
+    backgroundFile.value = newFile;
+    backgroundUploading.value = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('files', newFile);
+
+      const res = await uploadControllerUploadFile({
+        composable: '$fetch',
+        body: {},
+        bodySerializer: () => formData
+      });
+
+      if (res.data && res.data[0]) {
+        newFile._url = res.data[0].url!;
+        newFile._uploaded = true;
+        newFile._uploading = false;
+        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+        form.value.background = newFile._url;
+        backgroundFile.value = newFile;
+
+        toast.add({
+          title: t('common.message.uploadSuccess'),
+          color: 'success'
+        });
+      } else {
+        newFile._uploading = false;
+        backgroundFile.value = null;
+        toast.add({
+          title: t('common.message.uploadFailed'),
+          color: 'error'
+        });
+      }
+    } catch (error: any) {
+      console.error('Failed to upload background:', error);
+      backgroundFile.value = null;
+    } finally {
+      backgroundUploading.value = false;
+    }
+  };
+
+  // Watch for file changes
+  watch(
+    () => avatarFile.value?._url,
+    newUrl => {
+      if (newUrl && avatarFile.value?._uploaded) {
+        form.value.avatar = newUrl;
+      }
+    }
+  );
+
+  watch(
+    () => backgroundFile.value?._url,
+    newUrl => {
+      if (newUrl && backgroundFile.value?._uploaded) {
+        form.value.background = newUrl;
+      }
+    }
+  );
 
   // Fetch tag details
   const fetchTag = async () => {
@@ -204,9 +379,19 @@
           description: data.description || '',
           sort: data.sort || 0,
           avatar: data.avatar || '',
-          background: data.background || ''
+          background: data.background || '',
+          cover: data.cover || ''
         };
         tag.value = data;
+
+        // 初始化已有图片
+        if (data.avatar) {
+          avatarFile.value = await createVirtualFile(data.avatar, 0);
+        }
+
+        if (data.background) {
+          backgroundFile.value = await createVirtualFile(data.background, 1);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch tag:', error);
@@ -223,12 +408,26 @@
   const onSubmit = async () => {
     submitting.value = true;
     try {
-      const body = await schema.parseAsync(form.value);
+      const formData = {
+        ...form.value,
+        avatar: avatarFile.value?._url || form.value.avatar || '',
+        background: backgroundFile.value?._url || form.value.background || '',
+        description: form.value.description || undefined
+      };
+
+      const body = await schema.parseAsync(formData);
 
       await tagControllerUpdate({
         composable: '$fetch',
         path: { id: id.value },
-        body
+        body: {
+          name: body.name,
+          description: body.description || undefined,
+          avatar: body.avatar,
+          background: body.background,
+          cover: body.cover,
+          sort: body.sort
+        }
       });
 
       toast.add({
@@ -239,15 +438,20 @@
       router.push('/admin/tags');
     } catch (error: any) {
       console.error('Failed to update tag:', error);
-      toast.add({
-        title: t('common.message.updateFailed'),
-        description: error.message,
-        color: 'error'
-      });
     } finally {
       submitting.value = false;
     }
   };
+
+  // Cleanup URLs on unmount
+  onUnmounted(() => {
+    if (avatarFile.value?._url && avatarFile.value._url.startsWith('blob:')) {
+      URL.revokeObjectURL(avatarFile.value._url);
+    }
+    if (backgroundFile.value?._url && backgroundFile.value._url.startsWith('blob:')) {
+      URL.revokeObjectURL(backgroundFile.value._url);
+    }
+  });
 
   // Initialize data
   await fetchTag();

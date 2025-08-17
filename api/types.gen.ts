@@ -128,7 +128,7 @@ export type CreateArticleDto = {
   /**
    * 标签ID数组（与tagNames二选一）
    */
-  tagIds?: Array<string>;
+  tagIds?: Array<number>;
   /**
    * 文章状态
    */
@@ -191,7 +191,7 @@ export type UpdateArticleDto = {
   /**
    * 标签ID数组（与tagNames二选一）
    */
-  tagIds?: Array<string>;
+  tagIds?: Array<number>;
   /**
    * 文章状态
    */
@@ -2300,8 +2300,8 @@ export type ArticleControllerFindAllResponses = {
           description: unknown;
           followerCount: number;
           followingCount: number;
+          isFollowed: boolean;
         };
-        isFollowed: boolean;
         category: {
           id: number;
           name: string;
@@ -2467,8 +2467,8 @@ export type ArticleControllerFindOneResponses = {
         description: unknown;
         followerCount: number;
         followingCount: number;
+        isFollowed: boolean;
       };
-      isFollowed: boolean;
       category: {
         id: number;
         name: string;
@@ -3370,6 +3370,128 @@ export type CommentControllerUpdateResponses = {
   200: unknown;
 };
 
+export type CommentControllerFindAllWithAdminData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: {
+    /**
+     * 分页
+     */
+    page?: number;
+    /**
+     * 限制
+     */
+    limit?: number;
+    /**
+     * 用户id
+     */
+    userId?: number;
+    /**
+     * 关键词
+     */
+    keyword?: string;
+    /**
+     * 文章Id
+     */
+    articleId?: number;
+  };
+  url: '/comment';
+};
+
+export type CommentControllerFindAllWithAdminResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        content: string;
+        likes: number;
+        replyCount: number;
+        status: string;
+        article: {
+          id: number;
+          title: string;
+          requireLogin: boolean;
+          requireFollow: boolean;
+          requirePayment: boolean;
+          requireMembership: boolean;
+          viewPrice: string;
+          type: string;
+          content: string | null;
+          images: string;
+          sort: number;
+          summary: unknown;
+          views: number;
+          likes: number;
+          status: string;
+          cover: string;
+          authorId: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        rootId: number | null;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type CommentControllerFindAllWithAdminResponse =
+  CommentControllerFindAllWithAdminResponses[keyof CommentControllerFindAllWithAdminResponses];
+
+export type CommentControllerCreateData = {
+  body?: CreateCommentDto;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/comment';
+};
+
+export type CommentControllerCreateErrors = {
+  /**
+   * 请求参数错误
+   */
+  400: unknown;
+  /**
+   * 未授权
+   */
+  401: unknown;
+  /**
+   * 权限不足
+   */
+  403: unknown;
+  /**
+   * 文章或父评论不存在
+   */
+  404: unknown;
+};
+
+export type CommentControllerCreateResponses = {
+  /**
+   * 评论创建成功
+   */
+  201: unknown;
+};
+
 export type CommentControllerGetRepliesData = {
   body?: never;
   headers?: {
@@ -3510,45 +3632,6 @@ export type CommentControllerLikeResponses = {
    * 点赞成功
    */
   200: unknown;
-};
-
-export type CommentControllerCreateData = {
-  body?: CreateCommentDto;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/comment';
-};
-
-export type CommentControllerCreateErrors = {
-  /**
-   * 请求参数错误
-   */
-  400: unknown;
-  /**
-   * 未授权
-   */
-  401: unknown;
-  /**
-   * 权限不足
-   */
-  403: unknown;
-  /**
-   * 文章或父评论不存在
-   */
-  404: unknown;
-};
-
-export type CommentControllerCreateResponses = {
-  /**
-   * 评论创建成功
-   */
-  201: unknown;
 };
 
 export type TagControllerFindAllData = {

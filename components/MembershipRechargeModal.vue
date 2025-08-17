@@ -1,5 +1,10 @@
 <template>
-  <UModal v-model:open="isOpen" :title="$t('user.recharge.title')" size="lg">
+  <UModal
+    :ui="{ close: 'cursor-pointer' }"
+    v-model:open="isOpen"
+    :title="$t('user.recharge.title')"
+    size="lg"
+  >
     <template #body>
       <div class="space-y-6">
         <!-- 当前状态 -->
@@ -234,11 +239,11 @@
           :disabled="!selectedPackage || !selectedPaymentMethod || processing"
           :loading="processing"
           color="primary"
-          class="flex-1"
+          class="flex-1 cursor-pointer"
         >
           {{ processing ? $t('payment.processing') : $t('user.recharge.confirmRecharge') }}
         </UButton>
-        <UButton @click="closeModal" variant="outline">
+        <UButton @click="closeModal" variant="outline" class="cursor-pointer">
           {{ $t('common.cancel') }}
         </UButton>
       </div>

@@ -234,6 +234,9 @@
     "articles": {
       "searchAndFilter": "Search & Filter"
     },
+    "comments": {
+      "searchAndFilter": "Search & Filter"
+    },
     "banners": {
       "searchAndFilter": "Search & Filter"
     },
@@ -289,7 +292,14 @@
       "filter": "Filter",
       "background": "Background",
       "cover": "Cover",
-      "link": "Link"
+      "link": "Link",
+      "keyword": "Keyword",
+      "userId": "User ID",
+      "articleId": "Article ID",
+      "content": "Content",
+      "article": "Article",
+      "replyCount": "Replies",
+      "rootId": "Root Comment ID"
     },
     "message": {
       "deleteSuccess": "Delete Successful",
@@ -413,6 +423,7 @@
     "publishAt": "Published at",
     "views": "Views",
     "comments": "Comments",
+    "tags": "Tags",
     "followers": "Followers",
     "likes": "Likes",
     "goodReviews": "Good Reviews",
@@ -780,11 +791,43 @@
   },
   "response": {
     "error": {
-      "followSelf": "Cannot follow yourself",
+      "followSelf": "You cannot follow yourself",
       "emailAlreadyExists": "Email already exists",
       "usernameAlreadyExists": "Username already exists",
       "emailNotExists": "Email not exists",
-      "articleNotFound": "Article not found"
+      "articleNotFound": "Article not exists",
+      "userNotExist": "User not exists",
+      "passwordError": "Password error",
+      "inviteCodeAlreadyUsed": "Invite code already used",
+      "inviteCodeNotExist": "Invite code not exists",
+      "inviteCodeInvalid": "Invite code invalid",
+      "inviteCodeExpired": "Invite code expired",
+      "cannotUseOwnInviteCode": "You cannot use your own invite code",
+      "inviteRecordNotExist": "Invite record not exists",
+      "commentNotFound": "Comment not exists",
+      "tagNotFound": "The tag does not exist",
+      "categoryNotFound": "Category not exists",
+      "bannerNotFound": "Banner not exists",
+      "alipaySdkNotInitialized": "Alipay SDK not initialized",
+      "wechatPaySdkNotInitialized": "Wechat payment SDK not initialized",
+      "epayConfigNotInitialized": "Easy payment configuration not initialized",
+      "orderNotFound": "Order not exists",
+      "orderAlreadyPaid": "Order already paid",
+      "alipayNotEnabled": "Alipay not enabled",
+      "wechatPayNotEnabled": "Wechat payment not enabled",
+      "epayNotEnabled": "Easy payment not enabled",
+      "unsupportedPaymentMethod": "Unsupported payment methods",
+      "createAlipayPaymentFailed": "Create Alipay payment failed",
+      "createWechatPaymentFailed": "Create Wechat payment failed",
+      "createEpayPaymentFailed": "Create Easy payment failed",
+      "paymentRecordStatusIncorrect": "Payment record status incorrect",
+      "testEpaySignatureFailed": "Testing Easy Payment signature failed",
+      "noPermissionSendBroadcast": "No permission to send broadcast",
+      "permissionDenied": "Permission denied",
+      "unauthorized": "Unauthorized",
+      "uploadFileEmpty": "Upload file is empty",
+      "resourceNotFound": "Resource not found",
+      "resourceConflict": "Resource conflict"
     },
     "success": {
       "verificationCodeSent": "Verification code sent",
@@ -792,13 +835,14 @@
       "profileSavedFailed": "Failed to save profile"
     }
   },
-  "Unauthorized": "Unauthorized",
+  "Unauthorized": "User not logged in",
   "payment": {
     "epay": "Epay",
     "alipay": "Alipay",
     "balance": "Balance",
     "epayAlipay": "Alipay",
     "epayWechat": "Wxpay",
-    "wechat": "Wxpay"
+    "wechat": "Wxpay",
+    "balanceDesc": "Account balance"
   }
 }
