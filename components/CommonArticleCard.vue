@@ -18,8 +18,16 @@
     </div>
 
     <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden line-clamp-2">
+      <UChip v-if="hasNsfwTag" color="error" size="sm" position="top-left">
+        <h2
+          class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300"
+        >
+          {{ article.title }}
+        </h2>
+      </UChip>
       <h2
-        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 mb-2 sm:mb-3 transition-all duration-300"
+        v-else
+        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300"
       >
         {{ article.title }}
       </h2>
@@ -30,12 +38,12 @@
           <div class="flex items-center space-x-4">
             <UButton
               variant="ghost"
-              class="cursor-pointer text-gray-500 dark:text-white/70 flex items-center gap-2 hover:text-pink-400 rounded-full px-3 py-1.5 hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-all duration-300 whitespace-nowrap group/like"
-              :class="article.isLiked ? 'text-pink-500' : 'text-gray-500 dark:text-white/70'"
+              class="cursor-pointer text-gray-500 dark:text-white/70 flex items-center gap-2 hover:text-red-400 rounded-full px-3 py-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300 whitespace-nowrap group/like"
+              :class="article.isLiked ? 'text-red-500' : 'text-gray-500 dark:text-white/70'"
             >
               <Icon
                 name="mynaui:heart-solid"
-                class="transition-transform duration-300 group-hover/like:scale-110 group-hover/like:text-pink-500"
+                class="transition-transform duration-300 group-hover/like:scale-110 group-hover/like:text-red-500"
               />
               <span class="text-sm font-medium">{{ article.likes }}</span>
             </UButton>
@@ -70,4 +78,23 @@
   });
 
   const article = props.data;
+
+  // 检查是否有 NSFW 标签
+  const hasNsfwTag = computed(() => {
+    if (!article.tags || !Array.isArray(article.tags)) {
+      return false;
+    }
+
+    return article.tags.some(tag => {
+      // 处理不同类型的标签数据
+      if (typeof tag === 'string') {
+        return tag.toLowerCase() === 'nsfw';
+      }
+      if (typeof tag === 'object' && tag !== null) {
+        const tagName = (tag as any).name || (tag as any).label || '';
+        return tagName.toLowerCase() === 'nsfw';
+      }
+      return false;
+    });
+  });
 </script>
