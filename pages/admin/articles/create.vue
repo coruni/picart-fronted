@@ -452,6 +452,7 @@
       // 更新state.images
       updateStateImages();
 
+      // 显示上传成功提示
       toast.add({
         title: t('common.message.uploadSuccess'),
         color: 'success'
@@ -515,6 +516,7 @@
         state.cover = newFile._url;
         coverFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
           color: 'success'
@@ -593,11 +595,6 @@
           images: data.images,
           cover: coverFile.value?._url || data.cover || ''
         }
-      });
-
-      toast.add({
-        title: t('common.message.createSuccess'),
-        color: 'primary'
       });
 
       router.push('/admin/articles');

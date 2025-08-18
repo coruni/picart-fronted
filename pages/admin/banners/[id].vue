@@ -185,11 +185,6 @@
 
     displayFile.value = null;
     state.imageUrl = '';
-
-    toast.add({
-      title: t('form.image.removeSuccess') || '图片删除成功',
-      color: 'success'
-    });
   };
 
   // 表单验证规则
@@ -256,9 +251,10 @@
 
         displayFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
-          color: 'primary'
+          color: 'success'
         });
       } else {
         // 上传失败
@@ -325,11 +321,6 @@
           id: String(route.params.id)
         },
         body
-      });
-
-      toast.add({
-        title: t('common.message.updateSuccess'),
-        color: 'primary'
       });
 
       // 返回列表页

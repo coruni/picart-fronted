@@ -131,6 +131,17 @@ export const createClientConfig: CreateClientConfig = config => {
 
         throw error;
       }
+      if (context.response._data?.data?.message) {
+        const toast = useToast();
+        const { $i18n } = useNuxtApp();
+        const t = $i18n.t;
+        toast.add({
+          title: t(context.response._data.data.message),
+          color: 'primary',
+          icon: 'mynaui:check-circle',
+          ui: { close: 'cursor-pointer' }
+        });
+      }
       return context;
     }
   };

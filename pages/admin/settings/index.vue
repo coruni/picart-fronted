@@ -905,9 +905,10 @@
         config.value.site_logo = newFile._url;
         logoFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
-          color: 'primary'
+          color: 'success'
         });
       } else {
         newFile._uploading = false;
@@ -974,9 +975,10 @@
         config.value.site_favicon = newFile._url;
         faviconFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
-          color: 'primary'
+          color: 'success'
         });
       } else {
         newFile._uploading = false;
@@ -1041,11 +1043,6 @@
       await configControllerUpdateAll({
         composable: '$fetch',
         body: submitData as any
-      });
-
-      toast.add({
-        title: t('admin.settings.saveSuccess'),
-        color: 'success'
       });
     } catch (error) {
       toast.add({

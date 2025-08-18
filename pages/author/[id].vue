@@ -404,10 +404,6 @@
           id: String(route.params.id)
         }
       });
-      toast.add({
-        title: t(data.message),
-        color: 'primary'
-      });
     } catch (error: any) {
     } finally {
       followLoading.value = false;

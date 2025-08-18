@@ -254,10 +254,6 @@
           id: currentBannerId.value.toString()
         }
       });
-      toast.add({
-        title: t('common.message.deleteSuccess'),
-        color: 'success'
-      });
       banners.refresh?.();
     } catch (error) {
       console.error('Failed to delete banner:', error);

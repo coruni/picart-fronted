@@ -259,10 +259,6 @@
           id: currentTagId.value.toString()
         }
       });
-      toast.add({
-        title: t('common.message.deleteSuccess'),
-        color: 'success'
-      });
       tags.refresh?.();
     } catch (error) {
       console.error('Failed to delete tag:', error);
