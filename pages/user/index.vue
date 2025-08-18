@@ -725,8 +725,9 @@
 
       editForm.value.avatar = res.data[0].url!;
 
+      // 显示上传成功提示
       toast.add({
-        title: '头像上传成功',
+        title: t('common.message.uploadSuccess'),
         color: 'success'
       });
     } catch (error: any) {
@@ -761,12 +762,6 @@
       // 关闭模态框
       isEditModalOpen.value = false;
 
-      // 显示成功提示
-      toast.add({
-        title: t('response.success.profileSaved'),
-        color: 'primary',
-        duration: 2000
-      });
       // 刷新用户资料
       userRefresh();
     } catch (error) {
@@ -790,11 +785,6 @@
   // 支付成功回调
   const onPaymentSuccess = (orderId: number) => {
     showPaymentModal.value = false;
-
-    toast.add({
-      title: t('user.recharge.successMessage'),
-      color: 'success'
-    });
 
     // 刷新用户资料
     userRefresh();
@@ -821,11 +811,6 @@
 
       // 模拟API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-
-      toast.add({
-        title: t('user.changePassword.success'),
-        color: 'success'
-      });
 
       // 关闭模态框并重置表单
       isChangePasswordModalOpen.value = false;

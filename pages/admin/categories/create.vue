@@ -168,6 +168,7 @@
 
       form.value.avatar = res.data[0].url!;
 
+      // 显示上传成功提示
       toast.add({
         title: t('common.message.uploadSuccess'),
         color: 'success'
@@ -211,6 +212,8 @@
 
       form.value.cover = res.data[0].url!;
       console.log(form.value.cover);
+
+      // 显示上传成功提示
       toast.add({
         title: t('common.message.uploadSuccess'),
         color: 'success'
@@ -237,11 +240,6 @@
           link: form.value.link || undefined,
           status: 'ENABLED'
         } as any
-      });
-
-      toast.add({
-        title: t('common.message.createSuccess'),
-        color: 'success'
       });
 
       router.push('/admin/categories');

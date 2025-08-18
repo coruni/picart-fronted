@@ -378,10 +378,6 @@
           id: currentUserId.value.toString()
         }
       });
-      toast.add({
-        title: t('common.message.deleteSuccess'),
-        color: 'success'
-      });
       users.refresh?.();
     } catch (error) {
       console.error('Failed to delete user:', error);

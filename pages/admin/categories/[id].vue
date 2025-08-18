@@ -416,6 +416,7 @@
         form.value.avatar = newFile._url;
         displayFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
           color: 'success'
@@ -480,6 +481,7 @@
         form.value.cover = newFile._url;
         coverFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
           color: 'success'
@@ -549,11 +551,6 @@
           cover: body.cover || undefined,
           link: body.link || undefined
         } as any
-      });
-
-      toast.add({
-        title: t('common.message.updateSuccess'),
-        color: 'success'
       });
 
       router.push('/admin/categories');

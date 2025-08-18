@@ -265,6 +265,7 @@
         form.value.avatar = newFile._url;
         avatarFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
           color: 'success'
@@ -324,6 +325,7 @@
         form.value.background = newFile._url;
         backgroundFile.value = newFile;
 
+        // 显示上传成功提示
         toast.add({
           title: t('common.message.uploadSuccess'),
           color: 'success'
@@ -428,11 +430,6 @@
           cover: body.cover,
           sort: body.sort
         }
-      });
-
-      toast.add({
-        title: t('common.message.updateSuccess'),
-        color: 'success'
       });
 
       router.push('/admin/tags');

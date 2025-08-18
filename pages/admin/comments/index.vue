@@ -296,10 +296,6 @@
       //     id: currentCommentId.value
       //   }
       // });
-      toast.add({
-        title: t('common.message.deleteSuccess'),
-        color: 'success'
-      });
       comments.refresh?.();
     } catch (error) {
       console.error('Failed to delete comment:', error);

@@ -750,11 +750,6 @@
 
       // 刷新评论列表
       await refreshComments();
-
-      toast.add({
-        title: t('article.commentSuccess'),
-        color: 'success'
-      });
     } catch (error) {
       console.error('发布评论失败:', error);
     } finally {
@@ -791,11 +786,6 @@
 
       // 刷新文章数据以更新关注状态
       await refreshArticle();
-
-      toast.add({
-        title: t('user.followSuccess'),
-        color: 'success'
-      });
     } catch (error: any) {
       console.error('关注失败:', error);
     } finally {
@@ -884,11 +874,6 @@
       await articleControllerRemove({
         composable: '$fetch',
         path: { id: String(route.params.id) }
-      });
-
-      toast.add({
-        title: t('article.deleteSuccess') || '删除成功',
-        color: 'primary'
       });
 
       // 跳转到用户文章列表页面

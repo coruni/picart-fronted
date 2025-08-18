@@ -542,11 +542,6 @@
         }
       });
 
-      toast.add({
-        title: t('user.orders.cancelSuccess'),
-        color: 'success'
-      });
-
       // 关闭对话框
       isCancelModalOpen.value = false;
       orderToCancel.value = null;

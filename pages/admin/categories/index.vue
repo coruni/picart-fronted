@@ -450,10 +450,6 @@
           id: currentCategoryId.value.toString()
         }
       });
-      toast.add({
-        title: t('common.message.deleteSuccess'),
-        color: 'success'
-      });
       categories.refresh?.();
     } catch (error) {
       console.error('Failed to delete category:', error);

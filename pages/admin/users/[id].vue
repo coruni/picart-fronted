@@ -415,11 +415,6 @@
         body: updateData
       });
 
-      toast.add({
-        title: t('common.message.updateSuccess'),
-        color: 'success'
-      });
-
       router.push('/admin/users');
     } catch (error) {
       console.error('Failed to update user:', error);

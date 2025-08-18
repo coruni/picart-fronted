@@ -45,118 +45,29 @@ pnpm install
 npm install
 ```
 
-### 3. 环境配置
 
-创建 `.env` 文件并配置以下环境变量：
-
-```env
-# API 配置
-NUXT_PUBLIC_API_BASE_URL=http://localhost:3001/api
-NUXT_PUBLIC_API_PREFIX=/api
-
-# 应用配置
-NUXT_PUBLIC_APP_NAME=PicArt
-NUXT_PUBLIC_APP_DESCRIPTION=一个现代化的内容创作和分享平台
-NUXT_PUBLIC_APP_URL=http://localhost:3000
-
-# 文件上传配置
-NUXT_PUBLIC_UPLOAD_URL=http://localhost:3001/api/upload
-
-# 支付配置 (可选)
-NUXT_PUBLIC_PAYMENT_GATEWAY=stripe
-NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_key
-
-# 第三方服务配置 (可选)
-NUXT_PUBLIC_GOOGLE_ANALYTICS_ID=your_ga_id
-NUXT_PUBLIC_GOOGLE_ADSENSE_ID=your_adsense_id
-```
-
-### 4. 应用配置
+### 3. 应用配置
 
 编辑 `app.config.ts` 文件：
 
 ```typescript
 export default defineAppConfig({
-  title: 'PicArt',
-  description: '一个现代化的内容创作和分享平台',
-  url: 'http://localhost:3000',
-  
-  // 主题配置
-  theme: {
-    primary: '#3B82F6',
-    secondary: '#6B7280',
-    accent: '#F59E0B'
-  },
-  
-  // 功能开关
-  features: {
-    comments: true,
-    likes: true,
-    follows: true,
-    payments: true,
-    analytics: true
-  },
-  
-  // 分页配置
-  pagination: {
-    defaultPageSize: 20,
-    maxPageSize: 100
-  },
-  
-  // 文件上传配置
-  upload: {
-    maxSize: 10 * 1024 * 1024, // 10MB
-    allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-    imageQuality: 0.8
-  }
-})
+  apiBaseUrl: 'https://api.example.com/api/v1',
+  ...
+});
+
 ```
 
-### 5. Nuxt 配置
+### 4. Nuxt 配置
 
 编辑 `nuxt.config.ts` 文件：
 
 ```typescript
 export default defineNuxtConfig({
-  // 开发工具
-  devtools: { enabled: true },
-  
-  // 模块
-  modules: [
-    '@nuxt/ui',
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-    '@nuxt/image',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap'
-  ],
-  
-  // UI 配置
-  ui: {
-    icons: ['mynaui', 'heroicons']
-  },
-  
-  // 国际化配置
-  i18n: {
-    locales: [
-      { code: 'zh', iso: 'zh-CN', name: '中文' },
-      { code: 'en', iso: 'en-US', name: 'English' },
-      { code: 'ja', iso: 'ja-JP', name: '日本語' }
-    ],
-    defaultLocale: 'zh',
-    strategy: 'prefix_except_default'
-  },
-  
-  // 图片配置
-  image: {
-    provider: 'ipx',
-    quality: 80,
-    format: ['webp', 'avif', 'jpeg']
-  },
   
   // SEO 配置
   site: {
-    url: 'http://localhost:3000'
+    url: 'https://front.exmaple.com'
   },
   
   // 路由配置

@@ -246,11 +246,6 @@
         }
       });
 
-      toast.add({
-        title: t(data.message),
-        color: 'primary'
-      });
-
       // 开始倒计时
       countdown.value = 60;
       const timer = setInterval(() => {

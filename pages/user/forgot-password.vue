@@ -147,11 +147,6 @@
         }
       });
 
-      toast.add({
-        title: t('forgotPassword.codeSent'),
-        color: 'success'
-      });
-
       // 开始倒计时
       countdown.value = 60;
       const timer = setInterval(() => {
@@ -179,11 +174,6 @@
           code: forgotForm.value.verificationCode,
           newPassword: forgotForm.value.newPassword
         }
-      });
-
-      toast.add({
-        title: t('forgotPassword.resetSuccess'),
-        color: 'success'
       });
 
       // 跳转到登录页

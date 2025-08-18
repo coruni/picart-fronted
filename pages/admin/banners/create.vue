@@ -154,13 +154,14 @@
 
       state.imageUrl = res.data[0].url!;
 
-      // 手动触发表单重新验证以清除图片必填错误
-      await nextTick();
-
+      // 显示上传成功提示
       toast.add({
         title: t('common.message.uploadSuccess'),
         color: 'success'
       });
+
+      // 手动触发表单重新验证以清除图片必填错误
+      await nextTick();
     } catch (error: any) {
       // 处理上传错误
       console.error('Failed to upload image:', error);
@@ -183,11 +184,6 @@
       await bannersControllerCreate({
         composable: '$fetch',
         body: body
-      });
-
-      toast.add({
-        title: t('common.message.createSuccess'),
-        color: 'success'
       });
 
       // 返回列表页
