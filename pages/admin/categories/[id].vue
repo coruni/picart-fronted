@@ -540,13 +540,13 @@
         path: { id: id.value },
         body: {
           name: body.name,
-          description: body.description || undefined,
+          description: body.description,
           sort: body.sort,
-          parentId: body.parentId !== null ? body.parentId : undefined,
-          avatar: body.avatar || undefined,
-          cover: body.cover || undefined,
-          link: body.link || undefined
-        } as any
+          parentId: body.parentId ?? undefined,
+          avatar: body.avatar,
+          cover: body.cover,
+          link: body.link
+        }
       });
 
       router.push('/admin/categories');

@@ -237,9 +237,9 @@
         body: {
           ...form.value,
           parentId: form.value.parentId !== null ? form.value.parentId : undefined,
-          link: form.value.link || undefined,
+          link: form.value.link,
           status: 'ENABLED'
-        } as any
+        }
       });
 
       router.push('/admin/categories');

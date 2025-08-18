@@ -731,8 +731,8 @@
         path: { id: articleId },
         body: {
           ...data,
-          tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
-          tagNames: newTagNames.length > 0 ? newTagNames : undefined,
+          tagIds: existingTagIds ?? [],
+          tagNames: newTagNames ?? [],
           images: data.images,
           cover: coverFile.value?._url || data.cover || ''
         }
