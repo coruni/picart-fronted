@@ -258,11 +258,7 @@
       .max(200, t('validation.maxLength', { max: 200 }))
       .optional()
       .nullable(),
-    link: z
-      .string()
-
-      .optional()
-      .nullable(),
+    link: z.string().optional(),
     parentId: z
       .number()
       .optional()

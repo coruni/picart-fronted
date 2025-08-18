@@ -101,7 +101,7 @@
   const schema = z.object({
     name: z.string().min(1, t('form.name.placeholder')),
     description: z.string().optional(),
-    link: z.string().url(t('validation.invalidUrl')).optional().nullable(),
+    link: z.string().optional(),
     parentId: z.number().optional().nullable(),
     sort: z.number().min(0).default(0),
     avatar: z.string().optional(),
