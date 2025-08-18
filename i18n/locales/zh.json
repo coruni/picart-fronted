@@ -543,7 +543,8 @@
       "deleted": "已删除",
       "name": "状态",
       "placeholder": "选择状态"
-    }
+    },
+    "requireMembership": "会员查看"
   },
   "article": {
     "publishAt": "发布于",

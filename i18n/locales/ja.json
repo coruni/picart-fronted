@@ -417,7 +417,8 @@
       "deleted": "削除済み",
       "name": "ステータス",
       "placeholder": "ステータスを選択"
-    }
+    },
+    "requireMembership": "メンバービュー"
   },
   "article": {
     "publishAt": "公開日",

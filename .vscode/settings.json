@@ -33,7 +33,7 @@
     "_nuxt": true,
     "node-compile-cache": true
   },
-  "i18n-ally.sourceLanguage": "zh",
+  "i18n-ally.sourceLanguage": "en",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

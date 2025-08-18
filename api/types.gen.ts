@@ -335,6 +335,10 @@ export type CreateCategoryDto = {
    * 分类状态
    */
   status: string;
+  /**
+   * 链接
+   */
+  link?: string;
 };
 
 export type UpdateCategoryDto = {
@@ -4132,15 +4136,17 @@ export type CategoryControllerFindOneResponses = {
       id: number;
       name: string;
       description: string;
-      parentId: unknown;
-      link: unknown;
-      parent: unknown;
+      parentId?: number;
+      link?: string;
+      parent?: {
+        [key: string]: unknown;
+      };
       children: Array<{
         id?: number;
         name?: string;
         description?: string;
         parentId?: number;
-        link?: unknown;
+        link?: string;
         avatar?: string;
         background?: string;
         cover?: string;

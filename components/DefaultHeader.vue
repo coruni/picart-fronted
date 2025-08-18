@@ -4,7 +4,15 @@
   >
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
       <NuxtLinkLocale class="flex items-center space-x-2" to="/">
-        <span class="text-xl font-bold text-gray-700 dark:text-white">PicArt</span>
+        <NuxtImg
+          v-if="siteConfig?.site_logo"
+          :src="siteConfig?.site_logo"
+          class="w-8 h-8 rounded-full object-cover"
+          :alt="siteConfig?.site_name || 'Logo'"
+        />
+        <span v-else class="text-xl font-bold text-gray-700 dark:text-white">{{
+          siteConfig?.site_name || 'PicArt'
+        }}</span>
       </NuxtLinkLocale>
 
       <!-- 桌面端导航 -->
@@ -15,6 +23,7 @@
             <NuxtLinkLocale
               :to="item.link || `/category/${item.id}`"
               :target="item.link ? '_blank' : '_self'"
+              :no-rel="!!item.link"
             >
               <span>{{ item.name }}</span>
             </NuxtLinkLocale>
@@ -24,6 +33,7 @@
               v-if="item.link"
               :to="item.link"
               :target="item.link ? '_blank' : '_self'"
+              :no-rel="!!item.link"
               class="hover:text-primary dark:hover:text-primary-400 transition-colors"
             >
               <span>{{ item.name }}</span>
@@ -41,6 +51,7 @@
               <div class="py-1">
                 <NuxtLinkLocale
                   :target="child.link ? '_blank' : '_self'"
+                  :no-rel="!!child.link"
                   v-for="child in item.children"
                   :key="child.id"
                   :to="child.link || `/category/${child.id}`"
@@ -183,7 +194,9 @@
               <div v-if="!item.children">
                 <NuxtLinkLocale
                   :to="item.link || `/category/${item.id}`"
-                  class="rounded-none block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                  :target="item.link ? '_blank' : '_self'"
+                  :no-rel="!!item.link"
+                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                   @click="closeMobileMenu"
                 >
                   {{ item.name }}
@@ -193,6 +206,8 @@
                 <div v-if="item.link" class="px-4 py-2">
                   <NuxtLinkLocale
                     :to="item.link"
+                    :target="item.link ? '_blank' : '_self'"
+                    :no-rel="!!item.link"
                     class="block text-gray-700 dark:text-gray-300 font-medium hover:text-primary dark:hover:text-primary-400 transition-colors"
                     @click="closeMobileMenu"
                   >
@@ -207,6 +222,8 @@
                     v-for="child in item.children"
                     :key="child.id"
                     :to="child.link || `/category/${child.id}`"
+                    :target="child.link ? '_blank' : '_self'"
+                    :no-rel="!!child.link"
                     class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
                     @click="closeMobileMenu"
                   >
@@ -297,6 +314,9 @@
 <script lang="ts" setup>
   import type { Category } from '~~/types/category';
   import { useRoute } from 'vue-router';
+  import type { ConfigControllerGetPublicResponse } from '~/api';
+  type Config = ConfigControllerGetPublicResponse['data'];
+  const siteConfig = inject<Config>('siteConfig');
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();

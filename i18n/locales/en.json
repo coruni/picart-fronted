@@ -417,7 +417,8 @@
       "deleted": "Deleted",
       "name": "Status",
       "placeholder": "Select Status"
-    }
+    },
+    "requireMembership": "Member View"
   },
   "article": {
     "publishAt": "Published at",
