@@ -20,10 +20,10 @@ export default defineNuxtConfig({
 
   // SEO 配置
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://www.picart.cc',
-    name: process.env.NUXT_PUBLIC_APP_NAME || 'PicArt',
-    description: process.env.NUXT_PUBLIC_DESCRIPTION || '图片分享社区',
-    defaultLocale: process.env.NUXT_PUBLIC_DEFAULT_LOCALE || 'zh',
+    url: 'https://www.picart.cc',
+    name: 'PicArt',
+    description: '图片分享社区',
+    defaultLocale: 'zh',
     exclude: ['/admin/**', '/user/**'],
     cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     autoLastmod: true
@@ -200,12 +200,12 @@ export default defineNuxtConfig({
             '@type': 'WebSite',
             name: 'PicArt',
             description: '图片分享社区',
-            url: process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc',
+            url: 'https://www.picart.cc',
             potentialAction: {
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `${process.env.NUXT_PUBLIC_SITE_URL || 'https://picart.cc'}/search?q={search_term_string}`
+                urlTemplate: `https://www.picart.cc/search?q={search_term_string}`
               },
               'query-input': 'required name=search_term_string'
             }
