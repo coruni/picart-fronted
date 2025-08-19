@@ -67,6 +67,33 @@
         @change="handleFileSelect"
       />
 
+      <!-- 加载遮罩 -->
+      <div
+        v-if="isUploading"
+        class="absolute inset-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-10"
+      >
+        <div class="text-center">
+          <div
+            class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"
+          ></div>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            {{
+              totalUploadCount > 1
+                ? t('image.uploadingMultiple', { count: totalUploadCount })
+                : t('image.uploading')
+            }}
+          </p>
+          <div class="w-24 h-1 bg-gray-200 rounded-full mt-2 overflow-hidden">
+            <div
+              class="h-full bg-primary rounded-full transition-all duration-300"
+              :style="{
+                width: isUploading ? '100%' : '0%'
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+
       <div class="text-center">
         <UIcon
           name="mynaui:image"
@@ -78,7 +105,7 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
           {{ t('image.uploadMultipleDescription') }}
         </p>
-        <UButton variant="outline" size="sm" icon="mynaui:upload">
+        <UButton variant="outline" size="sm" icon="mynaui:upload" :disabled="isUploading">
           {{ t('common.button.selectImages') }}
         </UButton>
       </div>
@@ -128,6 +155,9 @@
   const error = ref('');
   const isDragOver = ref(false);
   const imageList = ref<string[]>([]);
+  const isUploading = ref(false);
+  const uploadingCount = ref(0);
+  const totalUploadCount = ref(0);
 
   // 初始化图片列表
   const initializeImageList = () => {
@@ -189,29 +219,32 @@
       return;
     }
 
-    // 处理每个文件
+    // 验证所有文件
     for (const file of files) {
-      await handleFile(file);
-    }
-  };
+      // 验证文件类型
+      if (!file.type.startsWith('image/')) {
+        error.value = t('image.invalidType');
+        return;
+      }
 
-  // 处理单个文件
-  const handleFile = async (file: File) => {
-    // 验证文件类型
-    if (!file.type.startsWith('image/')) {
-      error.value = t('image.invalidType');
-      return;
+      // 验证文件大小
+      if (file.size > props.maxSize * 1024 * 1024) {
+        error.value = t('image.tooLarge', { maxSize: props.maxSize });
+        return;
+      }
     }
 
-    // 验证文件大小
-    if (file.size > props.maxSize * 1024 * 1024) {
-      error.value = t('image.tooLarge', { maxSize: props.maxSize });
-      return;
-    }
+    // 设置上传状态
+    isUploading.value = true;
+    totalUploadCount.value = files.length;
+    uploadingCount.value = 0;
 
     try {
+      // 批量上传所有文件
       const formData = new FormData();
-      formData.append('files', file);
+      files.forEach(file => {
+        formData.append('files', file);
+      });
 
       const response = await uploadControllerUploadFile({
         composable: '$fetch',
@@ -219,14 +252,21 @@
         bodySerializer: () => formData
       });
 
-      if (response.data && response.data[0]?.url) {
-        const imageUrl = response.data[0].url;
-        imageList.value.push(imageUrl);
+      if (response.data && response.data.length > 0) {
+        // 添加所有上传成功的图片URL
+        const newImageUrls = response.data
+          .map(item => item.url)
+          .filter((url): url is string => Boolean(url));
+        imageList.value.push(...newImageUrls);
         updateModelValue();
+
+        // 更新进度
+        uploadingCount.value = files.length;
 
         toast.add({
           title: t('common.message.uploadSuccess'),
-          color: 'success'
+          color: 'primary',
+          icon: 'mynaui:check'
         });
       } else {
         throw new Error('Upload failed');
@@ -239,6 +279,10 @@
         title: t('common.message.uploadError'),
         color: 'error'
       });
+    } finally {
+      isUploading.value = false;
+      totalUploadCount.value = 0;
+      uploadingCount.value = 0;
     }
   };
 
@@ -251,6 +295,9 @@
   // 移除所有图片
   const removeAllImages = () => {
     imageList.value = [];
+    isUploading.value = false;
+    totalUploadCount.value = 0;
+    uploadingCount.value = 0;
     updateModelValue();
   };
 

@@ -38,7 +38,7 @@
         color="neutral"
         v-if="!$attrs.class?.includes('fixed')"
         @click="handleToggle"
-        class="cursor-pointer absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm hidden lg:flex"
+        class="cursor-pointer absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full items-center justify-center hover:bg-gray-50 transition-colors shadow-sm hidden lg:flex"
       >
         <Icon
           :name="sidebarCollapsed ? 'mynaui:chevron-right' : 'mynaui:chevron-left'"

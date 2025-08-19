@@ -52,6 +52,22 @@
         @change="handleFileSelect"
       />
 
+      <!-- 加载遮罩 -->
+      <div
+        v-if="isUploading"
+        class="absolute inset-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center z-10"
+      >
+        <div class="text-center">
+          <div
+            class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"
+          ></div>
+          <p class="text-sm text-gray-600 dark:text-gray-300">{{ t('image.uploading') }}</p>
+          <div class="w-24 h-1 bg-gray-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-primary rounded-full animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="text-center">
         <UIcon
           name="mynaui:image"
@@ -63,7 +79,7 @@
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
           {{ t('image.uploadDescription') }}
         </p>
-        <UButton variant="outline" size="sm" icon="mynaui:upload">
+        <UButton variant="outline" size="sm" icon="mynaui:upload" :disabled="isUploading">
           {{ t('common.button.selectImage') }}
         </UButton>
       </div>
@@ -110,6 +126,7 @@
   const fileInput = ref<HTMLInputElement>();
   const error = ref('');
   const isDragOver = ref(false);
+  const isUploading = ref(false);
 
   // 触发文件选择
   const triggerFileInput = () => {
@@ -155,6 +172,7 @@
     }
 
     try {
+      isUploading.value = true;
       const formData = new FormData();
       formData.append('files', file);
 
@@ -170,7 +188,8 @@
 
         toast.add({
           title: t('common.message.uploadSuccess'),
-          color: 'success'
+          color: 'primary',
+          icon: 'mynaui:check'
         });
       } else {
         throw new Error('Upload failed');
@@ -183,6 +202,8 @@
         title: t('common.message.uploadError'),
         color: 'error'
       });
+    } finally {
+      isUploading.value = false;
     }
   };
 
@@ -195,6 +216,7 @@
 
     // 重置状态
     error.value = '';
+    isUploading.value = false;
 
     // 发送事件
     emit('update:modelValue', '');

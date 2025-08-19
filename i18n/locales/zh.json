@@ -375,7 +375,9 @@
     "tooLarge": "图片大小不能超过 {maxSize}MB",
     "invalidAspectRatio": "图片宽高比不符合要求 ({ratio})",
     "uploadError": "图片上传失败，请重试",
-    "maxCountReached": "最多只能上传 {maxCount} 张图片"
+    "maxCountReached": "最多只能上传 {maxCount} 张图片",
+    "uploading": "上传中...",
+    "uploadingMultiple": "上传中... ({count} 张图片)"
   },
   "uploading": "上传中...",
   "filter": {

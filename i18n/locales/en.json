@@ -375,7 +375,9 @@
     "tooLarge": "Image size cannot exceed {maxSize}MB",
     "invalidAspectRatio": "Image aspect ratio does not meet requirements ({ratio})",
     "uploadError": "Image upload failed, please try again",
-    "maxCountReached": "Maximum {maxCount} images can be uploaded"
+    "maxCountReached": "Maximum {maxCount} images can be uploaded",
+    "uploading": "Uploading...",
+    "uploadingMultiple": "Uploading... ({count} images)"
   },
   "uploading": "Uploading...",
   "filter": {

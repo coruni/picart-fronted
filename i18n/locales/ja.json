@@ -365,7 +365,9 @@
     "tooLarge": "画像サイズは {maxSize}MB を超えることはできません",
     "invalidAspectRatio": "画像のアスペクト比が要件を満たしていません ({ratio})",
     "uploadError": "画像のアップロードに失敗しました。再試行してください",
-    "maxCountReached": "最大 {maxCount} 枚の画像をアップロードできます"
+    "maxCountReached": "最大 {maxCount} 枚の画像をアップロードできます",
+    "uploading": "アップロード中...",
+    "uploadingMultiple": "アップロード中... ({count} 枚の画像)"
   },
   "uploading": "アップロード中...",
   "status": {
