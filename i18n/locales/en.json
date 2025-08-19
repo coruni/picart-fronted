@@ -327,7 +327,13 @@
       "search": "Search",
       "close": "Close",
       "save": "Save",
-      "back": "Back"
+      "back": "Back",
+      "removeAll": "Remove All",
+      "replace": "Replace",
+      "remove": "Remove",
+      "change": "Change",
+      "selectImages": "Select Images",
+      "selectImage": "Select Image"
     },
     "save": "Save",
     "loading": {
@@ -349,8 +355,29 @@
     },
     "close": "Close",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "remove": "Remove",
+    "removeAll": "Remove All",
+    "change": "Change",
+    "replace": "Replace",
+    "selectImage": "Select Image",
+    "selectImages": "Select Images"
   },
+  "image": {
+    "preview": "Image Preview",
+    "uploadTitle": "Upload Image",
+    "uploadDescription": "Click or drag image here to upload",
+    "uploadMultipleTitle": "Upload Multiple Images",
+    "uploadMultipleDescription": "Click or drag images here to upload, supports multiple selection",
+    "uploadedImages": "Uploaded Images",
+    "image": "Image",
+    "invalidType": "Please select a valid image file",
+    "tooLarge": "Image size cannot exceed {maxSize}MB",
+    "invalidAspectRatio": "Image aspect ratio does not meet requirements ({ratio})",
+    "uploadError": "Image upload failed, please try again",
+    "maxCountReached": "Maximum {maxCount} images can be uploaded"
+  },
+  "uploading": "Uploading...",
   "filter": {
     "title": "Filter"
   },
@@ -785,7 +812,8 @@
     "image": "Image",
     "sortOrder": "Sort",
     "titlePlaceholder": "Input Title",
-    "description": "Description"
+    "description": "Description",
+    "imageHelp": "Recommended size: 1920x1080px, supports JPG, PNG format, max 5MB"
   },
   "categories": {
     "create": "New Category"

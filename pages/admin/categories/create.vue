@@ -48,23 +48,22 @@
       </div>
 
       <UFormField :label="t('common.table.avatar')" name="avatar" class="w-full mt-4">
-        <UFileUpload
-          v-model="file"
-          size="xl"
-          :ui="{ base: 'w-24 h-24', root: 'w-24 h-24' }"
-          :placeholder="t('admin.categories.avatarPlaceholder')"
+        <ImageUpload
+          v-model="form.avatar"
           accept="image/*"
-          @update:modelValue="onImageUpload"
-        >
-        </UFileUpload>
+          :max-size="1 * 1024 * 1024"
+          :help-text="t('admin.categories.avatarHelp')"
+          aspect-ratio="1/1"
+        />
       </UFormField>
 
       <UFormField :label="t('common.table.cover')" name="cover" class="w-full mt-4">
-        <UFileUpload
-          v-model="coverFile"
-          :placeholder="t('admin.categories.coverPlaceholder')"
+        <ImageUpload
+          v-model="form.cover"
           accept="image/*"
-          @update:modelValue="onCoverUpload"
+          :max-size="2 * 1024 * 1024"
+          :help-text="t('admin.categories.coverHelp')"
+          aspect-ratio="16/9"
         />
       </UFormField>
 

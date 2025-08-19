@@ -64,43 +64,23 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('common.table.avatar')" name="avatar">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="avatarFile"
-                :placeholder="t('admin.tags.avatarPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onAvatarUpload"
-                :loading="avatarUploading"
-                :ui="{
-                  base: 'w-24 h-24',
-                  root: 'w-24 h-24',
-                  file: 'w-24 h-24 h-24'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.tags.avatarHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.avatar"
+              accept="image/*"
+              :max-size="1 * 1024 * 1024"
+              :help-text="t('admin.tags.avatarHelp')"
+              aspect-ratio="1/1"
+            />
           </UFormField>
 
           <UFormField :label="t('common.table.background')" name="background">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="backgroundFile"
-                :placeholder="t('admin.tags.backgroundPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onBackgroundUpload"
-                :loading="backgroundUploading"
-                :ui="{
-                  base: 'w-32 h-32',
-                  root: 'w-32 h-32',
-                  file: 'w-32 h-32 h-32'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.tags.backgroundHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.background"
+              accept="image/*"
+              :max-size="2 * 1024 * 1024"
+              :help-text="t('admin.tags.backgroundHelp')"
+              aspect-ratio="16/9"
+            />
           </UFormField>
         </div>
       </UCard>

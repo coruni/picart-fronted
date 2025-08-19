@@ -26,29 +26,25 @@
           </UFormField>
 
           <UFormField :label="t('admin.settings.siteLogo')" name="site_logo" class="w-full">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="logoFile"
-                accept="image/*"
-                @update:modelValue="onLogoUpload"
-                :loading="logoUploading"
-                :ui="{ base: 'w-24 h-24', root: 'w-24 h-24' }"
-              />
-              <p class="text-sm text-gray-500">{{ t('admin.settings.siteLogoPlaceholder') }}</p>
-            </div>
+            <ImageUpload
+              v-model="config.site_logo"
+              :existing-image-url="existingLogoUrl"
+              accept="image/*"
+              :max-size="2 * 1024 * 1024"
+              :help-text="t('admin.settings.siteLogoPlaceholder')"
+              aspect-ratio="1/1"
+            />
           </UFormField>
 
           <UFormField :label="t('admin.settings.siteFavicon')" name="site_favicon" class="w-full">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="faviconFile"
-                accept="image/*"
-                @update:modelValue="onFaviconUpload"
-                :loading="faviconUploading"
-                :ui="{ base: 'w-16 h-16', root: 'w-16 h-16' }"
-              />
-              <p class="text-sm text-gray-500">{{ t('admin.settings.siteFaviconPlaceholder') }}</p>
-            </div>
+            <ImageUpload
+              v-model="config.site_favicon"
+              :existing-image-url="existingFaviconUrl"
+              accept="image/*"
+              :max-size="1 * 1024 * 1024"
+              :help-text="t('admin.settings.siteFaviconPlaceholder')"
+              aspect-ratio="1/1"
+            />
           </UFormField>
         </div>
       </template>
@@ -699,19 +695,9 @@
   // 活动标签
   const activeTab = ref('0');
 
-  // 扩展File接口，添加自定义属性
-  interface ExtendedFile extends File {
-    _url?: string;
-    _uploaded?: boolean;
-    _uploading?: boolean;
-    _id?: string;
-  }
-
-  // 文件上传状态
-  const logoFile = ref<ExtendedFile | null>(null);
-  const faviconFile = ref<ExtendedFile | null>(null);
-  const logoUploading = ref(false);
-  const faviconUploading = ref(false);
+  // 用于新组件的现有图片数据
+  const existingLogoUrl = ref<string>('');
+  const existingFaviconUrl = ref<string>('');
 
   // 标签页配置
   const tabs = ref<TabsItem[]>([
@@ -795,40 +781,6 @@
     ad_global_style: 'background: #f8f9fa; padding: 10px; text-align: center;'
   });
 
-  // 将URL转换为File对象
-  const createVirtualFile = async (url: string, index: number = 0): Promise<ExtendedFile> => {
-    try {
-      // 从URL获取图片数据
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      // 将响应转换为Blob
-      const blob = await response.blob();
-
-      // 从URL获取文件名
-      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
-
-      // 从Blob创建File对象
-      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-
-      return file;
-    } catch (error) {
-      console.error('Error converting URL to File:', error);
-      // 创建一个默认的虚拟文件作为备选
-      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
-      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-      return file;
-    }
-  };
-
   // 获取配置
   const { data: configData } = await configControllerFindAll({
     composable: 'useFetch'
@@ -850,176 +802,17 @@
 
       // 初始化logo文件
       if (config.value.site_logo) {
-        logoFile.value = await createVirtualFile(config.value.site_logo, 0);
+        existingLogoUrl.value = config.value.site_logo;
       }
 
       // 初始化favicon文件
       if (config.value.site_favicon) {
-        faviconFile.value = await createVirtualFile(config.value.site_favicon, 1);
+        existingFaviconUrl.value = config.value.site_favicon;
       }
     }
   };
 
   await initializeConfig();
-
-  // Logo上传处理
-  const onLogoUpload = async (files: unknown) => {
-    if (!files || (Array.isArray(files) && files.length === 0)) return;
-
-    let newFile: ExtendedFile | null = null;
-
-    if (Array.isArray(files) && files[0] instanceof File) {
-      newFile = files[0] as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) {
-        return;
-      }
-    } else if (files instanceof File) {
-      newFile = files as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) {
-        return;
-      }
-    }
-
-    if (!newFile) return;
-
-    newFile._uploading = true;
-    logoFile.value = newFile;
-    logoUploading.value = true;
-
-    try {
-      const formData = new FormData();
-      formData.append('files', newFile);
-
-      const res = await uploadControllerUploadFile({
-        composable: '$fetch',
-        body: {},
-        bodySerializer: () => formData
-      });
-
-      if (res.data && res.data[0]) {
-        newFile._url = res.data[0].url!;
-        newFile._uploaded = true;
-        newFile._uploading = false;
-        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-
-        config.value.site_logo = newFile._url;
-        logoFile.value = newFile;
-
-        // 显示上传成功提示
-        toast.add({
-          title: t('common.message.uploadSuccess'),
-          color: 'success'
-        });
-      } else {
-        newFile._uploading = false;
-        logoFile.value = null;
-
-        toast.add({
-          title: t('common.message.uploadFailed'),
-          color: 'error'
-        });
-      }
-    } catch (error: any) {
-      console.error('Failed to upload logo:', error);
-      logoFile.value = null;
-
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
-    } finally {
-      logoUploading.value = false;
-    }
-  };
-
-  // Favicon上传处理
-  const onFaviconUpload = async (files: unknown) => {
-    if (!files || (Array.isArray(files) && files.length === 0)) return;
-
-    let newFile: ExtendedFile | null = null;
-
-    if (Array.isArray(files) && files[0] instanceof File) {
-      newFile = files[0] as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) {
-        return;
-      }
-    } else if (files instanceof File) {
-      newFile = files as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) {
-        return;
-      }
-    }
-
-    if (!newFile) return;
-
-    newFile._uploading = true;
-    faviconFile.value = newFile;
-    faviconUploading.value = true;
-
-    try {
-      const formData = new FormData();
-      formData.append('files', newFile);
-
-      const res = await uploadControllerUploadFile({
-        composable: '$fetch',
-        body: {},
-        bodySerializer: () => formData
-      });
-
-      if (res.data && res.data[0]) {
-        newFile._url = res.data[0].url!;
-        newFile._uploaded = true;
-        newFile._uploading = false;
-        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-
-        config.value.site_favicon = newFile._url;
-        faviconFile.value = newFile;
-
-        // 显示上传成功提示
-        toast.add({
-          title: t('common.message.uploadSuccess'),
-          color: 'success'
-        });
-      } else {
-        newFile._uploading = false;
-        faviconFile.value = null;
-
-        toast.add({
-          title: t('common.message.uploadFailed'),
-          color: 'error'
-        });
-      }
-    } catch (error: any) {
-      console.error('Failed to upload favicon:', error);
-      faviconFile.value = null;
-
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
-    } finally {
-      faviconUploading.value = false;
-    }
-  };
-
-  // 监听文件变化，同步更新配置
-  watch(
-    () => logoFile.value?._url,
-    newUrl => {
-      if (newUrl && logoFile.value?._uploaded) {
-        config.value.site_logo = newUrl;
-      }
-    }
-  );
-
-  watch(
-    () => faviconFile.value?._url,
-    newUrl => {
-      if (newUrl && faviconFile.value?._uploaded) {
-        config.value.site_favicon = newUrl;
-      }
-    }
-  );
 
   // 保存状态
   const saving = ref(false);

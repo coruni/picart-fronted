@@ -179,7 +179,7 @@
       >
         <div
           v-if="isMobileMenuOpen"
-          class="mobile-menu-container md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700"
+          class="mobile-menu-container md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 max-h-[calc(100vh-4rem)] overflow-y-auto"
         >
           <div class="px-4 py-4 space-y-4">
             <NuxtLinkLocale
@@ -433,3 +433,32 @@
     document.removeEventListener('click', handleClickOutside);
   });
 </script>
+
+<style scoped>
+  /* 移动端菜单滚动条样式 */
+  .mobile-menu-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .mobile-menu-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .mobile-menu-container::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 2px;
+  }
+
+  .mobile-menu-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.8);
+  }
+
+  /* 暗色模式下的滚动条 */
+  .dark .mobile-menu-container::-webkit-scrollbar-thumb {
+    background: rgba(75, 85, 99, 0.5);
+  }
+
+  .dark .mobile-menu-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(75, 85, 99, 0.8);
+  }
+</style>

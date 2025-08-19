@@ -54,40 +54,24 @@
           />
         </UFormField>
         <UFormField name="images" :label="$t('form.image.name')">
-          <UFileUpload
-            v-model:modelValue="displayFiles"
-            draggable
-            dropzone
-            :placeholder="$t('form.image.placeholder')"
+          <MultiImageUpload
+            v-model="state.images"
             accept="image/*"
-            @update:modelValue="onImageUpload"
-            :loading="uploading"
-            multiple
-            :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
-          >
-          </UFileUpload>
+            :max-size="5 * 1024 * 1024"
+            :max-count="200"
+            :help-text="$t('form.image.help')"
+          />
         </UFormField>
       </template>
 
       <!-- Cover Image Upload -->
       <UFormField name="cover" :label="$t('form.cover.name')">
-        <div class="space-y-2">
-          <UFileUpload
-            v-model:modelValue="coverFile"
-            :placeholder="$t('form.cover.placeholder')"
-            accept="image/*"
-            @update:modelValue="onCoverUpload"
-            :loading="coverUploading"
-            :ui="{
-              base: 'w-32 h-32',
-              root: 'w-32 h-32',
-              file: 'w-32 h-32 h-32'
-            }"
-          />
-          <p class="text-xs text-gray-500">
-            {{ $t('form.cover.help') }}
-          </p>
-        </div>
+        <ImageUpload
+          v-model="state.cover"
+          accept="image/*"
+          :max-size="2 * 1024 * 1024"
+          :help-text="$t('form.cover.help')"
+        />
       </UFormField>
 
       <div class="flex items-center space-x-2">
@@ -261,20 +245,12 @@
     requiresAuth: true
   });
 
-  // 扩展File接口，添加自定义属性
-  interface ExtendedFile extends File {
-    _url?: string;
-    _uploaded?: boolean;
-    _uploading?: boolean;
-    _id?: string;
-  }
-
   const schema = z.object({
     title: z.string().min(4, t('form.title.placeholder')),
     content: z.string().optional(),
     parentCategory: z.number().optional(),
     categoryId: z.number().min(1, t('form.category.placeholder')),
-    images: z.any().optional(),
+    images: z.union([z.string(), z.array(z.string())]).optional(),
     cover: z.string().optional(),
     type: z.enum(['mixed', 'image']).optional().default('mixed'),
     tagIds: z
@@ -297,7 +273,7 @@
     content: '',
     parentCategory: undefined,
     categoryId: undefined,
-    images: '',
+    images: [] as string[] | string,
     cover: '',
     type: 'mixed',
     tagIds: [],
@@ -310,12 +286,37 @@
     status: 'PUBLISHED'
   });
 
-  // 文件列表，用于FileUpload组件展示
-  const displayFiles = ref<ExtendedFile[]>([]);
-  const coverFile = ref<ExtendedFile | null>(null);
-  const uploading = ref(false);
-  const coverUploading = ref(false);
   const loading = ref(false);
+
+  // 用于新组件的现有图片数据
+  const existingCoverUrl = ref<string>('');
+
+  // 初始化现有图片数据
+  if (articleId) {
+    try {
+      const { data: articleData } = await articleControllerFindOne({
+        composable: 'useFetch',
+        key: 'articleDetail',
+        path: { id: articleId }
+      });
+
+      if (articleData.value?.data) {
+        const data = articleData.value.data;
+
+        // 初始化现有图片
+        if (data.images) {
+          state.images = data.images;
+        }
+
+        // 初始化现有封面
+        if (data.cover) {
+          existingCoverUrl.value = data.cover;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load article:', error);
+    }
+  }
 
   const typeOptions = ref<SelectMenuItem[]>([
     {
@@ -437,40 +438,6 @@
     readonly: false
   };
 
-  // 将URL转换为File对象
-  const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
-    try {
-      // 从URL获取图片数据
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      // 将响应转换为Blob
-      const blob = await response.blob();
-
-      // 从URL获取文件名
-      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
-
-      // 从Blob创建File对象
-      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-
-      return file;
-    } catch (error) {
-      console.error('Error converting URL to File:', error);
-      // 创建一个默认的虚拟文件作为备选
-      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
-      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-      return file;
-    }
-  };
-
   // 若 articleId 存在，请求文章详情数据
   if (articleId) {
     try {
@@ -502,206 +469,21 @@
 
         // 初始化已有图片
         if (state.images) {
-          // 创建虚拟File对象
-          const virtualFiles = await Promise.all(
-            state.images.map((url: string, index: number) => createVirtualFile(url.trim(), index))
-          );
-
-          displayFiles.value = virtualFiles;
+          // 确保 images 是字符串数组
+          state.images = Array.isArray(state.images)
+            ? state.images
+            : state.images.split(',').filter(Boolean);
         }
 
         // 初始化封面图片
         if (state.cover) {
-          coverFile.value = await createVirtualFile(state.cover, 0);
+          existingCoverUrl.value = state.cover;
         }
       }
     } catch (error) {
       console.error('Failed to load article:', error);
     }
   }
-
-  // 获取文件预览URL
-  const getFilePreview = (file: ExtendedFile): string => {
-    if (file._url) {
-      return file._url;
-    }
-
-    if (file.size > 0) {
-      return URL.createObjectURL(file);
-    }
-
-    return '';
-  };
-
-  // 图片上传处理
-  const onImageUpload = async (files: any) => {
-    if (!files || files.length === 0) return;
-
-    // 找出新添加的文件（没有_uploaded标记的）
-    const newFiles = files.filter((file: unknown): file is ExtendedFile => {
-      if (file instanceof File) {
-        const extendedFile = file as ExtendedFile;
-        return !extendedFile._uploaded && !extendedFile._uploading;
-      }
-      return false;
-    });
-
-    if (newFiles.length === 0) return;
-
-    // 标记新文件为正在上传
-    newFiles.forEach((file: ExtendedFile) => {
-      file._uploading = true;
-    });
-
-    uploading.value = true;
-
-    try {
-      // 一次上传多个文件
-      const formData = new FormData();
-      newFiles.forEach((file: ExtendedFile) => {
-        formData.append('files', file);
-      });
-
-      const res = await uploadControllerUploadFile({
-        composable: '$fetch',
-        body: {},
-        bodySerializer: () => formData
-      });
-
-      // 更新所有文件状态
-      newFiles.forEach((file: ExtendedFile, index: number) => {
-        if (res.data && res.data[index]) {
-          file._url = res.data[index].url!;
-          file._uploaded = true;
-          file._uploading = false;
-          file._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-        } else {
-          // 上传失败的文件标记
-          file._uploading = false;
-        }
-      });
-
-      // 更新state.images
-      updateStateImages();
-
-      // 显示上传成功提示
-      toast.add({
-        title: t('common.message.uploadSuccess'),
-        color: 'success'
-      });
-    } catch (error: any) {
-      console.error('Failed to upload image:', error);
-
-      // 移除上传失败的文件
-      newFiles.forEach((failedFile: ExtendedFile) => {
-        const index = displayFiles.value.findIndex(f => f === failedFile);
-        if (index > -1) {
-          displayFiles.value.splice(index, 1);
-        }
-      });
-
-      toast.add({
-        title: error?.message || t('common.message.uploadFailed'),
-        color: 'error'
-      });
-    } finally {
-      uploading.value = false;
-    }
-  };
-
-  // Cover upload handler
-  const onCoverUpload = async (files: unknown) => {
-    if (!files || (Array.isArray(files) && files.length === 0)) return;
-
-    let newFile: ExtendedFile | null = null;
-
-    if (Array.isArray(files) && files[0] instanceof File) {
-      newFile = files[0] as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) return;
-    } else if (files instanceof File) {
-      newFile = files as ExtendedFile;
-      if (newFile._uploaded || newFile._uploading) return;
-    }
-
-    if (!newFile) return;
-
-    newFile._uploading = true;
-    coverFile.value = newFile;
-    coverUploading.value = true;
-
-    try {
-      const formData = new FormData();
-      formData.append('files', newFile);
-
-      const res = await uploadControllerUploadFile({
-        composable: '$fetch',
-        body: {},
-        bodySerializer: () => formData
-      });
-
-      if (res.data && res.data[0]) {
-        newFile._url = res.data[0].url!;
-        newFile._uploaded = true;
-        newFile._uploading = false;
-        newFile._id = `uploaded_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-
-        state.cover = newFile._url;
-        coverFile.value = newFile;
-
-        // 显示上传成功提示
-        toast.add({
-          title: t('common.message.uploadSuccess'),
-          color: 'success'
-        });
-      } else {
-        newFile._uploading = false;
-        coverFile.value = null;
-        toast.add({
-          title: t('common.message.uploadFailed'),
-          color: 'error'
-        });
-      }
-    } catch (error: any) {
-      console.error('Failed to upload cover:', error);
-      coverFile.value = null;
-      toast.add({
-        title: t('common.message.uploadFailed'),
-        description: error.message,
-        color: 'error'
-      });
-    } finally {
-      coverUploading.value = false;
-    }
-  };
-
-  // 删除图片
-
-  // 更新state.images
-  const updateStateImages = () => {
-    const urls = displayFiles.value
-      .filter(file => file._url) // 只包含已上传或已存在的图片
-      .map(file => file._url!);
-    state.images = urls.join(',');
-  };
-
-  // 监听displayFiles变化
-  watch(
-    () => displayFiles.value,
-    () => {
-      updateStateImages();
-    },
-    { deep: true }
-  );
-
-  // 监听cover文件变化
-  watch(
-    () => coverFile.value?._url,
-    newUrl => {
-      if (newUrl && coverFile.value?._uploaded) {
-        state.cover = newUrl;
-      }
-    }
-  );
 
   // 提交表单
   const onSubmit = debounce(async () => {
@@ -733,8 +515,8 @@
           ...data,
           tagIds: existingTagIds ?? [],
           tagNames: newTagNames ?? [],
-          images: data.images,
-          cover: coverFile.value?._url || data.cover || ''
+          images: Array.isArray(data.images) ? data.images.join(',') : data.images || '',
+          cover: data.cover || ''
         }
       });
 
@@ -913,22 +695,6 @@
     }
     state.tagIds.push(tempId);
   };
-
-  // 组件卸载时清理URL对象
-  onUnmounted(() => {
-    displayFiles.value.forEach(file => {
-      if (file.size > 0 && !file._url) {
-        const url = getFilePreview(file);
-        if (url.startsWith('blob:')) {
-          URL.revokeObjectURL(url);
-        }
-      }
-    });
-
-    if (coverFile.value?._url && coverFile.value._url.startsWith('blob:')) {
-      URL.revokeObjectURL(coverFile.value._url);
-    }
-  });
 </script>
 
 <style scoped>

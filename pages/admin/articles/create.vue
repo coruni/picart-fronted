@@ -55,40 +55,24 @@
           />
         </UFormField>
         <UFormField name="images" :label="$t('form.image.name')">
-          <UFileUpload
-            v-model:modelValue="displayFiles"
-            draggable
-            dropzone
-            :placeholder="$t('form.image.placeholder')"
+          <MultiImageUpload
+            v-model="state.images"
             accept="image/*"
-            @update:modelValue="onImageUpload"
-            :loading="uploading"
-            multiple
-            :ui="{ files: 'md:grid-cols-6', icon: 'cursor-pointer' }"
-          >
-          </UFileUpload>
+            :max-size="5 * 1024 * 1024"
+            :max-count="10"
+            :help-text="$t('form.image.help')"
+          />
         </UFormField>
       </template>
 
       <!-- Cover Image Upload -->
       <UFormField name="cover" :label="$t('form.cover.name')">
-        <div class="space-y-2">
-          <UFileUpload
-            v-model:modelValue="coverFile"
-            :placeholder="$t('form.cover.placeholder')"
-            accept="image/*"
-            @update:modelValue="onCoverUpload"
-            :loading="coverUploading"
-            :ui="{
-              base: 'w-32 h-32',
-              root: 'w-32 h-32',
-              file: 'w-32 h-32 h-32'
-            }"
-          />
-          <p class="text-xs text-gray-500">
-            {{ $t('form.cover.help') }}
-          </p>
-        </div>
+        <ImageUpload
+          v-model="state.cover"
+          accept="image/*"
+          :max-size="2 * 1024 * 1024"
+          :help-text="$t('form.cover.help')"
+        />
       </UFormField>
       <div class="flex items-center space-x-2">
         <UFormField name="parentCategory" class="flex-1">

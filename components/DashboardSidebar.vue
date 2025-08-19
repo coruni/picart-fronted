@@ -48,7 +48,7 @@
     </div>
 
     <!-- 导航菜单 -->
-    <nav class="flex-1 p-4">
+    <nav class="flex-1 p-4 overflow-y-auto">
       <ul class="space-y-2">
         <li v-for="item in menuItems" :key="item.path">
           <NuxtLinkLocale
@@ -100,20 +100,29 @@
 
 <style scoped>
   /* 自定义滚动条样式 */
-  .overflow-auto::-webkit-scrollbar {
-    width: 6px;
+  nav::-webkit-scrollbar {
+    width: 4px;
   }
 
-  .overflow-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  nav::-webkit-scrollbar-track {
+    background: transparent;
   }
 
-  .overflow-auto::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
+  nav::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 2px;
   }
 
-  .overflow-auto::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+  nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.8);
+  }
+
+  /* 暗色模式下的滚动条 */
+  .dark nav::-webkit-scrollbar-thumb {
+    background: rgba(75, 85, 99, 0.5);
+  }
+
+  .dark nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(75, 85, 99, 0.8);
   }
 </style>

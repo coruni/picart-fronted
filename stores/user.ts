@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { UserControllerGetProfileResponse } from '~~/api';
+import { userControllerLogout, type UserControllerGetProfileResponse } from '~~/api';
 type UserInfo = UserControllerGetProfileResponse['data'];
 
 interface UserState {
@@ -55,13 +55,16 @@ export const useUserStore = defineStore('user', {
       this.refreshToken = refreshToken;
     },
 
-    clearAuth() {
+    async clearAuth() {
       this.token = null;
       this.userInfo = null;
       this.isAuthenticated = false;
       this.rememberedUsername = null;
       this.refreshToken = null;
       if (import.meta.client) {
+        await userControllerLogout({
+          composable: '$fetch'
+        });
         // 使用与登录时相同的配置来清除 cookie
         const authToken = useCookie('auth-token', {
           default: () => '',

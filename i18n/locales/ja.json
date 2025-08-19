@@ -346,10 +346,31 @@
     "close": "閉じる",
     "delete": "消去",
     "edit": "編集",
-    "status": {
-      "active": "有効にする",
-      "inactive": "無効"
-    }
+    "remove": "削除",
+    "removeAll": "すべて削除",
+    "change": "変更",
+    "replace": "置換",
+    "selectImage": "画像を選択",
+    "selectImages": "画像を選択"
+  },
+  "image": {
+    "preview": "画像プレビュー",
+    "uploadTitle": "画像をアップロード",
+    "uploadDescription": "クリックまたはドラッグして画像をアップロード",
+    "uploadMultipleTitle": "複数の画像をアップロード",
+    "uploadMultipleDescription": "クリックまたはドラッグして複数の画像をアップロード",
+    "uploadedImages": "アップロードされた画像",
+    "image": "画像",
+    "invalidType": "有効な画像ファイルを選択してください",
+    "tooLarge": "画像サイズは {maxSize}MB を超えることはできません",
+    "invalidAspectRatio": "画像のアスペクト比が要件を満たしていません ({ratio})",
+    "uploadError": "画像のアップロードに失敗しました。再試行してください",
+    "maxCountReached": "最大 {maxCount} 枚の画像をアップロードできます"
+  },
+  "uploading": "アップロード中...",
+  "status": {
+    "active": "有効にする",
+    "inactive": "無効"
   },
   "filter": {
     "title": "フィルター"
@@ -785,7 +806,8 @@
     "image": "画像",
     "sortOrder": "並び替え",
     "titlePlaceholder": "タイトルを入力",
-    "description": "説明"
+    "description": "説明",
+    "imageHelp": "推奨サイズ：1920x1080px、JPG、PNG形式をサポート、最大5MB"
   },
   "categories": {
     "create": "新規カテゴリー"

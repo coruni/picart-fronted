@@ -24,16 +24,13 @@
 
         <!-- 图片上传 -->
         <UFormField :label="t('banners.image')" name="imageUrl" class="md:col-span-2">
-          <UFileUpload
-            v-model="file"
-            :placeholder="t('banners.imagePlaceholder')"
+          <ImageUpload
+            v-model="state.imageUrl"
             accept="image/*"
-            @update:modelValue="onImageUpload"
-            :loading="uploading"
+            :max-size="5 * 1024 * 1024"
+            :help-text="t('banners.imageHelp')"
+            aspect-ratio="16/9"
           />
-          <!-- <div v-if="state.imageUrl" class="mt-2">
-            <img :src="state.imageUrl" alt="预览图片" class="w-32 h-32 object-cover rounded-md" />
-          </div> -->
         </UFormField>
 
         <!-- 链接 -->

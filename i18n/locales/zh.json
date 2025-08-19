@@ -327,7 +327,13 @@
       "search": "搜索",
       "close": "关闭",
       "save": "保存",
-      "back": "返回"
+      "back": "返回",
+      "removeAll": "全部删除",
+      "remove": "删除",
+      "replace": "替换",
+      "change": "修改",
+      "selectImages": "选择图片",
+      "selectImage": "选择图片"
     },
     "save": "保存",
     "loading": {
@@ -349,8 +355,29 @@
     },
     "close": "关闭",
     "delete": "删除",
-    "edit": "编辑"
+    "edit": "编辑",
+    "remove": "移除",
+    "removeAll": "移除全部",
+    "change": "更换",
+    "replace": "替换",
+    "selectImage": "选择图片",
+    "selectImages": "选择图片"
   },
+  "image": {
+    "preview": "图片预览",
+    "uploadTitle": "上传图片",
+    "uploadDescription": "点击或拖拽图片到此处上传",
+    "uploadMultipleTitle": "上传多张图片",
+    "uploadMultipleDescription": "点击或拖拽图片到此处上传，支持多选",
+    "uploadedImages": "已上传图片",
+    "image": "图片",
+    "invalidType": "请选择有效的图片文件",
+    "tooLarge": "图片大小不能超过 {maxSize}MB",
+    "invalidAspectRatio": "图片宽高比不符合要求 ({ratio})",
+    "uploadError": "图片上传失败，请重试",
+    "maxCountReached": "最多只能上传 {maxCount} 张图片"
+  },
+  "uploading": "上传中...",
   "filter": {
     "title": "筛选"
   },
@@ -785,7 +812,8 @@
     "edit": "编辑轮播",
     "sortOrder": "排序",
     "titlePlaceholder": "输入标题",
-    "titleRequired": "请输入标题"
+    "titleRequired": "请输入标题",
+    "imageHelp": "建议尺寸：1920x1080px，支持 JPG、PNG 格式，最大 5MB"
   },
   "categories": {
     "create": "创建分类"

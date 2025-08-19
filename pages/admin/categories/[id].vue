@@ -97,43 +97,25 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('common.table.avatar')" name="avatar">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="displayFile"
-                :placeholder="t('admin.categories.avatarPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onImageUpload"
-                :loading="uploading"
-                :ui="{
-                  base: 'w-24 h-24',
-                  root: 'w-24 h-24',
-                  file: 'w-24 h-24 h-24'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.categories.avatarHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.avatar"
+              :existing-image-url="existingAvatarUrl"
+              accept="image/*"
+              :max-size="1 * 1024 * 1024"
+              :help-text="t('admin.categories.avatarHelp')"
+              aspect-ratio="1/1"
+            />
           </UFormField>
 
           <UFormField :label="t('common.table.cover')" name="cover">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="coverFile"
-                :placeholder="t('admin.categories.coverPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onCoverUpload"
-                :loading="coverUploading"
-                :ui="{
-                  base: 'w-32 h-32',
-                  root: 'w-32 h-32',
-                  file: 'w-32 h-32 h-32'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.categories.coverHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.cover"
+              :existing-image-url="existingCoverUrl"
+              accept="image/*"
+              :max-size="2 * 1024 * 1024"
+              :help-text="t('admin.categories.coverHelp')"
+              aspect-ratio="16/9"
+            />
           </UFormField>
         </div>
       </UCard>
@@ -209,6 +191,10 @@
   // File refs
   const coverFile = ref<ExtendedFile | null>(null);
   const displayFile = ref<ExtendedFile | null>(null);
+
+  // 用于新组件的现有图片数据
+  const existingAvatarUrl = ref<string>('');
+  const existingCoverUrl = ref<string>('');
 
   // Extended File interface
   interface ExtendedFile extends File {
@@ -287,34 +273,6 @@
     cover: ''
   });
 
-  // Create virtual file from URL
-  const createVirtualFile = async (url: string, index: number = 0): Promise<ExtendedFile> => {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
-      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
-      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
-
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-
-      return file;
-    } catch (error) {
-      console.error('Error converting URL to File:', error);
-      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
-      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-      return file;
-    }
-  };
-
   // Fetch category details
   const fetchCategory = async () => {
     try {
@@ -338,10 +296,10 @@
 
         // Load existing images
         if (data.avatar) {
-          displayFile.value = await createVirtualFile(data.avatar);
+          existingAvatarUrl.value = data.avatar;
         }
         if (data.cover) {
-          coverFile.value = await createVirtualFile(data.cover);
+          existingCoverUrl.value = data.cover;
         }
       }
     } catch (error) {

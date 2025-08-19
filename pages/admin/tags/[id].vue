@@ -71,43 +71,25 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('common.table.avatar')" name="avatar">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="avatarFile"
-                :placeholder="t('admin.tags.avatarPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onAvatarUpload"
-                :loading="avatarUploading"
-                :ui="{
-                  base: 'w-24 h-24',
-                  root: 'w-24 h-24',
-                  file: 'w-24 h-24 h-24'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.tags.avatarHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.avatar"
+              :existing-image-url="existingAvatarUrl"
+              accept="image/*"
+              :max-size="1 * 1024 * 1024"
+              :help-text="t('admin.tags.avatarHelp')"
+              aspect-ratio="1/1"
+            />
           </UFormField>
 
           <UFormField :label="t('common.table.background')" name="background">
-            <div class="space-y-2">
-              <UFileUpload
-                v-model:modelValue="backgroundFile"
-                :placeholder="t('admin.tags.backgroundPlaceholder')"
-                accept="image/*"
-                @update:modelValue="onBackgroundUpload"
-                :loading="backgroundUploading"
-                :ui="{
-                  base: 'w-32 h-32',
-                  root: 'w-32 h-32',
-                  file: 'w-32 h-32 h-32'
-                }"
-              />
-              <p class="text-xs text-gray-500">
-                {{ t('admin.tags.backgroundHelp') }}
-              </p>
-            </div>
+            <ImageUpload
+              v-model="form.background"
+              :existing-image-url="existingBackgroundUrl"
+              accept="image/*"
+              :max-size="2 * 1024 * 1024"
+              :help-text="t('admin.tags.backgroundHelp')"
+              aspect-ratio="16/9"
+            />
           </UFormField>
         </div>
       </UCard>
@@ -148,6 +130,10 @@
   // File refs
   const avatarFile = ref<ExtendedFile | null>(null);
   const backgroundFile = ref<ExtendedFile | null>(null);
+
+  // 用于新组件的现有图片数据
+  const existingAvatarUrl = ref<string>('');
+  const existingBackgroundUrl = ref<string>('');
 
   // Extended File interface
   interface ExtendedFile extends File {
@@ -191,40 +177,6 @@
     background: '',
     cover: ''
   });
-
-  // 将URL转换为File对象
-  const createVirtualFile = async (url: string, index: number): Promise<ExtendedFile> => {
-    try {
-      // 从URL获取图片数据
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.statusText}`);
-      }
-
-      // 将响应转换为Blob
-      const blob = await response.blob();
-
-      // 从URL获取文件名
-      const fileName = url.split('/').pop() || `image-${index + 1}.${blob.type.split('/')[1]}`;
-
-      // 从Blob创建File对象
-      const file = new File([blob], fileName, { type: blob.type }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-
-      return file;
-    } catch (error) {
-      console.error('Error converting URL to File:', error);
-      // 创建一个默认的虚拟文件作为备选
-      const fileName = url.split('/').pop() || `image-${index + 1}.jpg`;
-      const file = new File([''], fileName, { type: 'image/jpeg' }) as ExtendedFile;
-      file._url = url;
-      file._uploaded = true;
-      file._id = `existing_${index}_${Date.now()}`;
-      return file;
-    }
-  };
 
   // Avatar upload handler
   const onAvatarUpload = async (files: unknown) => {
@@ -388,11 +340,11 @@
 
         // 初始化已有图片
         if (data.avatar) {
-          avatarFile.value = await createVirtualFile(data.avatar, 0);
+          existingAvatarUrl.value = data.avatar;
         }
 
         if (data.background) {
-          backgroundFile.value = await createVirtualFile(data.background, 1);
+          existingBackgroundUrl.value = data.background;
         }
       }
     } catch (error) {
