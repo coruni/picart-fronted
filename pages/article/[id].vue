@@ -324,6 +324,75 @@
         <!-- 文章底部广告 -->
         <Advertisement type="article-bottom" />
 
+        <!-- 下载链接展示区 -->
+        <div
+          v-if="article?.data.downloads && article.data.downloads.length > 0 && shouldShowContent"
+          class="mb-6 md:mb-8"
+        >
+          <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
+            {{ $t('article.downloads') }}
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div
+              v-for="(download, index) in article.data.downloads"
+              :key="index"
+              class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow"
+            >
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-2">
+                  <Icon :name="getDownloadTypeIcon(download.type)" class="w-5 h-5 text-primary" />
+                  <span class="font-medium text-gray-900 dark:text-gray-100">
+                    {{ getDownloadTypeName(download.type) }}
+                  </span>
+                </div>
+                <span class="text-xs text-gray-500 dark:text-gray-400"> #{{ index + 1 }} </span>
+              </div>
+
+              <div class="space-y-2">
+                <div class="flex items-center space-x-2">
+                  <Icon name="mynaui:link" class="w-4 h-4 text-gray-400" />
+                  <a
+                    :href="download.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm text-primary hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 truncate"
+                  >
+                    {{ download.url }}
+                  </a>
+                </div>
+
+                <div v-if="download.password" class="flex items-center space-x-2">
+                  <Icon name="mynaui:lock" class="w-4 h-4 text-gray-400" />
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ $t('article.downloadPassword') }}: {{ download.password }}
+                  </span>
+                </div>
+
+                <div v-if="download.extractionCode" class="flex items-center space-x-2">
+                  <Icon name="mynaui:key" class="w-4 h-4 text-gray-400" />
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ $t('article.extractionCode') }}: {{ download.extractionCode }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <UButton
+                  :href="download.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="soft"
+                  size="sm"
+                  class="w-full"
+                >
+                  <Icon name="mynaui:download" class="w-4 h-4 mr-2" />
+                  {{ $t('article.download') }}
+                </UButton>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- 标签展示区 -->
         <div v-if="article?.data.tags && article.data.tags.length > 0" class="mb-6 md:mb-8">
           <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
@@ -879,6 +948,40 @@
       // 跳转到用户文章列表页面
       router.push(localePath('/user/articles'));
     } catch (error) {}
+  };
+
+  // 获取下载类型图标
+  const getDownloadTypeIcon = (type: string) => {
+    const iconMap: Record<string, string> = {
+      baidu: 'mynaui:cloud',
+      google: 'mynaui:cloud',
+      lanzou: 'mynaui:cloud',
+      quark: 'mynaui:cloud',
+      dropbox: 'mynaui:cloud',
+      direct: 'mynaui:download',
+      other: 'mynaui:link',
+      mega: 'mynaui:cloud',
+      onedrive: 'mynaui:cloud',
+      aliyun: 'mynaui:cloud'
+    };
+    return iconMap[type] || 'mynaui:link';
+  };
+
+  // 获取下载类型名称
+  const getDownloadTypeName = (type: string) => {
+    const nameMap: Record<string, string> = {
+      baidu: t('form.downloads.type.baidu'),
+      google: t('form.downloads.type.google'),
+      lanzou: t('form.downloads.type.lanzou'),
+      quark: t('form.downloads.type.quark'),
+      dropbox: t('form.downloads.type.dropbox'),
+      direct: t('form.downloads.type.direct'),
+      other: t('form.downloads.type.other'),
+      mega: t('form.downloads.type.mega'),
+      onedrive: t('form.downloads.type.onedrive'),
+      aliyun: t('form.downloads.type.aliyun')
+    };
+    return nameMap[type] || t('form.downloads.type.other');
   };
 </script>
 

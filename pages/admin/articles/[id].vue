@@ -154,6 +154,99 @@
         </div>
       </UFormField>
 
+      <!-- Downloads Section -->
+      <UFormField name="downloads" :label="$t('form.downloads.name')">
+        <div class="space-y-4">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            {{ $t('form.downloads.help') }}
+          </div>
+
+          <div
+            v-for="(download, index) in state.downloads"
+            :key="index"
+            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-4"
+          >
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                {{ $t('form.downloads.name') }} #{{ index + 1 }}
+              </h4>
+              <UButton
+                @click="removeDownload(index)"
+                variant="ghost"
+                color="error"
+                size="sm"
+                icon="mynaui:trash"
+                class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
+              >
+                {{ $t('form.downloads.removeDownload') }}
+              </UButton>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <UFormField :name="`downloads.${index}.type`" :label="$t('form.downloads.type.name')">
+                <USelect
+                  v-model="download.type"
+                  :items="downloadTypeOptions"
+                  :placeholder="$t('form.downloads.type.placeholder')"
+                  value-key="value"
+                  variant="soft"
+                  size="lg"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <UFormField :name="`downloads.${index}.url`" :label="$t('form.downloads.url.name')">
+                <UInput
+                  v-model="download.url"
+                  :placeholder="$t('form.downloads.url.placeholder')"
+                  variant="soft"
+                  size="lg"
+                  class="w-full"
+                />
+              </UFormField>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <UFormField
+                :name="`downloads.${index}.password`"
+                :label="$t('form.downloads.password.name')"
+              >
+                <UInput
+                  v-model="download.password"
+                  :placeholder="$t('form.downloads.password.placeholder')"
+                  variant="soft"
+                  size="lg"
+                  class="w-full"
+                />
+              </UFormField>
+
+              <UFormField
+                :name="`downloads.${index}.extractionCode`"
+                :label="$t('form.downloads.extractionCode.name')"
+              >
+                <UInput
+                  v-model="download.extractionCode"
+                  :placeholder="$t('form.downloads.extractionCode.placeholder')"
+                  variant="soft"
+                  size="lg"
+                  class="w-full"
+                />
+              </UFormField>
+            </div>
+          </div>
+
+          <UButton
+            @click="addDownload"
+            variant="outline"
+            size="lg"
+            icon="mynaui:plus"
+            class="w-full"
+          >
+            {{ $t('form.downloads.addDownload') }}
+          </UButton>
+        </div>
+      </UFormField>
+
       <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
         <template #advanced>
           <div class="space-y-4 mt-4">
@@ -263,7 +356,29 @@
     requirePayment: z.boolean().default(false),
     viewPrice: z.number().min(0).default(0),
     sort: z.number().min(0).default(0),
-    status: z.enum(['PUBLISHED', 'DRAFT']).default('PUBLISHED')
+    status: z.enum(['PUBLISHED', 'DRAFT']).default('PUBLISHED'),
+    downloads: z
+      .array(
+        z.object({
+          type: z.enum([
+            'baidu',
+            'google',
+            'aliyun',
+            'lanzou',
+            'quark',
+            'onedrive',
+            'dropbox',
+            'direct',
+            'other',
+            'mega'
+          ]),
+          url: z.string(),
+          password: z.string().optional(),
+          extractionCode: z.string().optional()
+        })
+      )
+      .optional()
+      .default([])
   });
 
   type Schema = z.output<typeof schema>;
@@ -283,7 +398,8 @@
     requirePayment: false,
     viewPrice: 0,
     sort: 0,
-    status: 'PUBLISHED'
+    status: 'PUBLISHED',
+    downloads: []
   });
 
   const loading = ref(false);
@@ -464,7 +580,14 @@
           requireMembership: data.requireMembership ?? false,
           requirePayment: data.requirePayment ?? false,
           viewPrice: Number(data.viewPrice) ?? 0,
-          status: data.status
+          status: data.status,
+          downloads:
+            data.downloads?.map(d => ({
+              type: d.type,
+              url: d.url,
+              password: d.password || '',
+              extractionCode: d.extractionCode || ''
+            })) ?? []
         });
 
         // 初始化已有图片
@@ -516,7 +639,8 @@
           tagIds: existingTagIds ?? [],
           tagNames: newTagNames ?? [],
           images: Array.isArray(data.images) ? data.images.join(',') : data.images || '',
-          cover: data.cover || ''
+          cover: data.cover || '',
+          downloads: data.downloads || []
         }
       });
 
@@ -695,6 +819,70 @@
     }
     state.tagIds.push(tempId);
   };
+
+  // 添加下载链接
+  const addDownload = () => {
+    if (!state.downloads) {
+      state.downloads = [];
+    }
+    state.downloads.push({
+      type: 'direct',
+      url: '',
+      password: '',
+      extractionCode: ''
+    });
+  };
+
+  // 移除下载链接
+  const removeDownload = (index: number) => {
+    if (state.downloads) {
+      state.downloads.splice(index, 1);
+    }
+  };
+
+  // 下载类型选项
+  const downloadTypeOptions = ref<SelectMenuItem[]>([
+    {
+      label: t('form.downloads.type.baidu'),
+      value: 'baidu'
+    },
+    {
+      label: t('form.downloads.type.google'),
+      value: 'google'
+    },
+    {
+      label: t('form.downloads.type.aliyun'),
+      value: 'aliyun'
+    },
+    {
+      label: t('form.downloads.type.lanzou'),
+      value: 'lanzou'
+    },
+    {
+      label: t('form.downloads.type.quark'),
+      value: 'quark'
+    },
+    {
+      label: t('form.downloads.type.dropbox'),
+      value: 'dropbox'
+    },
+    {
+      label: t('form.downloads.type.direct'),
+      value: 'direct'
+    },
+    {
+      label: t('form.downloads.type.other'),
+      value: 'other'
+    },
+    {
+      label: t('form.downloads.type.mega'),
+      value: 'mega'
+    },
+    {
+      label: t('form.downloads.type.onedrive'),
+      value: 'onedrive'
+    }
+  ]);
 </script>
 
 <style scoped>

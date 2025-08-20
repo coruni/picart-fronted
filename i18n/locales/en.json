@@ -447,13 +447,49 @@
       "name": "Status",
       "placeholder": "Select Status"
     },
-    "requireMembership": "Member View"
+    "requireMembership": "Member View",
+    "downloads": {
+      "name": "Download Links",
+      "addDownload": "Add Download Link",
+      "removeDownload": "Remove",
+      "type": {
+        "name": "Download Type",
+        "placeholder": "Select download type",
+        "baidu": "Baidu Netdisk",
+        "google": "Google Drive",
+        "lanzou": "Lanzou",
+        "quark": "Quark Netdisk",
+        "dropbox": "Dropbox",
+        "direct": "Direct Download",
+        "other": "Other",
+        "mega": "MEGA",
+        "onedrive": "OneDrive",
+        "aliyun": "Aliyun Drive"
+      },
+      "url": {
+        "name": "Download URL",
+        "placeholder": "Please enter download URL"
+      },
+      "password": {
+        "name": "Extraction Password",
+        "placeholder": "Please enter extraction password (optional)"
+      },
+      "extractionCode": {
+        "name": "Extraction Code",
+        "placeholder": "Please enter extraction code (optional)"
+      },
+      "help": "Support multiple cloud storage and direct download links"
+    }
   },
   "article": {
     "publishAt": "Published at",
     "views": "Views",
     "comments": "Comments",
     "tags": "Tags",
+    "downloads": "Download Links",
+    "download": "Download",
+    "downloadPassword": "Extraction Password",
+    "extractionCode": "Extraction Code",
     "followers": "Followers",
     "likes": "Likes",
     "goodReviews": "Good Reviews",

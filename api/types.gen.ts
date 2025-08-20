@@ -121,6 +121,27 @@ export type CreateArticleDto = {
    * 分类ID
    */
   categoryId: number;
+  downloads?: Array<{
+    type:
+      | 'baidu'
+      | 'google'
+      | 'lanzou'
+      | 'quark'
+      | 'dropbox'
+      | 'direct'
+      | 'other'
+      | 'mega'
+      | 'onedrive';
+    url: string;
+    /**
+     * 解压密码
+     */
+    password?: string;
+    /**
+     * 提取密码
+     */
+    extractionCode?: string;
+  }>;
   /**
    * 标签名称数组（不存在的标签会自动创建）
    */
@@ -184,6 +205,22 @@ export type UpdateArticleDto = {
    * 分类ID
    */
   categoryId?: number;
+  downloads?: Array<{
+    type:
+      | 'baidu'
+      | 'google'
+      | 'lanzou'
+      | 'dropbox'
+      | 'mega'
+      | 'quark'
+      | 'other'
+      | 'direct'
+      | 'onedrive'
+      | 'aliyun';
+    url: string;
+    password?: string;
+    extractionCode?: string;
+  }>;
   /**
    * 标签名称数组（不存在的标签会自动创建）
    */
@@ -2341,6 +2378,27 @@ export type ArticleControllerFindAllResponses = {
         updatedAt: string;
         isLiked: boolean;
         isPaid: boolean;
+        downloads: Array<{
+          id: number;
+          type:
+            | 'baidu'
+            | 'google'
+            | 'dropbox'
+            | 'lanzou'
+            | 'mega'
+            | 'onedrive'
+            | 'direct'
+            | 'other'
+            | 'aliyun'
+            | 'quark';
+          url: string;
+          password: string;
+          extractionCode: string;
+          articleId: number;
+          createdAt: string;
+          updatedAt: string;
+        }> | null;
+        downloadsCount: number;
       }>;
       meta: {
         total: number;
@@ -2502,6 +2560,27 @@ export type ArticleControllerFindOneResponses = {
         followCount: number;
         createdAt: string;
         updatedAt: string;
+        downloads?: Array<{
+          id: number;
+          type:
+            | 'baidu'
+            | 'google'
+            | 'dropbox'
+            | 'lanzou'
+            | 'mega'
+            | 'onedrive'
+            | 'direct'
+            | 'other'
+            | 'aliyun'
+            | 'quark';
+          url: string;
+          password: string;
+          extractionCode: string;
+          articleId: number;
+          createdAt: string;
+          updatedAt: string;
+        }> | null;
+        downloadsCount?: number;
       };
       tags: Array<{
         id: number;
@@ -2520,6 +2599,27 @@ export type ArticleControllerFindOneResponses = {
       updatedAt: string;
       isLiked: boolean;
       isPaid: boolean;
+      downloads: Array<{
+        id: number;
+        type:
+          | 'baidu'
+          | 'google'
+          | 'dropbox'
+          | 'lanzou'
+          | 'mega'
+          | 'onedrive'
+          | 'direct'
+          | 'other'
+          | 'aliyun'
+          | 'quark';
+        url: string;
+        password: string;
+        extractionCode: string;
+        articleId: number;
+        createdAt: string;
+        updatedAt: string;
+      }> | null;
+      downloadsCount: number;
     };
   };
 };

@@ -188,6 +188,102 @@
             </template>
           </UAccordion>
 
+          <!-- Downloads Section -->
+          <UFormField
+            name="downloads"
+            :label="$t('form.downloads.name')"
+            :help="$t('form.downloads.help')"
+          >
+            <div class="space-y-4">
+              <div
+                v-for="(download, index) in state.downloads"
+                :key="index"
+                class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3"
+              >
+                <div class="flex items-center justify-between">
+                  <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {{ $t('form.downloads.name') }} #{{ index + 1 }}
+                  </h4>
+                  <UButton
+                    type="button"
+                    color="error"
+                    variant="soft"
+                    size="sm"
+                    icon="mynaui:trash"
+                    class="cursor-pointer"
+                    @click="removeDownload(index)"
+                  >
+                    {{ $t('form.downloads.removeDownload') }}
+                  </UButton>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <UFormField
+                    :name="`downloads.${index}.type`"
+                    :label="$t('form.downloads.type.name')"
+                  >
+                    <USelect
+                      v-model="download.type"
+                      :items="downloadTypeOptions"
+                      :placeholder="$t('form.downloads.type.placeholder')"
+                      value-key="value"
+                      variant="soft"
+                      class="w-full"
+                    />
+                  </UFormField>
+
+                  <UFormField
+                    :name="`downloads.${index}.url`"
+                    :label="$t('form.downloads.url.name')"
+                  >
+                    <UInput
+                      v-model="download.url"
+                      :placeholder="$t('form.downloads.url.placeholder')"
+                      variant="soft"
+                      class="w-full"
+                    />
+                  </UFormField>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <UFormField
+                    :name="`downloads.${index}.password`"
+                    :label="$t('form.downloads.password.name')"
+                  >
+                    <UInput
+                      v-model="download.password"
+                      :placeholder="$t('form.downloads.password.placeholder')"
+                      variant="soft"
+                      class="w-full"
+                    />
+                  </UFormField>
+
+                  <UFormField
+                    :name="`downloads.${index}.extractionCode`"
+                    :label="$t('form.downloads.extractionCode.name')"
+                  >
+                    <UInput
+                      v-model="download.extractionCode"
+                      :placeholder="$t('form.downloads.extractionCode.placeholder')"
+                      variant="soft"
+                      class="w-full"
+                    />
+                  </UFormField>
+                </div>
+              </div>
+
+              <UButton
+                type="button"
+                variant="soft"
+                icon="mynaui:plus"
+                @click="addDownload"
+                class="w-full"
+              >
+                {{ $t('form.downloads.addDownload') }}
+              </UButton>
+            </div>
+          </UFormField>
+
           <UButton
             type="submit"
             icon="mynaui:save"
@@ -209,7 +305,8 @@
     categoryControllerFindAll,
     tagControllerFindAll,
     articleControllerFindOne,
-    articleControllerUpdate
+    articleControllerUpdate,
+    uploadControllerUploadFile
   } from '~~/api';
 
   import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
@@ -244,7 +341,28 @@
     requireFollow: z.boolean().default(false),
     requireMembership: z.boolean().default(false),
     requirePayment: z.boolean().default(false),
-    viewPrice: z.number().min(0).default(0)
+    viewPrice: z.number().min(0).default(0),
+    downloads: z
+      .array(
+        z.object({
+          type: z.enum([
+            'baidu',
+            'google',
+            'lanzou',
+            'quark',
+            'dropbox',
+            'direct',
+            'other',
+            'mega',
+            'onedrive'
+          ]),
+          url: z.string(),
+          password: z.string().optional(),
+          extractionCode: z.string().optional()
+        })
+      )
+      .optional()
+      .default([])
   });
 
   type Schema = z.output<typeof schema>;
@@ -262,7 +380,8 @@
     requireFollow: false,
     requireMembership: false,
     requirePayment: false,
-    viewPrice: 0
+    viewPrice: 0,
+    downloads: []
   });
 
   const loading = ref(false);
@@ -401,7 +520,14 @@
           requireFollow: data.requireFollow ?? false,
           requireMembership: data.requireMembership ?? false,
           requirePayment: data.requirePayment ?? false,
-          viewPrice: Number(data.viewPrice) ?? 0
+          viewPrice: Number(data.viewPrice) ?? 0,
+          downloads:
+            data.downloads?.map(d => ({
+              type: d.type,
+              url: d.url,
+              password: d.password || '',
+              extractionCode: d.extractionCode || ''
+            })) ?? []
         });
 
         // 初始化已有图片
@@ -455,7 +581,14 @@
           tagIds: existingTagIds.length > 0 ? existingTagIds : undefined,
           tagNames: newTagNames.length > 0 ? newTagNames : undefined,
           images: Array.isArray(data.images) ? data.images.join(',') : data.images || '',
-          cover: data.cover || ''
+          cover: data.cover || '',
+          downloads:
+            data.downloads?.map(d => ({
+              type: d.type,
+              url: d.url,
+              password: d.password || '',
+              extractionCode: d.extractionCode || ''
+            })) || []
         }
       });
 
@@ -601,6 +734,38 @@
     tagsOptions.value.push(tag);
     if (!state.tagIds) state.tagIds = [];
     state.tagIds.push(tempId);
+  };
+
+  // Downloads Section
+  const downloadTypeOptions = ref<SelectMenuItem[]>([
+    { label: t('form.downloads.type.baidu'), value: 'baidu' },
+    { label: t('form.downloads.type.google'), value: 'google' },
+    { label: t('form.downloads.type.aliyun'), value: 'aliyun' },
+    { label: t('form.downloads.type.lanzou'), value: 'lanzou' },
+    { label: t('form.downloads.type.quark'), value: 'quark' },
+    { label: t('form.downloads.type.dropbox'), value: 'dropbox' },
+    { label: t('form.downloads.type.direct'), value: 'direct' },
+    { label: t('form.downloads.type.other'), value: 'other' },
+    { label: t('form.downloads.type.mega'), value: 'mega' },
+    { label: t('form.downloads.type.onedrive'), value: 'onedrive' }
+  ]);
+
+  const addDownload = () => {
+    if (!state.downloads) {
+      state.downloads = [];
+    }
+    state.downloads.push({
+      type: 'direct',
+      url: '',
+      password: '',
+      extractionCode: ''
+    });
+  };
+
+  const removeDownload = (index: number) => {
+    if (state.downloads) {
+      state.downloads.splice(index, 1);
+    }
   };
 </script>
 

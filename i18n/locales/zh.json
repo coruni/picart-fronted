@@ -573,13 +573,49 @@
       "name": "状态",
       "placeholder": "选择状态"
     },
-    "requireMembership": "会员查看"
+    "requireMembership": "会员查看",
+    "downloads": {
+      "name": "下载链接",
+      "addDownload": "添加下载链接",
+      "removeDownload": "删除删除下载链接",
+      "type": {
+        "name": "下载类型",
+        "placeholder": "选择下载类型",
+        "baidu": "百度网盘",
+        "google": "Google Drive",
+        "lanzou": "蓝奏云",
+        "quark": "夸克网盘",
+        "dropbox": "Dropbox",
+        "direct": "直链下载",
+        "other": "其他",
+        "mega": "MEGA",
+        "onedrive": "OneDrive",
+        "aliyun": "阿里云盘"
+      },
+      "url": {
+        "name": "下载链接",
+        "placeholder": "请输入下载链接"
+      },
+      "password": {
+        "name": "解压密码",
+        "placeholder": "请输入解压密码（可选）"
+      },
+      "extractionCode": {
+        "name": "提取码",
+        "placeholder": "请输入提取码（可选）"
+      },
+      "help": "支持多种网盘和直链下载，可添加多个下载链接"
+    }
   },
   "article": {
     "publishAt": "发布于",
     "views": "浏览",
     "comments": "评论区",
     "tags": "标签",
+    "downloads": "下载链接",
+    "download": "下载",
+    "downloadPassword": "解压密码",
+    "extractionCode": "提取码",
     "followers": "粉丝",
     "likes": "点赞",
     "goodReviews": "好评",

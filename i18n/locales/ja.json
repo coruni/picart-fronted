@@ -441,13 +441,49 @@
       "name": "ステータス",
       "placeholder": "ステータスを選択"
     },
-    "requireMembership": "メンバービュー"
+    "requireMembership": "メンバービュー",
+    "downloads": {
+      "name": "ダウンロードリンク",
+      "addDownload": "ダウンロードリンクを追加",
+      "removeDownload": "削除",
+      "type": {
+        "name": "ダウンロードタイプ",
+        "placeholder": "ダウンロードタイプを選択",
+        "baidu": "百度網盤",
+        "google": "Google Drive",
+        "lanzou": "藍奏雲",
+        "quark": "クォーク網盤",
+        "dropbox": "Dropbox",
+        "direct": "直接ダウンロード",
+        "other": "その他",
+        "mega": "MEGA",
+        "onedrive": "OneDrive",
+        "aliyun": "アリ雲ドライブ"
+      },
+      "url": {
+        "name": "ダウンロードURL",
+        "placeholder": "ダウンロードURLを入力してください"
+      },
+      "password": {
+        "name": "解凍パスワード",
+        "placeholder": "解凍パスワードを入力してください（任意）"
+      },
+      "extractionCode": {
+        "name": "抽出コード",
+        "placeholder": "抽出コードを入力してください（任意）"
+      },
+      "help": "複数のクラウドストレージと直接ダウンロードリンクをサポート"
+    }
   },
   "article": {
     "publishAt": "公開日",
     "views": "閲覧数",
     "comments": "コメント",
     "tags": "タグ",
+    "downloads": "ダウンロードリンク",
+    "download": "ダウンロード",
+    "downloadPassword": "解凍パスワード",
+    "extractionCode": "抽出コード",
     "followers": "フォロワー",
     "likes": "いいね",
     "goodReviews": "良いレビュー",

@@ -5013,6 +5013,64 @@
                               },
                               "isPaid": {
                                 "type": "boolean"
+                              },
+                              "downloads": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "number"
+                                    },
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "baidu",
+                                        "google",
+                                        "dropbox",
+                                        "lanzou",
+                                        "mega",
+                                        "onedrive",
+                                        "direct",
+                                        "other",
+                                        "aliyun",
+                                        "quark"
+                                      ]
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "password": {
+                                      "type": "string"
+                                    },
+                                    "extractionCode": {
+                                      "type": "string"
+                                    },
+                                    "articleId": {
+                                      "type": "number"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "type",
+                                    "url",
+                                    "password",
+                                    "extractionCode",
+                                    "articleId",
+                                    "createdAt",
+                                    "updatedAt"
+                                  ]
+                                },
+                                "nullable": true
+                              },
+                              "downloadsCount": {
+                                "type": "number"
                               }
                             },
                             "required": [
@@ -5039,7 +5097,9 @@
                               "updatedAt",
                               "isLiked",
                               "isPaid",
-                              "01K2VE6CR5FTXYYZ85WRYSGR7S"
+                              "01K2VE6CR5FTXYYZ85WRYSGR7S",
+                              "downloads",
+                              "downloadsCount"
                             ]
                           }
                         },
@@ -5441,6 +5501,64 @@
                             },
                             "updatedAt": {
                               "type": "string"
+                            },
+                            "downloads": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "number"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "baidu",
+                                      "google",
+                                      "dropbox",
+                                      "lanzou",
+                                      "mega",
+                                      "onedrive",
+                                      "direct",
+                                      "other",
+                                      "aliyun",
+                                      "quark"
+                                    ]
+                                  },
+                                  "url": {
+                                    "type": "string"
+                                  },
+                                  "password": {
+                                    "type": "string"
+                                  },
+                                  "extractionCode": {
+                                    "type": "string"
+                                  },
+                                  "articleId": {
+                                    "type": "number"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type",
+                                  "url",
+                                  "password",
+                                  "extractionCode",
+                                  "articleId",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
+                              "nullable": true
+                            },
+                            "downloadsCount": {
+                              "type": "number"
                             }
                           },
                           "required": [
@@ -5525,6 +5643,64 @@
                         },
                         "isPaid": {
                           "type": "boolean"
+                        },
+                        "downloads": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "baidu",
+                                  "google",
+                                  "dropbox",
+                                  "lanzou",
+                                  "mega",
+                                  "onedrive",
+                                  "direct",
+                                  "other",
+                                  "aliyun",
+                                  "quark"
+                                ]
+                              },
+                              "url": {
+                                "type": "string"
+                              },
+                              "password": {
+                                "type": "string"
+                              },
+                              "extractionCode": {
+                                "type": "string"
+                              },
+                              "articleId": {
+                                "type": "number"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "type",
+                              "url",
+                              "password",
+                              "extractionCode",
+                              "articleId",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          },
+                          "nullable": true
+                        },
+                        "downloadsCount": {
+                          "type": "number"
                         }
                       },
                       "required": [
@@ -5550,7 +5726,9 @@
                         "createdAt",
                         "updatedAt",
                         "isLiked",
-                        "isPaid"
+                        "isPaid",
+                        "downloads",
+                        "downloadsCount"
                       ]
                     }
                   },
@@ -15403,6 +15581,43 @@
             "description": "分类ID",
             "example": 1
           },
+          "downloads": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "baidu",
+                    "google",
+                    "lanzou",
+                    "quark",
+                    "dropbox",
+                    "direct",
+                    "other",
+                    "mega",
+                    "onedrive"
+                  ]
+                },
+                "url": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string",
+                  "title": "解压密码"
+                },
+                "extractionCode": {
+                  "type": "string",
+                  "title": "提取密码"
+                }
+              },
+              "required": [
+                "type",
+                "url"
+              ]
+            }
+          },
           "tagNames": {
             "description": "标签名称数组（不存在的标签会自动创建）",
             "type": "array",
@@ -15514,6 +15729,42 @@
             "type": "number",
             "description": "分类ID",
             "example": 1
+          },
+          "downloads": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "baidu",
+                    "google",
+                    "lanzou",
+                    "dropbox",
+                    "mega",
+                    "quark",
+                    "other",
+                    "direct",
+                    "onedrive",
+                    "aliyun"
+                  ]
+                },
+                "url": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "extractionCode": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "url"
+              ]
+            }
           },
           "tagNames": {
             "description": "标签名称数组（不存在的标签会自动创建）",
