@@ -81,8 +81,18 @@ export default defineNuxtConfig({
       xxl: 1536,
       '2xl': 1536
     },
-    quality: 80,
-    format: ['webp', 'jpg', 'png', 'avif']
+    format: ['webp', 'jpg', 'png', 'avif'],
+    provider: 'weserv',
+    domains: ['minicdn.cosfan.cc'],
+    weserv: {
+      baseURL: 'https://minicdn.cosfan.cc',
+      weservURL: 'https://images.cosfan.cc',
+      modifiers: {
+        quality: 80,
+        fit: 'cover',
+        format: 'webp'
+      }
+    }
   },
   features: {
     inlineStyles: false
