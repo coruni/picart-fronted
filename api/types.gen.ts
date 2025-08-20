@@ -932,8 +932,15 @@ export type ConfigControllerUpdateAllResponses = {
   /**
    * 更新成功
    */
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: Array<string>;
+  };
 };
+
+export type ConfigControllerUpdateAllResponse =
+  ConfigControllerUpdateAllResponses[keyof ConfigControllerUpdateAllResponses];
 
 export type ConfigControllerCreateData = {
   body?: CreateConfigDto;
@@ -4878,7 +4885,36 @@ export type OrderControllerCreateArticleOrderResponses = {
   /**
    * 创建成功
    */
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+      data: {
+        id: number;
+        userId: number;
+        authorId: number;
+        articleId: number;
+        orderNo: string;
+        type: string;
+        title: string;
+        amount: string;
+        paymentMethod: unknown;
+        paymentOrderNo: unknown;
+        status: string;
+        paidAt: unknown;
+        details: {
+          articleId: number;
+          articleTitle: string;
+          remark: string;
+        };
+        remark: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
+  };
 };
 
 export type OrderControllerCreateArticleOrderResponse =
@@ -4916,29 +4952,33 @@ export type OrderControllerCreateMembershipOrderResponses = {
     code: number;
     message: string;
     data: {
-      id: number;
-      userId: number;
-      authorId: number;
-      articleId: unknown;
-      orderNo: string;
-      type: string;
-      title: string;
-      amount: number;
-      paymentMethod: unknown;
-      paymentOrderNo: unknown;
-      status: string;
-      paidAt: unknown;
-      details: {
-        membershipLevel: number;
-        membershipName: string;
-        duration: number;
-        basePrice: number;
-        totalAmount: number;
+      success: boolean;
+      message: string;
+      data: {
+        id: number;
+        userId: number;
+        authorId: number;
+        articleId: unknown;
+        orderNo: string;
+        type: string;
+        title: string;
+        amount: number;
+        paymentMethod: unknown;
+        paymentOrderNo: unknown;
+        status: string;
+        paidAt: unknown;
+        details: {
+          membershipLevel: number;
+          membershipName: string;
+          duration: number;
+          basePrice: number;
+          totalAmount: number;
+          remark: string;
+        };
         remark: string;
+        createdAt: string;
+        updatedAt: string;
       };
-      remark: string;
-      createdAt: string;
-      updatedAt: string;
     };
   };
 };
@@ -5519,8 +5559,24 @@ export type BannersControllerCreateData = {
 };
 
 export type BannersControllerCreateResponses = {
-  200: {
-    [key: string]: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+      data: {
+        id: number;
+        title: string;
+        description: string;
+        imageUrl: string;
+        linkUrl: string;
+        sortOrder: number;
+        status: string;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
   };
 };
 
@@ -5581,7 +5637,12 @@ export type BannersControllerDeleteByIdData = {
 
 export type BannersControllerDeleteByIdResponses = {
   200: {
-    [key: string]: unknown;
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+    };
   };
 };
 
@@ -5749,9 +5810,12 @@ export type PaymentControllerCreatePaymentResponses = {
     code: number;
     message: string;
     data: {
-      paymentId: number;
-      paymentUrl: string;
-      paymentMethod: string;
+      data: {
+        paymentId: number;
+        paymentUrl: string;
+        paymentMethod: string;
+      };
+      success: boolean;
       message: string;
     };
   };

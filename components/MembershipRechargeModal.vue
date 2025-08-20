@@ -430,21 +430,21 @@
 
     try {
       // 创建会员订单
-      const response = (await orderControllerCreateMembershipOrder({
+      const response = await orderControllerCreateMembershipOrder({
         composable: '$fetch',
         body: {
           duration: selectedPackage.value.duration,
           remark: `${t('user.recharge.membershipRecharge')} ${selectedPackage.value.duration}${t('user.recharge.month')}`
         }
-      })) as any;
+      });
 
-      const order = response.data;
+      const order = response.data.data;
 
       // 构建支付请求参数
-      const paymentData: any = {
+      const paymentData = {
         orderId: order.id,
         paymentMethod: selectedPaymentMethod.value
-      };
+      } as any;
 
       // 如果是易支付，必须传入type参数
       if (selectedPaymentMethod.value === 'EPAY') {
@@ -460,9 +460,8 @@
         body: paymentData
       });
 
-      // 处理支付响应
-      if (paymentResponse.data.paymentUrl) {
-        window.open(paymentResponse.data.paymentUrl, '_blank');
+      if (paymentResponse.data.data.paymentUrl) {
+        window.open(paymentResponse.data.data.paymentUrl, '_blank');
       }
     } catch (error: any) {
       console.error(t('payment.paymentFailed'), error);

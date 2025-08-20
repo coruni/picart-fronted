@@ -22,6 +22,7 @@ import type {
   ConfigControllerFindAllData,
   ConfigControllerFindAllResponse,
   ConfigControllerUpdateAllData,
+  ConfigControllerUpdateAllResponse,
   ConfigControllerCreateData,
   ConfigControllerRemoveData,
   ConfigControllerFindOneData,
@@ -349,12 +350,20 @@ export const configControllerFindAll = <
 /**
  * 更新所有配置
  */
-export const configControllerUpdateAll = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, ConfigControllerUpdateAllData, unknown, DefaultT>
+export const configControllerUpdateAll = <
+  TComposable extends Composable,
+  DefaultT extends ConfigControllerUpdateAllResponse = ConfigControllerUpdateAllResponse
+>(
+  options: Options<
+    TComposable,
+    ConfigControllerUpdateAllData,
+    ConfigControllerUpdateAllResponse,
+    DefaultT
+  >
 ) => {
   return (options.client ?? _heyApiClient).patch<
     TComposable,
-    unknown | DefaultT,
+    ConfigControllerUpdateAllResponse | DefaultT,
     unknown,
     DefaultT
   >({

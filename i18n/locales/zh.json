@@ -577,7 +577,7 @@
     "downloads": {
       "name": "下载链接",
       "addDownload": "添加下载链接",
-      "removeDownload": "删除删除下载链接",
+      "removeDownload": "删除",
       "type": {
         "name": "下载类型",
         "placeholder": "选择下载类型",

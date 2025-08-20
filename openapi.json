@@ -771,6 +771,32 @@
         "responses": {
           "200": {
             "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "400": {
@@ -12372,6 +12398,129 @@
           },
           "201": {
             "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "authorId": {
+                              "type": "integer"
+                            },
+                            "articleId": {
+                              "type": "integer"
+                            },
+                            "orderNo": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "amount": {
+                              "type": "string"
+                            },
+                            "paymentMethod": {
+                              "type": "null"
+                            },
+                            "paymentOrderNo": {
+                              "type": "null"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "paidAt": {
+                              "type": "null"
+                            },
+                            "details": {
+                              "type": "object",
+                              "properties": {
+                                "articleId": {
+                                  "type": "integer"
+                                },
+                                "articleTitle": {
+                                  "type": "string"
+                                },
+                                "remark": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "articleId",
+                                "articleTitle",
+                                "remark"
+                              ]
+                            },
+                            "remark": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "userId",
+                            "authorId",
+                            "articleId",
+                            "orderNo",
+                            "type",
+                            "title",
+                            "amount",
+                            "paymentMethod",
+                            "paymentOrderNo",
+                            "status",
+                            "paidAt",
+                            "details",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           },
           "400": {
@@ -12468,100 +12617,116 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "id": {
-                          "type": "integer"
+                        "success": {
+                          "type": "boolean"
                         },
-                        "userId": {
-                          "type": "integer"
-                        },
-                        "authorId": {
-                          "type": "integer"
-                        },
-                        "articleId": {
-                          "type": "null"
-                        },
-                        "orderNo": {
+                        "message": {
                           "type": "string"
                         },
-                        "type": {
-                          "type": "string"
-                        },
-                        "title": {
-                          "type": "string"
-                        },
-                        "amount": {
-                          "type": "integer"
-                        },
-                        "paymentMethod": {
-                          "type": "null"
-                        },
-                        "paymentOrderNo": {
-                          "type": "null"
-                        },
-                        "status": {
-                          "type": "string"
-                        },
-                        "paidAt": {
-                          "type": "null"
-                        },
-                        "details": {
+                        "data": {
                           "type": "object",
                           "properties": {
-                            "membershipLevel": {
+                            "id": {
                               "type": "integer"
                             },
-                            "membershipName": {
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "authorId": {
+                              "type": "integer"
+                            },
+                            "articleId": {
+                              "type": "null"
+                            },
+                            "orderNo": {
                               "type": "string"
                             },
-                            "duration": {
+                            "type": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "amount": {
                               "type": "integer"
                             },
-                            "basePrice": {
-                              "type": "integer"
+                            "paymentMethod": {
+                              "type": "null"
                             },
-                            "totalAmount": {
-                              "type": "integer"
+                            "paymentOrderNo": {
+                              "type": "null"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "paidAt": {
+                              "type": "null"
+                            },
+                            "details": {
+                              "type": "object",
+                              "properties": {
+                                "membershipLevel": {
+                                  "type": "integer"
+                                },
+                                "membershipName": {
+                                  "type": "string"
+                                },
+                                "duration": {
+                                  "type": "integer"
+                                },
+                                "basePrice": {
+                                  "type": "integer"
+                                },
+                                "totalAmount": {
+                                  "type": "integer"
+                                },
+                                "remark": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "membershipLevel",
+                                "membershipName",
+                                "duration",
+                                "basePrice",
+                                "totalAmount",
+                                "remark"
+                              ]
                             },
                             "remark": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
                               "type": "string"
                             }
                           },
                           "required": [
-                            "membershipLevel",
-                            "membershipName",
-                            "duration",
-                            "basePrice",
-                            "totalAmount",
-                            "remark"
+                            "id",
+                            "userId",
+                            "authorId",
+                            "articleId",
+                            "orderNo",
+                            "type",
+                            "title",
+                            "amount",
+                            "paymentMethod",
+                            "paymentOrderNo",
+                            "status",
+                            "paidAt",
+                            "details",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
                           ]
-                        },
-                        "remark": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string"
-                        },
-                        "updatedAt": {
-                          "type": "string"
                         }
                       },
                       "required": [
-                        "id",
-                        "userId",
-                        "authorId",
-                        "articleId",
-                        "orderNo",
-                        "type",
-                        "title",
-                        "amount",
-                        "paymentMethod",
-                        "paymentOrderNo",
-                        "status",
-                        "paidAt",
-                        "details",
-                        "remark",
-                        "createdAt",
-                        "updatedAt"
+                        "success",
+                        "message",
+                        "data"
                       ]
                     }
                   },
@@ -14176,13 +14341,84 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "imageUrl": {
+                              "type": "string"
+                            },
+                            "linkUrl": {
+                              "type": "string"
+                            },
+                            "sortOrder": {
+                              "type": "integer"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "description",
+                            "imageUrl",
+                            "linkUrl",
+                            "sortOrder",
+                            "status",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -14502,7 +14738,34 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {}
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -14915,23 +15178,35 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "paymentId": {
-                          "type": "integer"
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "paymentId": {
+                              "type": "integer"
+                            },
+                            "paymentUrl": {
+                              "type": "string"
+                            },
+                            "paymentMethod": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "paymentId",
+                            "paymentUrl",
+                            "paymentMethod"
+                          ]
                         },
-                        "paymentUrl": {
-                          "type": "string"
-                        },
-                        "paymentMethod": {
-                          "type": "string"
+                        "success": {
+                          "type": "boolean"
                         },
                         "message": {
                           "type": "string"
                         }
                       },
                       "required": [
-                        "paymentId",
-                        "paymentUrl",
-                        "paymentMethod",
+                        "data",
+                        "success",
                         "message"
                       ]
                     }
