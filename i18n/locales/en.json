@@ -21,6 +21,49 @@
       "following": "Following"
     }
   },
+  "message": {
+    "title": "Messages",
+    "description": "View all your messages and notifications",
+    "noMessages": "No messages",
+    "noMessagesDescription": "You haven't received any messages yet",
+    "noTitle": "No title",
+    "noContent": "No content",
+    "markRead": "Mark as read",
+    "markAllRead": "Mark all as read",
+    "loadMore": "Load more",
+    "viewAll": "View all",
+    "refresh": "Refresh",
+    "delete": "Delete",
+    "unread": "Unread",
+    "loading": "Loading...",
+    "loadingMore": "Loading more...",
+    "noMoreMessages": "No more messages",
+    "totalCount": "Total {count} messages",
+    "unreadCount": "Unread {count}",
+    "fetchError": "Failed to fetch messages",
+    "markReadError": "Failed to mark as read",
+    "markReadSuccess": "Marked as read",
+    "markAllReadSuccess": "All messages marked as read",
+    "markAllReadError": "Failed to mark all as read",
+    "deleteSuccess": "Message deleted",
+    "deleteError": "Failed to delete message",
+    "type": {
+      "system": "System",
+      "notification": "Notification",
+      "comment": "Comment",
+      "like": "Like",
+      "follow": "Follow",
+      "order": "Order",
+      "payment": "Payment",
+      "unknown": "Unknown"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{minutes} minutes ago",
+      "hoursAgo": "{hours} hours ago",
+      "daysAgo": "{days} days ago"
+    }
+  },
   "admin": {
     "menu": {
       "dashboard": "Dashboard",

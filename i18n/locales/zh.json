@@ -21,6 +21,49 @@
       "following": "关注作品"
     }
   },
+  "message": {
+    "title": "消息通知",
+    "description": "查看您的所有消息和通知",
+    "noMessages": "暂无消息",
+    "noMessagesDescription": "您还没有收到任何消息",
+    "noTitle": "无标题",
+    "noContent": "无内容",
+    "markRead": "标记已读",
+    "markAllRead": "全部已读",
+    "loadMore": "加载更多",
+    "viewAll": "查看全部",
+    "refresh": "刷新",
+    "delete": "删除",
+    "unread": "未读",
+    "loading": "加载中...",
+    "loadingMore": "加载更多...",
+    "noMoreMessages": "没有更多消息了",
+    "totalCount": "共 {count} 条消息",
+    "unreadCount": "未读 {count} 条",
+    "fetchError": "获取消息失败",
+    "markReadError": "标记已读失败",
+    "markReadSuccess": "已标记为已读",
+    "markAllReadSuccess": "已全部标记为已读",
+    "markAllReadError": "标记全部已读失败",
+    "deleteSuccess": "删除成功",
+    "deleteError": "删除失败",
+    "type": {
+      "system": "系统消息",
+      "notification": "通知",
+      "comment": "评论",
+      "like": "点赞",
+      "follow": "关注",
+      "order": "订单",
+      "payment": "支付",
+      "unknown": "未知类型"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{minutes}分钟前",
+      "hoursAgo": "{hours}小时前",
+      "daysAgo": "{days}天前"
+    }
+  },
   "admin": {
     "menu": {
       "dashboard": "仪表盘",

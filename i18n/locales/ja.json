@@ -21,6 +21,49 @@
       "following": "フォロー中"
     }
   },
+  "message": {
+    "title": "メッセージ",
+    "description": "すべてのメッセージと通知を表示",
+    "noMessages": "メッセージがありません",
+    "noMessagesDescription": "まだメッセージを受け取っていません",
+    "noTitle": "タイトルなし",
+    "noContent": "コンテンツなし",
+    "markRead": "既読にする",
+    "markAllRead": "すべて既読にする",
+    "loadMore": "もっと見る",
+    "viewAll": "すべて表示",
+    "refresh": "更新",
+    "delete": "削除",
+    "unread": "未読",
+    "loading": "読み込み中...",
+    "loadingMore": "さらに読み込み中...",
+    "noMoreMessages": "これ以上のメッセージはありません",
+    "totalCount": "合計 {count} 件のメッセージ",
+    "unreadCount": "未読 {count} 件",
+    "fetchError": "メッセージの取得に失敗しました",
+    "markReadError": "既読の設定に失敗しました",
+    "markReadSuccess": "既読にしました",
+    "markAllReadSuccess": "すべて既読にしました",
+    "markAllReadError": "すべて既読の設定に失敗しました",
+    "deleteSuccess": "メッセージを削除しました",
+    "deleteError": "メッセージの削除に失敗しました",
+    "type": {
+      "system": "システム",
+      "notification": "通知",
+      "comment": "コメント",
+      "like": "いいね",
+      "follow": "フォロー",
+      "order": "注文",
+      "payment": "支払い",
+      "unknown": "不明"
+    },
+    "time": {
+      "justNow": "今",
+      "minutesAgo": "{minutes}分前",
+      "hoursAgo": "{hours}時間前",
+      "daysAgo": "{days}日前"
+    }
+  },
   "admin": {
     "menu": {
       "dashboard": "ダッシュボード",

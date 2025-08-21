@@ -117,6 +117,9 @@
         </div>
 
         <template v-if="userStore.isLoggedIn">
+          <!-- 消息通知 -->
+          <MessageNotification />
+
           <div class="group relative cursor-pointer flex items-center gap-1">
             <UAvatar
               :src="currentUserAvatar"
@@ -179,7 +182,7 @@
       >
         <div
           v-if="isMobileMenuOpen"
-          class="mobile-menu-container md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 max-h-[calc(100vh-4rem)] overflow-y-auto"
+          class="mobile-menu-container md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-800 shadow-xl border-t border-gray-200 dark:border-gray-700 max-h-[calc(100vh-4rem)] overflow-y-auto backdrop-blur-sm"
         >
           <div class="px-4 py-4 space-y-4">
             <NuxtLinkLocale
@@ -272,6 +275,32 @@
                 />
               </div>
               <template v-if="userStore.isLoggedIn">
+                <!-- 移动端消息通知 -->
+                <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="mynaui:bell" class="w-5 h-5 text-primary" />
+                      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {{ $t('message.title') }}
+                      </span>
+                      <span
+                        v-if="unreadCount > 0"
+                        class="text-red-500 font-medium bg-red-100 dark:bg-red-900/20 px-2 py-1 rounded-full text-xs"
+                      >
+                        {{ unreadCount > 99 ? '99+' : unreadCount }}
+                      </span>
+                    </div>
+                    <NuxtLinkLocale
+                      to="/user/messages"
+                      class="text-sm text-primary hover:text-primary-600 dark:hover:text-primary-400 flex items-center space-x-1"
+                      @click="closeMobileMenu"
+                    >
+                      <span>{{ $t('message.viewAll') }}</span>
+                      <span class="text-gray-500 dark:text-gray-400">({{ totalCount }})</span>
+                    </NuxtLinkLocale>
+                  </div>
+                </div>
+
                 <NuxtLinkLocale
                   to="/user"
                   class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
@@ -320,6 +349,9 @@
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
+
+  // 消息相关数据
+  const { unreadCount, totalCount } = useMessage();
 
   // 语言切换相关
   const { locale: currentLocale, locales, setLocale } = useI18n();

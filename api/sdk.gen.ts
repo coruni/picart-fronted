@@ -152,11 +152,18 @@ import type {
   UploadControllerUploadFileResponse,
   UploadControllerRemoveData,
   MessageControllerFindAllData,
+  MessageControllerFindAllResponse,
   MessageControllerCreateData,
+  MessageControllerSearchData,
   MessageControllerRemoveData,
   MessageControllerFindOneData,
   MessageControllerUpdateData,
   MessageControllerMarkAsReadData,
+  MessageControllerMarkAllAsReadData,
+  MessageControllerBatchOperationData,
+  MessageControllerGetUnreadCountData,
+  MessageControllerGetUnreadCountResponse,
+  MessageControllerGetMessageStatsData,
   BannersControllerFindAllData,
   BannersControllerFindAllResponse,
   BannersControllerCreateData,
@@ -169,12 +176,6 @@ import type {
   BannersControllerDetailResponse,
   BannersControllerUpdateData,
   BannersControllerUpdateResponse,
-  PostPayCreateData,
-  PostPayCreateResponse,
-  GetPayOrderStatusData,
-  GetPayOrderStatusResponse,
-  PostPayNotifyByPaywayData,
-  PostPayNotifyByPaywayResponse,
   PaymentControllerCreatePaymentData,
   PaymentControllerCreatePaymentResponse,
   PaymentControllerAlipayNotifyData,
@@ -2242,10 +2243,29 @@ export const uploadControllerRemove = <TComposable extends Composable, DefaultT 
 /**
  * 获取当前用户所有消息（含全员通知）
  */
-export const messageControllerFindAll = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, MessageControllerFindAllData, unknown, DefaultT>
+export const messageControllerFindAll = <
+  TComposable extends Composable,
+  DefaultT extends MessageControllerFindAllResponse = MessageControllerFindAllResponse
+>(
+  options: Options<
+    TComposable,
+    MessageControllerFindAllData,
+    MessageControllerFindAllResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    MessageControllerFindAllResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/message',
     ...options
   });
@@ -2259,6 +2279,12 @@ export const messageControllerCreate = <TComposable extends Composable, DefaultT
 ) => {
   return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
     {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
       url: '/message',
       ...options,
       headers: {
@@ -2267,6 +2293,24 @@ export const messageControllerCreate = <TComposable extends Composable, DefaultT
       }
     }
   );
+};
+
+/**
+ * 高级查询消息
+ */
+export const messageControllerSearch = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, MessageControllerSearchData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/message/search',
+    ...options
+  });
 };
 
 /**
@@ -2281,6 +2325,12 @@ export const messageControllerRemove = <TComposable extends Composable, DefaultT
     unknown,
     DefaultT
   >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/message/{id}',
     ...options
   });
@@ -2293,6 +2343,12 @@ export const messageControllerFindOne = <TComposable extends Composable, Default
   options: Options<TComposable, MessageControllerFindOneData, unknown, DefaultT>
 ) => {
   return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/message/{id}',
     ...options
   });
@@ -2310,6 +2366,12 @@ export const messageControllerUpdate = <TComposable extends Composable, DefaultT
     unknown,
     DefaultT
   >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
     url: '/message/{id}',
     ...options,
     headers: {
@@ -2327,10 +2389,122 @@ export const messageControllerMarkAsRead = <TComposable extends Composable, Defa
 ) => {
   return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
     {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
       url: '/message/{id}/read',
       ...options
     }
   );
+};
+
+/**
+ * 标记所有消息为已读
+ */
+export const messageControllerMarkAllAsRead = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, MessageControllerMarkAllAsReadData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/message/read-all',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 批量操作消息（标记已读/删除）
+ */
+export const messageControllerBatchOperation = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, MessageControllerBatchOperationData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      security: [
+        {
+          scheme: 'bearer',
+          type: 'http'
+        }
+      ],
+      url: '/message/batch',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 获取未读消息数量
+ */
+export const messageControllerGetUnreadCount = <
+  TComposable extends Composable,
+  DefaultT extends MessageControllerGetUnreadCountResponse = MessageControllerGetUnreadCountResponse
+>(
+  options: Options<
+    TComposable,
+    MessageControllerGetUnreadCountData,
+    MessageControllerGetUnreadCountResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    MessageControllerGetUnreadCountResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/message/unread/count',
+    ...options
+  });
+};
+
+/**
+ * 获取消息统计信息
+ */
+export const messageControllerGetMessageStats = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, MessageControllerGetMessageStatsData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/message/stats',
+    ...options
+  });
 };
 
 /**
@@ -2490,66 +2664,6 @@ export const bannersControllerUpdate = <
       'Content-Type': 'application/x-www-form-urlencoded',
       ...options.headers
     }
-  });
-};
-
-/**
- * 创建支付订单
- */
-export const postPayCreate = <
-  TComposable extends Composable,
-  DefaultT extends PostPayCreateResponse = PostPayCreateResponse
->(
-  options: Options<TComposable, PostPayCreateData, PostPayCreateResponse, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<
-    TComposable,
-    PostPayCreateResponse | DefaultT,
-    unknown,
-    DefaultT
-  >({
-    url: '/pay/create',
-    ...options
-  });
-};
-
-/**
- * 查询订单状态
- */
-export const getPayOrderStatus = <
-  TComposable extends Composable,
-  DefaultT extends GetPayOrderStatusResponse = GetPayOrderStatusResponse
->(
-  options: Options<TComposable, GetPayOrderStatusData, GetPayOrderStatusResponse, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).get<
-    TComposable,
-    GetPayOrderStatusResponse | DefaultT,
-    unknown,
-    DefaultT
-  >({
-    url: '/pay/orderStatus',
-    ...options
-  });
-};
-
-/**
- * 订单异步通知
- */
-export const postPayNotifyByPayway = <
-  TComposable extends Composable,
-  DefaultT extends PostPayNotifyByPaywayResponse = PostPayNotifyByPaywayResponse
->(
-  options: Options<TComposable, PostPayNotifyByPaywayData, PostPayNotifyByPaywayResponse, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<
-    TComposable,
-    PostPayNotifyByPaywayResponse | DefaultT,
-    unknown,
-    DefaultT
-  >({
-    url: '/pay/notify/{payway}',
-    ...options
   });
 };
 

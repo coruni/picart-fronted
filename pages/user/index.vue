@@ -99,24 +99,45 @@
                   $t('user.orders.title')
                 }}</span>
               </NuxtLinkLocale>
+
+              <NuxtLinkLocale
+                to="/user/messages"
+                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors relative"
+              >
+                <Icon name="mynaui:bell" class="w-8 h-8 text-primary mb-2" />
+                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                  $t('message.title')
+                }}</span>
+                <!-- 未读消息徽章 -->
+                <span
+                  v-if="unreadCount > 0"
+                  class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium"
+                >
+                  {{ unreadCount > 99 ? '99+' : unreadCount }}
+                </span>
+              </NuxtLinkLocale>
+
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:credit-card" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.wallet') }}</span>
               </div>
+
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
               </div>
+
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
                 <Icon name="mynaui:cog" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
               </div>
+
               <div
                 @click="isChangePasswordModalOpen = true"
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
@@ -461,6 +482,9 @@
   const userStore = useUserStore();
   const userInfo = userStore.currentUser;
   const localPath = useLocalePath();
+
+  // 消息相关数据
+  const { unreadCount } = useMessage();
 
   const pagination = ref({
     page: 1,

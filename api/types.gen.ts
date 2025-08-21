@@ -5379,11 +5379,105 @@ export type MessageControllerFindAllData = {
 };
 
 export type MessageControllerFindAllResponses = {
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id?: number;
+        senderId?: number;
+        receiverId?: number;
+        content?: string;
+        type?: string;
+        isRead?: boolean;
+        isBroadcast?: boolean;
+        title?: unknown;
+        metadata?: unknown;
+        createdAt?: string;
+        updatedAt?: string;
+        sender?: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          level: number;
+          membershipLevel: number;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: string;
+          followerCount: number;
+          followingCount: number;
+          lastActiveAt: unknown;
+          lastLoginAt: string;
+          gender: string;
+        };
+        receiver?: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          level: number;
+          membershipLevel: number;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: string;
+          followerCount: number;
+          followingCount: number;
+          lastActiveAt: unknown;
+          lastLoginAt: string;
+          gender: string;
+        };
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
 };
 
+export type MessageControllerFindAllResponse =
+  MessageControllerFindAllResponses[keyof MessageControllerFindAllResponses];
+
 export type MessageControllerCreateData = {
-  body?: CreateMessageDto;
+  body?: {
+    senderId: number;
+    /**
+     * 单发 接收者id
+     */
+    receiverId?: number;
+    /**
+     * 批量发送
+     */
+    receiverIds?: Array<number>;
+    /**
+     * 内容
+     */
+    content: string;
+    /**
+     * 标题
+     */
+    title?: string;
+    type: 'private' | 'system' | 'notification';
+    /**
+     * 是否广播
+     */
+    isBroadcast?: boolean;
+    metadata?:
+      | string
+      | number
+      | boolean
+      | Array<unknown>
+      | {
+          [key: string]: unknown;
+        }
+      | number
+      | null;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -5397,6 +5491,56 @@ export type MessageControllerCreateData = {
 
 export type MessageControllerCreateResponses = {
   201: unknown;
+};
+
+export type MessageControllerSearchData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: {
+    /**
+     * 页码
+     */
+    page?: number;
+    /**
+     * 每页数量
+     */
+    limit?: number;
+    /**
+     * 消息类型
+     */
+    type?: 'private' | 'system' | 'notification';
+    /**
+     * 是否已读
+     */
+    isRead?: boolean;
+    /**
+     * 是否为广播消息
+     */
+    isBroadcast?: boolean;
+    /**
+     * 搜索关键词
+     */
+    keyword?: string;
+    /**
+     * 发送者ID
+     */
+    senderId?: number;
+    /**
+     * 接收者ID
+     */
+    receiverId?: number;
+  };
+  url: '/message/search';
+};
+
+export type MessageControllerSearchResponses = {
+  200: unknown;
 };
 
 export type MessageControllerRemoveData = {
@@ -5444,7 +5588,9 @@ export type MessageControllerFindOneResponses = {
 };
 
 export type MessageControllerUpdateData = {
-  body?: UpdateMessageDto;
+  body: {
+    [key: string]: unknown;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -5485,6 +5631,92 @@ export type MessageControllerMarkAsReadData = {
 
 export type MessageControllerMarkAsReadResponses = {
   201: unknown;
+};
+
+export type MessageControllerMarkAllAsReadData = {
+  body: {
+    [key: string]: unknown;
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/message/read-all';
+};
+
+export type MessageControllerMarkAllAsReadResponses = {
+  201: unknown;
+};
+
+export type MessageControllerBatchOperationData = {
+  body: {
+    [key: string]: unknown;
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/message/batch';
+};
+
+export type MessageControllerBatchOperationResponses = {
+  201: unknown;
+};
+
+export type MessageControllerGetUnreadCountData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/message/unread/count';
+};
+
+export type MessageControllerGetUnreadCountResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      data: {
+        personal: number;
+        broadcast: number;
+        total: number;
+      };
+    };
+  };
+};
+
+export type MessageControllerGetUnreadCountResponse =
+  MessageControllerGetUnreadCountResponses[keyof MessageControllerGetUnreadCountResponses];
+
+export type MessageControllerGetMessageStatsData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/message/stats';
+};
+
+export type MessageControllerGetMessageStatsResponses = {
+  200: unknown;
 };
 
 export type BannersControllerFindAllData = {
@@ -5721,73 +5953,6 @@ export type BannersControllerUpdateResponses = {
 
 export type BannersControllerUpdateResponse =
   BannersControllerUpdateResponses[keyof BannersControllerUpdateResponses];
-
-export type PostPayCreateData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/pay/create';
-};
-
-export type PostPayCreateResponses = {
-  200: {
-    [key: string]: unknown;
-  };
-};
-
-export type PostPayCreateResponse = PostPayCreateResponses[keyof PostPayCreateResponses];
-
-export type GetPayOrderStatusData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/pay/orderStatus';
-};
-
-export type GetPayOrderStatusResponses = {
-  200: {
-    [key: string]: unknown;
-  };
-};
-
-export type GetPayOrderStatusResponse =
-  GetPayOrderStatusResponses[keyof GetPayOrderStatusResponses];
-
-export type PostPayNotifyByPaywayData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path: {
-    payway: string;
-  };
-  query?: never;
-  url: '/pay/notify/{payway}';
-};
-
-export type PostPayNotifyByPaywayResponses = {
-  200: {
-    [key: string]: unknown;
-  };
-};
-
-export type PostPayNotifyByPaywayResponse =
-  PostPayNotifyByPaywayResponses[keyof PostPayNotifyByPaywayResponses];
 
 export type PaymentControllerCreatePaymentData = {
   body: CreatePaymentDto;
