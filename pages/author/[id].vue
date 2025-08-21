@@ -2,12 +2,51 @@
   <div class="min-h-screen">
     <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
       <!-- 加载状态 -->
-      <div v-if="isLoading" class="flex items-center justify-center py-20">
-        <div class="flex items-center justify-center flex-col gap-8">
-          <div
-            class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-          ></div>
-          <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
+      <div v-if="isLoading" class="flex flex-col lg:flex-row gap-4 md:gap-8">
+        <!-- 左侧主内容区骨架屏 -->
+        <div class="flex-1">
+          <!-- 作者信息区骨架屏 -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+            <div
+              class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
+            >
+              <USkeleton class="w-24 h-24 md:w-32 md:h-32 rounded-full" />
+              <div class="flex-1">
+                <USkeleton class="h-6 md:h-8 w-32 mb-2" />
+                <USkeleton class="h-4 w-48 mb-3" />
+                <div class="flex flex-wrap items-center gap-4">
+                  <div v-for="i in 4" :key="i" class="text-center">
+                    <USkeleton class="h-4 w-8 mx-auto mb-1" />
+                    <USkeleton class="h-3 w-12" />
+                  </div>
+                </div>
+              </div>
+              <USkeleton class="h-10 w-20 rounded-md" />
+            </div>
+          </div>
+
+          <!-- 文章列表骨架屏 -->
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+            <ArticleSkeleton v-for="i in 8" :key="i" />
+          </div>
+        </div>
+
+        <!-- 右侧边栏骨架屏 -->
+        <div class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0">
+          <div class="lg:sticky top-20">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+              <USkeleton class="h-6 w-32 mb-3 md:mb-4" />
+              <div class="space-y-3 md:space-y-4">
+                <div v-for="i in 3" :key="i" class="flex items-center space-x-3">
+                  <USkeleton class="w-16 h-16 md:w-20 md:h-20 rounded-md flex-shrink-0" />
+                  <div class="flex-1">
+                    <USkeleton class="h-4 w-full mb-1" />
+                    <USkeleton class="h-3 w-16" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

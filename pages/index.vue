@@ -30,10 +30,11 @@
         </TransitionGroup>
       </div>
       <!-- 加载指示器 -->
-      <div v-if="loading" class="col-span-2 md:col-span-4 flex justify-center py-8">
-        <div
-          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
+      <div
+        v-if="loading"
+        class="col-span-2 md:col-span-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 py-8"
+      >
+        <ArticleSkeleton v-for="i in 8" :key="i" />
       </div>
 
       <!-- 没有更多数据提示 -->

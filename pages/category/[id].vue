@@ -62,10 +62,11 @@
       </div>
 
       <!-- 文章列表 -->
-      <div v-if="loading && displayItems.length === 0" class="flex justify-center py-12 px-4">
-        <div
-          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
+      <div
+        v-if="loading && displayItems.length === 0"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 py-12 px-4"
+      >
+        <ArticleSkeleton v-for="i in 8" :key="i" />
       </div>
 
       <div v-else-if="!loading && displayItems.length === 0" class="text-center py-12 px-4">

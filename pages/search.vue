@@ -47,10 +47,8 @@
       </div>
 
       <!-- 加载指示器 -->
-      <div v-if="loading" class="flex justify-center py-8">
-        <div
-          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
+      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 py-8">
+        <ArticleSkeleton v-for="i in 8" :key="i" />
       </div>
 
       <!-- 没有更多数据提示 -->
