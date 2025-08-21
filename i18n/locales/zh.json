@@ -941,6 +941,7 @@
     "epay": "易支付",
     "epayAlipay": "支付宝",
     "epayWechat": "微信支付",
-    "balanceDesc": "账户余额"
+    "balanceDesc": "账户余额",
+    "processing": "支付中..."
   }
 }

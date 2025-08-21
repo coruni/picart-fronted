@@ -59,7 +59,7 @@
                   </div>
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.wallet! }}
+                      {{ userProfile?.data?.wallet || 0 }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.wallet') }}
@@ -435,6 +435,7 @@
     <!-- 会员充值弹窗 -->
     <MembershipRechargeModal
       v-model="showPaymentModal"
+      :user-profile="userProfile?.data"
       @recharge-success="onPaymentSuccess"
       @recharge-failed="onPaymentFailed"
     />

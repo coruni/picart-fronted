@@ -941,6 +941,7 @@
     "epayAlipay": "Alipay",
     "epayWechat": "Wxpay",
     "wechat": "Wxpay",
-    "balanceDesc": "Account balance"
+    "balanceDesc": "Account balance",
+    "processing": "Processing..."
   }
 }

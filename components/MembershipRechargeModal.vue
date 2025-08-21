@@ -18,7 +18,11 @@
                 {{ $t('user.recharge.membershipLevel') }}
               </div>
               <div class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ userStore.currentUser?.membershipLevelName || $t('user.recharge.noMembership') }}
+                {{
+                  (props.userProfile?.membershipLevel || 0) > 0
+                    ? $t('user.vipMember')
+                    : $t('user.basicMember')
+                }}
               </div>
             </div>
             <div>
@@ -26,7 +30,7 @@
                 {{ $t('user.recharge.expireDate') }}
               </div>
               <div class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ formatDate(userStore.currentUser?.membershipEndDate as string) || '-' }}
+                {{ formatDate(props.userProfile?.membershipEndDate as string) || '-' }}
               </div>
             </div>
           </div>
@@ -35,7 +39,7 @@
               {{ $t('user.recharge.walletBalance') }}
             </div>
             <div class="text-lg font-semibold text-primary">
-              ¥{{ userStore.currentUser?.wallet || 0 }}
+              ¥{{ props.userProfile?.wallet || 0 }}
             </div>
           </div>
         </div>
@@ -101,7 +105,7 @@
                     {{ $t('payment.balance') }}
                   </div>
                   <div class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ $t('payment.balanceDesc') }}: ¥{{ userStore.currentUser?.wallet || 0 }}
+                    {{ $t('payment.balanceDesc') }}: ¥{{ props.userProfile?.wallet || 0 }}
                   </div>
                 </div>
               </div>
@@ -259,6 +263,7 @@
 
   interface Props {
     modelValue: boolean;
+    userProfile?: any; // 添加userProfile prop
   }
 
   const props = defineProps<Props>();
@@ -408,7 +413,7 @@
 
     // 检查余额支付
     if (selectedPaymentMethod.value === 'BALANCE') {
-      if ((userStore.currentUser?.wallet || 0) < selectedPackage.value.price) {
+      if ((props.userProfile?.wallet || 0) < selectedPackage.value.price) {
         toast.add({
           title: t('payment.insufficientBalance'),
           color: 'error'
