@@ -27,5 +27,3 @@ Sitemap: https://www.picart.cc/sitemap_articles.xml
 Sitemap: https://www.picart.cc/sitemap_authors.xml
 Sitemap: https://www.picart.cc/sitemap_categories.xml
 
-# 爬取延迟（秒）
-Crawl-delay: 1
