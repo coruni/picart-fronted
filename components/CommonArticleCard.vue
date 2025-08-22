@@ -15,19 +15,32 @@
       <div
         class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       ></div>
+
+      <!-- 状态图标 - 显示非PUBLISHED状态 -->
+      <div
+        v-if="article.status && article.status !== 'PUBLISHED' && hasManagePermission"
+        class="flex items-center gap-2 absolute top-2 left-2 bg-white/90 dark:bg-gray-800/90 rounded-full p-1.5 shadow-md"
+        :title="getStatusText(article.status)"
+      >
+        <Icon
+          :name="getStatusIcon(article.status)"
+          class="w-4 h-4"
+          :class="getStatusColor(article.status)"
+        />
+      </div>
+
+      <!-- NSFW 标签 -->
+      <div
+        v-if="hasNsfwTag"
+        class="absolute top-2 right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full font-bold shadow-md flex items-center justify-center"
+      >
+        N
+      </div>
     </div>
 
-    <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden line-clamp-2">
-      <UChip v-if="hasNsfwTag" color="error" size="sm" position="top-left">
-        <h2
-          class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300"
-        >
-          {{ article.title }}
-        </h2>
-      </UChip>
+    <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden">
       <h2
-        v-else
-        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300"
+        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300 mb-3"
       >
         {{ article.title }}
       </h2>
@@ -79,6 +92,17 @@
 
   const article = props.data;
 
+  // 检查用户是否有文章管理权限
+  const hasManagePermission = computed(() => {
+    const userStore = useUserStore();
+    const userRoles = userStore.currentUser?.roles || [];
+
+    // 检查用户角色中是否有article:manage权限
+    return userRoles.some(role =>
+      role.permissions?.some(permission => permission.name === 'article:manage')
+    );
+  });
+
   // 检查是否有 NSFW 标签
   const hasNsfwTag = computed(() => {
     if (!article.tags || !Array.isArray(article.tags)) {
@@ -97,4 +121,61 @@
       return false;
     });
   });
+
+  // 获取状态图标
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'DRAFT':
+        return 'mynaui:file-text';
+      case 'PENDING':
+        return 'mynaui:alarm';
+      case 'REJECTED':
+        return 'mynaui:x-circle';
+      case 'ARCHIVED':
+        return 'mynaui:archive';
+      default:
+        return 'mynaui:info-circle';
+    }
+  };
+
+  // 获取状态颜色
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'DRAFT':
+        return 'text-gray-500';
+      case 'PENDING':
+        return 'text-yellow-500';
+      case 'REJECTED':
+        return 'text-red-500';
+      case 'ARCHIVED':
+        return 'text-gray-400';
+      default:
+        return 'text-gray-500';
+    }
+  };
+
+  // 获取状态文本
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'DRAFT':
+        return '草稿';
+      case 'PENDING':
+        return '待审核';
+      case 'REJECTED':
+        return '已拒绝';
+      case 'ARCHIVED':
+        return '已归档';
+      default:
+        return status;
+    }
+  };
 </script>
+
+<style scoped>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

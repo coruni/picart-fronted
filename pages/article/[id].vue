@@ -343,26 +343,26 @@
             </div>
 
             <!-- 作者管理按钮 -->
-            <div v-if="isAuthor" class="flex items-center space-x-2">
+            <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
               <UButton
                 @click="handleEdit"
-                variant="link"
+                variant="ghost"
                 size="sm"
-                class="flex items-center cursor-pointer"
+                class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
               >
-                <Icon name="mynaui:edit" class="w-4 h-4" />
-                <span class="hidden sm:inline">{{ $t('article.edit') }}</span>
+                <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
+                <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
               </UButton>
 
               <UButton
                 @click="handleDelete"
-                variant="link"
+                variant="ghost"
                 color="error"
                 size="sm"
-                class="flex items-center cursor-pointer"
+                class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
               >
-                <Icon name="mynaui:trash" class="w-4 h-4" />
-                <span class="hidden sm:inline">{{ $t('article.delete') }}</span>
+                <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
+                <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
               </UButton>
             </div>
           </div>
@@ -657,13 +657,13 @@
             </div>
             <UButton
               @click="handleFollow"
-              :disabled="article?.data.author.isFollowed || isFollowLoading"
+              :disabled="isFollowLoading"
               :loading="isFollowLoading"
               class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
             >
               {{
                 article?.data.author.isFollowed
-                  ? $t('article.following')
+                  ? $t('article.unfollow')
                   : $t('article.followAuthor')
               }}
             </UButton>
@@ -723,7 +723,8 @@
     commentControllerCreate,
     userControllerFollow,
     commentControllerFindAll,
-    articleControllerRemove
+    articleControllerRemove,
+    userControllerUnfollow
   } from '~/api';
   import type { CommentControllerFindAllResponse } from '~/api';
   import type { FormSubmitEvent } from '@nuxt/ui';
@@ -740,6 +741,16 @@
   const isAuthor = computed(() => {
     if (!isLoggedIn.value || !article.value?.data) return false;
     return userStore.userInfo?.id === article.value.data.author.id;
+  });
+
+  // 检查用户是否有文章管理权限
+  const hasManagePermission = computed(() => {
+    const userRoles = userStore.currentUser?.roles || [];
+
+    // 检查用户角色中是否有article:manage权限
+    return userRoles.some(role =>
+      role.permissions?.some(permission => permission.name === 'article:manage')
+    );
   });
 
   // 内容访问控制
@@ -969,18 +980,36 @@
 
     isFollowLoading.value = true;
     try {
-      await userControllerFollow({
-        composable: '$fetch',
-        key: `follow_${article.value?.data.author.id}`,
-        path: {
-          id: String(article.value?.data.author.id)
-        }
-      });
+      // 根据当前关注状态决定调用哪个API
+      if (article.value?.data.author.isFollowed) {
+        // 如果已关注，则取消关注
+        await userControllerUnfollow({
+          composable: '$fetch',
+          key: `unfollow_${article.value?.data.author.id}`,
+          path: {
+            id: String(article.value?.data.author.id)
+          }
+        });
+      } else {
+        // 如果未关注，则关注
+        await userControllerFollow({
+          composable: '$fetch',
+          key: `follow_${article.value?.data.author.id}`,
+          path: {
+            id: String(article.value?.data.author.id)
+          }
+        });
+      }
 
       // 刷新文章数据以更新关注状态
       await refreshArticle();
     } catch (error: any) {
-      console.error('关注失败:', error);
+      console.error('关注操作失败:', error);
+      // 显示错误提示
+      toast.add({
+        title: error?.data?.message || t('article.followError'),
+        color: 'error'
+      });
     } finally {
       isFollowLoading.value = false;
     }
@@ -1048,7 +1077,7 @@
 
   // 处理编辑文章
   const handleEdit = () => {
-    if (!isAuthor.value) return;
+    if (!isAuthor.value && !hasManagePermission.value) return;
 
     // 跳转到编辑页面
     router.push(`/user/articles/${route.params.id}`);
@@ -1056,7 +1085,7 @@
 
   // 处理删除文章
   const handleDelete = async () => {
-    if (!isAuthor.value) return;
+    if (!isAuthor.value && !hasManagePermission.value) return;
 
     // 显示确认对话框
     const confirmed = confirm(t('article.deleteConfirm.message'));

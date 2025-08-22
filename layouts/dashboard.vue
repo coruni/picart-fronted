@@ -1,27 +1,38 @@
 <template>
   <div class="min-h-screen flex relative">
-    <!-- 移动端遮罩层 -->
-    <div
-      v-if="toggleMobileSidebar"
-      class="fixed inset-0 bg-black/50 z-30 lg:hidden"
-      @click="toggleMobileSidebar = false"
-    ></div>
-
-    <!-- 左侧导航栏 -->
+    <!-- 左侧导航栏 - 桌面端 -->
     <DashboardSidebar
       :sidebar-collapsed="sidebarCollapsed"
       :menu-items="menuItems"
       @toggle="sidebarCollapsed = !sidebarCollapsed"
-      @close="toggleMobileSidebar = false"
       :class="[
         'transition-all duration-300 ease-in-out',
         'lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:z-30',
-        'w-64 fixed top-0 left-0 h-screen z-40 transform',
-        toggleMobileSidebar ? 'translate-x-0' : '-translate-x-full',
-        'lg:translate-x-0',
+        'hidden lg:block',
         sidebarCollapsed ? 'lg:w-16' : 'lg:w-64'
       ]"
     />
+
+    <!-- 移动端侧边栏 -->
+    <USlideover v-model:open="toggleMobileSidebar" side="left" title="管理菜单">
+      <template #body>
+        <nav class="flex-1 p-4 overflow-y-auto">
+          <ul class="space-y-2">
+            <li v-for="item in menuItems" :key="item.path">
+              <NuxtLinkLocale
+                :to="item.path"
+                class="flex items-center px-3 py-2 text-gray-800 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 hover:text-primary transition-all duration-200 group"
+                active-class="bg-gray-100 text-primary dark:bg-gray-700"
+                @click="toggleMobileSidebar = false"
+              >
+                <Icon :name="item.icon" class="w-5 h-5 flex-shrink-0 mr-3" />
+                <span>{{ $t(item.text) }}</span>
+              </NuxtLinkLocale>
+            </li>
+          </ul>
+        </nav>
+      </template>
+    </USlideover>
 
     <!-- 右侧内容区域 -->
     <main
@@ -37,10 +48,11 @@
         class="bg-white shadow-sm border-b border-gray-200 dark:border-gray-600 h-16 dark:bg-gray-800 flex items-center justify-between px-6"
       >
         <div class="flex items-center space-x-3">
+          <!-- 移动端菜单按钮 -->
           <UButton
+            @click="toggleMobileSidebar = true"
             variant="link"
             color="neutral"
-            @click="toggleMobileSidebar = !toggleMobileSidebar"
             class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
           >
             <Icon name="mynaui:menu" class="w-5 h-5" />
@@ -51,34 +63,23 @@
         </div>
 
         <div class="flex items-center space-x-2 sm:space-x-4">
-          <!-- 通知 -->
-          <UButton
-            variant="link"
-            color="neutral"
-            class="cursor-pointer p-2 text-gray-500 hover:text-gray-700 relative rounded-md hover:bg-gray-50 transition-all duration-200"
-          >
-            <Icon name="mynaui:bell" class="w-4 h-4 sm:w-5 sm:h-5" />
-            <span
-              class="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-red-500 rounded-full"
-            ></span>
-          </UButton>
-
           <!-- 用户菜单 -->
-          <div class="relative">
+          <div class="group relative">
             <UButton
               variant="link"
               color="neutral"
-              @click="toggleUserMenu"
               class="cursor-pointer flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-50 transition-all duration-200"
             >
               <Icon name="mynaui:user" class="w-4 h-4 sm:w-5 sm:h-5" />
-              <Icon name="mynaui:chevron-down" class="w-3 h-3 sm:w-4 sm:h-4 ml-1 hidden sm:block" />
+              <Icon
+                name="mynaui:chevron-down"
+                class="w-3 h-3 sm:w-4 sm:h-4 ml-1 hidden sm:block group-hover:rotate-180 transition-transform"
+              />
             </UButton>
 
             <!-- 下拉菜单 -->
             <div
-              v-show="showUserMenu"
-              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100"
+              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
             >
               <a
                 href="#"
@@ -117,7 +118,6 @@
   import { useRoute } from 'vue-router';
 
   const route = useRoute();
-  const showUserMenu = ref(false);
   const sidebarCollapsed = ref(false);
   const toggleMobileSidebar = ref(false);
 
@@ -184,28 +184,17 @@
     return titleMap[route.path] || '管理后台';
   });
 
-  const toggleUserMenu = () => {
-    showUserMenu.value = !showUserMenu.value;
-  };
-
   const toggleSidebar = () => {
     sidebarCollapsed.value = !sidebarCollapsed.value;
   };
 
-  // 点击外部关闭用户菜单
-  const handleClickOutside = event => {
-    if (!event.target.closest('.relative')) {
-      showUserMenu.value = false;
+  // 监听路由变化，自动关闭移动端菜单
+  watch(
+    () => route.path,
+    () => {
+      toggleMobileSidebar.value = false;
     }
-  };
-
-  onMounted(() => {
-    document.addEventListener('click', handleClickOutside);
-  });
-
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside);
-  });
+  );
 </script>
 
 <style scoped>
