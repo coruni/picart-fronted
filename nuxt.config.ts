@@ -46,7 +46,6 @@ export default defineNuxtConfig({
       Disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/']
     },
     sitemap: [
-      'https://www.picart.cc/sitemap_home.xml',
       'https://www.picart.cc/sitemap_articles.xml',
       'https://www.picart.cc/sitemap_authors.xml',
       'https://www.picart.cc/sitemap_categories.xml'
@@ -59,11 +58,6 @@ export default defineNuxtConfig({
     sitemapsPathPrefix: '/',
     cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     sitemaps: {
-      home: {
-        include: ['/'],
-        includeAppSources: true,
-        sources: ['/api/__sitemap__/home']
-      },
       articles: {
         include: ['/article/**'],
         includeAppSources: true,
@@ -149,6 +143,8 @@ export default defineNuxtConfig({
     defaultLocale: 'zh',
     // 语言文件目录
     langDir: 'locales/',
+    // 策略
+    strategy: 'prefix_except_default',
     // 检测浏览器语言
     detectBrowserLanguage: {
       useCookie: true,
@@ -161,7 +157,11 @@ export default defineNuxtConfig({
     compilation: {
       strictMessage: false,
       escapeHtml: false
-    }
+    },
+    // 路由配置
+    routesNameSeparator: '___',
+    // 调试模式
+    debug: false
   },
 
   // 配置CSS

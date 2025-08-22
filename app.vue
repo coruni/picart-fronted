@@ -19,19 +19,19 @@
   // 构建全局元数据和SEO
   useSeoMeta({
     title: configs.data.value?.data?.site_name,
-    titleTemplate: '%s - ' + configs.data.value?.data?.site_subtitle,
-    description: configs.data.value?.data?.site_description,
-    keywords: configs.data.value?.data?.site_keywords,
+    titleTemplate: '%s - ' + (configs.data.value?.data?.site_subtitle || ''),
+    description: configs.data.value?.data?.site_description || '',
+    keywords: configs.data.value?.data?.site_keywords || '',
     robots: 'index, follow',
-    ogSiteName: configs.data.value?.data?.site_name,
+    ogSiteName: configs.data.value?.data?.site_name || '',
     ogLocale: 'zh_CN',
     ogType: 'website',
     twitterCard: 'summary_large_image',
-    twitterSite: '@' + configs.data.value?.data?.site_name,
-    twitterCreator: '@' + configs.data.value?.data?.site_name,
-    twitterTitle: configs.data.value?.data?.site_name,
-    twitterDescription: configs.data.value?.data?.site_description,
-    twitterImage: configs.data.value?.data?.site_favicon,
-    twitterImageAlt: configs.data.value?.data?.site_name
+    twitterSite: '@' + (configs.data.value?.data?.site_name || ''),
+    twitterCreator: '@' + (configs.data.value?.data?.site_name || ''),
+    twitterTitle: configs.data.value?.data?.site_name || '',
+    twitterDescription: configs.data.value?.data?.site_description || '',
+    twitterImage: configs.data.value?.data?.site_favicon || '/favicon.ico',
+    twitterImageAlt: configs.data.value?.data?.site_name || ''
   });
 </script>
