@@ -33,9 +33,25 @@ export default defineNuxtConfig({
   robots: {
     rules: {
       UserAgent: '*',
-      Allow: '/',
-      Disallow: ['/admin/', '/api/', '/user/']
-    }
+      Allow: [
+        '/',
+        '/?tab=*',
+        '/?page=*',
+        '/?tab=*&page=*',
+        '/article/',
+        '/author/',
+        '/category/',
+        '/search'
+      ],
+      Disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/']
+    },
+    sitemap: [
+      'https://www.picart.cc/sitemap_home.xml',
+      'https://www.picart.cc/sitemap_articles.xml',
+      'https://www.picart.cc/sitemap_authors.xml',
+      'https://www.picart.cc/sitemap_categories.xml'
+    ],
+    crawlDelay: 1
   },
 
   sitemap: {
@@ -43,6 +59,11 @@ export default defineNuxtConfig({
     sitemapsPathPrefix: '/',
     cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     sitemaps: {
+      home: {
+        include: ['/'],
+        includeAppSources: true,
+        sources: ['/api/__sitemap__/home']
+      },
       articles: {
         include: ['/article/**'],
         includeAppSources: true,
@@ -60,6 +81,7 @@ export default defineNuxtConfig({
       }
     }
   },
+
   // 统计
   $production: {
     scripts: {
