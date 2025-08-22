@@ -1,69 +1,45 @@
 <template>
-  <div
-    class="flex-1 flex items-center justify-center min-h-[calc(100vh-4rem)] dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
-  >
-    <div class="max-w-md w-full mx-4">
-      <div class="text-center">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-sm w-full mx-4">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 md:p-8 text-center">
         <!-- 错误图标 -->
-        <div class="mb-8">
+        <div class="mb-6">
           <div
-            class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-red-100 dark:bg-red-900/20"
+            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mb-4"
           >
-            <svg
-              class="w-16 h-16 text-red-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-              />
-            </svg>
+            <Icon name="mynaui:exclamation-triangle" class="w-8 h-8 text-red-500" />
           </div>
         </div>
 
         <!-- 错误标题 -->
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">
           {{ error?.statusCode || 404 }}
         </h1>
 
         <!-- 错误描述 -->
-        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">
           {{ $t(getErrorMessage()) }}
         </p>
 
         <!-- 操作按钮 -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="space-y-3">
           <UButton
             @click="handleGoHome"
-            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            color="primary"
+            size="lg"
+            class="w-full"
+            icon="mynaui:home"
           >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
             {{ $t('error.backHome') }}
           </UButton>
 
           <UButton
             @click="handleGoBack"
-            class="inline-flex cursor-pointer items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            variant="outline"
+            size="lg"
+            class="w-full"
+            icon="mynaui:arrow-left"
           >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
             {{ $t('error.goBack') }}
           </UButton>
         </div>
@@ -71,12 +47,12 @@
         <!-- 错误详情（开发环境显示） -->
         <div
           v-if="error?.message && isDev"
-          class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-md text-left"
+          class="mt-6 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-left"
         >
-          <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+          <h3 class="text-xs font-medium text-gray-900 dark:text-white mb-2">
             {{ $t('error.details') }}:
           </h3>
-          <pre class="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{{
+          <pre class="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap break-words">{{
             error.message
           }}</pre>
         </div>

@@ -591,8 +591,8 @@
       }
     },
     "deleteConfirm": "確認確認を削除します",
-    "edit": "编辑",
-    "delete": "删除"
+    "edit": "編集",
+    "delete": "削除"
   },
   "validation": {
     "required": "このフィールドは必須です",
@@ -789,7 +789,7 @@
     "profileSaved": "データは正常に保存されます",
     "quickNav": "クイックナビゲーション",
     "recharge": {
-      "alipay": "アリパイ",
+      "alipay": "Alipay",
       "balance": "残高支払い",
       "balancePaymentSuccess": "残高の支払いは成功しました",
       "confirmOrder": "注文を確認します",
@@ -822,7 +822,7 @@
       "title": "メンバーリチャージ",
       "totalAmount": "一時金",
       "walletBalance": "ウォレットバランス",
-      "wechat": "wechatの支払い"
+      "wechat": "WeChat Pay"
     },
     "saveProfileFailed": "データの保存に失敗しました",
     "settings": "設定"
@@ -882,7 +882,7 @@
     "imagePlaceholder": "画像をアップロードしてください",
     "descriptionPlaceholder": "説明を入力してください",
     "title": "タイトル",
-    "create": "新規バナー",
+    "create": "バナー作成",
     "edit": "バナー編集",
     "image": "画像",
     "sortOrder": "並び替え",
@@ -891,13 +891,13 @@
     "imageHelp": "推奨サイズ：1920x1080px、JPG、PNG形式をサポート、最大5MB"
   },
   "categories": {
-    "create": "新規カテゴリー"
+    "create": "カテゴリー作成"
   },
   "response": {
     "error": {
       "followSelf": "自分をフォローすることはできません",
       "emailAlreadyExists": "メールアドレスはすでに存在します",
-      "usernameAlreadyExists": "用户名已存在",
+      "usernameAlreadyExists": "ユーザー名は既に存在します",
       "emailNotExists": "メールアドレスが存在しません",
       "articleNotFound": "記事が存在しません",
       "userNotExist": "ユーザーが存在しません",
@@ -928,7 +928,7 @@
       "testEpaySignatureFailed": "簡単な支払いの署名のテストに失敗しました",
       "noPermissionSendBroadcast": "ブロードキャストの送信権限がありません",
       "permissionDenied": "権限がありません",
-      "unauthorized": "未認証",
+      "unauthorized": "ログインしていません",
       "uploadFileEmpty": "ファイルが空です",
       "resourceNotFound": "リソースが存在しません",
       "resourceConflict": "リソースが競合しています"
@@ -943,7 +943,7 @@
       "bannerCreate": "バナー作成成功",
       "bannerDelete": "バナー削除成功",
       "bannerUpdate": "バナー更新成功",
-      " categoryCreate": "カテゴリー作成成功",
+      "categoryCreate": "カテゴリー作成成功",
       "categoryDelete": "カテゴリー削除成功",
       "categoryUpdate": "カテゴリー更新成功",
       "commentCreate": "コメント作成成功",
@@ -963,7 +963,7 @@
       "roleCreate": "ロール作成成功",
       "roleDelete": "ロール削除成功",
       "roleUpdate": "ロール更新成功",
-      "tagCreate": "标签创建成功",
+      "tagCreate": "タグ作成成功",
       "tagDelete": "タグ削除成功",
       "tagUpdate": "タグ更新成功",
       "userDelete": "ユーザー削除成功",
@@ -973,11 +973,11 @@
   "Unauthorized": "ユーザーがログインしていません",
   "payment": {
     "epayWechat": "wechatの支払い",
-    "wechat": "wechatの支払い",
+    "wechat": "WeChat Pay",
     "epay": "簡単な支払い",
-    "alipay": "アリパイ",
+    "alipay": "Alipay",
     "balance": "バランス",
-    "balanceDesc": "アカウント残高",
+    "balanceDesc": "現在の残高",
     "epayAlipay": "アリパイ"
   }
 }

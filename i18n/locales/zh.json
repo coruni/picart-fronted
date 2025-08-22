@@ -365,7 +365,7 @@
     "button": {
       "cancel": "取消",
       "confirm": "确认",
-      "create": "新增",
+      "create": "创建",
       "update": "更新",
       "search": "搜索",
       "close": "关闭",
@@ -399,9 +399,9 @@
     "close": "关闭",
     "delete": "删除",
     "edit": "编辑",
-    "remove": "移除",
-    "removeAll": "移除全部",
-    "change": "更换",
+    "remove": "删除",
+    "removeAll": "全部删除",
+    "change": "修改",
     "replace": "替换",
     "selectImage": "选择图片",
     "selectImages": "选择图片"
@@ -429,7 +429,7 @@
   "user": {
     "title": "用户中心",
     "avatar": "用户头像",
-    "noDescription": "暂无个人简介",
+    "noDescription": "暂无个人描述",
     "articles": "文章",
     "followers": "粉丝",
     "following": "关注",
@@ -763,7 +763,7 @@
     "loadingArticles": "正在加载文章...",
     "noArticles": "暂无文章",
     "noArticlesDescription": "该分类下还没有发布任何文章",
-    "defaultDescription": "探索这个分类下的精彩内容"
+    "defaultDescription": "探索该分类下的精彩内容"
   },
   "login": {
     "title": "用户登录",
@@ -835,7 +835,7 @@
   },
   "author": {
     "title": "作者主页",
-    "noDescription": "这个人很懒，什么都没有留下",
+    "noDescription": "这个人很懒，什么都没留下",
     "articles": "文章",
     "followers": "粉丝",
     "following": "关注",
@@ -887,7 +887,7 @@
     "imagePlaceholder": "请上传图片",
     "descriptionPlaceholder": "请输入描述",
     "title": "标题",
-    "create": "新建轮播",
+    "create": "创建轮播",
     "description": "描述",
     "image": "图片",
     "edit": "编辑轮播",
@@ -934,7 +934,7 @@
       "testEpaySignatureFailed": "测试易支付签名失败",
       "noPermissionSendBroadcast": "没有发送广播的权限",
       "permissionDenied": "权限不足",
-      "unauthorized": "未授权",
+      "unauthorized": "未登录",
       "uploadFileEmpty": "上传文件为空",
       "resourceNotFound": "资源不存在",
       "resourceConflict": "资源冲突"
@@ -949,7 +949,7 @@
       "bannerCreate": "轮播创建成功",
       "bannerDelete": "轮播删除成功",
       "bannerUpdate": "轮播更新成功",
-      " categoryCreate": "分类创建成功",
+      "categoryCreate": "分类创建成功",
       "categoryDelete": "分类删除成功",
       "categoryUpdate": "分类更新成功",
       "commentCreate": "评论创建成功",
@@ -984,7 +984,7 @@
     "epay": "易支付",
     "epayAlipay": "支付宝",
     "epayWechat": "微信支付",
-    "balanceDesc": "账户余额",
-    "processing": "支付中..."
+    "balanceDesc": "当前余额",
+    "processing": "处理中..."
   }
 }
