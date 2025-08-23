@@ -33,16 +33,7 @@ export default defineNuxtConfig({
   robots: {
     rules: {
       UserAgent: '*',
-      Allow: [
-        '/',
-        '/?tab=*',
-        '/?page=*',
-        '/?tab=*&page=*',
-        '/article/',
-        '/author/',
-        '/category/',
-        '/search'
-      ],
+      Allow: ['/', '/article/', '/author/', '/category/', '/search'],
       Disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/']
     },
     sitemap: [

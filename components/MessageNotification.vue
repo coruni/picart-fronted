@@ -1,8 +1,9 @@
 <template>
-  <div class="relative">
+  <div class="group relative">
     <!-- 消息通知按钮 -->
     <UButton
-      @click="toggleMessagePanel"
+      @mouseenter="handleMouseEnter"
+      @click="handleClick"
       variant="ghost"
       color="neutral"
       class="relative p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -19,8 +20,7 @@
 
     <!-- 消息面板 -->
     <div
-      v-if="isMessagePanelOpen"
-      class="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50"
+      class="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
     >
       <!-- 面板头部 -->
       <div class="flex items-center justify-between p-4">
@@ -145,15 +145,11 @@
         <NuxtLinkLocale
           to="/user/messages"
           class="block text-center text-sm text-primary hover:text-primary-600 dark:hover:text-primary-400"
-          @click="closeMessagePanel"
         >
           {{ $t('message.viewAll') }}
         </NuxtLinkLocale>
       </div>
     </div>
-
-    <!-- 遮罩层 -->
-    <div v-if="isMessagePanelOpen" class="fixed inset-0 z-40" @click="closeMessagePanel"></div>
   </div>
 </template>
 
@@ -244,11 +240,22 @@
     }
   };
 
-  // 切换消息面板
-  const toggleMessagePanel = () => {
-    isMessagePanelOpen.value = !isMessagePanelOpen.value;
-    if (isMessagePanelOpen.value) {
+  // 处理鼠标悬停事件
+  const handleMouseEnter = () => {
+    // 在桌面端，鼠标悬停时获取消息
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
       fetchMessages(true);
+    }
+  };
+
+  // 处理点击事件
+  const handleClick = () => {
+    // 在移动端，点击时切换面板
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      isMessagePanelOpen.value = !isMessagePanelOpen.value;
+      if (isMessagePanelOpen.value) {
+        fetchMessages(true);
+      }
     }
   };
 
@@ -266,22 +273,10 @@
     // 比如跳转到相关页面等
   };
 
-  // 监听键盘事件
-  const handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape' && isMessagePanelOpen.value) {
-      closeMessagePanel();
-    }
-  };
-
   // 生命周期
   onMounted(() => {
-    document.addEventListener('keydown', handleKeydown);
     // 初始加载消息
     fetchMessages(true);
-  });
-
-  onUnmounted(() => {
-    document.removeEventListener('keydown', handleKeydown);
   });
 
   // 暴露给父组件的方法

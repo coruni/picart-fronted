@@ -45,44 +45,6 @@
         {{ $t('common.loading.noMore') }}
       </div>
 
-      <!-- 爬虫友好的分页链接 - 对用户隐藏 -->
-      <nav class="sr-only" aria-label="分页导航">
-        <ul class="flex justify-center space-x-2">
-          <!-- 上一页 -->
-          <li v-if="currentPage > 1">
-            <NuxtLinkLocale
-              :to="`/?tab=${currentTab}&page=${currentPage - 1}`"
-              class="px-3 py-2 text-sm text-gray-700 hover:text-primary"
-              rel="prev"
-            >
-              上一页
-            </NuxtLinkLocale>
-          </li>
-
-          <!-- 页码 -->
-          <li v-for="page in visiblePages" :key="page">
-            <NuxtLinkLocale
-              :to="`/?tab=${currentTab}&page=${page}`"
-              class="px-3 py-2 text-sm text-gray-700 hover:text-primary"
-              :class="{ 'text-primary font-medium': page === currentPage }"
-            >
-              {{ page }}
-            </NuxtLinkLocale>
-          </li>
-
-          <!-- 下一页 -->
-          <li v-if="hasMore">
-            <NuxtLinkLocale
-              :to="`/?tab=${currentTab}&page=${currentPage + 1}`"
-              class="px-3 py-2 text-sm text-gray-700 hover:text-primary"
-              rel="next"
-            >
-              下一页
-            </NuxtLinkLocale>
-          </li>
-        </ul>
-      </nav>
-
       <!-- Intersection Observer 观察器元素 -->
       <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
     </div>
@@ -133,25 +95,6 @@
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
 
-  // 分页相关计算属性
-  const currentPage = computed(() => pagination.value.page);
-  const totalPages = computed(() => {
-    // 根据当前加载的数据量估算总页数
-    const totalItems = allItems.value.length;
-    if (totalItems === 0) return 1;
-    return Math.ceil(totalItems / pagination.value.limit) + 1; // +1 为可能的更多数据预留
-  });
-  const visiblePages = computed(() => {
-    // 显示当前页附近的页码，最多显示5个
-    const pages = [];
-    const start = Math.max(1, currentPage.value - 2);
-    const end = Math.min(totalPages.value, currentPage.value + 2);
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    return pages;
-  });
   // 重置数据
   const resetData = () => {
     pagination.value.page = 1;
@@ -222,20 +165,6 @@
   onMounted(() => {
     // 监听窗口大小变化
     window.addEventListener('resize', handleResize);
-
-    // 检查URL参数，支持爬虫访问特定页面
-    const route = useRoute();
-    const urlTab = route.query.tab as string;
-    const urlPage = parseInt(route.query.page as string) || 1;
-
-    if (urlTab && tabs.some(tab => tab.value === urlTab)) {
-      currentTab.value = urlTab;
-    }
-
-    if (urlPage > 1) {
-      // 如果是爬虫访问特定页面，预加载到该页面
-      pagination.value.page = urlPage;
-    }
 
     // 初始化 Intersection Observer
     if (observerTarget.value) {
