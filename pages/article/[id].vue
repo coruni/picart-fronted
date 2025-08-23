@@ -376,15 +376,15 @@
               :class="[
                 'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-gray-100 dark:bg-gray-900',
                 index === 0 && article?.data.images.length > 1
-                  ? 'sm:col-span-2 aspect-[16/9]'
-                  : 'aspect-square'
+                  ? 'sm:col-span-2 sm:aspect-[16/9]'
+                  : 'sm:aspect-square'
               ]"
               @click="openLightbox(index)"
             >
               <NuxtImg
                 :src="img"
                 :alt="'图片' + (index + 1)"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-contain sm:object-cover"
                 loading="lazy"
                 format="webp"
               />
