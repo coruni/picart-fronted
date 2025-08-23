@@ -124,7 +124,7 @@
             <div class="text-sm font-medium text-gray-900 dark:text-white">
               {{ $t('payment.epay') }}
             </div>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-2 gap-2">
               <div
                 v-for="epayType in epayTypes"
                 :key="epayType.value"
@@ -214,7 +214,7 @@
   });
 
   const selectedPaymentMethod = ref<'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY' | null>(null);
-  const selectedEpayType = ref<'alipay' | 'wxpay' | 'qqpay' | null>(null);
+  const selectedEpayType = ref<'alipay' | 'wxpay' | null>(null);
   const processing = ref(false);
 
   // 易支付类型选项
@@ -228,11 +228,6 @@
       value: 'wxpay' as const,
       label: t('payment.epayWechat'),
       icon: 'mynaui:brand-wechat'
-    },
-    {
-      value: 'qqpay' as const,
-      label: t('payment.epayQQ'),
-      icon: 'mynaui:brand-qq'
     }
   ]);
 
@@ -252,7 +247,7 @@
   };
 
   // 选择易支付类型
-  const selectEpayType = (type: 'alipay' | 'wxpay' | 'qqpay') => {
+  const selectEpayType = (type: 'alipay' | 'wxpay') => {
     selectedEpayType.value = type;
     selectedPaymentMethod.value = 'EPAY';
   };
@@ -280,8 +275,6 @@
         return t('payment.epayAlipay');
       case 'wxpay':
         return t('payment.epayWechat');
-      case 'qqpay':
-        return t('payment.epayQQ');
       default:
         return '';
     }
@@ -339,14 +332,14 @@
       }
 
       // 调用支付API
-      const response = (await paymentControllerCreatePayment({
+      const response = await paymentControllerCreatePayment({
         composable: '$fetch',
         body: paymentData
-      })) as any;
+      });
 
       // 处理支付响应
-      if (response && response.data) {
-        const paymentResult = response.data as any;
+      if (response && response.data.data) {
+        const paymentResult = response.data.data;
 
         // 根据支付方式处理不同的响应
         if (selectedPaymentMethod.value === 'BALANCE') {
@@ -359,17 +352,10 @@
           closeModal();
         } else {
           // 第三方支付，跳转到支付页面
-          if (paymentResult.payUrl) {
-            window.open(paymentResult.payUrl, '_blank');
+          if (paymentResult.paymentUrl) {
+            window.open(paymentResult.paymentUrl, '_blank');
             toast.add({
               title: t('payment.redirectToPayment'),
-              color: 'info'
-            });
-          } else if (paymentResult.qrCode) {
-            // 显示二维码支付
-            // TODO: 实现二维码显示逻辑
-            toast.add({
-              title: t('payment.scanQRCode'),
               color: 'info'
             });
           }

@@ -156,7 +156,6 @@
       "epay": "易支付",
       "epayAlipay": "支付宝",
       "epayWechat": "微信",
-      "epayQQ": "QQ钱包",
       "selectEpayType": "请选择易支付类型",
       "insufficientBalance": "余额不足",
       "processing": "处理中...",
@@ -298,6 +297,9 @@
       "searchUserId": "搜索用户ID",
       "searchAndFilter": "搜索和筛选",
       "allStatus": "全部状态",
+      "type": {
+        "all": "全部类型"
+      },
       "allTypes": "全部类型",
       "pending": "待支付",
       "paid": "已支付",
@@ -522,6 +524,9 @@
         "cancelled": "已取消",
         "refunded": "已退款"
       },
+      "type": {
+        "all": "全部类型"
+      },
       "viewDetail": "查看详情",
       "cancel": "取消订单",
       "pay": "立即支付",
@@ -533,8 +538,13 @@
       "paymentId": "支付单号",
       "payTime": "支付时间",
       "membership": "会员服务",
+      "product": "商品",
+      "service": "服务",
+      "article": "文章",
       "articleAccess": "文章访问权限",
       "membershipAccess": "会员权限",
+      "productAccess": "商品访问权限",
+      "serviceAccess": "服务访问权限",
       "unknownProduct": "未知商品",
       "empty": {
         "title": "暂无订单",
@@ -544,6 +554,7 @@
       "loadFailed": "加载订单失败",
       "cancelSuccess": "订单取消成功",
       "cancelFailed": "订单取消失败",
+      "paymentSuccess": "支付成功",
       "paymentRedirect": "正在跳转到支付页面...",
       "paymentFailed": "支付失败",
       "confirmCancel": "确认取消订单",
@@ -980,13 +991,32 @@
   },
   "Unauthorized": "请先登录",
   "payment": {
+    "title": "支付",
+    "orderInfo": "订单信息",
+    "defaultRemark": "订单支付",
+    "selectPaymentMethod": "选择支付方式",
+    "balance": "余额支付",
+    "balanceDesc": "当前余额",
     "alipay": "支付宝",
+    "alipayDesc": "支付宝安全支付",
     "wechat": "微信支付",
-    "balance": "余额",
+    "wechatDesc": "微信安全支付",
     "epay": "易支付",
     "epayAlipay": "支付宝",
     "epayWechat": "微信支付",
-    "balanceDesc": "当前余额",
-    "processing": "处理中..."
+    "selectEpayType": "请选择易支付类型",
+    "insufficientBalance": "余额不足",
+    "processing": "处理中...",
+    "confirmPayment": "确认支付",
+    "balancePaymentSuccess": "余额支付成功",
+    "redirectToPayment": "正在跳转到支付页面...",
+    "scanQRCode": "请扫描二维码完成支付",
+    "failed": "支付失败",
+    "paymentFailed": "支付失败",
+    "paymentSuccess": "支付成功",
+    "createOrderFailed": "创建订单失败",
+    "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
+    "networkError": "网络错误",
+    "unknownError": "未知错误"
   }
 }
