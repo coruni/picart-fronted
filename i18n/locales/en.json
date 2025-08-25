@@ -422,7 +422,11 @@
     "uploadError": "Image upload failed, please try again",
     "maxCountReached": "Maximum {maxCount} images can be uploaded",
     "uploading": "Uploading...",
-    "uploadingMultiple": "Uploading... ({count} images)"
+    "uploadingMultiple": "Uploading... ({count} images)",
+    "loading": "Loading...",
+    "loadFailed": "Image load failed",
+    "retry": "Retry",
+    "loadError": "Load failed"
   },
   "uploading": "Uploading...",
   "filter": {

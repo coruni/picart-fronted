@@ -367,6 +367,7 @@
             </div>
           </div>
         </div>
+
         <!-- 图片展示区 -->
         <div class="mb-4 md:mb-8" v-if="article?.data?.images && article?.data?.images.length > 0">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4">
@@ -374,42 +375,101 @@
               v-for="(img, index) in article?.data.images"
               :key="index"
               :class="[
-                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-gray-100 dark:bg-gray-800 relative',
-                'aspect-[16/9]', // 移动端固定宽高比
+                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-all duration-300 bg-gray-100 dark:bg-gray-800 relative',
+                // 动态宽高比：加载时使用4:3，加载完成后使用原始比例
+                !imageLoaded[index] || imageErrors[index]
+                  ? 'aspect-[4/3]'
+                  : imageAspectRatios[index] || 'aspect-[4/3]',
                 index === 0 && article?.data.images.length > 1
-                  ? 'sm:col-span-2'
+                  ? 'sm:col-span-2 sm:aspect-[16/9]'
                   : 'sm:aspect-square'
               ]"
               @click="openLightbox(index)"
             >
               <!-- 骨架屏占位 -->
               <div
-                v-if="!imageLoaded[index]"
-                class="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 animate-pulse"
+                v-if="!imageLoaded[index] && !imageErrors[index]"
+                class="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 dark:from-gray-700 dark:via-gray-600 dark:to-gray-800"
               >
+                <!-- 波浪式加载动画 -->
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-400/10 to-transparent animate-shimmer"
+                ></div>
+
+                <!-- 图片图标 -->
                 <div class="flex items-center justify-center h-full">
-                  <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fill-rule="evenodd"
-                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                      clip-rule="evenodd"
+                  <div class="text-center">
+                    <Icon
+                      name="mynaui:image"
+                      class="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2 animate-pulse"
                     />
-                  </svg>
+                    <div class="text-xs text-gray-400 dark:text-gray-500">
+                      {{ $t('image.loading') }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 加载进度条 -->
+                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
+                  <div class="h-full bg-primary animate-pulse w-full opacity-60"></div>
                 </div>
               </div>
 
+              <!-- 图片加载错误状态 -->
+              <div
+                v-else-if="imageErrors[index]"
+                class="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+              >
+                <div class="text-center text-gray-400">
+                  <Icon name="mynaui:exclamation-triangle" class="w-8 h-8 mx-auto mb-2" />
+                  <div class="text-xs">{{ $t('image.loadFailed') }}</div>
+                  <button
+                    @click.stop="retryImageLoad(index)"
+                    class="text-xs text-primary hover:text-primary-600 mt-1 flex items-center mx-auto"
+                  >
+                    <Icon name="mynaui:refresh" class="w-3 h-3 mr-1" />
+                    {{ $t('image.retry') }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- 实际图片 -->
               <NuxtImg
                 :src="img"
-                :alt="'图片' + (index + 1)"
-                class="w-full h-full object-contain sm:object-cover transition-opacity duration-200"
-                :class="{ 'opacity-0': !imageLoaded[index] }"
+                :alt="`${article?.data.title} - 图片 ${index + 1}`"
+                class="w-full h-full object-cover transition-all duration-500"
+                :class="{
+                  'opacity-0': !imageLoaded[index] || imageErrors[index],
+                  'opacity-100': imageLoaded[index] && !imageErrors[index]
+                }"
                 loading="lazy"
                 format="webp"
                 @load="onImageLoad(index)"
+                @error="onImageError(index)"
               />
+
+              <!-- 图片序号标识 -->
+              <div
+                v-if="article?.data.images.length > 1 && imageLoaded[index] && !imageErrors[index]"
+                class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center"
+              >
+                <Icon name="mynaui:image" class="w-3 h-3 mr-1" />
+                {{ index + 1 }}/{{ article?.data.images.length }}
+              </div>
+
+              <!-- 放大镜图标提示 -->
+              <div
+                v-if="imageLoaded[index] && !imageErrors[index]"
+                class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20"
+              >
+                <div class="bg-white/90 dark:bg-gray-800/90 rounded-full p-3">
+                  <Icon name="mynaui:search" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
         <!-- 文章内容 -->
         <div v-if="shouldShowContent" class="mb-6 md:mb-12">
           <div
@@ -692,7 +752,7 @@
             <h4
               class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
             >
-              <i class="fas fa-fire text-orange-500 mr-2"></i>
+              <Icon name="mynaui:flame" class="text-orange-500 mr-2" />
               {{ $t('article.relatedArticles') }}
             </h4>
             <div class="space-y-3 md:space-y-4">
@@ -894,7 +954,6 @@
   const handleRetry = () => {
     location.reload();
   };
-  // 图片错误处理
 
   const schema = zod.object({
     commentText: zod.string().min(1, t('article.commentText'))
@@ -1156,10 +1215,66 @@
     return nameMap[type] || t('form.downloads.type.other');
   };
 
-  const imageLoaded = ref(new Array(article.value.data.images?.length || 0).fill(false));
+  // 图片加载状态管理
+  const imageLoaded = ref(new Array(article.value?.data?.images?.length || 0).fill(false));
+  const imageErrors = ref(new Array(article.value?.data?.images?.length || 0).fill(false));
+  const imageAspectRatios = ref<string[]>([]);
+
+  // 监听文章数据变化，初始化图片状态
+  watch(
+    () => article.value?.data?.images,
+    newImages => {
+      if (newImages) {
+        const length = newImages.length;
+        imageLoaded.value = new Array(length).fill(false);
+        imageErrors.value = new Array(length).fill(false);
+        imageAspectRatios.value = new Array(length).fill('aspect-[4/3]');
+      }
+    },
+    { immediate: true }
+  );
 
   const onImageLoad = (index: number) => {
     imageLoaded.value[index] = true;
+    imageErrors.value[index] = false;
+
+    // 计算图片的原始宽高比
+    const img = new Image();
+    img.onload = () => {
+      const aspectRatio = img.width / img.height;
+      let aspectClass = 'aspect-[4/3]';
+
+      // 根据宽高比设置合适的CSS类
+      if (aspectRatio > 1.5) {
+        aspectClass = 'aspect-[16/9]';
+      } else if (aspectRatio > 1.2) {
+        aspectClass = 'aspect-[4/3]';
+      } else if (aspectRatio > 0.8) {
+        aspectClass = 'aspect-square';
+      } else {
+        aspectClass = 'aspect-[3/4]';
+      }
+
+      imageAspectRatios.value[index] = aspectClass;
+    };
+    img.src = article.value?.data.images?.[index] || '';
+  };
+
+  const onImageError = (index: number) => {
+    imageLoaded.value[index] = false;
+    imageErrors.value[index] = true;
+  };
+
+  // 重试加载图片
+  const retryImageLoad = (index: number) => {
+    imageErrors.value[index] = false;
+    imageLoaded.value[index] = false;
+
+    // 强制刷新图片
+    const img = new Image();
+    img.onload = () => onImageLoad(index);
+    img.onerror = () => onImageError(index);
+    img.src = `${article.value?.data.images?.[index]}?t=${Date.now()}`;
   };
 </script>
 
@@ -1171,5 +1286,19 @@
   }
   :deep(.vel-img) {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  /* 波浪式加载动画 */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 1.5s infinite;
   }
 </style>
