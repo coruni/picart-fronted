@@ -374,19 +374,38 @@
               v-for="(img, index) in article?.data.images"
               :key="index"
               :class="[
-                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-gray-100 dark:bg-gray-900',
+                'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-opacity bg-gray-100 dark:bg-gray-800 relative',
+                'aspect-[16/9]', // 移动端固定宽高比
                 index === 0 && article?.data.images.length > 1
-                  ? 'sm:col-span-2 sm:aspect-[16/9]'
+                  ? 'sm:col-span-2'
                   : 'sm:aspect-square'
               ]"
               @click="openLightbox(index)"
             >
+              <!-- 骨架屏占位 -->
+              <div
+                v-if="!imageLoaded[index]"
+                class="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 animate-pulse"
+              >
+                <div class="flex items-center justify-center h-full">
+                  <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+
               <NuxtImg
                 :src="img"
                 :alt="'图片' + (index + 1)"
-                class="w-full h-full object-contain sm:object-cover"
+                class="w-full h-full object-contain sm:object-cover transition-opacity duration-200"
+                :class="{ 'opacity-0': !imageLoaded[index] }"
                 loading="lazy"
                 format="webp"
+                @load="onImageLoad(index)"
               />
             </div>
           </div>
@@ -1135,6 +1154,12 @@
       aliyun: t('form.downloads.type.aliyun')
     };
     return nameMap[type] || t('form.downloads.type.other');
+  };
+
+  const imageLoaded = ref(new Array(article.value.data.images?.length || 0).fill(false));
+
+  const onImageLoad = (index: number) => {
+    imageLoaded.value[index] = true;
   };
 </script>
 
