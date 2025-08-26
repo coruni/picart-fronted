@@ -611,7 +611,8 @@
     "requirePayment": "付费查看",
     "viewPrice": {
       "placeholder": "请输入价格",
-      "name": "付费金额"
+      "name": "付费金额",
+      "required": "启用付费查看时，必须设置价格"
     },
     "requireLogin": "登录查看",
     "sort": {

@@ -180,7 +180,7 @@
                     v-model="state.viewPrice"
                     type="number"
                     variant="soft"
-                    :min="1"
+                    :min="state.requirePayment ? 1 : 0"
                     :placeholder="$t('form.viewPrice.placeholder')"
                   />
                 </UFormField>
@@ -325,45 +325,60 @@
     requiresAuth: true
   });
 
-  const schema = z.object({
-    title: z.string().min(4, t('form.title.placeholder')),
-    content: z.string().optional(),
-    parentCategory: z.number().optional(),
-    categoryId: z.number().min(1, t('form.category.placeholder')),
-    images: z.union([z.string(), z.array(z.string())]).optional(),
-    cover: z.string().optional(),
-    type: z.enum(['mixed', 'image']).optional().default('mixed'),
-    tagIds: z
-      .array(z.union([z.string(), z.number()]))
-      .optional()
-      .default([]),
-    requireLogin: z.boolean().default(false),
-    requireFollow: z.boolean().default(false),
-    requireMembership: z.boolean().default(false),
-    requirePayment: z.boolean().default(false),
-    viewPrice: z.number().min(0).default(0),
-    downloads: z
-      .array(
-        z.object({
-          type: z.enum([
-            'baidu',
-            'google',
-            'lanzou',
-            'quark',
-            'dropbox',
-            'direct',
-            'other',
-            'mega',
-            'onedrive'
-          ]),
-          url: z.string(),
-          password: z.string().optional(),
-          extractionCode: z.string().optional()
-        })
-      )
-      .optional()
-      .default([])
-  });
+  const schema = z
+    .object({
+      title: z.string().min(4, t('form.title.placeholder')),
+      content: z.string().optional(),
+      parentCategory: z.number().optional(),
+      categoryId: z.number().min(1, t('form.category.placeholder')),
+      images: z.union([z.string(), z.array(z.string())]).optional(),
+      cover: z.string().optional(),
+      type: z.enum(['mixed', 'image']).optional().default('mixed'),
+      tagIds: z
+        .array(z.union([z.string(), z.number()]))
+        .optional()
+        .default([]),
+      requireLogin: z.boolean().default(false),
+      requireFollow: z.boolean().default(false),
+      requireMembership: z.boolean().default(false),
+      requirePayment: z.boolean().default(false),
+      viewPrice: z.number().min(0).optional().default(0),
+      downloads: z
+        .array(
+          z.object({
+            type: z.enum([
+              'baidu',
+              'google',
+              'aliyun',
+              'lanzou',
+              'quark',
+              'dropbox',
+              'direct',
+              'other',
+              'mega',
+              'onedrive'
+            ]),
+            url: z.string(),
+            password: z.string().optional(),
+            extractionCode: z.string().optional()
+          })
+        )
+        .optional()
+        .default([])
+    })
+    .refine(
+      data => {
+        // 如果 requirePayment 为 true，则 viewPrice 必须大于 0
+        if (data.requirePayment && (!data.viewPrice || data.viewPrice <= 0)) {
+          return false;
+        }
+        return true;
+      },
+      {
+        message: t('form.viewPrice.required'),
+        path: ['viewPrice']
+      }
+    );
 
   type Schema = z.output<typeof schema>;
 
@@ -525,8 +540,8 @@
             data.downloads?.map(d => ({
               type: d.type,
               url: d.url,
-              password: d.password || '',
-              extractionCode: d.extractionCode || ''
+              ...(d.password && { password: d.password }),
+              ...(d.extractionCode && { extractionCode: d.extractionCode })
             })) ?? []
         });
 
@@ -586,13 +601,13 @@
             data.downloads?.map(d => ({
               type: d.type,
               url: d.url,
-              password: d.password || '',
-              extractionCode: d.extractionCode || ''
+              ...(d.password && { password: d.password }),
+              ...(d.extractionCode && { extractionCode: d.extractionCode })
             })) || []
         }
       });
 
-      router.push(localePath('/user/articles'));
+      router.push(localePath('/user'));
     } catch (error) {
       console.error('Failed to update article:', error);
       toast.add({
@@ -709,6 +724,16 @@
   watch(
     () => state.parentCategory,
     () => (state.categoryId = undefined)
+  );
+
+  // 监听 requirePayment 变化，当关闭时重置 viewPrice
+  watch(
+    () => state.requirePayment,
+    newValue => {
+      if (!newValue) {
+        state.viewPrice = 0;
+      }
+    }
   );
 
   // 创建新标签的函数

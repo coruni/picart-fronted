@@ -125,8 +125,8 @@
 </template>
 
 <script setup lang="ts">
-  import { uploadControllerUploadFile } from '~~/api';
-  import naturalCompare from 'natural-compare';
+  import { uploadControllerUploadFile } from '~/api';
+  import { orderBy } from 'natural-orderby';
 
   interface Props {
     modelValue?: string[] | string;
@@ -236,7 +236,7 @@
     }
 
     // 使用自然排序对文件进行排序
-    const sortedFiles = files.sort((a, b) => naturalCompare(a.name, b.name));
+    const sortedFiles = orderBy(files, 'name');
 
     // 设置上传状态
     isUploading.value = true;
