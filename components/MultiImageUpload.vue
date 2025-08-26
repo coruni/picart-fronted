@@ -79,7 +79,7 @@
           <p class="text-sm text-gray-600 dark:text-gray-300">
             {{
               totalUploadCount > 1
-                ? t('image.uploadingMultiple', { count: totalUploadCount })
+                ? t('image.uploadingMultiple', { count: uploadingCount, total: totalUploadCount })
                 : t('image.uploading')
             }}
           </p>
@@ -87,7 +87,7 @@
             <div
               class="h-full bg-primary rounded-full transition-all duration-300"
               :style="{
-                width: isUploading ? '100%' : '0%'
+                width: totalUploadCount > 0 ? `${(uploadingCount / totalUploadCount) * 100}%` : '0%'
               }"
             ></div>
           </div>
@@ -126,6 +126,7 @@
 
 <script setup lang="ts">
   import { uploadControllerUploadFile } from '~~/api';
+  import naturalCompare from 'natural-compare';
 
   interface Props {
     modelValue?: string[] | string;
@@ -142,7 +143,7 @@
   const props = withDefaults(defineProps<Props>(), {
     accept: 'image/*',
     maxSize: 5, // 5MB
-    maxCount: 10
+    maxCount: 100
   });
 
   const emit = defineEmits<Emits>();
@@ -234,15 +235,18 @@
       }
     }
 
+    // 使用自然排序对文件进行排序
+    const sortedFiles = files.sort((a, b) => naturalCompare(a.name, b.name));
+
     // 设置上传状态
     isUploading.value = true;
-    totalUploadCount.value = files.length;
+    totalUploadCount.value = sortedFiles.length;
     uploadingCount.value = 0;
 
     try {
-      // 批量上传所有文件
+      // 批量上传排序后的文件
       const formData = new FormData();
-      files.forEach(file => {
+      sortedFiles.forEach(file => {
         formData.append('files', file);
       });
 
@@ -261,7 +265,7 @@
         updateModelValue();
 
         // 更新进度
-        uploadingCount.value = files.length;
+        uploadingCount.value = sortedFiles.length;
 
         toast.add({
           title: t('common.message.uploadSuccess'),

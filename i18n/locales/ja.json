@@ -412,7 +412,7 @@
     "uploadError": "画像のアップロードに失敗しました。再試行してください",
     "maxCountReached": "最大 {maxCount} 枚の画像をアップロードできます",
     "uploading": "アップロード中...",
-    "uploadingMultiple": "アップロード中... ({count} 枚の画像)"
+    "uploadingMultiple": "アップロード中... ({count}/{total})"
   },
   "uploading": "アップロード中...",
   "status": {

@@ -18,6 +18,17 @@ export default defineNuxtConfig({
     '@nuxtjs/seo'
   ],
 
+  // 性能优化
+  experimental: {
+    payloadExtraction: false,
+    renderJsonPayloads: true
+  },
+
+  // 构建优化
+  build: {
+    transpile: ['vue-i18n']
+  },
+
   // SEO 配置
   site: {
     url: 'https://www.picart.cc',
@@ -31,11 +42,8 @@ export default defineNuxtConfig({
 
   // Robots 配置
   robots: {
-    rules: {
-      UserAgent: '*',
-      Allow: ['/', '/article/', '/author/', '/category/', '/search'],
-      Disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/']
-    },
+    disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/'],
+    allow: ['/', '/article/', '/author/', '/category/', '/search'],
     sitemap: [
       'https://www.picart.cc/sitemap_articles.xml',
       'https://www.picart.cc/sitemap_authors.xml',
@@ -186,6 +194,13 @@ export default defineNuxtConfig({
     // 确保cookie在SSR阶段正确传递
     experimental: {
       wasm: true
+    },
+    // 缓存优化
+    compressPublicAssets: true,
+    minify: true,
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
     }
   },
 
