@@ -537,6 +537,7 @@
   const replies = ref<Comment[]>([]);
   const hasMoreReplies = ref(false);
   const currentPage = ref(1);
+  const currentRequest = ref<AbortController | null>(null);
 
   // 模板引用
   const repliesContainer = ref<HTMLElement>();
@@ -768,12 +769,21 @@
   };
 
   const loadReplies = async () => {
+    // 如果已经有请求在进行中，取消之前的请求
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+
+    // 创建新的 AbortController
+    currentRequest.value = new AbortController();
+
     try {
       isLoadingReplies.value = true;
       const response = await commentControllerFindOne({
         composable: '$fetch',
         path: { id: props.comment.id! },
-        query: { page: currentPage.value, limit: 10 }
+        query: { page: currentPage.value, limit: 10 },
+        signal: currentRequest.value.signal
       });
 
       const resVal: any = response as any;
@@ -788,9 +798,15 @@
 
       // 增加页码
       currentPage.value++;
-    } catch (error) {
+    } catch (error: any) {
+      // 如果是取消请求的错误，不显示错误信息
+      if (error.name === 'AbortError') {
+        return;
+      }
+      console.error('加载回复失败:', error);
     } finally {
       isLoadingReplies.value = false;
+      currentRequest.value = null;
     }
   };
 
@@ -798,7 +814,20 @@
     loadReplies();
   };
 
-  const handleScroll = (event: Event) => {
+  // 防抖函数
+  const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  const handleScroll = debounce((event: Event) => {
     const target = event.target as HTMLElement;
     const { scrollTop, scrollHeight, clientHeight } = target;
 
@@ -810,9 +839,14 @@
     ) {
       loadMoreReplies();
     }
-  };
+  }, 100); // 100ms 防抖延迟
 
   const resetAndReloadReplies = async () => {
+    // 取消当前请求
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+
     replies.value = [];
     currentPage.value = 1;
     hasMoreReplies.value = false;
@@ -980,6 +1014,13 @@
       isDeleteLoading.value = false;
     }
   };
+
+  // 组件卸载时清理请求
+  onUnmounted(() => {
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+  });
 </script>
 
 <style scoped></style>
