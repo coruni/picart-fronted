@@ -197,11 +197,11 @@ export default defineNuxtConfig({
     },
     // 缓存优化
     compressPublicAssets: true,
-    minify: true,
-    prerender: {
-      crawlLinks: true,
-      routes: ['/']
-    }
+    minify: true
+    // prerender: {
+    //   crawlLinks: true,
+    //   routes: ['/']
+    // }
   },
 
   // 配置Vite
@@ -218,6 +218,23 @@ export default defineNuxtConfig({
     },
     css: {
       devSourcemap: true
+    },
+    build: {
+      // 提高块大小警告限制
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          // 手动代码分割 - 只分割安全的第三方库
+          manualChunks: {
+            // 工具库
+            'utils-vendor': ['lodash-es', 'zod'],
+            // 编辑器相关
+            'editor-vendor': ['@tinymce/tinymce-vue'],
+            // 表格组件
+            'table-vendor': ['@tanstack/vue-table']
+          }
+        }
+      }
     }
   },
 
@@ -266,21 +283,52 @@ export default defineNuxtConfig({
     optimization: {
       splitChunks: {
         chunks: 'all',
-        maxSize: 244 * 1024, // 244KB
+        maxSize: 500 * 1024, // 增加到 500KB
+        minSize: 20 * 1024, // 最小块大小 20KB
         cacheGroups: {
           styles: {
             name: 'styles',
             test: /\.(css|vue)$/,
             chunks: 'all',
             enforce: true,
-            priority: 20
+            priority: 30
           },
+          // Vue 核心库
+          vue: {
+            name: 'chunk-vue',
+            test: /[\\/]node_modules[\\/](vue|vue-router|@vue)[\\/]/,
+            priority: 25,
+            chunks: 'all'
+          },
+          // UI 组件库 (排除 @nuxt 相关模块)
+          ui: {
+            name: 'chunk-ui',
+            test: /[\\/]node_modules[\\/](@headlessui|@heroicons)[\\/]/,
+            priority: 20,
+            chunks: 'all'
+          },
+          // 编辑器相关
+          editor: {
+            name: 'chunk-editor',
+            test: /[\\/]node_modules[\\/](@tinymce|tinymce)[\\/]/,
+            priority: 20,
+            chunks: 'all'
+          },
+          // 工具库
+          utils: {
+            name: 'chunk-utils',
+            test: /[\\/]node_modules[\\/](lodash|zod|@tanstack)[\\/]/,
+            priority: 15,
+            chunks: 'all'
+          },
+          // 其他第三方库
           vendors: {
             name: 'chunk-vendors',
             test: /[\\/]node_modules[\\/]/,
             priority: 10,
             chunks: 'initial'
           },
+          // 公共代码
           common: {
             name: 'chunk-common',
             minChunks: 2,
