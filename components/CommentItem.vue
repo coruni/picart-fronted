@@ -142,7 +142,12 @@
 
       <!-- 弹窗内容 -->
       <template #body>
-        <div id="comment-detail-description" class="p-4 space-y-4">
+        <div
+          id="comment-detail-description"
+          class="p-4 space-y-4 max-h-96 overflow-y-auto"
+          @scroll="handleScroll"
+          ref="modalContent"
+        >
           <!-- 主评论内容 - 立即显示 -->
           <div>
             <div class="flex items-center space-x-3">
@@ -208,7 +213,7 @@
             </div>
 
             <!-- 回复列表容器 -->
-            <div ref="repliesContainer" class="space-y-3 max-h-64 overflow-y-auto">
+            <div ref="repliesContainer" class="space-y-3">
               <div
                 v-for="reply in replies"
                 :key="reply.id"
@@ -408,17 +413,14 @@
                 </div>
               </div>
 
-              <!-- 加载更多按钮 -->
-              <div v-if="hasMoreReplies" class="flex justify-center">
-                <UButton
-                  @click="loadMoreReplies"
-                  :loading="isLoadingReplies"
-                  variant="ghost"
-                  size="sm"
-                  class="text-sm"
-                >
-                  {{ $t('article.loadMoreReplies') }}
-                </UButton>
+              <!-- 滚动加载提示 -->
+              <div v-if="isLoadingReplies && hasMoreReplies" class="flex justify-center py-4">
+                <div class="flex items-center space-x-2 text-sm text-gray-500">
+                  <div
+                    class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"
+                  ></div>
+                  <span>{{ $t('article.loadingMore') }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -535,10 +537,11 @@
   const replies = ref<Comment[]>([]);
   const hasMoreReplies = ref(false);
   const currentPage = ref(1);
+  const currentRequest = ref<AbortController | null>(null);
 
   // 模板引用
   const repliesContainer = ref<HTMLElement>();
-  const repliesModalContainer = ref<HTMLElement>();
+  const modalContent = ref<HTMLElement>();
 
   // 表单状态
   const replySchema = z.object({
@@ -693,10 +696,7 @@
         ? (props.comment.likes || 0) + 1
         : Math.max(0, (props.comment.likes || 0) - 1);
 
-      toast.add({
-        title: props.comment.isLiked ? t('article.liked') : t('article.unliked'),
-        color: 'primary'
-      });
+      // 移除点赞/取消点赞的 toast 通知，因为状态变化已经通过 UI 反映
     } catch (error) {
     } finally {
       isLikeLoading.value = false;
@@ -725,10 +725,6 @@
 
       replyState.content = '';
       showReplyInput.value = false;
-      toast.add({
-        title: t('article.replySuccess'),
-        color: 'primary'
-      });
     } catch (error) {
     } finally {
       isReplyLoading.value = false;
@@ -750,10 +746,7 @@
       // 简单本地更新
       props.comment.content = payload.data.content;
       showEditInput.value = false;
-      toast.add({
-        title: t('article.editSuccess'),
-        color: 'primary'
-      });
+      // 移除编辑成功的 toast，因为用户可以看到内容已经更新
     } catch (error) {
     } finally {
       isEditLoading.value = false;
@@ -769,10 +762,6 @@
       });
 
       emit('comment-deleted', (props.comment.id as number) || 0);
-      toast.add({
-        title: t('article.deleteSuccess'),
-        color: 'primary'
-      });
     } catch (error) {
     } finally {
       isDeleteLoading.value = false;
@@ -780,12 +769,21 @@
   };
 
   const loadReplies = async () => {
+    // 如果已经有请求在进行中，取消之前的请求
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+
+    // 创建新的 AbortController
+    currentRequest.value = new AbortController();
+
     try {
       isLoadingReplies.value = true;
       const response = await commentControllerFindOne({
         composable: '$fetch',
         path: { id: props.comment.id! },
-        query: { page: currentPage.value, limit: 10 }
+        query: { page: currentPage.value, limit: 10 },
+        signal: currentRequest.value.signal
       });
 
       const resVal: any = response as any;
@@ -800,9 +798,15 @@
 
       // 增加页码
       currentPage.value++;
-    } catch (error) {
+    } catch (error: any) {
+      // 如果是取消请求的错误，不显示错误信息
+      if (error.name === 'AbortError') {
+        return;
+      }
+      console.error('加载回复失败:', error);
     } finally {
       isLoadingReplies.value = false;
+      currentRequest.value = null;
     }
   };
 
@@ -810,7 +814,39 @@
     loadReplies();
   };
 
+  // 防抖函数
+  const debounce = (func: Function, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: any[]) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  const handleScroll = debounce((event: Event) => {
+    const target = event.target as HTMLElement;
+    const { scrollTop, scrollHeight, clientHeight } = target;
+
+    // 当滚动到距离底部 50px 时触发加载
+    if (
+      scrollHeight - scrollTop - clientHeight < 50 &&
+      hasMoreReplies.value &&
+      !isLoadingReplies.value
+    ) {
+      loadMoreReplies();
+    }
+  }, 100); // 100ms 防抖延迟
+
   const resetAndReloadReplies = async () => {
+    // 取消当前请求
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+
     replies.value = [];
     currentPage.value = 1;
     hasMoreReplies.value = false;
@@ -850,10 +886,7 @@
       reply.isLiked = !reply.isLiked;
       reply.likes = reply.isLiked ? (reply.likes || 0) + 1 : Math.max(0, (reply.likes || 0) - 1);
 
-      toast.add({
-        title: reply.isLiked ? t('article.liked') : t('article.unliked'),
-        color: 'primary'
-      });
+      // 移除回复点赞/取消点赞的 toast 通知，因为状态变化已经通过 UI 反映
     } catch (error) {
     } finally {
       isLikeLoading.value = false;
@@ -927,10 +960,7 @@
       props.comment.replyCount = currentReplyCount + 1;
 
       reply.showReplyInput = false;
-      toast.add({
-        title: t('article.replySuccess'),
-        color: 'success'
-      });
+      // 移除回复成功的 toast，因为用户可以看到新回复已经添加
     } catch (error) {
     } finally {
       isReplyLoading.value = false;
@@ -953,10 +983,7 @@
       });
 
       reply.showEditInput = false;
-      toast.add({
-        title: t('article.editSuccess'),
-        color: 'success'
-      });
+      // 移除编辑成功的 toast，因为用户可以看到内容已经更新
     } catch (error) {
     } finally {
       isEditLoading.value = false;
@@ -981,15 +1008,19 @@
       const currentReplyCount = props.comment.replyCount || 0;
       props.comment.replyCount = Math.max(0, currentReplyCount - 1);
 
-      toast.add({
-        title: t('article.deleteSuccess'),
-        color: 'success'
-      });
+      // 移除删除成功的 toast，因为用户可以看到回复已经被删除
     } catch (error) {
     } finally {
       isDeleteLoading.value = false;
     }
   };
+
+  // 组件卸载时清理请求
+  onUnmounted(() => {
+    if (currentRequest.value) {
+      currentRequest.value.abort();
+    }
+  });
 </script>
 
 <style scoped></style>

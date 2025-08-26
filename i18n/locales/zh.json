@@ -422,7 +422,11 @@
     "uploadError": "图片上传失败，请重试",
     "maxCountReached": "最多只能上传 {maxCount} 张图片",
     "uploading": "上传中...",
-    "uploadingMultiple": "上传中... ({count}/{total})"
+    "uploadingMultiple": "上传中... ({count} 张图片)",
+    "loading": "加载中...",
+    "loadFailed": "图片加载失败",
+    "retry": "重试",
+    "loadError": "加载失败"
   },
   "uploading": "上传中...",
   "filter": {
