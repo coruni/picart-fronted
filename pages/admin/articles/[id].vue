@@ -363,7 +363,6 @@
           type: z.enum([
             'baidu',
             'google',
-            'aliyun',
             'lanzou',
             'quark',
             'onedrive',
@@ -717,6 +716,7 @@
   }
 
   const tagsOptions = ref<TagMenuItem[]>([]);
+  const selectedTags = ref<TagMenuItem[]>([]); // 已选择的标签
   const tagSearchQuery = ref('');
 
   // 搜索标签函数
@@ -733,8 +733,8 @@
       // 获取现有的临时标签
       const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
 
-      // 获取现有的真实标签
-      const existingRealTags = tagsData?.data
+      // 获取搜索结果中的真实标签
+      const searchResultTags = tagsData?.data
         ? tagsData.data.map((item: any) => ({
             id: item.id,
             label: item.name,
@@ -743,11 +743,11 @@
           }))
         : [];
 
-      // 合并：临时标签 + 搜索结果中的真实标签（去重）
-      const allTags = [...existingTempTags];
+      // 合并：临时标签 + 搜索结果中的真实标签 + 已选择的标签（去重）
+      const allTags = [...existingTempTags, ...selectedTags.value];
 
       // 添加搜索结果，避免重复
-      existingRealTags.forEach((newTag: TagMenuItem) => {
+      searchResultTags.forEach((newTag: TagMenuItem) => {
         const exists = allTags.some(t => t.id === newTag.id || t.label === newTag.label);
         if (!exists) {
           allTags.push(newTag);
@@ -801,6 +801,10 @@
       }
       if (!state.tagIds.includes(existingTag.id)) {
         state.tagIds.push(existingTag.id);
+        // 将已选择的标签添加到 selectedTags 中
+        if (!selectedTags.value.find(t => t.id === existingTag.id)) {
+          selectedTags.value.push(existingTag);
+        }
       }
       return;
     }
@@ -813,12 +817,31 @@
     };
 
     tagsOptions.value.push(tag);
+    selectedTags.value.push(tag);
 
     if (!state.tagIds) {
       state.tagIds = [];
     }
     state.tagIds.push(tempId);
   };
+
+  // 监听标签选择变化
+  watch(
+    () => state.tagIds,
+    newTagIds => {
+      if (!newTagIds) return;
+
+      // 更新 selectedTags
+      selectedTags.value = [];
+      newTagIds.forEach((tagId: string | number) => {
+        const tag = tagsOptions.value.find(t => t.id === tagId || t.value === tagId);
+        if (tag && !selectedTags.value.find(t => t.id === tag.id)) {
+          selectedTags.value.push(tag);
+        }
+      });
+    },
+    { deep: true }
+  );
 
   // 添加下载链接
   const addDownload = () => {
@@ -849,10 +872,6 @@
     {
       label: t('form.downloads.type.google'),
       value: 'google'
-    },
-    {
-      label: t('form.downloads.type.aliyun'),
-      value: 'aliyun'
     },
     {
       label: t('form.downloads.type.lanzou'),
