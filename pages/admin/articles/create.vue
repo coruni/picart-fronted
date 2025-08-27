@@ -279,7 +279,7 @@
                 v-model="state.viewPrice"
                 type="number"
                 variant="soft"
-                :min="1"
+                :min="state.requirePayment ? 1 : 0"
                 :placeholder="$t('form.viewPrice.placeholder')"
               />
             </UFormField>
@@ -730,6 +730,16 @@
     () => state.parentCategory,
     () => {
       state.categoryId = undefined;
+    }
+  );
+
+  // 监听 requirePayment 变化，当关闭时重置 viewPrice
+  watch(
+    () => state.requirePayment,
+    newValue => {
+      if (!newValue) {
+        state.viewPrice = 0;
+      }
     }
   );
 

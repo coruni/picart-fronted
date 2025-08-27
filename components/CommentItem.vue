@@ -640,6 +640,13 @@
     }
   };
 
+  // 监听弹窗打开状态，自动加载评论详情
+  // watch(showRepliesModal, async newValue => {
+  //   if (newValue && (props.comment.replyCount || 0) > 0 && replies.value.length === 0) {
+  //     await loadReplies();
+  //   }
+  // });
+
   // 监听弹窗关闭，重置回复状态
   watch(showRepliesModal, newValue => {
     if (!newValue) {
@@ -660,7 +667,7 @@
 
   const loadCommentDetail = async () => {
     // 加载评论详情时，同时加载第一页回复
-    if ((props.comment.replyCount || 0) > 0) {
+    if ((props.comment.replyCount || 0) > 0 && replies.value.length === 0) {
       await loadReplies();
     }
   };
@@ -782,8 +789,7 @@
       const response = await commentControllerFindOne({
         composable: '$fetch',
         path: { id: props.comment.id! },
-        query: { page: currentPage.value, limit: 10 },
-        signal: currentRequest.value.signal
+        query: { page: currentPage.value, limit: 10 }
       });
 
       const resVal: any = response as any;

@@ -481,7 +481,8 @@
     },
     "viewPrice": {
       "placeholder": "Please input price",
-      "name": "Payment Amount"
+      "name": "Payment Amount",
+      "required": "Price is required when payment viewing is enabled"
     },
     "name": {
       "placeholder": "Please input name"

@@ -27,6 +27,7 @@
     "@tinymce/tinymce-vue": "^6.3.0",
     "@unhead/vue": "^2.0.12",
     "lodash-es": "^4.17.21",
+    "natural-orderby": "^5.0.0",
     "nuxt": "^3.17.6",
     "nuxt-easy-lightbox": "^1.1.0",
     "nuxt-swiper": "2.0.1",

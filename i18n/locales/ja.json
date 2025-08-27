@@ -475,7 +475,8 @@
     },
     "viewPrice": {
       "placeholder": "価格を入力してください",
-      "name": "有料金額"
+      "name": "有料金額",
+      "required": "有料閲覧が有効な場合、価格の設定が必要です"
     },
     "name": {
       "placeholder": "名前を入力してください"
