@@ -342,7 +342,6 @@
             type: z.enum([
               'baidu',
               'google',
-              'aliyun',
               'lanzou',
               'quark',
               'dropbox',
