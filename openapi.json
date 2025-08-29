@@ -170,10 +170,84 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Role"
-                  }
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "displayName": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "permissions": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description"
+                                  ]
+                                }
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "permissions",
+                              "createdAt",
+                              "updatedAt"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -324,7 +398,73 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Role"
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "permissions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description"
+                            ]
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "permissions",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
                 }
               }
             },
@@ -8679,6 +8819,67 @@
                               "status": {
                                 "type": "string"
                               },
+                              "author": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "nickname": {
+                                    "type": "string"
+                                  },
+                                  "status": {
+                                    "type": "string"
+                                  },
+                                  "avatar": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "address": {
+                                    "type": "null"
+                                  },
+                                  "membershipLevel": {
+                                    "type": "integer"
+                                  },
+                                  "membershipLevelName": {
+                                    "type": "string"
+                                  },
+                                  "membershipStatus": {
+                                    "type": "string"
+                                  },
+                                  "membershipStartDate": {
+                                    "type": "string"
+                                  },
+                                  "membershipEndDate": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "username",
+                                  "nickname",
+                                  "status",
+                                  "avatar",
+                                  "address",
+                                  "membershipLevel",
+                                  "membershipLevelName",
+                                  "membershipStatus",
+                                  "membershipStartDate",
+                                  "membershipEndDate",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
+                              },
                               "article": {
                                 "type": "object",
                                 "properties": {
@@ -8703,21 +8904,14 @@
                                   "viewPrice": {
                                     "type": "string"
                                   },
-                                  "type": {
-                                    "type": "string"
-                                  },
                                   "content": {
-                                    "type": "string",
-                                    "nullable": true
+                                    "type": "string"
                                   },
                                   "images": {
                                     "type": "string"
                                   },
-                                  "sort": {
-                                    "type": "integer"
-                                  },
                                   "summary": {
-                                    "type": "null"
+                                    "type": "string"
                                   },
                                   "views": {
                                     "type": "integer"
@@ -8725,13 +8919,10 @@
                                   "likes": {
                                     "type": "integer"
                                   },
-                                  "status": {
-                                    "type": "string"
-                                  },
                                   "cover": {
                                     "type": "string"
                                   },
-                                  "authorId": {
+                                  "downloadCount": {
                                     "type": "integer"
                                   },
                                   "createdAt": {
@@ -8749,16 +8940,12 @@
                                   "requirePayment",
                                   "requireMembership",
                                   "viewPrice",
-                                  "type",
                                   "content",
                                   "images",
-                                  "sort",
-                                  "summary",
                                   "views",
                                   "likes",
-                                  "status",
                                   "cover",
-                                  "authorId",
+                                  "downloadCount",
                                   "createdAt",
                                   "updatedAt"
                                 ]
@@ -8780,6 +8967,7 @@
                               "likes",
                               "replyCount",
                               "status",
+                              "author",
                               "article",
                               "rootId",
                               "createdAt",
@@ -16531,6 +16719,10 @@
             "description": "是否需要支付后才能查看",
             "default": false
           },
+          "requireMembership": {
+            "type": "boolean",
+            "description": "是否需要会员"
+          },
           "viewPrice": {
             "type": "number",
             "description": "查看所需支付金额",
@@ -16552,12 +16744,7 @@
         },
         "required": [
           "title",
-          "content",
           "categoryId",
-          "requireLogin",
-          "requireFollow",
-          "requirePayment",
-          "viewPrice",
           "type"
         ]
       },

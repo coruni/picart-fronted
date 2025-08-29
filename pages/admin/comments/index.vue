@@ -182,21 +182,21 @@
         ]);
       }
     },
-    // {
-    //   accessorKey: 'author',
-    //   header: t('common.table.author'),
-    //   cell: ({ row }) => {
-    //     const author = row.original.author;
-    //     if (author) {
-    //       const displayName = author.nickname || author.username || '-';
-    //       return h('div', { class: 'max-w-xs' }, [
-    //         h('div', { class: 'font-medium' }, displayName),
-    //         h('div', { class: 'text-xs text-gray-500' }, `ID: ${author.id || '-'}`)
-    //       ]);
-    //     }
-    //     return h('div', { class: 'text-gray-500' }, '-');
-    //   }
-    // },
+    {
+      accessorKey: 'author',
+      header: t('common.table.author'),
+      cell: ({ row }) => {
+        const author = row.original.author;
+        if (author) {
+          const displayName = author.nickname || author.username || '-';
+          return h('div', { class: 'max-w-xs' }, [
+            h('div', { class: 'font-medium' }, displayName),
+            h('div', { class: 'text-xs text-gray-500' }, `ID: ${author.id || '-'}`)
+          ]);
+        }
+        return h('div', { class: 'text-gray-500' }, '-');
+      }
+    },
     {
       accessorKey: 'status',
       header: t('common.table.status'),

@@ -104,7 +104,7 @@ export type CreateArticleDto = {
   /**
    * 文章内容
    */
-  content: string;
+  content?: string;
   /**
    * 文章摘要
    */
@@ -157,19 +157,23 @@ export type CreateArticleDto = {
   /**
    * 是否需要登录后才能查看
    */
-  requireLogin: boolean;
+  requireLogin?: boolean;
   /**
    * 是否仅关注后可查看
    */
-  requireFollow: boolean;
+  requireFollow?: boolean;
   /**
    * 是否需要支付后才能查看
    */
-  requirePayment: boolean;
+  requirePayment?: boolean;
+  /**
+   * 是否需要会员
+   */
+  requireMembership?: boolean;
   /**
    * 查看所需支付金额
    */
-  viewPrice: number;
+  viewPrice?: number;
   /**
    * 文章类型
    */
@@ -749,7 +753,25 @@ export type RoleControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: Array<Role>;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        name: string;
+        displayName?: string;
+        description: string;
+        permissions: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+    };
+  };
 };
 
 export type RoleControllerFindAllResponse =
@@ -819,7 +841,23 @@ export type RoleControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: Role;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      name: string;
+      displayName?: string;
+      description: string;
+      permissions: Array<{
+        id: number;
+        name: string;
+        description: string;
+      }>;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
 
 export type RoleControllerFindOneResponse =
@@ -3526,6 +3564,21 @@ export type CommentControllerFindAllWithAdminResponses = {
         likes: number;
         replyCount: number;
         status: string;
+        author: {
+          id: number;
+          username: string;
+          nickname: string;
+          status: string;
+          avatar: string | null;
+          address: unknown;
+          membershipLevel: number;
+          membershipLevelName: string;
+          membershipStatus: string;
+          membershipStartDate: string;
+          membershipEndDate: string | null;
+          createdAt: string;
+          updatedAt: string;
+        };
         article: {
           id: number;
           title: string;
@@ -3534,16 +3587,13 @@ export type CommentControllerFindAllWithAdminResponses = {
           requirePayment: boolean;
           requireMembership: boolean;
           viewPrice: string;
-          type: string;
-          content: string | null;
+          content: string;
           images: string;
-          sort: number;
-          summary: unknown;
+          summary?: string;
           views: number;
           likes: number;
-          status: string;
           cover: string;
-          authorId: number;
+          downloadCount: number;
           createdAt: string;
           updatedAt: string;
         };
