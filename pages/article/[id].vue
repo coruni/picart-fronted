@@ -462,7 +462,9 @@
                 v-if="imageLoaded[index] && !imageErrors[index]"
                 class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20"
               >
-                <div class="bg-white/90 dark:bg-gray-800/90 rounded-full p-3">
+                <div
+                  class="bg-white/90 flex items-center justify-center dark:bg-gray-800/90 rounded-full p-3"
+                >
                   <Icon name="mynaui:search" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
                 </div>
               </div>

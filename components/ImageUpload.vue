@@ -11,25 +11,153 @@
         </UButton>
       </div>
 
-      <div class="relative group">
-        <img
-          :src="modelValue"
-          :alt="t('image.preview')"
-          class="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
-        />
+      <!-- 使用VueEasyLightbox进行图片预览 -->
+      <VueEasyLightbox
+        :visible="lightboxVisible"
+        :imgs="[modelValue]"
+        :index="0"
+        @hide="lightboxVisible = false"
+      >
+        <!-- 自定义左右导航按钮 -->
+        <template #prev-btn="{ prev }">
+          <UButton
+            @click="prev"
+            variant="link"
+            class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 left-4 text-white flex items-center justify-center"
+          >
+            <Icon name="mynaui:chevron-left" />
+          </UButton>
+        </template>
+
+        <template #next-btn="{ next }">
+          <UButton
+            @click="next"
+            variant="link"
+            class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 right-4 text-white flex items-center justify-center"
+          >
+            <Icon name="mynaui:chevron-right" />
+          </UButton>
+        </template>
+
+        <!-- 自定义工具栏按钮 -->
+        <template #toolbar="{ toolbarMethods }">
+          <div
+            class="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 flex items-center gap-2 bg-gray-700/80 backdrop-blur-sm rounded-full shadow-lg"
+          >
+            <!-- 放大按钮 -->
+            <UButton
+              variant="link"
+              @click="toolbarMethods.zoomIn"
+              class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+              title="放大"
+            >
+              <Icon name="mynaui:plus" class="w-5 h-5" />
+            </UButton>
+
+            <!-- 缩小按钮 -->
+            <UButton
+              variant="link"
+              @click="toolbarMethods.zoomOut"
+              class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+              title="缩小"
+            >
+              <Icon name="mynaui:minus" class="w-5 h-5" />
+            </UButton>
+
+            <!-- 逆时针旋转按钮 -->
+            <UButton
+              variant="link"
+              @click="toolbarMethods.rotateLeft"
+              class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+              title="逆时针旋转"
+            >
+              <Icon name="mynaui:undo" class="w-5 h-5" />
+            </UButton>
+
+            <!-- 顺时针旋转按钮 -->
+            <UButton
+              variant="link"
+              @click="toolbarMethods.rotateRight"
+              class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+              title="顺时针旋转"
+            >
+              <Icon name="mynaui:redo" class="w-5 h-5" />
+            </UButton>
+          </div>
+        </template>
+
+        <!-- 自定义关闭按钮 -->
+        <template #close-btn>
+          <UButton
+            variant="link"
+            @click="lightboxVisible = false"
+            class="font-bold backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full right-4 top-4 text-white flex items-center justify-center"
+          >
+            <Icon name="mynaui:x" size="24" />
+          </UButton>
+        </template>
+
+        <!-- 自定义加载 -->
+        <template #loading>
+          <div class="flex items-center justify-center py-20">
+            <div class="flex items-center justify-center flex-col gap-8">
+              <div
+                class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
+              ></div>
+            </div>
+          </div>
+        </template>
+      </VueEasyLightbox>
+
+      <!-- 图片预览卡片 -->
+      <div class="relative group cursor-pointer" @click="openLightbox">
+        <div
+          class="aspect-[3/4] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
+        >
+          <NuxtImg
+            :src="modelValue"
+            :alt="t('image.preview')"
+            class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+            loading="lazy"
+            format="webp"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+
+        <!-- 悬停操作 -->
         <div
           class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 rounded-lg flex items-center justify-center"
         >
-          <UButton
-            variant="solid"
-            color="neutral"
-            size="sm"
-            icon="mynaui:edit"
-            class="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            @click.stop="triggerFileInput"
+          <div
+            class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-2"
           >
-            {{ t('common.button.change') }}
-          </UButton>
+            <UButton
+              variant="solid"
+              color="neutral"
+              size="sm"
+              icon="mynaui:edit"
+              @click.stop="triggerFileInput"
+            >
+              {{ t('common.button.change') }}
+            </UButton>
+            <UButton
+              variant="solid"
+              color="primary"
+              size="sm"
+              icon="mynaui:search"
+              @click.stop="openLightbox"
+            >
+              {{ t('common.button.preview') }}
+            </UButton>
+          </div>
+        </div>
+
+        <!-- 放大镜图标提示 -->
+        <div
+          class="absolute top-2 right-2 flex items-center justify-center bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm"
+        >
+          <Icon name="mynaui:search" class="w-3 h-3 mr-1" />
+          {{ t('common.button.preview') }}
         </div>
       </div>
     </div>
@@ -128,6 +256,16 @@
   const isDragOver = ref(false);
   const isUploading = ref(false);
 
+  // Lightbox相关状态
+  const lightboxVisible = ref(false);
+
+  // 打开lightbox
+  const openLightbox = () => {
+    if (props.modelValue && props.modelValue.trim()) {
+      lightboxVisible.value = true;
+    }
+  };
+
   // 触发文件选择
   const triggerFileInput = () => {
     // 重置文件输入，确保能重复选择同一文件
@@ -222,3 +360,22 @@
     emit('update:modelValue', '');
   };
 </script>
+
+<style scoped>
+  /* 悬停效果 */
+  .group:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+  }
+
+  /* Lightbox样式 */
+  :deep(.vel-modal) {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  :deep(.vel-img) {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  }
+</style>
