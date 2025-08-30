@@ -18,7 +18,7 @@
 
   <!-- 关注限制 -->
   <div
-    v-else-if="type === 'follow'"
+    v-else-if="type === 'follow' && !isAuthor"
     class="bg-gradient-to-br from-pink-50/50 to-pink-100/50 dark:from-pink-900/10 dark:to-pink-800/10 rounded-xl p-6 text-center my-8 border border-pink-200/50 dark:border-pink-800/30"
   >
     <Icon name="mynaui:heart" class="text-3xl text-pink-600 dark:text-pink-400 mb-3" />
@@ -154,6 +154,14 @@
   const showPaymentModal = ref(false);
   const currentOrder = ref<any>(null);
 
+  // 计算属性
+  const isAuthor = computed(() => {
+    if (!userStore.isLoggedIn || !userStore.userInfo || !props.authorId) {
+      return false;
+    }
+    return userStore.userInfo.id === props.authorId;
+  });
+
   // 确保在客户端才执行交互逻辑
   const isClient = ref(false);
   onMounted(() => {
@@ -167,7 +175,7 @@
 
   // 处理关注
   const handleFollow = async () => {
-    if (!isClient.value || isFollowing.value || isFollowLoading.value) return;
+    if (!isClient.value || isFollowing.value || isFollowLoading.value || isAuthor.value) return;
 
     isFollowLoading.value = true;
     try {
@@ -188,11 +196,6 @@
       if (props.refreshArticle) {
         props.refreshArticle();
       }
-
-      toast.add({
-        title: t('user.followSuccess'),
-        color: 'success'
-      });
     } catch (error: any) {
       console.error('关注失败:', error);
     } finally {

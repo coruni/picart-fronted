@@ -1,5 +1,5 @@
 export default defineAppConfig({
-  apiBaseUrl: 'https://picapi.picart.cc/api/v1',
+  apiBaseUrl: 'https://api.kawax.org/api/v1',
   ui: {
     colors: {
       primary: 'indigo'
@@ -30,5 +30,9 @@ export default defineAppConfig({
       search: 'mynaui:search',
       upload: 'mynaui:upload'
     }
+  },
+  icon: {
+    mode: 'css',
+    cssLayer: 'base'
   }
 });

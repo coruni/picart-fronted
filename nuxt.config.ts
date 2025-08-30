@@ -31,7 +31,7 @@ export default defineNuxtConfig({
 
   // SEO 配置
   site: {
-    url: 'https://www.picart.cc',
+    url: 'https://www.kawax.org',
     name: 'PicArt',
     description: '图片分享社区',
     defaultLocale: 'zh',
@@ -39,15 +39,20 @@ export default defineNuxtConfig({
     cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     autoLastmod: true
   },
+  icon: {
+    serverBundle: {
+      collections: ['mynaui']
+    }
+  },
 
   // Robots 配置
   robots: {
     disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/'],
     allow: ['/', '/article/', '/author/', '/category/', '/search'],
     sitemap: [
-      'https://www.picart.cc/sitemap_articles.xml',
-      'https://www.picart.cc/sitemap_authors.xml',
-      'https://www.picart.cc/sitemap_categories.xml'
+      'https://www.kawax.org/sitemap_articles.xml',
+      'https://www.kawax.org/sitemap_authors.xml',
+      'https://www.kawax.org/sitemap_categories.xml'
     ],
     crawlDelay: 1
   },
@@ -255,12 +260,12 @@ export default defineNuxtConfig({
             '@type': 'WebSite',
             name: 'PicArt',
             description: '图片分享社区',
-            url: 'https://www.picart.cc',
+            url: 'https://www.kawax.org',
             potentialAction: {
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `https://www.picart.cc/search?q={search_term_string}`
+                urlTemplate: `https://www.kawax.org/search?q={search_term_string}`
               },
               'query-input': 'required name=search_term_string'
             }

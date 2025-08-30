@@ -19,7 +19,7 @@
   // 构建全局元数据和SEO
   useSeoMeta({
     title: configs.data.value?.data?.site_name,
-    titleTemplate: '%s - ' + (configs.data.value?.data?.site_subtitle || ''),
+    titleTemplate: '%s - ' + (configs.data.value?.data?.site_name || ''),
     description: configs.data.value?.data?.site_description || '',
     keywords: configs.data.value?.data?.site_keywords || '',
     robots: 'index, follow',

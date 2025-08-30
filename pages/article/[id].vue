@@ -845,8 +845,8 @@
       return false;
     }
 
-    // 如果需要关注但用户未关注作者
-    if (data.requireFollow && !data.author.isFollowed) {
+    // 如果需要关注但用户未关注作者，且用户不是作者本人
+    if (data.requireFollow && !data.author.isFollowed && !isAuthor.value) {
       return false;
     }
 
@@ -873,7 +873,7 @@
       return 'login';
     }
 
-    if (data.requireFollow && !data.author.isFollowed) {
+    if (data.requireFollow && !data.author.isFollowed && !isAuthor.value) {
       return 'follow';
     }
 
