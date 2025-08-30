@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
   import type { TabsItem } from '@nuxt/ui';
-  import { articleControllerFindAll } from '~~/api';
+  import { articleControllerFindAll } from '~/api';
   const { t } = useI18n();
   const tabs: TabsItem[] = [
     { id: 'all', label: t('home.tab.all'), value: 'all', icon: 'mynaui:brand-trello' },
