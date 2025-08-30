@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-08',
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -213,7 +213,9 @@ export default defineNuxtConfig({
   vite: {
     // 可以在这里配置Vite相关设置
     experimental: {},
-
+    optimizeDeps: {
+      include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : []
+    },
     define: {
       __DEV__: process.env.NODE_ENV === 'development'
     },
