@@ -54,7 +54,21 @@
 <script lang="ts" setup>
   import type { TabsItem } from '@nuxt/ui';
   import { articleControllerFindAll } from '~/api';
+  import type { ConfigControllerGetPublicResponse } from '~/api';
+  type SiteConfig = ConfigControllerGetPublicResponse['data'];
   const { t } = useI18n();
+
+  // 首页中
+  const siteConfig = inject<SiteConfig>('siteConfig');
+  const siteName = siteConfig?.site_name || '';
+  const siteSubtitle = siteConfig?.site_subtitle || '';
+  const homeTitle = siteSubtitle ? `${siteName} - ${siteSubtitle}` : siteName;
+
+  // 或者使用 useSeoMeta 覆盖
+  useSeoMeta({
+    title: homeTitle,
+    titleTemplate: null
+  });
   const tabs: TabsItem[] = [
     { id: 'all', label: t('home.tab.all'), value: 'all', icon: 'mynaui:brand-trello' },
     { id: 'popular', label: t('home.tab.popular'), value: 'popular', icon: 'mynaui:fire' },

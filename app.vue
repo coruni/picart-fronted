@@ -34,30 +34,4 @@
     twitterImage: configs.data.value?.data?.site_favicon || '/favicon.ico',
     twitterImageAlt: configs.data.value?.data?.site_name || ''
   });
-
-  // 监听路由变化，为首页设置特殊的标题格式
-  const route = useRoute();
-  watch(
-    () => route.path,
-    newPath => {
-      if (newPath === '/' || newPath === '/zh' || newPath === '/en' || newPath === '/ja') {
-        // 首页：显示 name - subtitle 格式
-        const siteName = configs.data.value?.data?.site_name || '';
-        const siteSubtitle = configs.data.value?.data?.site_subtitle || '';
-        const homeTitle = siteSubtitle ? `${siteName} - ${siteSubtitle}` : siteName;
-
-        useSeoMeta({
-          title: homeTitle,
-          titleTemplate: undefined // 首页不使用模板
-        });
-      } else {
-        // 其他页面：使用默认的 titleTemplate
-        useSeoMeta({
-          title: undefined,
-          titleTemplate: '%s - ' + (configs.data.value?.data?.site_name || '')
-        });
-      }
-    },
-    { immediate: true }
-  );
 </script>
