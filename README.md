@@ -382,3 +382,9 @@ pnpm deploy
 ---
 
 ⭐ 如果这个项目对您有帮助，请给我们一个星标！
+
+## 常见问题
+- 缺少 devtool-api 导入问题 删除server/node_modules 重新pnpm i一次
+-     "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+- 解决方法 https://answers.netlify.com/t/functions-cannot-find-module-vue-devtools-api/129081
