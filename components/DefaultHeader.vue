@@ -65,7 +65,7 @@
         </template>
       </div>
 
-      <!-- 桌面端搜索、语言切换和用户 -->
+      <!-- 桌面端搜索和用户 -->
       <div class="hidden md:flex items-center space-x-4">
         <div class="relative">
           <input
@@ -82,43 +82,23 @@
           />
         </div>
 
-        <!-- 语言切换器 -->
-        <div class="group relative cursor-pointer flex items-center gap-1">
-          <span class="text-lg">{{ currentLanguageFlag }}</span>
-          <span class="hidden sm:inline">{{ currentLanguageName }}</span>
-          <Icon
-            name="mynaui:chevron-down"
-            class="w-4 h-4 transition-transform group-hover:rotate-180"
-          />
-
-          <!-- 语言选择菜单 -->
-          <div
-            class="absolute top-full right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
-          >
-            <div class="py-1">
-              <UButton
-                variant="ghost"
-                v-for="locale in availableLocales"
-                :key="locale.code"
-                @click="handleLanguageSwitch(locale.code)"
-                class="rounded-none w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
-                :class="{ 'bg-primary/10 text-primary': locale.code === currentLocale }"
-              >
-                <span class="text-lg">{{ getLanguageFlag(locale.code) }}</span>
-                <span>{{ locale.name }}</span>
-                <Icon
-                  v-if="locale.code === currentLocale"
-                  name="mynaui:check"
-                  class="w-4 h-4 ml-auto text-primary"
-                />
-              </UButton>
-            </div>
-          </div>
-        </div>
-
         <template v-if="userStore.isLoggedIn">
           <!-- 消息通知 -->
           <MessageNotification />
+
+          <!-- 主题切换按钮 -->
+          <UButton
+            variant="link"
+            color="neutral"
+            @click="toggleColorMode"
+            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            :title="$t('common.toggleTheme')"
+          >
+            <Icon
+              :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+              class="w-5 h-5 text-gray-600 dark:text-gray-300"
+            />
+          </UButton>
 
           <div class="group relative cursor-pointer flex items-center gap-1">
             <UAvatar
@@ -138,11 +118,52 @@
                   <span>{{ $t('header.nav.profile') }}</span>
                 </NuxtLinkLocale>
 
+                <!-- 语言切换选项 -->
+                <div class="relative group/language" ref="languageMenuRef">
+                  <div
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary flex items-center justify-between cursor-pointer"
+                  >
+                    <div class="flex items-center space-x-2">
+                      <span class="text-lg">{{ currentLanguageFlag }}</span>
+                      <span>{{ currentLanguageName }}</span>
+                    </div>
+                    <Icon
+                      name="mynaui:chevron-right"
+                      class="w-4 h-4 transition-transform group-hover/language:rotate-90"
+                    />
+                  </div>
+
+                  <!-- 语言选择子菜单 -->
+                  <div
+                    class="absolute top-0 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover/language:opacity-100 group-hover/language:visible transition-all duration-300 z-50 dark:border-gray-700"
+                    :class="languageSubmenuPosition"
+                  >
+                    <div class="py-1">
+                      <UButton
+                        variant="ghost"
+                        v-for="locale in availableLocales"
+                        :key="locale.code"
+                        @click="handleLanguageSwitch(locale.code)"
+                        class="rounded-none w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                        :class="{ 'bg-primary/10 text-primary': locale.code === currentLocale }"
+                      >
+                        <span class="text-lg">{{ getLanguageFlag(locale.code) }}</span>
+                        <span>{{ locale.name }}</span>
+                        <Icon
+                          v-if="locale.code === currentLocale"
+                          name="mynaui:check"
+                          class="w-4 h-4 ml-auto text-primary"
+                        />
+                      </UButton>
+                    </div>
+                  </div>
+                </div>
+
                 <UButton
                   color="error"
-                  variant="ghost"
+                  variant="link"
                   @click="handleLogout"
-                  class="block w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
+                  class="block w-full cursor-pointer rounded-none text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
                 >
                   <span>{{ $t('user.logout') }}</span>
                 </UButton>
@@ -237,29 +258,6 @@
             </template>
 
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
-              <!-- 移动端语言切换 -->
-              <div class="px-4">
-                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {{ $t('header.nav.language') || '语言' }}
-                </div>
-                <div class="flex space-x-2">
-                  <UButton
-                    variant="ghost"
-                    v-for="locale in availableLocales"
-                    :key="locale.code"
-                    @click="handleLanguageSwitch(locale.code)"
-                    class="w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors cursor-pointer"
-                    :class="
-                      locale.code === currentLocale
-                        ? 'bg-primary text-white'
-                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                    "
-                  >
-                    {{ locale.flag }}
-                  </UButton>
-                </div>
-              </div>
-
               <div class="relative px-4">
                 <input
                   v-model="searchQuery"
@@ -317,6 +315,48 @@
                   </div>
                 </NuxtLinkLocale>
 
+                <!-- 移动端主题切换 -->
+                <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {{ $t('common.toggleTheme') || '主题' }}
+                    </span>
+                    <UButton
+                      variant="ghost"
+                      @click="toggleColorMode"
+                      class="w-10 h-10 flex items-center justify-center rounded-full transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                    >
+                      <Icon
+                        :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+                        class="w-5 h-5 text-gray-700 dark:text-gray-300"
+                      />
+                    </UButton>
+                  </div>
+                </div>
+
+                <!-- 移动端语言切换 -->
+                <div class="px-4 py-2">
+                  <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ $t('header.nav.language') || '语言' }}
+                  </div>
+                  <div class="flex space-x-2">
+                    <UButton
+                      variant="ghost"
+                      v-for="locale in availableLocales"
+                      :key="locale.code"
+                      @click="handleLanguageSwitch(locale.code)"
+                      class="w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors cursor-pointer"
+                      :class="
+                        locale.code === currentLocale
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      "
+                    >
+                      {{ locale.flag }}
+                    </UButton>
+                  </div>
+                </div>
+
                 <button
                   @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-red-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
@@ -342,26 +382,40 @@
 </template>
 <script lang="ts" setup>
   import type { Category } from '~~/types/category';
-  import { useRoute } from 'vue-router';
   import type { ConfigControllerGetPublicResponse } from '~/api';
   type Config = ConfigControllerGetPublicResponse['data'];
   const siteConfig = inject<Config>('siteConfig');
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
-
+  const localePath = useLocalePath();
   // 消息相关数据
   const { unreadCount, totalCount } = useMessage();
 
   // 语言切换相关
   const { locale: currentLocale, locales, setLocale } = useI18n();
 
+  // 主题切换相关
+  const colorMode = useColorMode();
+
+  const toggleColorMode = () => {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+  };
+
+  // 确保主题状态在客户端正确获取
+  const isDarkMode = computed(() => {
+    // 在客户端确保能正确读取存储的主题状态
+    if (import.meta.client) {
+      return colorMode.preference === 'dark';
+    }
+  });
+
   // 搜索相关
   const searchQuery = ref('');
 
   const handleSearch = () => {
     if (searchQuery.value.trim()) {
-      router.push({ path: '/search', query: { q: searchQuery.value } });
+      router.push({ path: localePath('/search'), query: { q: searchQuery.value } });
     }
   };
 
@@ -375,6 +429,26 @@
   // 用户头像 - 使用computed确保响应式
   const currentUserAvatar = computed(() => userStore.userInfo?.avatar);
   const isMobileMenuOpen = ref(false);
+  const languageMenuRef = ref<HTMLElement>();
+
+  // 语言子菜单位置计算
+  const languageSubmenuPosition = computed(() => {
+    if (!languageMenuRef.value) return 'left-full ml-1';
+
+    const rect = languageMenuRef.value.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+    const submenuWidth = 160; // w-40 = 160px
+    const margin = 4; // ml-1 = 4px
+
+    // 检查右侧是否有足够空间
+    const rightSpace = windowWidth - rect.right - margin;
+
+    if (rightSpace >= submenuWidth) {
+      return 'left-full ml-1'; // 右侧显示
+    } else {
+      return 'right-full mr-1'; // 左侧显示
+    }
+  });
 
   // 可用语言列表
   const availableLocales = computed(() => {
@@ -453,17 +527,27 @@
     }
   });
 
+  // 监听窗口大小变化，重新计算语言子菜单位置
+  const handleResize = () => {
+    // 触发响应式更新
+    languageSubmenuPosition.value;
+  };
+
+  onMounted(() => {
+    window.addEventListener('resize', handleResize);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+    document.removeEventListener('click', handleClickOutside);
+  });
+
   // 处理登出
   const handleLogout = () => {
     userStore.clearAuth();
     closeMobileMenu();
     // clearAuth 方法已经处理了页面跳转，这里不需要额外的跳转
   };
-
-  // 组件卸载时清理事件监听
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside);
-  });
 </script>
 <style scoped>
   /* 移动端菜单滚动条样式 */

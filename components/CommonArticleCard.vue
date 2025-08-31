@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { ArticleControllerFindAllResponse } from '~~/api';
+  import type { ArticleControllerFindAllResponse } from '~/api';
   type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined> & {
     images: string[] | string;
   };

@@ -374,7 +374,11 @@
       "title": "标题",
       "summary": "摘要"
     },
-    "loading": "加载中..."
+    "loading": {
+      "loading": "加载中...",
+      "noMore": "没有更多"
+    },
+    "toggleTheme": "切换主题"
   },
   "role": {
     "title": "角色管理",

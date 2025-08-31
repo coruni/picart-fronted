@@ -17,7 +17,7 @@
         class="h-60 md:h-[400px] transition-all duration-300 bg-gray-100 dark:bg-gray-900"
         :autoplay="{ delay: 3000 }"
         :slides-per-view="1"
-        :loop="true"
+        :loop="safeBannersData.length > 1 ? true : false"
         :pagination="{
           clickable: true,
           el: '.custom-pagination'

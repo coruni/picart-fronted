@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-    <USkeleton class="aspect-[4/3] w-full" />
+    <USkeleton class="aspect-[3/4] w-full" />
     <div class="p-3 md:p-4">
       <USkeleton class="h-4 w-full mb-2" />
       <USkeleton class="h-3 w-3/4 mb-3" />

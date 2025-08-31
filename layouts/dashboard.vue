@@ -210,10 +210,6 @@
     return titleMap[route.path] || '管理后台';
   });
 
-  const toggleSidebar = () => {
-    sidebarCollapsed.value = !sidebarCollapsed.value;
-  };
-
   // 监听路由变化，自动关闭移动端菜单
   watch(
     () => route.path,
