@@ -19,6 +19,13 @@ import type {
   RoleControllerFindOneResponse,
   RoleControllerUpdateData,
   RoleControllerUpdateResponse,
+  RoleControllerFindWithPaginationData,
+  RoleControllerFindWithPaginationResponse,
+  RoleControllerGetActiveRolesData,
+  RoleControllerGetActiveRolesResponse,
+  RoleControllerAssignPermissionsData,
+  RoleControllerToggleStatusData,
+  RoleControllerCopyRoleData,
   ConfigControllerFindAllData,
   ConfigControllerFindAllResponse,
   ConfigControllerUpdateAllData,
@@ -321,6 +328,109 @@ export const roleControllerUpdate = <
       ...options.headers
     }
   });
+};
+
+/**
+ * 分页获取角色列表
+ */
+export const roleControllerFindWithPagination = <
+  TComposable extends Composable,
+  DefaultT extends
+    RoleControllerFindWithPaginationResponse = RoleControllerFindWithPaginationResponse
+>(
+  options: Options<
+    TComposable,
+    RoleControllerFindWithPaginationData,
+    RoleControllerFindWithPaginationResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    RoleControllerFindWithPaginationResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/role/list',
+    ...options
+  });
+};
+
+/**
+ * 获取活跃角色列表
+ */
+export const roleControllerGetActiveRoles = <
+  TComposable extends Composable,
+  DefaultT extends RoleControllerGetActiveRolesResponse = RoleControllerGetActiveRolesResponse
+>(
+  options: Options<
+    TComposable,
+    RoleControllerGetActiveRolesData,
+    RoleControllerGetActiveRolesResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    RoleControllerGetActiveRolesResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/role/active',
+    ...options
+  });
+};
+
+/**
+ * 为角色分配权限
+ */
+export const roleControllerAssignPermissions = <
+  TComposable extends Composable,
+  DefaultT = undefined
+>(
+  options: Options<TComposable, RoleControllerAssignPermissionsData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/role/{id}/permissions',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    }
+  );
+};
+
+/**
+ * 启用/禁用角色
+ */
+export const roleControllerToggleStatus = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, RoleControllerToggleStatusData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).patch<
+    TComposable,
+    unknown | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/role/{id}/status',
+    ...options
+  });
+};
+
+/**
+ * 复制角色
+ */
+export const roleControllerCopyRole = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, RoleControllerCopyRoleData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/role/{id}/copy',
+      ...options
+    }
+  );
 };
 
 /**

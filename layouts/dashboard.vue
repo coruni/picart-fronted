@@ -14,7 +14,7 @@
     />
 
     <!-- 移动端侧边栏 -->
-    <USlideover v-model:open="toggleMobileSidebar" side="left" title="管理菜单">
+    <USlideover v-model:open="toggleMobileSidebar" side="left" :title="$t('admin.menu.dashboard')">
       <template #body>
         <nav class="flex-1 p-4 overflow-y-auto">
           <ul class="space-y-2">
@@ -55,7 +55,7 @@
             color="neutral"
             class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
           >
-            <Icon name="mynaui:menu" class="w-5 h-5" />
+            <Icon name="mynaui:menu" class="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </UButton>
           <h2 class="text-lg font-semibold text-gray-800 dark:text-white/80">
             {{ $t(pageTitle) }}
@@ -63,12 +63,26 @@
         </div>
 
         <div class="flex items-center space-x-2 sm:space-x-4">
+          <!-- 暗黑模式切换按钮 -->
+          <UButton
+            variant="link"
+            color="neutral"
+            @click="toggleColorMode"
+            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            :title="$t('common.toggleTheme')"
+          >
+            <Icon
+              :name="colorMode.value === 'dark' ? 'mynaui:sun' : 'mynaui:moon'"
+              class="w-5 h-5 text-gray-600 dark:text-gray-300"
+            />
+          </UButton>
+
           <!-- 用户菜单 -->
           <div class="group relative">
             <UButton
               variant="link"
               color="neutral"
-              class="cursor-pointer flex items-center p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-50 transition-all duration-200"
+              class="cursor-pointer flex items-center p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
             >
               <Icon name="mynaui:user" class="w-4 h-4 sm:w-5 sm:h-5" />
               <Icon
@@ -79,22 +93,22 @@
 
             <!-- 下拉菜单 -->
             <div
-              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
+              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
             >
               <a
                 href="#"
-                class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded mx-1 sm:mx-2"
+                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
                 >个人资料</a
               >
               <a
                 href="#"
-                class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded mx-1 sm:mx-2"
+                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
                 >账户设置</a
               >
-              <hr class="my-1 sm:my-2 mx-1 sm:mx-2" />
+              <hr class="my-1 sm:my-2 mx-1 sm:mx-2 border-gray-200 dark:border-gray-600" />
               <a
                 href="#"
-                class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded mx-1 sm:mx-2"
+                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
                 >退出登录</a
               >
             </div>
@@ -121,6 +135,13 @@
   const sidebarCollapsed = ref(false);
   const toggleMobileSidebar = ref(false);
 
+  // 暗黑模式
+  const colorMode = useColorMode();
+
+  const toggleColorMode = () => {
+    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+  };
+
   // 菜单数据
   const menuItems = [
     {
@@ -142,6 +163,11 @@
       path: '/admin/tags',
       icon: 'mynaui:box',
       text: 'admin.menu.tags'
+    },
+    {
+      path: '/admin/roles',
+      icon: 'mynaui:shield',
+      text: 'admin.menu.roles'
     },
     {
       path: '/admin/users',
@@ -214,5 +240,18 @@
 
   .overflow-auto::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
+  }
+
+  /* 暗黑模式下的滚动条 */
+  .dark .overflow-auto::-webkit-scrollbar-track {
+    background: #374151;
+  }
+
+  .dark .overflow-auto::-webkit-scrollbar-thumb {
+    background: #6b7280;
+  }
+
+  .dark .overflow-auto::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
   }
 </style>

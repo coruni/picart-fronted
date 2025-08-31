@@ -1,7 +1,7 @@
 <template>
   <aside
     :class="[
-      'bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out dark:bg-gray-800 h-full',
+      'bg-white shadow-lg flex flex-col transition-all duration-300 ease-in-out dark:bg-gray-800 h-full relative',
       $attrs.class || ''
     ]"
   >
@@ -26,11 +26,11 @@
         variant="link"
         color="neutral"
         @click="handleToggle"
-        class="cursor-pointer absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white border border-gray-300 rounded-full items-center justify-center hover:bg-gray-50 transition-colors shadow-sm flex"
+        class="cursor-pointer absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm flex z-10"
       >
         <Icon
           :name="sidebarCollapsed ? 'mynaui:chevron-right' : 'mynaui:chevron-left'"
-          class="w-3 h-3 text-gray-600"
+          class="w-3 h-3 text-gray-600 dark:text-gray-300"
         />
       </UButton>
     </div>

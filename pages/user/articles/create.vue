@@ -87,11 +87,10 @@
                 :items="parentCategoriesOptions"
                 :placeholder="$t('form.parentCategory.placeholder')"
                 value-key="id"
+                option-attribute="name"
                 variant="soft"
                 class="w-full"
                 size="lg"
-                searchable
-                :search-placeholder="$t('form.parentCategory.searchPlaceholder')"
               />
             </UFormField>
             <UFormField name="category" v-if="state.parentCategory" class="flex-1">
@@ -100,11 +99,10 @@
                 :items="subCategoriesOptions"
                 :placeholder="$t('form.category.placeholder')"
                 value-key="id"
+                option-attribute="name"
                 variant="soft"
                 class="w-full"
                 size="lg"
-                searchable
-                :search-placeholder="$t('form.category.searchPlaceholder')"
               />
             </UFormField>
           </div>
@@ -117,12 +115,14 @@
                 size="lg"
                 class="w-full"
                 value-key="id"
+                option-attribute="name"
                 variant="soft"
                 multiple
-                create-item
-                searchable
-                :search-placeholder="$t('form.tag.searchPlaceholder')"
+                :search-input="{
+                  placeholder: $t('form.tag.searchPlaceholder')
+                }"
                 :placeholder="$t('form.tag.placeholder')"
+                :loading="isTagSearching"
                 @create="onCreate"
                 @update:searchTerm="
                   (query: string) => {
@@ -603,9 +603,11 @@
   const tagsOptions = ref<TagMenuItem[]>([]);
   const selectedTags = ref<TagMenuItem[]>([]); // 已选择的标签
   const tagSearchQuery = ref('');
+  const isTagSearching = ref(false); // 标签搜索加载状态
 
   // 搜索标签函数
   const searchTags = debounce(async (query: string = '') => {
+    isTagSearching.value = true;
     try {
       const { data: tagsData } = await tagControllerFindAll({
         composable: '$fetch',
@@ -614,9 +616,6 @@
           ...(query?.trim() && { name: query.trim() })
         }
       });
-
-      // 获取现有的临时标签
-      const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
 
       // 获取搜索结果中的真实标签
       const searchResultTags = tagsData?.data
@@ -628,20 +627,47 @@
           }))
         : [];
 
-      // 合并：临时标签 + 搜索结果中的真实标签 + 已选择的标签（去重）
-      const allTags = [...existingTempTags, ...selectedTags.value];
+      // 获取现有的临时标签（用户创建的）
+      const existingTempTags = tagsOptions.value.filter(t => t.flag === true);
 
-      // 添加搜索结果，避免重复
-      searchResultTags.forEach((newTag: TagMenuItem) => {
-        const exists = allTags.some(t => t.id === newTag.id || t.label === newTag.label);
-        if (!exists) {
-          allTags.push(newTag);
+      // 获取已选择的标签
+      const selectedTagIds = state.tagIds || [];
+      const selectedTagItems = tagsOptions.value.filter(
+        t => selectedTagIds.includes(t.id) || selectedTagIds.includes(t.value)
+      );
+
+      // 创建去重集合
+      const uniqueTags = new Map<string | number, TagMenuItem>();
+
+      // 1. 首先添加已选择的标签
+      selectedTagItems.forEach(tag => {
+        uniqueTags.set(tag.id, tag);
+      });
+
+      // 2. 添加临时标签（用户创建的）
+      existingTempTags.forEach(tag => {
+        uniqueTags.set(tag.id, tag);
+      });
+
+      // 3. 添加搜索结果，避免重复
+      searchResultTags.forEach(tag => {
+        // 检查是否已存在相同ID或相同名称的标签
+        const existsById = uniqueTags.has(tag.id);
+        const existsByName = Array.from(uniqueTags.values()).some(
+          t => t.label.toLowerCase() === tag.label.toLowerCase()
+        );
+
+        if (!existsById && !existsByName) {
+          uniqueTags.set(tag.id, tag);
         }
       });
 
-      tagsOptions.value = allTags;
+      // 转换为数组
+      tagsOptions.value = Array.from(uniqueTags.values());
     } catch (error) {
       console.error('搜索标签失败:', error);
+    } finally {
+      isTagSearching.value = false;
     }
   }, 500);
 

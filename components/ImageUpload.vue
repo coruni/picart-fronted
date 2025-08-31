@@ -1,5 +1,8 @@
 <template>
   <div class="space-y-4">
+    <!-- 隐藏的文件输入 -->
+    <input ref="fileInput" type="file" :accept="accept" class="hidden" @change="handleFileSelect" />
+
     <!-- 图片预览区域 -->
     <div v-if="modelValue && modelValue.trim()" class="space-y-3">
       <div class="flex items-center justify-between">
@@ -110,7 +113,10 @@
       </VueEasyLightbox>
 
       <!-- 图片预览卡片 -->
-      <div class="relative group cursor-pointer" @click="openLightbox">
+      <div
+        class="relative group cursor-pointer max-w-sm sm:max-w-md lg:max-w-lg mx-auto"
+        @click="openLightbox"
+      >
         <div
           class="aspect-[3/4] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
         >
@@ -120,7 +126,7 @@
             class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
             loading="lazy"
             format="webp"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 384px, (max-width: 1024px) 448px, 512px"
           />
         </div>
 
@@ -128,9 +134,7 @@
         <div
           class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 rounded-lg flex items-center justify-center"
         >
-          <div
-            class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex space-x-2"
-          >
+          <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <UButton
               variant="solid"
               color="neutral"
@@ -140,24 +144,15 @@
             >
               {{ t('common.button.change') }}
             </UButton>
-            <UButton
-              variant="solid"
-              color="primary"
-              size="sm"
-              icon="mynaui:search"
-              @click.stop="openLightbox"
-            >
-              {{ t('common.button.preview') }}
-            </UButton>
           </div>
         </div>
 
-        <!-- 放大镜图标提示 -->
+        <!-- 编辑图标提示 -->
         <div
           class="absolute top-2 right-2 flex items-center justify-center bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm"
         >
-          <Icon name="mynaui:search" class="w-3 h-3 mr-1" />
-          {{ t('common.button.preview') }}
+          <Icon name="mynaui:edit" class="w-3 h-3 mr-1" />
+          {{ t('common.button.change') }}
         </div>
       </div>
     </div>
@@ -172,14 +167,6 @@
       @dragleave.prevent="isDragOver = false"
       @click="triggerFileInput"
     >
-      <input
-        ref="fileInput"
-        type="file"
-        :accept="accept"
-        class="hidden"
-        @change="handleFileSelect"
-      />
-
       <!-- 加载遮罩 -->
       <div
         v-if="isUploading"

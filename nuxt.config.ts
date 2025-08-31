@@ -15,7 +15,8 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     '@nuxt/ui',
     'nuxt-easy-lightbox',
-    '@nuxtjs/seo'
+    '@nuxtjs/seo',
+    '@nuxtjs/color-mode'
   ],
 
   // 性能优化
@@ -50,6 +51,7 @@ export default defineNuxtConfig({
     disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/'],
     allow: ['/', '/article/', '/author/', '/category/', '/search'],
     sitemap: [
+      'https://www.kawax.org/sitemap_index.xml',
       'https://www.kawax.org/sitemap_articles.xml',
       'https://www.kawax.org/sitemap_authors.xml',
       'https://www.kawax.org/sitemap_categories.xml'
@@ -116,6 +118,14 @@ export default defineNuxtConfig({
   },
   features: {
     inlineStyles: false
+  },
+
+  // 暗黑模式配置
+  colorMode: {
+    preference: 'system', // 默认跟随系统
+    fallback: 'light', // 回退到浅色模式
+    classSuffix: '',
+    storageKey: 'nuxt-color-mode'
   },
 
   // i18n 国际化配置

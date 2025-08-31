@@ -52,7 +52,7 @@ export const createClientConfig: CreateClientConfig = config => {
               token = authTokenCookie.value || tokenCookie.value;
             }
           } catch (error) {
-            console.warn('Failed to get info from stores/cookies:', error);
+            // console.warn('Failed to get info from stores/cookies:', error);
           }
         } else {
           // SSR阶段：尝试从请求头获取cookie
@@ -76,17 +76,17 @@ export const createClientConfig: CreateClientConfig = config => {
               });
             }
           } catch (error) {
-            console.warn('SSR: Failed to read cookies from request headers:', error);
+            // console.warn('SSR: Failed to read cookies from request headers:', error);
           }
         }
 
         // 调试日志
-        console.log('onRequest - deviceId:', deviceId, 'token:', token ? '***' : null);
+        // console.log('onRequest - deviceId:', deviceId, 'token:', token ? '***' : null);
 
         // 更新请求headers
         await updateRequestHeaders(context, deviceId, token);
       } catch (error) {
-        console.error('Error in onRequest:', error);
+        // console.error('Error in onRequest:', error);
         // 即使出错也要继续，使用默认值
         await updateRequestHeaders(context, 'unknown-device', null);
       }
@@ -94,10 +94,10 @@ export const createClientConfig: CreateClientConfig = config => {
       return context;
     },
     onRequestError: context => {
-      console.error('Request Error:', context.error);
+      // console.error('Request Error:', context.error);
       // 500错误处理
       if (context.response && context.response.status === 500) {
-        console.error('Internal Server Error: Backend server encountered an error');
+        // console.error('Internal Server Error: Backend server encountered an error');
         // 可以在这里添加用户通知逻辑
         const toast = useToast();
         const { $i18n } = useNuxtApp();
@@ -150,13 +150,13 @@ export const createClientConfig: CreateClientConfig = config => {
 // 设置token到cookie的辅助函数
 export function setTokenToCookie(token: string): void {
   // 这个函数现在在插件中处理
-  console.log('setTokenToCookie called with:', token);
+  // console.log('setTokenToCookie called with:', token);
 }
 
 // 清除token cookie的辅助函数
 export function clearTokenCookie(): void {
   // 这个函数现在在插件中处理
-  console.log('clearTokenCookie called');
+  // console.log('clearTokenCookie called');
 }
 
 // 辅助函数：更新请求headers
@@ -263,7 +263,7 @@ export function clearAuthToken(userStore?: any): void {
       localStorage.removeItem('user');
       localStorage.removeItem('app');
     } catch (error) {
-      console.warn('Failed to clear token from localStorage:', error);
+      // console.warn('Failed to clear token from localStorage:', error);
     }
   }
 }

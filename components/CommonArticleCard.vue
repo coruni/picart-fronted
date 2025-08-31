@@ -91,6 +91,7 @@
   });
 
   const article = props.data;
+  const { t } = useI18n();
 
   // 检查用户是否有文章管理权限
   const hasManagePermission = computed(() => {
@@ -122,52 +123,25 @@
     });
   });
 
+  import {
+    getStatusIcon as getStatusIconUtil,
+    getStatusColor as getStatusColorUtil,
+    getStatusText as getStatusTextUtil
+  } from '~/utils/article-status';
+
   // 获取状态图标
   const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'DRAFT':
-        return 'mynaui:file-text';
-      case 'PENDING':
-        return 'mynaui:alarm';
-      case 'REJECTED':
-        return 'mynaui:x-circle';
-      case 'ARCHIVED':
-        return 'mynaui:archive';
-      default:
-        return 'mynaui:info-circle';
-    }
+    return getStatusIconUtil(status);
   };
 
   // 获取状态颜色
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'DRAFT':
-        return 'text-gray-500';
-      case 'PENDING':
-        return 'text-yellow-500';
-      case 'REJECTED':
-        return 'text-red-500';
-      case 'ARCHIVED':
-        return 'text-gray-400';
-      default:
-        return 'text-gray-500';
-    }
+    return getStatusColorUtil(status);
   };
 
   // 获取状态文本
   const getStatusText = (status: string) => {
-    switch (status) {
-      case 'DRAFT':
-        return '草稿';
-      case 'PENDING':
-        return '待审核';
-      case 'REJECTED':
-        return '已拒绝';
-      case 'ARCHIVED':
-        return '已归档';
-      default:
-        return status;
-    }
+    return getStatusTextUtil(status, t);
   };
 </script>
 

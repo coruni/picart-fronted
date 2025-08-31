@@ -27,11 +27,22 @@ export default defineSitemapEventHandler(async () => {
 
     // 处理第一页数据
     firstPage.data.data.forEach(article => {
-      urls.push({
-        loc: `/article/${article.id}`,
-        lastmod: article.updatedAt || article.createdAt || new Date().toISOString(),
-        changefreq: 'weekly',
-        priority: 0.8
+      // 添加多语言URL
+      const locales = ['', '/en', '/ja'];
+      locales.forEach(locale => {
+        urls.push({
+          loc: `${locale}/article/${article.id}`,
+          lastmod: article.updatedAt || article.createdAt || new Date().toISOString(),
+          images:
+            article.images?.length > 0
+              ? article.images.map(image => ({
+                  loc: image,
+                  title: '文章图片'
+                }))
+              : undefined,
+          changefreq: 'weekly',
+          priority: 0.8
+        });
       });
     });
 

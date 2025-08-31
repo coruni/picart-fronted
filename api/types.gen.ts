@@ -760,8 +760,10 @@ export type RoleControllerFindAllResponses = {
       data: Array<{
         id: number;
         name: string;
-        displayName?: string;
+        displayName: unknown;
         description: string;
+        isActive: boolean;
+        isSystem: boolean;
         permissions: Array<{
           id: number;
           name: string;
@@ -778,7 +780,17 @@ export type RoleControllerFindAllResponse =
   RoleControllerFindAllResponses[keyof RoleControllerFindAllResponses];
 
 export type RoleControllerCreateData = {
-  body?: CreateRoleDto;
+  body?: {
+    /**
+     * 名称
+     */
+    name: string;
+    displayName: string;
+    description?: string;
+    permissionIds: Array<number>;
+    isActive: boolean;
+    isSystem: boolean;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -794,7 +806,9 @@ export type RoleControllerCreateResponses = {
   /**
    * 创建成功
    */
-  201: Role;
+  201: {
+    [key: string]: unknown;
+  };
 };
 
 export type RoleControllerCreateResponse =
@@ -847,8 +861,10 @@ export type RoleControllerFindOneResponses = {
     data: {
       id: number;
       name: string;
-      displayName?: string;
+      displayName: unknown;
       description: string;
+      isActive: boolean;
+      isSystem: boolean;
       permissions: Array<{
         id: number;
         name: string;
@@ -864,7 +880,14 @@ export type RoleControllerFindOneResponse =
   RoleControllerFindOneResponses[keyof RoleControllerFindOneResponses];
 
 export type RoleControllerUpdateData = {
-  body?: UpdateRoleDto;
+  body?: {
+    name?: string;
+    displayName?: string;
+    description?: string;
+    permissionIds?: Array<number>;
+    isActive?: boolean;
+    isSystem?: boolean;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -882,11 +905,184 @@ export type RoleControllerUpdateResponses = {
   /**
    * 更新成功
    */
-  200: Role;
+  200: {
+    [key: string]: unknown;
+  };
 };
 
 export type RoleControllerUpdateResponse =
   RoleControllerUpdateResponses[keyof RoleControllerUpdateResponses];
+
+export type RoleControllerFindWithPaginationData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: {
+    /**
+     * 页码
+     */
+    page?: number;
+    /**
+     * 每页数量
+     */
+    limit?: number;
+    name?: string;
+    isActive?: boolean;
+  };
+  url: '/role/list';
+};
+
+export type RoleControllerFindWithPaginationResponses = {
+  /**
+   * 获取成功
+   */
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        name: string;
+        displayName: unknown;
+        description: string;
+        isActive: boolean;
+        isSystem: boolean;
+        permissions: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type RoleControllerFindWithPaginationResponse =
+  RoleControllerFindWithPaginationResponses[keyof RoleControllerFindWithPaginationResponses];
+
+export type RoleControllerGetActiveRolesData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/role/active';
+};
+
+export type RoleControllerGetActiveRolesResponses = {
+  /**
+   * 获取成功
+   */
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        name: string;
+        displayName: unknown;
+        description: string;
+        isActive: boolean;
+        isSystem: boolean;
+        permissions: Array<{
+          id: number;
+          name: string;
+          description: string;
+        }>;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+    };
+  };
+};
+
+export type RoleControllerGetActiveRolesResponse =
+  RoleControllerGetActiveRolesResponses[keyof RoleControllerGetActiveRolesResponses];
+
+export type RoleControllerAssignPermissionsData = {
+  body: {
+    [key: string]: unknown;
+  };
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/role/{id}/permissions';
+};
+
+export type RoleControllerAssignPermissionsResponses = {
+  /**
+   * 分配成功
+   */
+  200: unknown;
+};
+
+export type RoleControllerToggleStatusData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/role/{id}/status';
+};
+
+export type RoleControllerToggleStatusResponses = {
+  /**
+   * 状态更新成功
+   */
+  200: unknown;
+};
+
+export type RoleControllerCopyRoleData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/role/{id}/copy';
+};
+
+export type RoleControllerCopyRoleResponses = {
+  /**
+   * 复制成功
+   */
+  200: unknown;
+};
 
 export type ConfigControllerFindAllData = {
   body?: never;
@@ -4399,14 +4595,26 @@ export type PermissionControllerFindAllResponses = {
   /**
    * 获取成功
    */
-  200: Array<Permission>;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        name: string;
+        description: string;
+      }>;
+    };
+  };
 };
 
 export type PermissionControllerFindAllResponse =
   PermissionControllerFindAllResponses[keyof PermissionControllerFindAllResponses];
 
 export type PermissionControllerCreateData = {
-  body?: CreatePermissionDto;
+  body: {
+    [key: string]: unknown;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -4437,7 +4645,9 @@ export type PermissionControllerCreateResponses = {
   /**
    * 创建成功
    */
-  201: Permission;
+  201: {
+    [key: string]: unknown;
+  };
 };
 
 export type PermissionControllerCreateResponse =
@@ -4514,14 +4724,18 @@ export type PermissionControllerFindOneResponses = {
   /**
    * 获取成功
    */
-  200: Permission;
+  200: {
+    [key: string]: unknown;
+  };
 };
 
 export type PermissionControllerFindOneResponse =
   PermissionControllerFindOneResponses[keyof PermissionControllerFindOneResponses];
 
 export type PermissionControllerUpdateData = {
-  body?: UpdatePermissionDto;
+  body: {
+    [key: string]: unknown;
+  };
   headers?: {
     Authorization?: string;
     'Device-Id'?: string;
@@ -4558,7 +4772,9 @@ export type PermissionControllerUpdateResponses = {
   /**
    * 更新成功
    */
-  200: Permission;
+  200: {
+    [key: string]: unknown;
+  };
 };
 
 export type PermissionControllerUpdateResponse =

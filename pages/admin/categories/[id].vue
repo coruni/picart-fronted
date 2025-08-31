@@ -226,7 +226,7 @@
       });
     };
 
-    flattenCategories(allCategories);
+    flattenCategories(allCategories as Category[]);
     return flattened;
   });
 
@@ -498,7 +498,7 @@
         path: { id: id.value },
         body: {
           name: body.name,
-          description: body.description,
+          description: body.description || undefined,
           sort: body.sort,
           parentId: body.parentId ?? undefined,
           avatar: body.avatar,

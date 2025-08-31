@@ -170,10 +170,10 @@
       header: t('banners.sortOrder')
     },
     {
-      accessorKey: 'isActive',
+      accessorKey: 'status',
       header: t('banners.status'),
       cell: ({ row }) => {
-        const isActive = row.getValue('isActive');
+        const isActive = row.getValue('status') === 'active';
         return h(
           UBadge,
           {

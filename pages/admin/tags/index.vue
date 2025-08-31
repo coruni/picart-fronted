@@ -35,7 +35,7 @@
       </template>
     </UCollapsible>
     <div class="flex justify-between items-center mb-4">
-      <h1 class="text-2xl font-bold">{{ t('admin.tags.title') }}</h1>
+      <h1 class="text-2xl font-bold">{{ t('admin.menu.tags') }}</h1>
       <UButton color="primary" @click="$router.push('/admin/tags/create')">
         <template #leading>
           <span class="mynaui:plus" />
