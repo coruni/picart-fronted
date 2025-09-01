@@ -10,12 +10,15 @@
     >
       <Icon name="mynaui:bell" class="w-5 h-5" />
       <!-- 未读消息数量徽章 -->
-      <span
+      <UBadge
         v-if="unreadCount > 0"
-        class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium"
+        color="error"
+        variant="solid"
+        size="xs"
+        class="absolute -top-1 -right-1"
       >
         {{ unreadCount > 99 ? '99+' : unreadCount }}
-      </span>
+      </UBadge>
     </UButton>
 
     <!-- 消息面板 -->
@@ -62,60 +65,39 @@
           <div
             v-for="message in messages"
             :key="message.id"
-            class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer group"
+            class="p-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer group flex items-center justify-between"
             :class="{ 'bg-blue-50 dark:bg-blue-900/20': !message.isRead }"
             @click="handleMessageClick(message)"
           >
-            <div class="flex items-start space-x-3">
-              <!-- 消息图标 -->
-              <div class="flex-shrink-0">
-                <div
-                  class="w-8 h-8 rounded-full flex items-center justify-center"
-                  :class="getMessageIconClass(message.type || '')"
-                >
-                  <Icon :name="getMessageIcon(message.type || '')" class="w-4 h-4 text-white" />
-                </div>
-              </div>
-
-              <!-- 消息内容 -->
+            <div class="flex items-center flex-1 min-w-0">
               <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between">
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white truncate">
-                    {{ message.title || $t('message.noTitle') }}
-                  </h4>
-                  <div class="flex items-center space-x-2">
-                    <span class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ message.createdAt ? formatTime(message.createdAt) : '' }}
-                    </span>
-                    <UButton
-                      v-if="!message.isRead"
-                      @click.stop="handleMarkAsRead(message.id || 0)"
-                      variant="ghost"
-                      size="xs"
-                      class="text-xs"
-                    >
-                      {{ $t('message.markRead') }}
-                    </UButton>
-                  </div>
+                <div class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  {{ message.title || $t('message.noTitle') }}
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">
-                  {{ message.content || $t('message.noContent') }}
-                </p>
-                <div class="flex items-center justify-between mt-2">
-                  <span class="text-xs text-gray-500 dark:text-gray-400">
-                    {{ message.type ? getMessageTypeLabel(message.type) : '' }}
-                  </span>
-                  <UButton
-                    @click.stop="handleDeleteMessage(message.id || 0)"
-                    variant="ghost"
-                    size="xs"
-                    color="error"
-                    class="text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Icon name="mynaui:trash" class="w-3 h-3" />
-                  </UButton>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ message.createdAt ? formatTime(message.createdAt) : '' }}
                 </div>
               </div>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0">
+              <UButton
+                v-if="!message.isRead"
+                @click.stop="handleMarkAsRead(message.id || 0)"
+                variant="ghost"
+                size="xs"
+                class="text-xs"
+              >
+                {{ $t('message.markRead') }}
+              </UButton>
+              <UButton
+                @click.stop="handleDeleteMessage(message.id || 0)"
+                variant="ghost"
+                size="xs"
+                color="error"
+                class="text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Icon name="mynaui:trash" class="w-3 h-3" />
+              </UButton>
             </div>
           </div>
         </div>
@@ -286,11 +268,4 @@
   });
 </script>
 
-<style scoped>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+<style scoped></style>

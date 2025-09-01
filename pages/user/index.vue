@@ -59,7 +59,7 @@
                   </div>
                   <div class="text-center">
                     <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.wallet || 0 }}
+                      {{ userProfile?.data?.wallet.toFixed(2) || 0 }}
                     </div>
                     <div class="text-xs text-gray-500 dark:text-gray-400">
                       {{ $t('user.wallet') }}

@@ -2516,6 +2516,27 @@ export type UserControllerPasswordResetResponses = {
 export type UserControllerPasswordResetResponse =
   UserControllerPasswordResetResponses[keyof UserControllerPasswordResetResponses];
 
+export type GetUserConfigData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/user/config';
+};
+
+export type GetUserConfigResponses = {
+  200: {
+    [key: string]: unknown;
+  };
+};
+
+export type GetUserConfigResponse = GetUserConfigResponses[keyof GetUserConfigResponses];
+
 export type ArticleControllerFindAllData = {
   body?: never;
   headers?: {
@@ -5657,8 +5678,10 @@ export type MessageControllerFindAllResponses = {
         type?: string;
         isRead?: boolean;
         isBroadcast?: boolean;
-        title?: unknown;
-        metadata?: unknown;
+        title?: string;
+        metadata?: {
+          [key: string]: unknown;
+        };
         createdAt?: string;
         updatedAt?: string;
         sender?: {
@@ -5756,8 +5779,33 @@ export type MessageControllerCreateData = {
 };
 
 export type MessageControllerCreateResponses = {
-  201: unknown;
+  201: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      message: string;
+      data: Array<{
+        id?: number;
+        senderId?: number;
+        receiverId?: number;
+        content?: string;
+        type?: string;
+        isRead?: boolean;
+        isBroadcast?: boolean;
+        title?: string;
+        metadata?: {
+          [key: string]: unknown;
+        };
+        createdAt?: string;
+        updatedAt?: string;
+      }>;
+    };
+  };
 };
+
+export type MessageControllerCreateResponse =
+  MessageControllerCreateResponses[keyof MessageControllerCreateResponses];
 
 export type MessageControllerSearchData = {
   body?: never;
@@ -5850,8 +5898,103 @@ export type MessageControllerFindOneData = {
 };
 
 export type MessageControllerFindOneResponses = {
-  200: unknown;
+  200: {
+    code: number;
+    message: string;
+    data: {
+      id: number;
+      senderId: number;
+      receiverId: number;
+      content: string;
+      type: string;
+      isRead: boolean;
+      isBroadcast: boolean;
+      title: string;
+      metadata: {
+        [key: string]: unknown;
+      };
+      createdAt: string;
+      updatedAt: string;
+      sender: {
+        id: number;
+        username: string;
+        nickname: string;
+        password: string;
+        email: string;
+        phone: unknown;
+        status: string;
+        banned: unknown;
+        banReason: unknown;
+        avatar: string;
+        description: string;
+        address: unknown;
+        gender: string;
+        birthDate: unknown;
+        articleCount: number;
+        followerCount: number;
+        followingCount: number;
+        level: number;
+        experience: number;
+        score: number;
+        wallet: number;
+        membershipLevel: number;
+        membershipLevelName: string;
+        membershipStatus: string;
+        membershipStartDate: string;
+        membershipEndDate: string;
+        lastLoginAt: string;
+        lastActiveAt: unknown;
+        refreshToken: unknown;
+        inviterId: unknown;
+        inviteCode: unknown;
+        inviteEarnings: string;
+        inviteCount: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+      receiver: {
+        id: number;
+        username: string;
+        nickname: string;
+        password: string;
+        email: string;
+        phone: unknown;
+        status: string;
+        banned: unknown;
+        banReason: unknown;
+        avatar: string;
+        description: string;
+        address: unknown;
+        gender: string;
+        birthDate: unknown;
+        articleCount: number;
+        followerCount: number;
+        followingCount: number;
+        level: number;
+        experience: number;
+        score: number;
+        wallet: number;
+        membershipLevel: number;
+        membershipLevelName: string;
+        membershipStatus: string;
+        membershipStartDate: string;
+        membershipEndDate: string;
+        lastLoginAt: string;
+        lastActiveAt: unknown;
+        refreshToken: unknown;
+        inviterId: unknown;
+        inviteCode: unknown;
+        inviteEarnings: string;
+        inviteCount: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+    };
+  };
 };
+
+export type MessageControllerFindOneResponse =
+  MessageControllerFindOneResponses[keyof MessageControllerFindOneResponses];
 
 export type MessageControllerUpdateData = {
   body: {
@@ -5876,6 +6019,37 @@ export type MessageControllerUpdateData = {
 export type MessageControllerUpdateResponses = {
   200: unknown;
 };
+
+export type MessageControllerGetUnreadCountData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/message/unread/count';
+};
+
+export type MessageControllerGetUnreadCountResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      success: boolean;
+      data: {
+        personal: number;
+        broadcast: number;
+        total: number;
+      };
+    };
+  };
+};
+
+export type MessageControllerGetUnreadCountResponse =
+  MessageControllerGetUnreadCountResponses[keyof MessageControllerGetUnreadCountResponses];
 
 export type MessageControllerMarkAsReadData = {
   body?: never;
@@ -5935,54 +6109,6 @@ export type MessageControllerBatchOperationData = {
 
 export type MessageControllerBatchOperationResponses = {
   201: unknown;
-};
-
-export type MessageControllerGetUnreadCountData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/message/unread/count';
-};
-
-export type MessageControllerGetUnreadCountResponses = {
-  200: {
-    code: number;
-    message: string;
-    data: {
-      success: boolean;
-      data: {
-        personal: number;
-        broadcast: number;
-        total: number;
-      };
-    };
-  };
-};
-
-export type MessageControllerGetUnreadCountResponse =
-  MessageControllerGetUnreadCountResponses[keyof MessageControllerGetUnreadCountResponses];
-
-export type MessageControllerGetMessageStatsData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path?: never;
-  query?: never;
-  url: '/message/stats';
-};
-
-export type MessageControllerGetMessageStatsResponses = {
-  200: unknown;
 };
 
 export type BannersControllerFindAllData = {

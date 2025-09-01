@@ -219,7 +219,8 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     minify: true,
     // 跨平台兼容性配置
-    preset: process.env.NITRO_PRESET || 'node_cluster'
+    preset: process.env.NITRO_PRESET || 'node_cluster',
+    logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error'
     // prerender: {
     //   crawlLinks: true,
     //   routes: ['/']

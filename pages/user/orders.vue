@@ -197,147 +197,152 @@
         {{ $t('common.loading.noMore') }}
       </div>
     </div>
+
+    <UModal
+      v-model:open="isDetailModalOpen"
+      :title="$t('user.orders.orderDetail')"
+      :ui="{
+        close: 'cursor-pointer'
+      }"
+    >
+      <template #body>
+        <div v-if="selectedOrder" class="space-y-4">
+          <!-- 订单基本信息 -->
+          <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >{{ $t('user.orders.orderNumber') }}:</span
+                >
+                <span class="ml-2 font-mono">{{
+                  selectedOrder.orderNo || selectedOrder.id?.toString() || ''
+                }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >{{ $t('user.orders.status') }}:</span
+                >
+                <span
+                  :class="[
+                    'ml-2 px-2 py-1 rounded text-xs',
+                    getStatusColor(selectedOrder.status || '')
+                  ]"
+                >
+                  {{ getStatusText(selectedOrder.status || '') }}
+                </span>
+              </div>
+              <div>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >{{ $t('user.orders.createTime') }}:</span
+                >
+                <span class="ml-2">{{ formatDate(selectedOrder.createdAt || '') }}</span>
+              </div>
+              <div>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >{{ $t('user.orders.amount') }}:</span
+                >
+                <span class="ml-2 font-bold">¥{{ formatPrice(selectedOrder.amount) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 商品详情 -->
+          <div>
+            <h4 class="font-medium text-gray-900 dark:text-white mb-3">
+              {{ $t('user.orders.productInfo') }}
+            </h4>
+            <div class="flex items-start space-x-3">
+              <div v-if="selectedOrder.articleId">
+                <NuxtImg
+                  src="/placeholder.svg"
+                  alt="Article"
+                  class="w-20 h-20 object-cover rounded-md"
+                  loading="lazy"
+                  format="webp"
+                  sizes="80px"
+                />
+              </div>
+              <div class="flex-1">
+                <h5 class="font-medium text-gray-900 dark:text-white">
+                  {{ getOrderTitle(selectedOrder) }}
+                </h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  {{ getOrderDescription(selectedOrder) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </UModal>
+
+    <!-- 取消订单确认对话框 -->
+    <UModal
+      v-model:open="isCancelModalOpen"
+      :title="$t('user.orders.confirmCancel')"
+      :ui="{
+        close: 'cursor-pointer'
+      }"
+    >
+      <template #body>
+        <div class="space-y-4">
+          <p class="text-gray-600 dark:text-gray-400">
+            {{ $t('user.orders.confirmCancelMessage') }}
+          </p>
+          <div v-if="orderToCancel" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+            <div class="flex items-center space-x-3">
+              <div v-if="orderToCancel.articleId">
+                <NuxtImg
+                  src="/placeholder.svg"
+                  alt="Article"
+                  class="w-12 h-12 object-cover rounded"
+                  loading="lazy"
+                  format="webp"
+                  sizes="48px"
+                />
+              </div>
+              <div class="flex-1">
+                <h5 class="font-medium text-gray-900 dark:text-white">
+                  {{ getOrderTitle(orderToCancel) }}
+                </h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  ¥{{ formatPrice(orderToCancel.amount) }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex space-x-3 pt-4">
+            <UButton
+              @click="confirmCancelOrder"
+              :loading="cancelling"
+              color="error"
+              class="flex-1 cursor-pointer text-center"
+            >
+              {{
+                cancelling ? $t('user.orders.cancelling') : $t('user.orders.confirmCancelButton')
+              }}
+            </UButton>
+            <UButton
+              @click="isCancelModalOpen = false"
+              variant="outline"
+              class="flex-1 cursor-pointer text-center"
+            >
+              {{ $t('common.cancel') }}
+            </UButton>
+          </div>
+        </div>
+      </template>
+    </UModal>
+
+    <!-- 支付弹窗 -->
+    <PaymentModal
+      v-model="showPaymentModal"
+      :order-info="paymentOrderInfo"
+      :user-wallet="userWallet"
+      @payment-success="handlePaymentSuccess"
+      @payment-failed="handlePaymentFailed"
+    />
   </div>
-
-  <!-- 订单详情模态框 -->
-  <UModal
-    v-model:open="isDetailModalOpen"
-    :title="$t('user.orders.orderDetail')"
-    :ui="{
-      close: 'cursor-pointer'
-    }"
-  >
-    <template #body>
-      <div v-if="selectedOrder" class="space-y-4">
-        <!-- 订单基本信息 -->
-        <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span class="text-gray-500 dark:text-gray-400"
-                >{{ $t('user.orders.orderNumber') }}:</span
-              >
-              <span class="ml-2 font-mono">{{
-                selectedOrder.orderNo || selectedOrder.id?.toString() || ''
-              }}</span>
-            </div>
-            <div>
-              <span class="text-gray-500 dark:text-gray-400">{{ $t('user.orders.status') }}:</span>
-              <span
-                :class="[
-                  'ml-2 px-2 py-1 rounded text-xs',
-                  getStatusColor(selectedOrder.status || '')
-                ]"
-              >
-                {{ getStatusText(selectedOrder.status || '') }}
-              </span>
-            </div>
-            <div>
-              <span class="text-gray-500 dark:text-gray-400"
-                >{{ $t('user.orders.createTime') }}:</span
-              >
-              <span class="ml-2">{{ formatDate(selectedOrder.createdAt || '') }}</span>
-            </div>
-            <div>
-              <span class="text-gray-500 dark:text-gray-400">{{ $t('user.orders.amount') }}:</span>
-              <span class="ml-2 font-bold">¥{{ formatPrice(selectedOrder.amount) }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 商品详情 -->
-        <div>
-          <h4 class="font-medium text-gray-900 dark:text-white mb-3">
-            {{ $t('user.orders.productInfo') }}
-          </h4>
-          <div class="flex items-start space-x-3">
-            <div v-if="selectedOrder.articleId">
-              <NuxtImg
-                src="/placeholder.svg"
-                alt="Article"
-                class="w-20 h-20 object-cover rounded-md"
-                loading="lazy"
-                format="webp"
-                sizes="80px"
-              />
-            </div>
-            <div class="flex-1">
-              <h5 class="font-medium text-gray-900 dark:text-white">
-                {{ getOrderTitle(selectedOrder) }}
-              </h5>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {{ getOrderDescription(selectedOrder) }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </UModal>
-
-  <!-- 取消订单确认对话框 -->
-  <UModal
-    v-model:open="isCancelModalOpen"
-    :title="$t('user.orders.confirmCancel')"
-    :ui="{
-      close: 'cursor-pointer'
-    }"
-  >
-    <template #body>
-      <div class="space-y-4">
-        <p class="text-gray-600 dark:text-gray-400">
-          {{ $t('user.orders.confirmCancelMessage') }}
-        </p>
-        <div v-if="orderToCancel" class="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
-          <div class="flex items-center space-x-3">
-            <div v-if="orderToCancel.articleId">
-              <NuxtImg
-                src="/placeholder.svg"
-                alt="Article"
-                class="w-12 h-12 object-cover rounded"
-                loading="lazy"
-                format="webp"
-                sizes="48px"
-              />
-            </div>
-            <div class="flex-1">
-              <h5 class="font-medium text-gray-900 dark:text-white">
-                {{ getOrderTitle(orderToCancel) }}
-              </h5>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                ¥{{ formatPrice(orderToCancel.amount) }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="flex space-x-3 pt-4">
-          <UButton
-            @click="confirmCancelOrder"
-            :loading="cancelling"
-            color="error"
-            class="flex-1 cursor-pointer text-center"
-          >
-            {{ cancelling ? $t('user.orders.cancelling') : $t('user.orders.confirmCancelButton') }}
-          </UButton>
-          <UButton
-            @click="isCancelModalOpen = false"
-            variant="outline"
-            class="flex-1 cursor-pointer text-center"
-          >
-            {{ $t('common.cancel') }}
-          </UButton>
-        </div>
-      </div>
-    </template>
-  </UModal>
-
-  <!-- 支付弹窗 -->
-  <PaymentModal
-    v-model="showPaymentModal"
-    :order-info="paymentOrderInfo"
-    :user-wallet="userWallet"
-    @payment-success="handlePaymentSuccess"
-    @payment-failed="handlePaymentFailed"
-  />
 </template>
 
 <script lang="ts" setup>
@@ -375,7 +380,7 @@
 
   // 订单类型选项 - 修复：使用 value 属性而不是 id
   const orderTypes = computed<TabsItem[]>(() => [
-    { label: t('user.orders.type.all'), value: 'ALL', icon: 'mynaui:grid' },
+    { label: t('user.orders.all'), value: 'ALL', icon: 'mynaui:grid' },
     { label: t('user.orders.product'), value: 'PRODUCT', icon: 'mynaui:box' },
     {
       label: t('user.orders.membership'),

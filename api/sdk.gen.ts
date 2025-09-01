@@ -73,6 +73,8 @@ import type {
   UserControllerSendVerificationCodeResponse,
   UserControllerPasswordResetData,
   UserControllerPasswordResetResponse,
+  GetUserConfigData,
+  GetUserConfigResponse,
   ArticleControllerFindAllData,
   ArticleControllerFindAllResponse,
   ArticleControllerCreateData,
@@ -161,16 +163,17 @@ import type {
   MessageControllerFindAllData,
   MessageControllerFindAllResponse,
   MessageControllerCreateData,
+  MessageControllerCreateResponse,
   MessageControllerSearchData,
   MessageControllerRemoveData,
   MessageControllerFindOneData,
+  MessageControllerFindOneResponse,
   MessageControllerUpdateData,
+  MessageControllerGetUnreadCountData,
+  MessageControllerGetUnreadCountResponse,
   MessageControllerMarkAsReadData,
   MessageControllerMarkAllAsReadData,
   MessageControllerBatchOperationData,
-  MessageControllerGetUnreadCountData,
-  MessageControllerGetUnreadCountResponse,
-  MessageControllerGetMessageStatsData,
   BannersControllerFindAllData,
   BannersControllerFindAllResponse,
   BannersControllerCreateData,
@@ -1102,6 +1105,26 @@ export const userControllerPasswordReset = <
       'Content-Type': 'application/x-www-form-urlencoded',
       ...options.headers
     }
+  });
+};
+
+/**
+ * 获取用户配置
+ */
+export const getUserConfig = <
+  TComposable extends Composable,
+  DefaultT extends GetUserConfigResponse = GetUserConfigResponse
+>(
+  options: Options<TComposable, GetUserConfigData, GetUserConfigResponse, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    GetUserConfigResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/user/config',
+    ...options
   });
 };
 
@@ -2384,25 +2407,36 @@ export const messageControllerFindAll = <
 /**
  * 创建消息（支持全员、部分、个人通知）
  */
-export const messageControllerCreate = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, MessageControllerCreateData, unknown, DefaultT>
+export const messageControllerCreate = <
+  TComposable extends Composable,
+  DefaultT extends MessageControllerCreateResponse = MessageControllerCreateResponse
+>(
+  options: Options<
+    TComposable,
+    MessageControllerCreateData,
+    MessageControllerCreateResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      security: [
-        {
-          scheme: 'bearer',
-          type: 'http'
-        }
-      ],
-      url: '/message',
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
+  return (options.client ?? _heyApiClient).post<
+    TComposable,
+    MessageControllerCreateResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
       }
+    ],
+    url: '/message',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
     }
-  );
+  });
 };
 
 /**
@@ -2449,10 +2483,23 @@ export const messageControllerRemove = <TComposable extends Composable, DefaultT
 /**
  * 获取单条消息
  */
-export const messageControllerFindOne = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, MessageControllerFindOneData, unknown, DefaultT>
+export const messageControllerFindOne = <
+  TComposable extends Composable,
+  DefaultT extends MessageControllerFindOneResponse = MessageControllerFindOneResponse
+>(
+  options: Options<
+    TComposable,
+    MessageControllerFindOneData,
+    MessageControllerFindOneResponse,
+    DefaultT
+  >
 ) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    MessageControllerFindOneResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
     security: [
       {
         scheme: 'bearer',
@@ -2488,6 +2535,37 @@ export const messageControllerUpdate = <TComposable extends Composable, DefaultT
       'Content-Type': 'application/json',
       ...options.headers
     }
+  });
+};
+
+/**
+ * 获取未读消息数量
+ */
+export const messageControllerGetUnreadCount = <
+  TComposable extends Composable,
+  DefaultT extends MessageControllerGetUnreadCountResponse = MessageControllerGetUnreadCountResponse
+>(
+  options: Options<
+    TComposable,
+    MessageControllerGetUnreadCountData,
+    MessageControllerGetUnreadCountResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    MessageControllerGetUnreadCountResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    security: [
+      {
+        scheme: 'bearer',
+        type: 'http'
+      }
+    ],
+    url: '/message/unread/count',
+    ...options
   });
 };
 
@@ -2563,58 +2641,6 @@ export const messageControllerBatchOperation = <
       }
     }
   );
-};
-
-/**
- * 获取未读消息数量
- */
-export const messageControllerGetUnreadCount = <
-  TComposable extends Composable,
-  DefaultT extends MessageControllerGetUnreadCountResponse = MessageControllerGetUnreadCountResponse
->(
-  options: Options<
-    TComposable,
-    MessageControllerGetUnreadCountData,
-    MessageControllerGetUnreadCountResponse,
-    DefaultT
-  >
-) => {
-  return (options.client ?? _heyApiClient).get<
-    TComposable,
-    MessageControllerGetUnreadCountResponse | DefaultT,
-    unknown,
-    DefaultT
-  >({
-    security: [
-      {
-        scheme: 'bearer',
-        type: 'http'
-      }
-    ],
-    url: '/message/unread/count',
-    ...options
-  });
-};
-
-/**
- * 获取消息统计信息
- */
-export const messageControllerGetMessageStats = <
-  TComposable extends Composable,
-  DefaultT = undefined
->(
-  options: Options<TComposable, MessageControllerGetMessageStatsData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).get<TComposable, unknown | DefaultT, unknown, DefaultT>({
-    security: [
-      {
-        scheme: 'bearer',
-        type: 'http'
-      }
-    ],
-    url: '/message/stats',
-    ...options
-  });
 };
 
 /**

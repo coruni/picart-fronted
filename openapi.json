@@ -5470,6 +5470,71 @@
         "security": []
       }
     },
+    "/user/config": {
+      "get": {
+        "summary": "获取用户配置",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/article": {
       "get": {
         "summary": "获取文章列表",
@@ -14551,142 +14616,6 @@
       }
     },
     "/message": {
-      "post": {
-        "summary": "创建消息（支持全员、部分、个人通知）",
-        "deprecated": false,
-        "description": "",
-        "operationId": "MessageController_create",
-        "tags": [
-          "信息管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "senderId": {
-                    "type": "number"
-                  },
-                  "receiverId": {
-                    "type": "number",
-                    "description": "单发 接收者id"
-                  },
-                  "receiverIds": {
-                    "type": "array",
-                    "items": {
-                      "type": "number"
-                    },
-                    "description": "批量发送"
-                  },
-                  "content": {
-                    "type": "string",
-                    "description": "内容"
-                  },
-                  "title": {
-                    "type": "string",
-                    "description": "标题"
-                  },
-                  "type": {
-                    "type": "string",
-                    "enum": [
-                      "private",
-                      "system",
-                      "notification"
-                    ]
-                  },
-                  "isBroadcast": {
-                    "type": "boolean",
-                    "description": "是否广播"
-                  },
-                  "metadata": {
-                    "nullable": true,
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "integer"
-                      },
-                      {
-                        "type": "boolean"
-                      },
-                      {
-                        "type": "array"
-                      },
-                      {
-                        "type": "object"
-                      },
-                      {
-                        "type": "number"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "senderId",
-                  "content",
-                  "type"
-                ]
-              },
-              "examples": {}
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
       "get": {
         "summary": "获取当前用户所有消息（含全员通知）",
         "deprecated": false,
@@ -14804,10 +14733,11 @@
                                 "type": "boolean"
                               },
                               "title": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "metadata": {
-                                "type": "null"
+                                "type": "object",
+                                "properties": {}
                               },
                               "createdAt": {
                                 "type": "string"
@@ -14979,6 +14909,220 @@
                       "required": [
                         "data",
                         "meta"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "创建消息（支持全员、部分、个人通知）",
+        "deprecated": false,
+        "description": "",
+        "operationId": "MessageController_create",
+        "tags": [
+          "信息管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "senderId": {
+                    "type": "number"
+                  },
+                  "receiverId": {
+                    "type": "number",
+                    "description": "单发 接收者id"
+                  },
+                  "receiverIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "批量发送"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "内容"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "标题"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "private",
+                      "system",
+                      "notification"
+                    ]
+                  },
+                  "isBroadcast": {
+                    "type": "boolean",
+                    "description": "是否广播"
+                  },
+                  "metadata": {
+                    "nullable": true,
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "array"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "senderId",
+                  "content",
+                  "type"
+                ]
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "senderId": {
+                                "type": "integer"
+                              },
+                              "receiverId": {
+                                "type": "integer"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "isRead": {
+                                "type": "boolean"
+                              },
+                              "isBroadcast": {
+                                "type": "boolean"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "metadata": {
+                                "type": "object",
+                                "properties": {}
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "message",
+                        "data"
                       ]
                     }
                   },
@@ -15210,6 +15354,374 @@
         "responses": {
           "200": {
             "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "senderId": {
+                          "type": "integer"
+                        },
+                        "receiverId": {
+                          "type": "integer"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "isRead": {
+                          "type": "boolean"
+                        },
+                        "isBroadcast": {
+                          "type": "boolean"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "sender": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "nickname": {
+                              "type": "string"
+                            },
+                            "password": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "phone": {
+                              "type": "null"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "banned": {
+                              "type": "null"
+                            },
+                            "banReason": {
+                              "type": "null"
+                            },
+                            "avatar": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "address": {
+                              "type": "null"
+                            },
+                            "gender": {
+                              "type": "string"
+                            },
+                            "birthDate": {
+                              "type": "null"
+                            },
+                            "articleCount": {
+                              "type": "integer"
+                            },
+                            "followerCount": {
+                              "type": "integer"
+                            },
+                            "followingCount": {
+                              "type": "integer"
+                            },
+                            "level": {
+                              "type": "integer"
+                            },
+                            "experience": {
+                              "type": "integer"
+                            },
+                            "score": {
+                              "type": "integer"
+                            },
+                            "wallet": {
+                              "type": "number"
+                            },
+                            "membershipLevel": {
+                              "type": "integer"
+                            },
+                            "membershipLevelName": {
+                              "type": "string"
+                            },
+                            "membershipStatus": {
+                              "type": "string"
+                            },
+                            "membershipStartDate": {
+                              "type": "string"
+                            },
+                            "membershipEndDate": {
+                              "type": "string"
+                            },
+                            "lastLoginAt": {
+                              "type": "string"
+                            },
+                            "lastActiveAt": {
+                              "type": "null"
+                            },
+                            "refreshToken": {
+                              "type": "null"
+                            },
+                            "inviterId": {
+                              "type": "null"
+                            },
+                            "inviteCode": {
+                              "type": "null"
+                            },
+                            "inviteEarnings": {
+                              "type": "string"
+                            },
+                            "inviteCount": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "username",
+                            "nickname",
+                            "password",
+                            "email",
+                            "phone",
+                            "status",
+                            "banned",
+                            "banReason",
+                            "avatar",
+                            "description",
+                            "address",
+                            "gender",
+                            "birthDate",
+                            "articleCount",
+                            "followerCount",
+                            "followingCount",
+                            "level",
+                            "experience",
+                            "score",
+                            "wallet",
+                            "membershipLevel",
+                            "membershipLevelName",
+                            "membershipStatus",
+                            "membershipStartDate",
+                            "membershipEndDate",
+                            "lastLoginAt",
+                            "lastActiveAt",
+                            "refreshToken",
+                            "inviterId",
+                            "inviteCode",
+                            "inviteEarnings",
+                            "inviteCount",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        },
+                        "receiver": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "username": {
+                              "type": "string"
+                            },
+                            "nickname": {
+                              "type": "string"
+                            },
+                            "password": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "phone": {
+                              "type": "null"
+                            },
+                            "status": {
+                              "type": "string"
+                            },
+                            "banned": {
+                              "type": "null"
+                            },
+                            "banReason": {
+                              "type": "null"
+                            },
+                            "avatar": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "address": {
+                              "type": "null"
+                            },
+                            "gender": {
+                              "type": "string"
+                            },
+                            "birthDate": {
+                              "type": "null"
+                            },
+                            "articleCount": {
+                              "type": "integer"
+                            },
+                            "followerCount": {
+                              "type": "integer"
+                            },
+                            "followingCount": {
+                              "type": "integer"
+                            },
+                            "level": {
+                              "type": "integer"
+                            },
+                            "experience": {
+                              "type": "integer"
+                            },
+                            "score": {
+                              "type": "integer"
+                            },
+                            "wallet": {
+                              "type": "number"
+                            },
+                            "membershipLevel": {
+                              "type": "integer"
+                            },
+                            "membershipLevelName": {
+                              "type": "string"
+                            },
+                            "membershipStatus": {
+                              "type": "string"
+                            },
+                            "membershipStartDate": {
+                              "type": "string"
+                            },
+                            "membershipEndDate": {
+                              "type": "string"
+                            },
+                            "lastLoginAt": {
+                              "type": "string"
+                            },
+                            "lastActiveAt": {
+                              "type": "null"
+                            },
+                            "refreshToken": {
+                              "type": "null"
+                            },
+                            "inviterId": {
+                              "type": "null"
+                            },
+                            "inviteCode": {
+                              "type": "null"
+                            },
+                            "inviteEarnings": {
+                              "type": "string"
+                            },
+                            "inviteCount": {
+                              "type": "integer"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "username",
+                            "nickname",
+                            "password",
+                            "email",
+                            "phone",
+                            "status",
+                            "banned",
+                            "banReason",
+                            "avatar",
+                            "description",
+                            "address",
+                            "gender",
+                            "birthDate",
+                            "articleCount",
+                            "followerCount",
+                            "followingCount",
+                            "level",
+                            "experience",
+                            "score",
+                            "wallet",
+                            "membershipLevel",
+                            "membershipLevelName",
+                            "membershipStatus",
+                            "membershipStartDate",
+                            "membershipEndDate",
+                            "lastLoginAt",
+                            "lastActiveAt",
+                            "refreshToken",
+                            "inviterId",
+                            "inviteCode",
+                            "inviteEarnings",
+                            "inviteCount",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "senderId",
+                        "receiverId",
+                        "content",
+                        "type",
+                        "isRead",
+                        "isBroadcast",
+                        "title",
+                        "metadata",
+                        "createdAt",
+                        "updatedAt",
+                        "sender",
+                        "receiver"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -15365,6 +15877,121 @@
         "responses": {
           "200": {
             "description": "",
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/message/unread/count": {
+      "get": {
+        "summary": "获取未读消息数量",
+        "deprecated": false,
+        "description": "",
+        "operationId": "MessageController_getUnreadCount",
+        "tags": [
+          "信息管理"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "example": "Bearer {{token}}",
+            "schema": {
+              "type": "string",
+              "default": "Bearer {{token}}"
+            }
+          },
+          {
+            "name": "Device-Id",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceId}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceId}}"
+            }
+          },
+          {
+            "name": "Device-Name",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceName}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceName}}"
+            }
+          },
+          {
+            "name": "Device-Type",
+            "in": "header",
+            "description": "",
+            "example": "{{deviceType}}",
+            "schema": {
+              "type": "string",
+              "default": "{{deviceType}}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "success": {
+                          "type": "boolean"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "personal": {
+                              "type": "integer"
+                            },
+                            "broadcast": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "personal",
+                            "broadcast",
+                            "total"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "success",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "data"
+                  ]
+                }
+              }
+            },
             "headers": {}
           }
         },
@@ -15588,185 +16215,6 @@
         },
         "responses": {
           "201": {
-            "description": "",
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/message/unread/count": {
-      "get": {
-        "summary": "获取未读消息数量",
-        "deprecated": false,
-        "description": "",
-        "operationId": "MessageController_getUnreadCount",
-        "tags": [
-          "信息管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "integer"
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "success": {
-                          "type": "boolean"
-                        },
-                        "data": {
-                          "type": "object",
-                          "properties": {
-                            "personal": {
-                              "type": "integer"
-                            },
-                            "broadcast": {
-                              "type": "integer"
-                            },
-                            "total": {
-                              "type": "integer"
-                            }
-                          },
-                          "required": [
-                            "personal",
-                            "broadcast",
-                            "total"
-                          ]
-                        }
-                      },
-                      "required": [
-                        "success",
-                        "data"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "message",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/message/stats": {
-      "get": {
-        "summary": "获取消息统计信息",
-        "deprecated": false,
-        "description": "",
-        "operationId": "MessageController_getMessageStats",
-        "tags": [
-          "信息管理"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "description": "",
-            "example": "Bearer {{token}}",
-            "schema": {
-              "type": "string",
-              "default": "Bearer {{token}}"
-            }
-          },
-          {
-            "name": "Device-Id",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceId}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceId}}"
-            }
-          },
-          {
-            "name": "Device-Name",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceName}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceName}}"
-            }
-          },
-          {
-            "name": "Device-Type",
-            "in": "header",
-            "description": "",
-            "example": "{{deviceType}}",
-            "schema": {
-              "type": "string",
-              "default": "{{deviceType}}"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
             "description": "",
             "headers": {}
           }
