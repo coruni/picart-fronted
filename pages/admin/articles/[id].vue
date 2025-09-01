@@ -164,6 +164,7 @@
               label: $t('form.tag.noResults'),
               description: $t('form.tag.noResultsDesc')
             }"
+            :createItem="{ when: 'empty' }"
             @create="onCreate"
             @update:searchTerm="
               (query: string) => {
