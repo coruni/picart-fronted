@@ -287,7 +287,7 @@
     "orders": {
       "orderNo": "Order No",
       "userId": "User ID",
-      "type": "Order Type",
+      "type": {},
       "status": "Order Status",
       "amount": "Amount",
       "createdAt": "Created At",
@@ -300,9 +300,6 @@
       "searchAndFilter": "Search & Filter",
       "allStatus": "All Status",
       "allTypes": "All Types",
-      "type": {
-        "all": "All Types"
-      },
       "pending": "Pending",
       "paid": "Paid",
       "cancelled": "Cancelled",
@@ -382,7 +379,11 @@
       "remove": "Remove",
       "change": "Change",
       "selectImages": "Select Images",
-      "selectImage": "Select Image"
+      "selectImage": "Select Image",
+      "delete": "Delete",
+      "edit": "Edit",
+      "refresh": "Refrsh",
+      "retry": "Retry"
     },
     "save": "Save",
     "loading": {
@@ -774,9 +775,6 @@
         "cancelled": "Cancelled",
         "refunded": "Refunded"
       },
-      "type": {
-        "all": "All Types"
-      },
       "amount": "Order amount",
       "articleAccess": "Article access permissions",
       "cancel": "Cancel an order",
@@ -814,7 +812,8 @@
       "searchPlaceholder": "Search for order number or product name...",
       "title": "My order",
       "unknownProduct": "Unknown products",
-      "viewDetail": "check the details"
+      "viewDetail": "check the details",
+      "type": {}
     },
     "favorites": "My Collection",
     "profileSaved": "Data is saved successfully",
@@ -1121,5 +1120,9 @@
     "articlePaymentSuccess": "Payment successful, you can now view the article content",
     "networkError": "Network error",
     "unknownError": "Unknown error"
+  },
+  "status": {
+    "active": "ACtive",
+    "inactive": "Inactive"
   }
 }

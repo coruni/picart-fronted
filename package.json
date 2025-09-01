@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "build:prod": "NODE_ENV=production nuxt build",
+    "build": "nuxt build --verbose",
+    "build:prod": "NODE_ENV=production nuxt build --verbose",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

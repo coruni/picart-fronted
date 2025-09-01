@@ -754,7 +754,7 @@
             <h4
               class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
             >
-              <Icon name="mynaui:flame" class="text-orange-500 mr-2" />
+              <Icon name="mynaui:fire" class="text-orange-500 mr-2" />
               {{ $t('article.relatedArticles') }}
             </h4>
             <div class="space-y-3 md:space-y-4">

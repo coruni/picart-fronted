@@ -300,9 +300,6 @@
       "searchAndFilter": "検索・フィルター",
       "allStatus": "すべてのステータス",
       "allTypes": "すべてのタイプ",
-      "type": {
-        "all": "すべてのタイプ"
-      },
       "pending": "保留中",
       "paid": "支払い済み",
       "cancelled": "キャンセル済み",
@@ -376,7 +373,17 @@
       "search": "検索",
       "close": "閉じる",
       "save": "保存",
-      "back": "戻る"
+      "back": "戻る",
+      "removeAll": "すべて削除",
+      "remove": "削除",
+      "selectImages": "画像を選択",
+      "selectImage": "画像を選択",
+      "change": "変化",
+      "delete": "消去",
+      "edit": "編集",
+      "refresh": "控えめ",
+      "replace": "交換する",
+      "retry": "リトライ"
     },
     "save": "保存",
     "loading": {
@@ -401,7 +408,11 @@
     "replace": "置換",
     "selectImage": "画像を選択",
     "selectImages": "画像を選択",
-    "toggleTheme": "テーマ切り替え"
+    "toggleTheme": "テーマ切り替え",
+    "status": {
+      "active": "アクティブ",
+      "inactive": "非アクティブ"
+    }
   },
   "image": {
     "preview": "画像プレビュー",
@@ -458,7 +469,8 @@
     },
     "image": {
       "placeholder": "画像をアップロードしてください",
-      "name": "画像"
+      "name": "画像",
+      "help": ""
     },
     "cover": {
       "placeholder": "カバー画像をアップロードしてください",
@@ -804,12 +816,10 @@
         "pending": "支払われる",
         "refunded": "返金"
       },
-      "type": {
-        "all": "すべてのタイプ"
-      },
       "title": "私の注文",
       "unknownProduct": "未知の製品",
-      "viewDetail": "詳細を確認してください"
+      "viewDetail": "詳細を確認してください",
+      "type": {}
     },
     "profileSaved": "データは正常に保存されます",
     "quickNav": "クイックナビゲーション",

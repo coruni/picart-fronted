@@ -1,302 +1,297 @@
 <template>
-  <ClientOnly>
-    <div class="flex-1 flex flex-col w-full">
-      <div class="w-full flex-1 max-w-4xl mx-auto p-4">
-        <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
-          <div class="flex items-start space-x-4">
-            <UFormField name="title" class="flex-1">
-              <UInput
-                v-model="state.title"
-                size="xl"
-                :placeholder="$t('form.title.placeholder')"
-                variant="soft"
-                class="w-full"
-              />
-            </UFormField>
-            <UFormField name="type">
-              <USelect
-                v-model="state.type"
-                :items="typeOptions"
-                :placeholder="$t('form.type.placeholder')"
-                value-key="value"
-                variant="soft"
-                size="xl"
-                class="w-full h-full"
-              />
-            </UFormField>
-          </div>
-
-          <UFormField name="content" v-show="state.type === 'mixed'">
-            <div class="w-full">
-              <ClientOnly>
-                <Editor
-                  tinymce-script-src="/tinymce/tinymce.min.js"
-                  v-model="state.content"
-                  :init="editorConfig"
-                  :placeholder="$t('form.content.placeholder')"
-                  class="min-h-[400px]"
-                />
-                <template #fallback>
-                  <div class="min-h-[400px] border border-gray-300 rounded-lg p-4 bg-gray-50">
-                    <div class="text-gray-500 text-center">编辑器加载中...</div>
-                  </div>
-                </template>
-              </ClientOnly>
-            </div>
+  <div class="flex-1 flex flex-col w-full">
+    <div class="w-full flex-1 max-w-4xl mx-auto p-4">
+      <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+        <div class="flex items-start space-x-4">
+          <UFormField name="title" class="flex-1">
+            <UInput
+              v-model="state.title"
+              size="xl"
+              :placeholder="$t('form.title.placeholder')"
+              variant="soft"
+              class="w-full"
+            />
           </UFormField>
+          <UFormField name="type">
+            <USelect
+              v-model="state.type"
+              :items="typeOptions"
+              :placeholder="$t('form.type.placeholder')"
+              value-key="value"
+              variant="soft"
+              size="xl"
+              class="w-full h-full"
+            />
+          </UFormField>
+        </div>
 
-          <template v-if="state.type === 'image'">
-            <UFormField name="content">
-              <UTextarea
+        <UFormField name="content" v-show="state.type === 'mixed'">
+          <div class="w-full">
+            <ClientOnly>
+              <Editor
+                tinymce-script-src="/tinymce/tinymce.min.js"
                 v-model="state.content"
+                :init="editorConfig"
                 :placeholder="$t('form.content.placeholder')"
-                variant="soft"
-                class="w-full"
-                size="xl"
+                class="min-h-[400px]"
               />
-            </UFormField>
-            <UFormField name="images" :label="$t('form.image.name')">
-              <MultiImageUpload
-                v-model="state.images"
-                :existing-images="existingImages"
-                accept="image/*"
-                :max-size="5 * 1024 * 1024"
-                :help-text="$t('form.image.help')"
-                aspect-ratio="16/9"
-              />
-            </UFormField>
-          </template>
-
-          <!-- Cover Image Upload -->
-          <UFormField name="cover" :label="$t('form.cover.name')">
-            <div class="space-y-2">
-              <ImageUpload
-                v-model="state.cover"
-                :existing-image-url="existingCoverUrl"
-                accept="image/*"
-                :max-size="2 * 1024 * 1024"
-                :help-text="$t('form.cover.help')"
-                aspect-ratio="16/9"
-              />
-            </div>
-          </UFormField>
-
-          <div class="flex items-center space-x-2">
-            <UFormField name="parentCategory" class="flex-1">
-              <USelectMenu
-                v-model="state.parentCategory"
-                :items="parentCategoriesOptions"
-                :placeholder="$t('form.parentCategory.placeholder')"
-                value-key="id"
-                option-attribute="name"
-                variant="soft"
-                class="w-full"
-                size="lg"
-              />
-            </UFormField>
-            <UFormField name="category" v-show="state.parentCategory" class="flex-1">
-              <USelectMenu
-                v-model="state.categoryId"
-                :items="subCategoriesOptions"
-                :placeholder="$t('form.category.placeholder')"
-                value-key="id"
-                option-attribute="name"
-                variant="soft"
-                class="w-full"
-                size="lg"
-              />
-            </UFormField>
+              <template #fallback>
+                <div class="min-h-[400px] border border-gray-300 rounded-lg p-4 bg-gray-50">
+                  <div class="text-gray-500 text-center">编辑器加载中...</div>
+                </div>
+              </template>
+            </ClientOnly>
           </div>
+        </UFormField>
 
-          <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
-            <div class="space-y-2">
-              <USelectMenu
-                v-model="state.tagIds"
-                :items="tagsOptions"
-                size="lg"
-                class="w-full"
-                value-key="id"
-                option-attribute="name"
-                variant="soft"
-                multiple
-                :search-input="{
-                  placeholder: $t('form.tag.searchPlaceholder')
-                }"
-                :placeholder="$t('form.tag.placeholder')"
-                :loading="isTagSearching"
-                @create="onCreate"
-                @update:searchTerm="
-                  (query: string) => {
-                    tagSearchQuery = query;
-                    searchTags(query);
-                  }
-                "
-              />
-            </div>
+        <template v-if="state.type === 'image'">
+          <UFormField name="content">
+            <UTextarea
+              v-model="state.content"
+              :placeholder="$t('form.content.placeholder')"
+              variant="soft"
+              class="w-full"
+              size="xl"
+            />
           </UFormField>
+          <UFormField name="images" :label="$t('form.image.name')">
+            <MultiImageUpload
+              v-model="state.images"
+              :existing-images="existingImages"
+              accept="image/*"
+              :max-size="5 * 1024 * 1024"
+              :help-text="$t('form.image.help')"
+              aspect-ratio="16/9"
+            />
+          </UFormField>
+        </template>
 
-          <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
-            <template #advanced>
-              <div class="space-y-4 mt-4">
-                <UFormField
-                  name="requireLogin"
-                  :label="$t('form.requireLogin')"
-                  class="flex items-center justify-between"
-                >
-                  <USwitch v-model="state.requireLogin" />
-                </UFormField>
+        <!-- Cover Image Upload -->
+        <UFormField name="cover" :label="$t('form.cover.name')">
+          <div class="space-y-2">
+            <ImageUpload
+              v-model="state.cover"
+              :existing-image-url="existingCoverUrl"
+              accept="image/*"
+              :max-size="2 * 1024 * 1024"
+              :help-text="$t('form.cover.help')"
+              aspect-ratio="16/9"
+            />
+          </div>
+        </UFormField>
 
-                <UFormField
-                  name="requireFollow"
-                  :label="$t('form.requireFollow')"
-                  class="flex items-center justify-between"
-                >
-                  <USwitch v-model="state.requireFollow" />
-                </UFormField>
+        <div class="flex items-center space-x-2">
+          <UFormField name="parentCategory" class="flex-1">
+            <USelectMenu
+              v-model="state.parentCategory"
+              :items="parentCategoriesOptions"
+              :placeholder="$t('form.parentCategory.placeholder')"
+              value-key="id"
+              option-attribute="name"
+              variant="soft"
+              class="w-full"
+              size="lg"
+            />
+          </UFormField>
+          <UFormField name="category" v-show="state.parentCategory" class="flex-1">
+            <USelectMenu
+              v-model="state.categoryId"
+              :items="subCategoriesOptions"
+              :placeholder="$t('form.category.placeholder')"
+              value-key="id"
+              option-attribute="name"
+              variant="soft"
+              class="w-full"
+              size="lg"
+            />
+          </UFormField>
+        </div>
 
-                <UFormField
-                  name="requireMembership"
-                  :label="$t('form.requireMembership')"
-                  class="flex items-center justify-between"
-                >
-                  <USwitch v-model="state.requireMembership" />
-                </UFormField>
+        <UFormField name="tags" class="flex-1" :label="$t('form.tag.name')">
+          <div class="space-y-2">
+            <USelectMenu
+              v-model="state.tagIds"
+              :items="tagsOptions"
+              size="lg"
+              class="w-full"
+              value-key="id"
+              option-attribute="name"
+              variant="soft"
+              multiple
+              :search-input="{
+                placeholder: $t('form.tag.searchPlaceholder')
+              }"
+              :placeholder="$t('form.tag.placeholder')"
+              :loading="isTagSearching"
+              @create="onCreate"
+              @update:searchTerm="
+                (query: string) => {
+                  tagSearchQuery = query;
+                  searchTags(query);
+                }
+              "
+            />
+          </div>
+        </UFormField>
 
-                <UFormField
-                  name="requirePayment"
-                  :label="$t('form.requirePayment')"
-                  class="flex items-center justify-between"
-                >
-                  <USwitch v-model="state.requirePayment" />
-                </UFormField>
+        <UAccordion :items="[{ label: $t('form.advancedOptions'), slot: 'advanced' }]">
+          <template #advanced>
+            <div class="space-y-4 mt-4">
+              <UFormField
+                name="requireLogin"
+                :label="$t('form.requireLogin')"
+                class="flex items-center justify-between"
+              >
+                <USwitch v-model="state.requireLogin" />
+              </UFormField>
 
-                <UFormField
-                  name="viewPrice"
-                  :label="$t('form.viewPrice.name')"
-                  v-show="state.requirePayment"
-                  class="flex items-center justify-between"
+              <UFormField
+                name="requireFollow"
+                :label="$t('form.requireFollow')"
+                class="flex items-center justify-between"
+              >
+                <USwitch v-model="state.requireFollow" />
+              </UFormField>
+
+              <UFormField
+                name="requireMembership"
+                :label="$t('form.requireMembership')"
+                class="flex items-center justify-between"
+              >
+                <USwitch v-model="state.requireMembership" />
+              </UFormField>
+
+              <UFormField
+                name="requirePayment"
+                :label="$t('form.requirePayment')"
+                class="flex items-center justify-between"
+              >
+                <USwitch v-model="state.requirePayment" />
+              </UFormField>
+
+              <UFormField
+                name="viewPrice"
+                :label="$t('form.viewPrice.name')"
+                v-show="state.requirePayment"
+                class="flex items-center justify-between"
+              >
+                <UInput
+                  v-model="state.viewPrice"
+                  type="number"
+                  variant="soft"
+                  :min="state.requirePayment ? 1 : 0"
+                  :placeholder="$t('form.viewPrice.placeholder')"
+                />
+              </UFormField>
+            </div>
+          </template>
+        </UAccordion>
+
+        <!-- Downloads Section -->
+        <UFormField
+          name="downloads"
+          :label="$t('form.downloads.name')"
+          :help="$t('form.downloads.help')"
+        >
+          <div class="space-y-4">
+            <div
+              v-for="(download, index) in state.downloads"
+              :key="index"
+              class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3"
+            >
+              <div class="flex items-center justify-between">
+                <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {{ $t('form.downloads.name') }} #{{ index + 1 }}
+                </h4>
+                <UButton
+                  type="button"
+                  color="error"
+                  variant="soft"
+                  size="sm"
+                  icon="mynaui:trash"
+                  class="cursor-pointer"
+                  @click="removeDownload(index)"
                 >
-                  <UInput
-                    v-model="state.viewPrice"
-                    type="number"
+                  {{ $t('form.downloads.removeDownload') }}
+                </UButton>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <UFormField
+                  :name="`downloads.${index}.type`"
+                  :label="$t('form.downloads.type.name')"
+                >
+                  <USelect
+                    v-model="download.type"
+                    :items="downloadTypeOptions"
+                    :placeholder="$t('form.downloads.type.placeholder')"
+                    value-key="value"
                     variant="soft"
-                    :min="state.requirePayment ? 1 : 0"
-                    :placeholder="$t('form.viewPrice.placeholder')"
+                    class="w-full"
+                  />
+                </UFormField>
+
+                <UFormField :name="`downloads.${index}.url`" :label="$t('form.downloads.url.name')">
+                  <UInput
+                    v-model="download.url"
+                    :placeholder="$t('form.downloads.url.placeholder')"
+                    variant="soft"
+                    class="w-full"
                   />
                 </UFormField>
               </div>
-            </template>
-          </UAccordion>
 
-          <!-- Downloads Section -->
-          <UFormField
-            name="downloads"
-            :label="$t('form.downloads.name')"
-            :help="$t('form.downloads.help')"
-          >
-            <div class="space-y-4">
-              <div
-                v-for="(download, index) in state.downloads"
-                :key="index"
-                class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg space-y-3"
-              >
-                <div class="flex items-center justify-between">
-                  <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {{ $t('form.downloads.name') }} #{{ index + 1 }}
-                  </h4>
-                  <UButton
-                    type="button"
-                    color="error"
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <UFormField
+                  :name="`downloads.${index}.password`"
+                  :label="$t('form.downloads.password.name')"
+                >
+                  <UInput
+                    v-model="download.password"
+                    :placeholder="$t('form.downloads.password.placeholder')"
                     variant="soft"
-                    size="sm"
-                    icon="mynaui:trash"
-                    class="cursor-pointer"
-                    @click="removeDownload(index)"
-                  >
-                    {{ $t('form.downloads.removeDownload') }}
-                  </UButton>
-                </div>
+                    class="w-full"
+                  />
+                </UFormField>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <UFormField
-                    :name="`downloads.${index}.type`"
-                    :label="$t('form.downloads.type.name')"
-                  >
-                    <USelect
-                      v-model="download.type"
-                      :items="downloadTypeOptions"
-                      :placeholder="$t('form.downloads.type.placeholder')"
-                      value-key="value"
-                      variant="soft"
-                      class="w-full"
-                    />
-                  </UFormField>
-
-                  <UFormField
-                    :name="`downloads.${index}.url`"
-                    :label="$t('form.downloads.url.name')"
-                  >
-                    <UInput
-                      v-model="download.url"
-                      :placeholder="$t('form.downloads.url.placeholder')"
-                      variant="soft"
-                      class="w-full"
-                    />
-                  </UFormField>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <UFormField
-                    :name="`downloads.${index}.password`"
-                    :label="$t('form.downloads.password.name')"
-                  >
-                    <UInput
-                      v-model="download.password"
-                      :placeholder="$t('form.downloads.password.placeholder')"
-                      variant="soft"
-                      class="w-full"
-                    />
-                  </UFormField>
-
-                  <UFormField
-                    :name="`downloads.${index}.extractionCode`"
-                    :label="$t('form.downloads.extractionCode.name')"
-                  >
-                    <UInput
-                      v-model="download.extractionCode"
-                      :placeholder="$t('form.downloads.extractionCode.placeholder')"
-                      variant="soft"
-                      class="w-full"
-                    />
-                  </UFormField>
-                </div>
+                <UFormField
+                  :name="`downloads.${index}.extractionCode`"
+                  :label="$t('form.downloads.extractionCode.name')"
+                >
+                  <UInput
+                    v-model="download.extractionCode"
+                    :placeholder="$t('form.downloads.extractionCode.placeholder')"
+                    variant="soft"
+                    class="w-full"
+                  />
+                </UFormField>
               </div>
-
-              <UButton
-                type="button"
-                variant="soft"
-                icon="mynaui:plus"
-                @click="addDownload"
-                class="w-full"
-              >
-                {{ $t('form.downloads.addDownload') }}
-              </UButton>
             </div>
-          </UFormField>
 
-          <UButton
-            type="submit"
-            icon="mynaui:save"
-            class="w-full cursor-pointer justify-center"
-            size="lg"
-            :loading="loading"
-          >
-            {{ $t('form.submit') }}
-          </UButton>
-        </UForm>
-      </div>
+            <UButton
+              type="button"
+              variant="soft"
+              icon="mynaui:plus"
+              @click="addDownload"
+              class="w-full"
+            >
+              {{ $t('form.downloads.addDownload') }}
+            </UButton>
+          </div>
+        </UFormField>
+
+        <UButton
+          type="submit"
+          icon="mynaui:save"
+          class="w-full cursor-pointer justify-center"
+          size="lg"
+          :loading="loading"
+        >
+          {{ $t('form.submit') }}
+        </UButton>
+      </UForm>
     </div>
-  </ClientOnly>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -309,7 +304,7 @@
     uploadControllerUploadFile
   } from '~~/api';
 
-  import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';
+  import type { SelectMenuItem } from '@nuxt/ui';
   import Editor from '@tinymce/tinymce-vue';
   import { debounce } from 'lodash-es';
 
@@ -411,7 +406,7 @@
     // 基础路径配置 - 指向 public/tinymce 目录
     base_url: '/tinymce',
     suffix: '.min',
-
+    license_key: 'gpl',
     // 插件配置
     plugins: [
       'advlist',
