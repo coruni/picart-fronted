@@ -315,6 +315,10 @@
   const route = useRoute();
   const articleId = route.params.id as string;
 
+  const tagsOptions = ref<TagMenuItem[]>([]);
+  const selectedTags = ref<TagMenuItem[]>([]); // 已选择的标签
+  const tagSearchQuery = ref('');
+  const isTagSearching = ref(false); // 标签搜索加载状态
   definePageMeta({
     layout: 'default',
     requiresAuth: true
@@ -667,11 +671,6 @@
     flag?: boolean;
   }
 
-  const tagsOptions = ref<TagMenuItem[]>([]);
-  const selectedTags = ref<TagMenuItem[]>([]); // 已选择的标签
-  const tagSearchQuery = ref('');
-  const isTagSearching = ref(false); // 标签搜索加载状态
-
   // 搜索标签函数
   const searchTags = debounce(async (query: string = '') => {
     isTagSearching.value = true;
@@ -762,6 +761,34 @@
   };
 
   await initializeTags();
+
+  // 将文章中的标签添加到标签选项中，确保它们显示在已选择列表中
+  if (articleId) {
+    try {
+      const { data: articleData } = await articleControllerFindOne({
+        composable: 'useFetch',
+        key: 'articleDetailForTags',
+        path: { id: articleId }
+      });
+
+      if (articleData.value?.data?.tags && articleData.value.data.tags.length > 0) {
+        const existingTagIds = tagsOptions.value.map(t => t.id);
+        const newTags = articleData.value.data.tags
+          .filter(tag => !existingTagIds.includes(tag.id))
+          .map(tag => ({
+            id: tag.id,
+            label: tag.name,
+            value: tag.id,
+            ...(tag.avatar && { avatar: { src: tag.avatar } })
+          }));
+
+        // 将新标签添加到标签选项中
+        tagsOptions.value.push(...newTags);
+      }
+    } catch (error) {
+      console.error('Failed to load article tags:', error);
+    }
+  }
 
   // 监听搜索输入
   watch(tagSearchQuery, debounce(searchTags, 500));
