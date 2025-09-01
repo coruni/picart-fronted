@@ -122,9 +122,14 @@ export default defineNuxtConfig({
 
   // 暗黑模式配置
   colorMode: {
-    preference: 'system', // 默认跟随系统
-    fallback: 'light', // 回退到浅色模式
+    preference: 'system',
+    fallback: 'light',
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
+    classPrefix: '',
     classSuffix: '',
+    storage: 'localStorage',
     storageKey: 'nuxt-color-mode'
   },
 

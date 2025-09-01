@@ -64,18 +64,20 @@
 
         <div class="flex items-center space-x-2 sm:space-x-4">
           <!-- 暗黑模式切换按钮 -->
-          <UButton
-            variant="link"
-            color="neutral"
-            @click="toggleColorMode"
-            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            :title="$t('common.toggleTheme')"
-          >
-            <Icon
-              :name="colorMode.value === 'dark' ? 'mynaui:sun' : 'mynaui:moon'"
-              class="w-5 h-5 text-gray-600 dark:text-gray-300"
-            />
-          </UButton>
+          <ColorScheme placeholder="..." tag="span">
+            <UButton
+              variant="link"
+              color="neutral"
+              @click="toggleColorMode"
+              class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              :title="$t('common.toggleTheme')"
+            >
+              <Icon
+                :name="colorMode.value === 'dark' ? 'mynaui:sun' : 'mynaui:moon'"
+                class="w-5 h-5 text-gray-600 dark:text-gray-300"
+              />
+            </UButton>
+          </ColorScheme>
 
           <!-- 用户菜单 -->
           <div class="group relative">
