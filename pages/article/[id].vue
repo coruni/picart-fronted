@@ -1,12 +1,15 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
     <Title>{{ article?.data.title }}</Title>
-    <Meta name="description" :content="article?.data.summary as string" />
+    <Meta name="description" :content="(article?.data.summary as string) ?? article?.data.title" />
     <Meta name="author" :content="article?.data.author.nickname" />
     <Meta name="keywords" :content="article?.data.tags?.map(tag => tag.name).join(',')" />
     <Meta name="robots" content="index, follow" />
     <Meta name="og:title" :content="article?.data.title" />
-    <Meta name="og:description" :content="article?.data.summary as string" />
+    <Meta
+      name="og:description"
+      :content="(article?.data.summary as string) ?? article?.data.title"
+    />
     <Meta name="og:type" content="article" />
     <Meta
       name="og:image"
