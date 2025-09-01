@@ -475,7 +475,7 @@
     // 基础路径配置 - 指向 public/tinymce 目录
     base_url: '/tinymce',
     suffix: '.min',
-
+    license_key: 'gpl',
     // 插件配置
     plugins: [
       'advlist',

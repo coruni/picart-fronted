@@ -1,12 +1,15 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
     <Title>{{ article?.data.title }}</Title>
-    <Meta name="description" :content="article?.data.summary as string" />
+    <Meta name="description" :content="(article?.data.summary as string) ?? article?.data.title" />
     <Meta name="author" :content="article?.data.author.nickname" />
     <Meta name="keywords" :content="article?.data.tags?.map(tag => tag.name).join(',')" />
     <Meta name="robots" content="index, follow" />
     <Meta name="og:title" :content="article?.data.title" />
-    <Meta name="og:description" :content="article?.data.summary as string" />
+    <Meta
+      name="og:description"
+      :content="(article?.data.summary as string) ?? article?.data.title"
+    />
     <Meta name="og:type" content="article" />
     <Meta
       name="og:image"
@@ -754,7 +757,7 @@
             <h4
               class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
             >
-              <Icon name="mynaui:flame" class="text-orange-500 mr-2" />
+              <Icon name="mynaui:fire" class="text-orange-500 mr-2" />
               {{ $t('article.relatedArticles') }}
             </h4>
             <div class="space-y-3 md:space-y-4">

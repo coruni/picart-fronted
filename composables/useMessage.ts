@@ -38,7 +38,7 @@ export const useMessage = () => {
         hasMore.value = true;
       }
 
-      const response = await messageControllerFindAll({
+      const { data: responseData } = await messageControllerFindAll({
         composable: 'useFetch',
         key: `messages_${page.value}`,
         query: {
@@ -46,10 +46,8 @@ export const useMessage = () => {
           limit: pageSize.value
         }
       });
-
-      const responseData = response as any;
-      if (responseData?.data?.data) {
-        const newMessages = responseData.data.data;
+      if (responseData.value?.data?.data) {
+        const newMessages = responseData.value.data.data;
 
         if (reset) {
           messages.value = newMessages;
@@ -58,7 +56,7 @@ export const useMessage = () => {
         }
 
         // 检查是否还有更多数据
-        hasMore.value = responseData.data.meta.page < responseData.data.meta.totalPages;
+        hasMore.value = responseData.value.data.meta.page < responseData.value.data.meta.totalPages;
         if (hasMore.value) {
           page.value++;
         }
@@ -150,11 +148,19 @@ export const useMessage = () => {
     const iconMap: Record<string, string> = {
       system: 'mynaui:info-circle',
       notification: 'mynaui:bell',
+      private: 'mynaui:lock',
       comment: 'mynaui:chat',
       like: 'mynaui:heart',
       follow: 'mynaui:user-plus',
       order: 'mynaui:shopping-cart',
-      payment: 'mynaui:credit-card'
+      payment: 'mynaui:credit-card',
+      warning: 'mynaui:warning',
+      error: 'mynaui:error',
+      success: 'mynaui:check-circle',
+      info: 'mynaui:info',
+      alert: 'mynaui:alert',
+      reminder: 'mynaui:clock',
+      update: 'mynaui:refresh'
     };
     return iconMap[type] || 'mynaui:bell';
   };
@@ -164,11 +170,19 @@ export const useMessage = () => {
     const classMap: Record<string, string> = {
       system: 'bg-blue-500',
       notification: 'bg-green-500',
+      private: 'bg-purple-500',
       comment: 'bg-purple-500',
       like: 'bg-red-500',
       follow: 'bg-orange-500',
       order: 'bg-indigo-500',
-      payment: 'bg-emerald-500'
+      payment: 'bg-emerald-500',
+      warning: 'bg-yellow-500',
+      error: 'bg-red-500',
+      success: 'bg-green-500',
+      info: 'bg-blue-500',
+      alert: 'bg-orange-500',
+      reminder: 'bg-indigo-500',
+      update: 'bg-cyan-500'
     };
     return classMap[type] || 'bg-gray-500';
   };
@@ -179,6 +193,7 @@ export const useMessage = () => {
     const labelMap: Record<string, string> = {
       system: t('message.type.system'),
       notification: t('message.type.notification'),
+      private: t('message.type.private'),
       comment: t('message.type.comment'),
       like: t('message.type.like'),
       follow: t('message.type.follow'),

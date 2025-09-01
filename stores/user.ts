@@ -56,11 +56,6 @@ export const useUserStore = defineStore('user', {
     },
 
     async clearAuth() {
-      this.token = null;
-      this.userInfo = null;
-      this.isAuthenticated = false;
-      this.rememberedUsername = null;
-      this.refreshToken = null;
       if (import.meta.client) {
         await userControllerLogout({
           composable: '$fetch'
@@ -112,6 +107,11 @@ export const useUserStore = defineStore('user', {
         // 强制刷新页面，确保所有状态都被重置
         window.location.href = '/';
       }
+      this.token = null;
+      this.userInfo = null;
+      this.isAuthenticated = false;
+      this.rememberedUsername = null;
+      this.refreshToken = null;
     }
   },
 

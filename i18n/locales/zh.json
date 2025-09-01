@@ -55,7 +55,8 @@
       "follow": "关注",
       "order": "订单",
       "payment": "支付",
-      "unknown": "未知类型"
+      "unknown": "未知类型",
+      "private": "个人"
     },
     "time": {
       "justNow": "刚刚",
@@ -325,7 +326,11 @@
       "update": "更新",
       "back": "返回",
       "selectImage": "选择图片",
-      "selectImages": "选择图片"
+      "selectImages": "选择图片",
+      "remove": "删除",
+      "removeAll": "删除全部",
+      "change": "改变",
+      "replace": "代替"
     },
     "message": {
       "updateFailed": "更新失败",
@@ -333,7 +338,13 @@
       "createFailed": "创建失败",
       "createSuccess": "创建成功",
       "deleteFailed": "删除失败",
-      "deleteSuccess": "删除成功"
+      "deleteSuccess": "删除成功",
+      "fetchFailed": "无法获得数据",
+      "loadError": "负载失败",
+      "networkError": "网络连接失败",
+      "networkErrorDescription": "无法连接到服务器，请检查网络连接",
+      "uploadFailed": "上传失败",
+      "uploadSuccess": "上传成功"
     },
     "modal": {
       "confirmDelete": "确认删除",
@@ -372,13 +383,37 @@
       "parent": "父级",
       "roles": "角色",
       "title": "标题",
-      "summary": "摘要"
+      "summary": "摘要",
+      "category": "类别"
     },
     "loading": {
       "loading": "加载中...",
       "noMore": "没有更多"
     },
-    "toggleTheme": "切换主题"
+    "loadMore": "加载更多",
+    "toggleTheme": "切换主题",
+    "cancel": "取消",
+    "change": "改变",
+    "close": "关闭",
+    "delete": "删除",
+    "edit": "编辑",
+    "error": {
+      "description": "页面加载失败，请稍后再试",
+      "retry": "重新加载",
+      "title": "加载失败"
+    },
+    "remove": "消除",
+    "removeAll": "删除全部",
+    "replace": "代替",
+    "retry": "重新加载",
+    "save": "节省",
+    "saving": "保存...",
+    "selectImage": "选择图像",
+    "selectImages": "选择图像",
+    "status": {
+      "inactive": "不活动",
+      "active": "积极的"
+    }
   },
   "role": {
     "title": "角色管理",
@@ -591,9 +626,6 @@
         "cancelled": "已取消",
         "refunded": "已退款"
       },
-      "type": {
-        "all": "全部类型"
-      },
       "viewDetail": "查看详情",
       "cancel": "取消订单",
       "pay": "立即支付",
@@ -627,7 +659,8 @@
       "confirmCancel": "确认取消订单",
       "confirmCancelMessage": "确定要取消这个订单吗？取消后将无法恢复。",
       "confirmCancelButton": "确认取消",
-      "cancelling": "取消中..."
+      "cancelling": "取消中...",
+      "all": "全部"
     }
   },
   "form": {
@@ -657,7 +690,8 @@
     },
     "image": {
       "placeholder": "请上传图片",
-      "name": "图片"
+      "name": "图片",
+      "help": "建议尺寸 1200x630 像素，支持 JPG、PNG 格式"
     },
     "cover": {
       "placeholder": "请上传封面图片",
@@ -1088,5 +1122,9 @@
     "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
     "networkError": "网络错误",
     "unknownError": "未知错误"
+  },
+  "status": {
+    "active": "积极的",
+    "inactive": "不活动"
   }
 }

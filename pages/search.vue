@@ -4,16 +4,26 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div class="flex flex-col items-center justify-center">
           <!-- 搜索输入框 -->
-          <div class="w-full max-w-2xl">
+          <div class="w-full max-w-2xl flex gap-2">
             <UInput
               v-model="searchQuery"
               :placeholder="$t('search.placeholder')"
               size="lg"
-              class="w-full"
+              class="flex-1"
               icon="mynaui:search"
-              @keyup.enter="handleSearch"
+              @keyup.enter="handleManualSearch"
             >
             </UInput>
+            <UButton
+              @click="handleManualSearch"
+              size="lg"
+              color="primary"
+              :loading="loading"
+              icon="mynaui:search"
+              class="truncate"
+            >
+              {{ $t('search.title') }}
+            </UButton>
           </div>
         </div>
       </div>
@@ -69,6 +79,7 @@
   import { articleControllerArticleSearch } from '~~/api';
   import { debounce } from 'lodash-es';
   const { t } = useI18n();
+  const route = useRoute();
 
   // 搜索状态
   const searchQuery = ref('');
@@ -93,6 +104,36 @@
     totalResults.value = 0;
   };
 
+  // SSR 数据预取 - 从 URL 参数获取搜索关键词
+  const initialQuery = (route.query.q as string) || '';
+  if (initialQuery) {
+    searchQuery.value = initialQuery;
+    hasSearched.value = true;
+  }
+
+  // SSR 数据获取
+  const { data: initialSearchData, pending: initialLoading } = await articleControllerArticleSearch(
+    {
+      composable: 'useFetch',
+      key: `search-ssr-${initialQuery}`,
+      query: {
+        page: 1,
+        limit: pagination.value.limit,
+        keyword: initialQuery
+      }
+    }
+  );
+
+  // 初始化 SSR 数据
+  if (initialSearchData.value?.data && initialQuery) {
+    allArticles.value = initialSearchData.value.data.data;
+    totalResults.value = initialSearchData.value.data.meta?.total || 0;
+    hasMore.value = initialSearchData.value.data.data.length === pagination.value.limit;
+    if (hasMore.value) {
+      pagination.value.page = 2;
+    }
+  }
+
   // 搜索功能
   const handleSearch = async () => {
     if (!searchQuery.value.trim()) {
@@ -106,9 +147,7 @@
     hasSearched.value = true;
     try {
       const { data: articles } = await articleControllerArticleSearch({
-        composable: 'useFetch',
-        key: `search-${searchQuery.value}-${pagination.value.page}`,
-
+        composable: '$fetch',
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,
@@ -116,14 +155,16 @@
         }
       });
 
-      allArticles.value = [...allArticles.value, ...(articles.value?.data?.data || [])];
-      totalResults.value = articles.value?.data?.meta?.total || 0;
-      hasMore.value = articles.value?.data?.data?.length === pagination.value.limit;
+      const newArticles = articles?.data || [];
+      allArticles.value = [...allArticles.value, ...newArticles];
+      totalResults.value = articles?.meta?.total || 0;
+      hasMore.value = newArticles.length === pagination.value.limit;
 
       if (hasMore.value) {
         pagination.value.page++;
       }
     } catch (error) {
+      console.error('搜索失败:', error);
     } finally {
       loading.value = false;
     }
@@ -136,55 +177,70 @@
     hasSearched.value = false;
   };
 
+  // 手动搜索（重置数据后搜索）
+  const handleManualSearch = () => {
+    if (searchQuery.value.trim()) {
+      resetData();
+      hasSearched.value = true;
+      handleSearch();
+    }
+  };
+
   // Intersection Observer 元素引用
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
 
-  // 监听路由参数
-  watch(
-    () => useRoute().query.q,
-    newQuery => {
-      if (newQuery && typeof newQuery === 'string') {
-        // 避免重复设置相同值
-        if (searchQuery.value !== newQuery) {
-          searchQuery.value = newQuery;
+  // 监听路由参数（仅在客户端执行）
+  if (process.client) {
+    watch(
+      () => useRoute().query.q,
+      newQuery => {
+        if (newQuery && typeof newQuery === 'string') {
+          // 避免重复设置相同值
+          if (searchQuery.value !== newQuery) {
+            searchQuery.value = newQuery;
+          }
+        } else if (!newQuery && searchQuery.value) {
+          clearSearch();
         }
-      } else if (!newQuery && searchQuery.value) {
-        clearSearch();
-      }
-    },
-    { immediate: true }
-  );
+      },
+      { immediate: false } // 不立即执行，因为 SSR 已经处理了初始值
+    );
+  }
 
-  // 防抖搜索
+  // 防抖搜索（仅在客户端执行）
   const debouncedSearch = debounce(() => {
     if (searchQuery.value.trim()) {
+      // 重置数据并重新搜索
       resetData();
+      hasSearched.value = true;
       handleSearch();
     } else {
       clearSearch();
     }
   }, 500);
 
-  // 监听搜索参数变化（使用防抖）
-  watch(searchQuery, () => {
-    debouncedSearch();
-  });
+  // 监听搜索参数变化（使用防抖，仅在客户端执行）
+  if (process.client) {
+    watch(searchQuery, () => {
+      debouncedSearch();
+    });
 
-  // 同步URL参数
-  watch(
-    searchQuery,
-    () => {
-      const query: Record<string, string> = {};
+    // 同步URL参数（仅在客户端执行）
+    watch(
+      searchQuery,
+      () => {
+        const query: Record<string, string> = {};
 
-      if (searchQuery.value.trim()) {
-        query.q = searchQuery.value;
-      }
+        if (searchQuery.value.trim()) {
+          query.q = searchQuery.value;
+        }
 
-      navigateTo({ query }, { replace: true });
-    },
-    { deep: true }
-  );
+        navigateTo({ query }, { replace: true });
+      },
+      { deep: true }
+    );
+  }
 
   // 初始化
   onMounted(() => {
@@ -197,7 +253,8 @@
             target.isIntersecting &&
             !loading.value &&
             hasMore.value &&
-            searchQuery.value.trim()
+            searchQuery.value.trim() &&
+            hasSearched.value
           ) {
             handleSearch();
           }
@@ -218,9 +275,43 @@
     }
   });
 
-  // 页面标题
+  // 页面标题和 SEO 元数据
   useHead({
-    title: t('search.title')
+    title: computed(() => {
+      if (searchQuery.value) {
+        return `${t('search.title')} - "${searchQuery.value}"`;
+      }
+      return t('search.title');
+    }),
+    meta: [
+      {
+        name: 'description',
+        content: computed(() => {
+          if (searchQuery.value) {
+            return `${t('search.meta.description')} "${searchQuery.value}"`;
+          }
+          return t('search.meta.description');
+        })
+      },
+      {
+        property: 'og:title',
+        content: computed(() => {
+          if (searchQuery.value) {
+            return `${t('search.title')} - "${searchQuery.value}"`;
+          }
+          return t('search.title');
+        })
+      },
+      {
+        property: 'og:description',
+        content: computed(() => {
+          if (searchQuery.value) {
+            return `${t('search.meta.description')} "${searchQuery.value}"`;
+          }
+          return t('search.meta.description');
+        })
+      }
+    ]
   });
 </script>
 

@@ -1,9 +1,5 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
-:root {
-  --ui-radius: 0.25rem;
-}
-
 
 .bounce-enter-active {
   animation: scale-in 0.5s ease-out;

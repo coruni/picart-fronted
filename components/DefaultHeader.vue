@@ -87,18 +87,20 @@
           <MessageNotification />
 
           <!-- 主题切换按钮 -->
-          <UButton
-            variant="link"
-            color="neutral"
-            @click="toggleColorMode"
-            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            :title="$t('common.toggleTheme')"
-          >
-            <Icon
-              :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
-              class="w-5 h-5 text-gray-600 dark:text-gray-300"
-            />
-          </UButton>
+          <ColorScheme placeholder="..." tag="span">
+            <UButton
+              variant="link"
+              color="neutral"
+              @click="toggleColorMode"
+              class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              :title="$t('common.toggleTheme')"
+            >
+              <Icon
+                :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+                class="w-5 h-5 text-gray-600 dark:text-gray-300"
+              />
+            </UButton>
+          </ColorScheme>
 
           <div class="group relative cursor-pointer flex items-center gap-1">
             <UAvatar
@@ -184,8 +186,8 @@
       <!-- 移动端汉堡菜单按钮 -->
       <UButton
         @click="toggleMobileMenu"
-        variant="outline"
-        class="mobile-menu-container md:hidden p-2 flex items-center cursor-pointer justify-center rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
+        variant="link"
+        class="mobile-menu-container md:hidden p-1 flex items-center cursor-pointer justify-center rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
         :aria-expanded="isMobileMenuOpen"
         :aria-label="isMobileMenuOpen ? '关闭菜单' : '打开菜单'"
       >
@@ -321,16 +323,18 @@
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {{ $t('common.toggleTheme') || '主题' }}
                     </span>
-                    <UButton
-                      variant="ghost"
-                      @click="toggleColorMode"
-                      class="w-10 h-10 flex items-center justify-center rounded-full transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
-                    >
-                      <Icon
-                        :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
-                        class="w-5 h-5 text-gray-700 dark:text-gray-300"
-                      />
-                    </UButton>
+                    <ColorScheme placeholder="..." tag="span">
+                      <UButton
+                        variant="ghost"
+                        @click="toggleColorMode"
+                        class="w-10 h-10 flex items-center justify-center rounded-full transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      >
+                        <Icon
+                          :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+                          class="w-5 h-5 text-gray-700 dark:text-gray-300"
+                        />
+                      </UButton>
+                    </ColorScheme>
                   </div>
                 </div>
 
@@ -404,10 +408,8 @@
 
   // 确保主题状态在客户端正确获取
   const isDarkMode = computed(() => {
-    // 在客户端确保能正确读取存储的主题状态
-    if (import.meta.client) {
-      return colorMode.preference === 'dark';
-    }
+    // 使用 ColorScheme 组件时，可以安全地访问 colorMode.value
+    return colorMode.value === 'dark';
   });
 
   // 搜索相关

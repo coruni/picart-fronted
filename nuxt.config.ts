@@ -48,7 +48,7 @@ export default defineNuxtConfig({
 
   // Robots 配置
   robots: {
-    disallow: ['/admin/', '/api/', '/user/', '/_nuxt/', '/__nuxt/'],
+    disallow: ['/admin/', '/user/'],
     allow: ['/', '/article/', '/author/', '/category/', '/search'],
     sitemap: [
       'https://www.kawax.org/sitemap_index.xml',
@@ -122,9 +122,14 @@ export default defineNuxtConfig({
 
   // 暗黑模式配置
   colorMode: {
-    preference: 'system', // 默认跟随系统
-    fallback: 'light', // 回退到浅色模式
+    preference: 'system',
+    fallback: 'light',
+    hid: 'nuxt-color-mode-script',
+    globalName: '__NUXT_COLOR_MODE__',
+    componentName: 'ColorScheme',
+    classPrefix: '',
     classSuffix: '',
+    storage: 'localStorage',
     storageKey: 'nuxt-color-mode'
   },
 
@@ -214,7 +219,8 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     minify: true,
     // 跨平台兼容性配置
-    preset: process.env.NITRO_PRESET || 'node_cluster'
+    preset: process.env.NITRO_PRESET || 'node_cluster',
+    logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error'
     // prerender: {
     //   crawlLinks: true,
     //   routes: ['/']
@@ -241,7 +247,29 @@ export default defineNuxtConfig({
     build: {
       // 提高块大小警告限制
       chunkSizeWarningLimit: 1000,
+      // 显示打包进度
+      reportCompressedSize: true,
+      // 显示打包时间
+      minify: 'esbuild',
+      // 显示详细的打包信息
+      sourcemap: false,
       rollupOptions: {
+        onwarn(warning, warn) {
+          // 屏蔽特定的弃用警告
+          if (
+            warning.code === 'DEP0155' ||
+            warning.message.includes('trailing slash pattern mapping') ||
+            warning.message.includes('exports field module resolution')
+          ) {
+            return;
+          }
+          // 屏蔽其他常见的警告
+          if (warning.code === 'CIRCULAR_DEPENDENCY' || warning.code === 'UNUSED_EXTERNAL_IMPORT') {
+            return;
+          }
+          // 显示其他警告
+          warn(warning);
+        },
         output: {
           // 手动代码分割 - 只分割安全的第三方库
           manualChunks: {
