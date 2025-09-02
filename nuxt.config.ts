@@ -68,11 +68,6 @@ export default defineNuxtConfig({
         includeAppSources: true,
         sources: ['/api/__sitemap__/articles']
       },
-      authors: {
-        include: ['/author/**'],
-        includeAppSources: true,
-        sources: ['/api/__sitemap__/authors']
-      },
       categories: {
         include: ['/category/**'],
         includeAppSources: true,

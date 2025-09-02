@@ -90,6 +90,8 @@ import type {
   ArticleControllerFindRecommendResponse,
   ArticleControllerFindArticleByAuthorData,
   ArticleControllerFindArticleByAuthorResponse,
+  ArticleControllerFindPublishedIdsData,
+  ArticleControllerFindPublishedIdsResponse,
   ArticleControllerLikeData,
   CommentControllerFindAllData,
   CommentControllerFindAllResponse,
@@ -1333,6 +1335,32 @@ export const articleControllerFindArticleByAuthor = <
     DefaultT
   >({
     url: '/article/author/{id}',
+    ...options
+  });
+};
+
+/**
+ * 获取已发布文章id列表
+ */
+export const articleControllerFindPublishedIds = <
+  TComposable extends Composable,
+  DefaultT extends
+    ArticleControllerFindPublishedIdsResponse = ArticleControllerFindPublishedIdsResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerFindPublishedIdsData,
+    ArticleControllerFindPublishedIdsResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerFindPublishedIdsResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/article/published/ids',
     ...options
   });
 };

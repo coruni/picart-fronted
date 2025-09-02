@@ -3338,6 +3338,30 @@ export type ArticleControllerFindArticleByAuthorResponses = {
 export type ArticleControllerFindArticleByAuthorResponse =
   ArticleControllerFindArticleByAuthorResponses[keyof ArticleControllerFindArticleByAuthorResponses];
 
+export type ArticleControllerFindPublishedIdsData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/article/published/ids';
+};
+
+export type ArticleControllerFindPublishedIdsResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: Array<number>;
+  };
+};
+
+export type ArticleControllerFindPublishedIdsResponse =
+  ArticleControllerFindPublishedIdsResponses[keyof ArticleControllerFindPublishedIdsResponses];
+
 export type ArticleControllerLikeData = {
   body?: ArticleLikeDto;
   headers?: {
