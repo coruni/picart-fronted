@@ -122,6 +122,7 @@
                 placeholder: $t('form.tag.searchPlaceholder')
               }"
               :placeholder="$t('form.tag.placeholder')"
+              createItem="always"
               :loading="isTagSearching"
               @create="onCreate"
               @update:searchTerm="
