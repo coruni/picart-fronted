@@ -157,7 +157,7 @@
             :search-input="{
               placeholder: $t('form.tag.searchPlaceholder')
             }"
-            :createItem="{ when: 'empty' }"
+            createItem="always"
             :placeholder="$t('form.tag.placeholder')"
             :loading="isTagSearching"
             :empty-state="{

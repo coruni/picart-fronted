@@ -37,7 +37,6 @@ export default defineNuxtConfig({
     description: '图片分享社区',
     defaultLocale: 'zh',
     exclude: ['/admin/**', '/user/**'],
-    cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
     autoLastmod: true
   },
   icon: {
@@ -62,17 +61,12 @@ export default defineNuxtConfig({
   sitemap: {
     exclude: ['/admin/**', '/user/**'],
     sitemapsPathPrefix: '/',
-    cacheMaxAgeSeconds: 60 * 60 * 24 * 30,
+    gzip: true,
     sitemaps: {
       articles: {
         include: ['/article/**'],
         includeAppSources: true,
         sources: ['/api/__sitemap__/articles']
-      },
-      authors: {
-        include: ['/author/**'],
-        includeAppSources: true,
-        sources: ['/api/__sitemap__/authors']
       },
       categories: {
         include: ['/category/**'],
