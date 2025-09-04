@@ -324,7 +324,6 @@
           <UFormField :label="$t('user.username')" name="username">
             <UInput
               v-model="editForm.username"
-              disabled
               :placeholder="$t('user.enterUsername')"
               class="w-full"
             />
