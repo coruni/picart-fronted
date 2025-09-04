@@ -6,6 +6,11 @@ export const useAppStore = defineStore('app', {
     loading: false as boolean,
     error: null as string | null,
     deviceId: '' as string,
+    // 维护模式状态
+    maintenance: {
+      enabled: false as boolean,
+      message: '' as string
+    },
     // i18n相关状态
     i18n: {
       availableLocales: ['zh', 'en', 'ja'] as string[],
@@ -21,7 +26,10 @@ export const useAppStore = defineStore('app', {
     hasError: state => !!state.error,
     currentLocale: state => state.language,
     getDeviceId: state => state.deviceId,
-    supportedLocales: state => state.i18n.availableLocales
+    supportedLocales: state => state.i18n.availableLocales,
+    // 维护模式相关getters
+    isMaintenanceMode: state => state.maintenance.enabled,
+    maintenanceMessage: state => state.maintenance.message
   },
 
   actions: {
@@ -58,6 +66,20 @@ export const useAppStore = defineStore('app', {
 
     clearError() {
       this.error = null;
+    },
+
+    // 维护模式相关操作
+    setMaintenanceMode(enabled: boolean) {
+      this.maintenance.enabled = enabled;
+    },
+
+    setMaintenanceMessage(message: string) {
+      this.maintenance.message = message;
+    },
+
+    updateMaintenance(config: { enabled: boolean; message: string }) {
+      this.maintenance.enabled = config.enabled;
+      this.maintenance.message = config.message;
     },
 
     // i18n相关操作

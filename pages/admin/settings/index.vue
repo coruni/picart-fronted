@@ -677,13 +677,7 @@
 
 <script setup lang="ts">
   import type { TabsItem } from '@nuxt/ui';
-  import {
-    configControllerFindAll,
-    configControllerUpdateAll,
-    uploadControllerUploadFile
-  } from '~~/api';
-  import { ref, watch } from 'vue';
-
+  import { configControllerFindAll, configControllerUpdateAll } from '~/api';
   definePageMeta({
     layout: 'dashboard',
     requiresAuth: true
@@ -738,7 +732,7 @@
     membership_enabled: true,
     membership_name: '',
     membership_price: 0,
-    maintenance_mode: true,
+    maintenance_mode: false,
     maintenance_message: '',
     invite_code_required: true,
     invite_code_enabled: true,
@@ -837,9 +831,13 @@
         composable: '$fetch',
         body: submitData as any
       });
+      toast.add({
+        title: t('common.message.updateSuccess'),
+        color: 'primary'
+      });
     } catch (error) {
       toast.add({
-        title: t('admin.settings.saveFailed'),
+        title: t('common.message.updateFailed'),
         color: 'error'
       });
     } finally {
