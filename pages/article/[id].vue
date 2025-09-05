@@ -321,7 +321,9 @@
       <div class="flex-1">
         <!-- 文章标题区 -->
         <div class="mb-4 md:mb-8">
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4">
+          <h1
+            class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 break-words"
+          >
             {{ article?.data.title }}
           </h1>
           <div
