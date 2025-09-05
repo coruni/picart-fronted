@@ -18,12 +18,12 @@
                   format="webp"
                   sizes="96px md:128px"
                 />
-                <!-- <div
-                  class="absolute bottom-2 right-2 w-6 h-6 md:w-8 md:h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer"
-                  @click="triggerAvatarUpload"
+                <div
+                  v-if="userProfile?.data?.isMember"
+                  class="absolute bottom-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
                 >
-                  <Icon name="mynaui:camera" class="text-white text-xs md:text-sm" />
-                </div> -->
+                  <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                </div>
               </div>
               <div class="flex-1">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
@@ -206,8 +206,7 @@
 
         <!-- 右侧边栏 -->
         <div
-          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10"
-          style="position: sticky"
+          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10 sticky"
         >
           <!-- 会员等级 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
@@ -226,12 +225,10 @@
             </div>
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                (userProfile?.data?.membershipLevel || 0) > 0
-                  ? $t('user.vipMember')
-                  : $t('user.basicMember')
+                userProfile?.data.isMember ? $t('user.vipMember') : $t('user.basicMember')
               }}</span>
               <span class="text-sm font-medium text-primary-500 dark:text-white"
-                >Lv.{{ userProfile?.data?.membershipLevel || 0 }}</span
+                >Lv.{{ userProfile?.data?.level || 0 }}</span
               >
             </div>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">

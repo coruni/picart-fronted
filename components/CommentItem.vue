@@ -22,7 +22,7 @@
           />
           <!-- VIP 标识 -->
           <div
-            v-if="comment.author?.membershipLevel > 0"
+            v-if="comment.author?.isMember"
             class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
           >
             <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
@@ -159,7 +159,7 @@
                 />
                 <!-- VIP 标识 -->
                 <div
-                  v-if="comment.author?.membershipLevel > 0"
+                  v-if="comment.author?.isMember"
                   class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
                 >
                   <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
@@ -230,7 +230,7 @@
                   />
                   <!-- VIP 标识 -->
                   <div
-                    v-if="reply.author?.membershipLevel > 0"
+                    v-if="reply.author?.isMember"
                     class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
                   >
                     <Icon name="mynaui:heart-waves" class="w-2 h-2 text-white" />

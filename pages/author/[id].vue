@@ -84,8 +84,11 @@
                   sizes="96px md:128px"
                 />
                 <div
-                  class="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-2 border-white"
-                ></div>
+                  v-if="authorInfo?.isMember"
+                  class="absolute bottom-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
+                >
+                  <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                </div>
               </div>
               <div class="flex-1">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
@@ -211,8 +214,7 @@
 
         <!-- 右侧边栏 -->
         <div
-          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10"
-          style="position: sticky"
+          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10 sticky"
         >
           <!-- 会员等级 -->
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
@@ -221,7 +223,7 @@
             </h3>
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                authorInfo?.membershipLevelName || $t('author.basicMember')
+                authorInfo?.isMember ? $t('user.vipMember') : $t('user.basicMember')
               }}</span>
               <span class="text-sm font-medium text-primary-500"
                 >Lv.{{ authorInfo?.membershipLevel || 0 }}</span
@@ -250,7 +252,7 @@
                   $t('author.totalViews')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  authorInfo?.totalViews || 0
+                  authorInfo?.articleCount || 0
                 }}</span>
               </div>
               <div class="flex items-center justify-between">
@@ -258,7 +260,7 @@
                   $t('author.totalLikes')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  authorInfo?.totalLikes || 0
+                  authorInfo?.followerCount || 0
                 }}</span>
               </div>
               <div class="flex items-center justify-between">
@@ -266,7 +268,7 @@
                   $t('author.avgRating')
                 }}</span>
                 <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  authorInfo?.avgRating || 0
+                  authorInfo?.followingCount || 0
                 }}</span>
               </div>
             </div>
@@ -284,12 +286,11 @@
     articleControllerFindArticleByAuthor,
     userControllerFollow,
     userControllerUnfollow
-  } from '~~/api';
+  } from '~/api';
   import { watch } from 'vue';
 
   const route = useRoute();
   const { t } = useI18n();
-  const toast = useToast();
   const userStore = useUserStore();
 
   // 作者信息
@@ -488,7 +489,7 @@
     meta: [
       {
         name: 'description',
-        content: authorInfo.value?.description
+        content: authorInfo.value?.description as string
       },
       {
         name: 'robots',

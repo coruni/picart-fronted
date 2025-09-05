@@ -328,15 +328,24 @@
             class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
           >
             <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="flex items-center">
-              <UAvatar
-                :src="article?.data.author.avatar"
-                :alt="article?.data.author.nickname ?? article?.data.author.username"
-                class="w-8 h-8 rounded-full mr-2 object-cover"
-                loading="lazy"
-                format="webp"
-                sizes="32px"
-                placeholder
-              />
+              <div class="relative flex items-center justify-center mr-2">
+                <UAvatar
+                  :src="article?.data.author.avatar"
+                  :alt="article?.data.author.nickname ?? article?.data.author.username"
+                  class="w-8 h-8 rounded-full object-cover"
+                  loading="lazy"
+                  format="webp"
+                  sizes="32px"
+                  placeholder
+                />
+                <div
+                  v-if="article?.data.author.isMember"
+                  class="absolute -bottom-1 -right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
+                >
+                  <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                </div>
+              </div>
+
               <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
             </NuxtLinkLocale>
             <div>{{ $t('article.publishAt') }} {{ formatDate(article?.data.createdAt) }}</div>
@@ -550,9 +559,9 @@
             >
               <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center space-x-2">
-                  <Icon :name="getDownloadTypeIcon(download.type)" class="w-5 h-5 text-primary" />
+                  <Icon :name="getDownloadTypeIcon(download.type!)" class="w-5 h-5 text-primary" />
                   <span class="font-medium text-gray-900 dark:text-gray-100">
-                    {{ getDownloadTypeName(download.type) }}
+                    {{ getDownloadTypeName(download.type!) }}
                   </span>
                 </div>
                 <span class="text-xs text-gray-500 dark:text-gray-400"> #{{ index + 1 }} </span>
@@ -709,8 +718,11 @@
                   sizes="48px md:64px"
                 />
                 <div
-                  class="absolute -bottom-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full border-2 border-white"
-                ></div>
+                  v-if="article?.data.author.isMember"
+                  class="absolute bottom-1 right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
+                >
+                  <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                </div>
               </NuxtLinkLocale>
               <div>
                 <h4 class="font-bold text-gray-900 dark:text-gray-100 text-sm md:text-base">
@@ -898,19 +910,7 @@
     const userInfo = userStore.userInfo;
     if (!userInfo) return false;
 
-    // 检查会员等级是否大于0（基础会员）
-    if (userInfo.membershipLevel && userInfo.membershipLevel > 0) {
-      return true;
-    }
-
-    // 检查会员到期时间
-    if (userInfo.membershipEndDate) {
-      const endDate = new Date(userInfo.membershipEndDate as string);
-      const now = new Date();
-      return endDate > now;
-    }
-
-    return false;
+    return userInfo.isMember;
   });
 
   // 点赞相关状态
