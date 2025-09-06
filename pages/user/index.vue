@@ -120,13 +120,6 @@
               <div
                 class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
               >
-                <Icon name="mynaui:credit-card" class="w-8 h-8 text-gray-400 mb-2" />
-                <span class="text-sm font-medium text-gray-500">{{ $t('user.wallet') }}</span>
-              </div>
-
-              <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
-              >
                 <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
                 <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
               </div>

@@ -122,6 +122,12 @@ export const createClientConfig: CreateClientConfig = config => {
         const { $i18n } = useNuxtApp();
         const t = $i18n.t;
 
+        if (context.response.status === 401) {
+          clearAuthToken();
+          navigateTo('/user/login');
+          return context;
+        }
+
         toast.add({
           title: t(error.message),
           color: 'error',
@@ -216,12 +222,7 @@ export function setAuthToken(token: string, userStore?: any): void {
 }
 
 // 用户登出时调用此函数
-export function clearAuthToken(userStore?: any): void {
-  // 清除store
-  if (userStore?.clearToken) {
-    userStore.clearToken();
-  }
-
+export function clearAuthToken(): void {
   // 清除cookie（通过插件处理）
   if (import.meta.client) {
     const authTokenCookie = useCookie('auth-token', {

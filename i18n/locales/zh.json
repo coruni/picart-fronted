@@ -143,7 +143,18 @@
       "adGlobalEnabled": "启用全局广告",
       "adGlobalContent": "全局广告内容",
       "adGlobalPosition": "全局广告位置",
-      "adGlobalStyle": "全局广告样式"
+      "adGlobalStyle": "全局广告样式",
+      "paymentAlipayGateway": "支付宝网关",
+      "paymentAlipayNotifyUrl": "支付宝通知URL",
+      "paymentAlipayReturnUrl": "支付宝返回URL",
+      "paymentWechatPrivateKey": "微信私钥",
+      "paymentWechatPublicKey": "微信公钥",
+      "paymentWechatSerialNo": "微信序列号",
+      "paymentEpayAppId": "易支付应用ID",
+      "paymentEpayAppKey": "易支付应用密钥",
+      "paymentEpayGateway": "易支付网关",
+      "paymentNotifyUrl": "支付通知URL(通用)",
+      "paymentReturnUrl": "支付返回URL(通用)"
     },
     "payment": {
       "title": "支付",

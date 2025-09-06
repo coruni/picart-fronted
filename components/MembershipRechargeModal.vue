@@ -39,7 +39,7 @@
               {{ $t('user.recharge.walletBalance') }}
             </div>
             <div class="text-lg font-semibold text-primary">
-              ¥{{ props.userProfile?.wallet || 0 }}
+              ¥{{ props.userProfile?.wallet?.toFixed(2) || 0 }}
             </div>
           </div>
         </div>
@@ -105,7 +105,9 @@
                     {{ $t('payment.balance') }}
                   </div>
                   <div class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ $t('payment.balanceDesc') }}: ¥{{ props.userProfile?.wallet || 0 }}
+                    {{ $t('payment.balanceDesc') }}: ¥{{
+                      props.userProfile?.wallet?.toFixed(2) || 0
+                    }}
                   </div>
                 </div>
               </div>
