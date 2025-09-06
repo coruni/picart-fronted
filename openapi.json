@@ -2589,15 +2589,13 @@
                                 "type": "string"
                               },
                               "nickname": {
-                                "type": "string",
-                                "nullable": true
+                                "type": "string"
                               },
                               "status": {
                                 "type": "string"
                               },
                               "avatar": {
-                                "type": "string",
-                                "nullable": true
+                                "type": "string"
                               },
                               "description": {
                                 "type": "string"
@@ -2637,6 +2635,12 @@
                                     "description": {
                                       "type": "string"
                                     },
+                                    "isActive": {
+                                      "type": "boolean"
+                                    },
+                                    "isSystem": {
+                                      "type": "boolean"
+                                    },
                                     "permissions": {
                                       "type": "array",
                                       "items": {
@@ -2671,6 +2675,8 @@
                                     "name",
                                     "displayName",
                                     "description",
+                                    "isActive",
+                                    "isSystem",
                                     "permissions",
                                     "createdAt",
                                     "updatedAt"
@@ -2679,7 +2685,95 @@
                               },
                               "config": {
                                 "type": "object",
-                                "properties": {}
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "userId": {
+                                    "type": "integer"
+                                  },
+                                  "articleCommissionRate": {
+                                    "type": "string"
+                                  },
+                                  "membershipCommissionRate": {
+                                    "type": "string"
+                                  },
+                                  "productCommissionRate": {
+                                    "type": "string"
+                                  },
+                                  "serviceCommissionRate": {
+                                    "type": "string"
+                                  },
+                                  "enableCustomCommission": {
+                                    "type": "boolean"
+                                  },
+                                  "enableSystemNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableCommentNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableLikeNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableFollowNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableMessageNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableOrderNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enablePaymentNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableInviteNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableEmailNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enableSmsNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "enablePushNotification": {
+                                    "type": "boolean"
+                                  },
+                                  "remark": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "userId",
+                                  "articleCommissionRate",
+                                  "membershipCommissionRate",
+                                  "productCommissionRate",
+                                  "serviceCommissionRate",
+                                  "enableCustomCommission",
+                                  "enableSystemNotification",
+                                  "enableCommentNotification",
+                                  "enableLikeNotification",
+                                  "enableFollowNotification",
+                                  "enableMessageNotification",
+                                  "enableOrderNotification",
+                                  "enablePaymentNotification",
+                                  "enableInviteNotification",
+                                  "enableEmailNotification",
+                                  "enableSmsNotification",
+                                  "enablePushNotification",
+                                  "remark",
+                                  "createdAt",
+                                  "updatedAt"
+                                ]
                               },
                               "createdAt": {
                                 "type": "string"
@@ -2688,6 +2782,9 @@
                                 "type": "string"
                               },
                               "isFollowed": {
+                                "type": "boolean"
+                              },
+                              "isMember": {
                                 "type": "boolean"
                               }
                             },
@@ -2708,7 +2805,8 @@
                               "config",
                               "createdAt",
                               "updatedAt",
-                              "isFollowed"
+                              "isFollowed",
+                              "isMember"
                             ]
                           }
                         },
@@ -2944,7 +3042,7 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "address": {
                           "type": "null"
@@ -2974,7 +3072,7 @@
                           "type": "integer"
                         },
                         "wallet": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "membershipLevel": {
                           "type": "integer"
@@ -2986,10 +3084,10 @@
                           "type": "string"
                         },
                         "membershipStartDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "membershipEndDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "lastLoginAt": {
                           "type": "string"
@@ -3029,6 +3127,12 @@
                               "description": {
                                 "type": "string"
                               },
+                              "isActive": {
+                                "type": "boolean"
+                              },
+                              "isSystem": {
+                                "type": "boolean"
+                              },
                               "permissions": {
                                 "type": "array",
                                 "items": {
@@ -3061,7 +3165,95 @@
                           }
                         },
                         "config": {
-                          "type": "null"
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "articleCommissionRate": {
+                              "type": "string"
+                            },
+                            "membershipCommissionRate": {
+                              "type": "string"
+                            },
+                            "productCommissionRate": {
+                              "type": "string"
+                            },
+                            "serviceCommissionRate": {
+                              "type": "string"
+                            },
+                            "enableCustomCommission": {
+                              "type": "boolean"
+                            },
+                            "enableSystemNotification": {
+                              "type": "boolean"
+                            },
+                            "enableCommentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableLikeNotification": {
+                              "type": "boolean"
+                            },
+                            "enableFollowNotification": {
+                              "type": "boolean"
+                            },
+                            "enableMessageNotification": {
+                              "type": "boolean"
+                            },
+                            "enableOrderNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePaymentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableInviteNotification": {
+                              "type": "boolean"
+                            },
+                            "enableEmailNotification": {
+                              "type": "boolean"
+                            },
+                            "enableSmsNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePushNotification": {
+                              "type": "boolean"
+                            },
+                            "remark": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "userId",
+                            "articleCommissionRate",
+                            "membershipCommissionRate",
+                            "productCommissionRate",
+                            "serviceCommissionRate",
+                            "enableCustomCommission",
+                            "enableSystemNotification",
+                            "enableCommentNotification",
+                            "enableLikeNotification",
+                            "enableFollowNotification",
+                            "enableMessageNotification",
+                            "enableOrderNotification",
+                            "enablePaymentNotification",
+                            "enableInviteNotification",
+                            "enableEmailNotification",
+                            "enableSmsNotification",
+                            "enablePushNotification",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
+                          ]
                         },
                         "createdAt": {
                           "type": "string"
@@ -3070,6 +3262,9 @@
                           "type": "string"
                         },
                         "isFollowed": {
+                          "type": "boolean"
+                        },
+                        "isMember": {
                           "type": "boolean"
                         }
                       },
@@ -3111,7 +3306,8 @@
                         "config",
                         "createdAt",
                         "updatedAt",
-                        "isFollowed"
+                        "isFollowed",
+                        "isMember"
                       ]
                     }
                   },
@@ -3381,25 +3577,25 @@
                           "type": "string"
                         },
                         "banned": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "banReason": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "avatar": {
                           "type": "string"
                         },
                         "description": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "address": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "gender": {
                           "type": "string"
                         },
                         "birthDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "articleCount": {
                           "type": "integer"
@@ -3420,7 +3616,7 @@
                           "type": "integer"
                         },
                         "wallet": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "membershipLevel": {
                           "type": "integer"
@@ -3432,22 +3628,22 @@
                           "type": "string"
                         },
                         "membershipStartDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "membershipEndDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "lastLoginAt": {
                           "type": "string"
                         },
                         "lastActiveAt": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "refreshToken": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "inviterId": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "inviteCode": {
                           "type": "string"
@@ -3474,6 +3670,12 @@
                               },
                               "description": {
                                 "type": "string"
+                              },
+                              "isActive": {
+                                "type": "boolean"
+                              },
+                              "isSystem": {
+                                "type": "boolean"
                               },
                               "permissions": {
                                 "type": "array",
@@ -3507,13 +3709,104 @@
                           }
                         },
                         "config": {
-                          "type": "null"
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "articleCommissionRate": {
+                              "type": "string"
+                            },
+                            "membershipCommissionRate": {
+                              "type": "string"
+                            },
+                            "productCommissionRate": {
+                              "type": "string"
+                            },
+                            "serviceCommissionRate": {
+                              "type": "string"
+                            },
+                            "enableCustomCommission": {
+                              "type": "boolean"
+                            },
+                            "enableSystemNotification": {
+                              "type": "boolean"
+                            },
+                            "enableCommentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableLikeNotification": {
+                              "type": "boolean"
+                            },
+                            "enableFollowNotification": {
+                              "type": "boolean"
+                            },
+                            "enableMessageNotification": {
+                              "type": "boolean"
+                            },
+                            "enableOrderNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePaymentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableInviteNotification": {
+                              "type": "boolean"
+                            },
+                            "enableEmailNotification": {
+                              "type": "boolean"
+                            },
+                            "enableSmsNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePushNotification": {
+                              "type": "boolean"
+                            },
+                            "remark": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "userId",
+                            "articleCommissionRate",
+                            "membershipCommissionRate",
+                            "productCommissionRate",
+                            "serviceCommissionRate",
+                            "enableCustomCommission",
+                            "enableSystemNotification",
+                            "enableCommentNotification",
+                            "enableLikeNotification",
+                            "enableFollowNotification",
+                            "enableMessageNotification",
+                            "enableOrderNotification",
+                            "enablePaymentNotification",
+                            "enableInviteNotification",
+                            "enableEmailNotification",
+                            "enableSmsNotification",
+                            "enablePushNotification",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
+                          ]
                         },
                         "createdAt": {
                           "type": "string"
                         },
                         "updatedAt": {
                           "type": "string"
+                        },
+                        "isMember": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -3552,7 +3845,8 @@
                         "roles",
                         "config",
                         "createdAt",
-                        "updatedAt"
+                        "updatedAt",
+                        "isMember"
                       ]
                     }
                   },
@@ -4194,7 +4488,7 @@
                           "type": "string"
                         },
                         "phone": {
-                          "type": "string"
+                          "type": "null"
                         },
                         "status": {
                           "type": "string"
@@ -4209,7 +4503,7 @@
                           "type": "string"
                         },
                         "description": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "address": {
                           "type": "null"
@@ -4239,7 +4533,7 @@
                           "type": "integer"
                         },
                         "wallet": {
-                          "type": "integer"
+                          "type": "number"
                         },
                         "membershipLevel": {
                           "type": "integer"
@@ -4251,10 +4545,10 @@
                           "type": "string"
                         },
                         "membershipStartDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "membershipEndDate": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "lastLoginAt": {
                           "type": "string"
@@ -4269,7 +4563,7 @@
                           "type": "null"
                         },
                         "inviteCode": {
-                          "type": "string"
+                          "type": "null"
                         },
                         "inviteEarnings": {
                           "type": "string"
@@ -4293,6 +4587,12 @@
                               },
                               "description": {
                                 "type": "string"
+                              },
+                              "isActive": {
+                                "type": "boolean"
+                              },
+                              "isSystem": {
+                                "type": "boolean"
                               },
                               "permissions": {
                                 "type": "array",
@@ -4325,11 +4625,105 @@
                             }
                           }
                         },
+                        "config": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "userId": {
+                              "type": "integer"
+                            },
+                            "articleCommissionRate": {
+                              "type": "string"
+                            },
+                            "membershipCommissionRate": {
+                              "type": "string"
+                            },
+                            "productCommissionRate": {
+                              "type": "string"
+                            },
+                            "serviceCommissionRate": {
+                              "type": "string"
+                            },
+                            "enableCustomCommission": {
+                              "type": "boolean"
+                            },
+                            "enableSystemNotification": {
+                              "type": "boolean"
+                            },
+                            "enableCommentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableLikeNotification": {
+                              "type": "boolean"
+                            },
+                            "enableFollowNotification": {
+                              "type": "boolean"
+                            },
+                            "enableMessageNotification": {
+                              "type": "boolean"
+                            },
+                            "enableOrderNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePaymentNotification": {
+                              "type": "boolean"
+                            },
+                            "enableInviteNotification": {
+                              "type": "boolean"
+                            },
+                            "enableEmailNotification": {
+                              "type": "boolean"
+                            },
+                            "enableSmsNotification": {
+                              "type": "boolean"
+                            },
+                            "enablePushNotification": {
+                              "type": "boolean"
+                            },
+                            "remark": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string"
+                            },
+                            "updatedAt": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "userId",
+                            "articleCommissionRate",
+                            "membershipCommissionRate",
+                            "productCommissionRate",
+                            "serviceCommissionRate",
+                            "enableCustomCommission",
+                            "enableSystemNotification",
+                            "enableCommentNotification",
+                            "enableLikeNotification",
+                            "enableFollowNotification",
+                            "enableMessageNotification",
+                            "enableOrderNotification",
+                            "enablePaymentNotification",
+                            "enableInviteNotification",
+                            "enableEmailNotification",
+                            "enableSmsNotification",
+                            "enablePushNotification",
+                            "remark",
+                            "createdAt",
+                            "updatedAt"
+                          ]
+                        },
                         "createdAt": {
                           "type": "string"
                         },
                         "updatedAt": {
                           "type": "string"
+                        },
+                        "isMember": {
+                          "type": "boolean"
                         },
                         "token": {
                           "type": "string"
@@ -4369,8 +4763,10 @@
                         "inviteEarnings",
                         "inviteCount",
                         "roles",
+                        "config",
                         "createdAt",
                         "updatedAt",
+                        "isMember",
                         "token"
                       ]
                     }
@@ -5691,8 +6087,7 @@
                                 "type": "string"
                               },
                               "content": {
-                                "type": "string",
-                                "nullable": true
+                                "type": "string"
                               },
                               "images": {
                                 "type": "array",
@@ -5700,8 +6095,11 @@
                                   "type": "string"
                                 }
                               },
+                              "sort": {
+                                "type": "integer"
+                              },
                               "summary": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "views": {
                                 "type": "integer"
@@ -5739,6 +6137,15 @@
                                   "membershipLevel": {
                                     "type": "integer"
                                   },
+                                  "membershipStatus": {
+                                    "type": "string"
+                                  },
+                                  "membershipStartDate": {
+                                    "type": "string"
+                                  },
+                                  "membershipEndDate": {
+                                    "type": "string"
+                                  },
                                   "status": {
                                     "type": "string"
                                   },
@@ -5749,13 +6156,25 @@
                                     "type": "string"
                                   },
                                   "description": {
-                                    "type": "null"
+                                    "type": "string"
                                   },
                                   "followerCount": {
                                     "type": "integer"
                                   },
                                   "followingCount": {
                                     "type": "integer"
+                                  },
+                                  "lastActiveAt": {
+                                    "type": "null"
+                                  },
+                                  "lastLoginAt": {
+                                    "type": "string"
+                                  },
+                                  "gender": {
+                                    "type": "string"
+                                  },
+                                  "isMember": {
+                                    "type": "boolean"
                                   },
                                   "isFollowed": {
                                     "type": "boolean"
@@ -5765,14 +6184,22 @@
                                   "id",
                                   "username",
                                   "nickname",
+                                  "avatar",
                                   "level",
                                   "membershipLevel",
+                                  "membershipStatus",
+                                  "membershipStartDate",
+                                  "membershipEndDate",
                                   "status",
                                   "createdAt",
                                   "updatedAt",
                                   "description",
                                   "followerCount",
                                   "followingCount",
+                                  "lastActiveAt",
+                                  "lastLoginAt",
+                                  "gender",
+                                  "isMember",
                                   "isFollowed"
                                 ]
                               },
@@ -5791,6 +6218,10 @@
                                   "parentId": {
                                     "type": "integer"
                                   },
+                                  "link": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
                                   "parent": {
                                     "type": "object",
                                     "properties": {
@@ -5806,11 +6237,16 @@
                                       "parentId": {
                                         "type": "null"
                                       },
+                                      "link": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
                                       "avatar": {
                                         "type": "string"
                                       },
                                       "background": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "nullable": true
                                       },
                                       "cover": {
                                         "type": "string"
@@ -5839,6 +6275,7 @@
                                       "name",
                                       "description",
                                       "parentId",
+                                      "link",
                                       "avatar",
                                       "background",
                                       "cover",
@@ -5854,7 +6291,8 @@
                                     "type": "string"
                                   },
                                   "background": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                   },
                                   "cover": {
                                     "type": "string"
@@ -5883,6 +6321,7 @@
                                   "name",
                                   "description",
                                   "parentId",
+                                  "link",
                                   "parent",
                                   "avatar",
                                   "background",
@@ -5898,20 +6337,59 @@
                               "tags": {
                                 "type": "array",
                                 "items": {
-                                  "type": "string"
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "description": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "avatar": {
+                                      "type": "string"
+                                    },
+                                    "background": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "cover": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "sort": {
+                                      "type": "integer"
+                                    },
+                                    "articleCount": {
+                                      "type": "integer"
+                                    },
+                                    "followCount": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "description",
+                                    "avatar",
+                                    "background",
+                                    "cover",
+                                    "sort",
+                                    "articleCount",
+                                    "followCount",
+                                    "createdAt",
+                                    "updatedAt"
+                                  ]
                                 }
-                              },
-                              "createdAt": {
-                                "type": "string"
-                              },
-                              "updatedAt": {
-                                "type": "string"
-                              },
-                              "isLiked": {
-                                "type": "boolean"
-                              },
-                              "isPaid": {
-                                "type": "boolean"
                               },
                               "downloads": {
                                 "type": "array",
@@ -5919,22 +6397,10 @@
                                   "type": "object",
                                   "properties": {
                                     "id": {
-                                      "type": "number"
+                                      "type": "integer"
                                     },
                                     "type": {
-                                      "type": "string",
-                                      "enum": [
-                                        "baidu",
-                                        "google",
-                                        "dropbox",
-                                        "lanzou",
-                                        "mega",
-                                        "onedrive",
-                                        "direct",
-                                        "other",
-                                        "aliyun",
-                                        "quark"
-                                      ]
+                                      "type": "string"
                                     },
                                     "url": {
                                       "type": "string"
@@ -5946,7 +6412,7 @@
                                       "type": "string"
                                     },
                                     "articleId": {
-                                      "type": "number"
+                                      "type": "integer"
                                     },
                                     "createdAt": {
                                       "type": "string"
@@ -5965,11 +6431,22 @@
                                     "createdAt",
                                     "updatedAt"
                                   ]
-                                },
-                                "nullable": true
+                                }
                               },
-                              "downloadsCount": {
-                                "type": "number"
+                              "downloadCount": {
+                                "type": "integer"
+                              },
+                              "createdAt": {
+                                "type": "string"
+                              },
+                              "updatedAt": {
+                                "type": "string"
+                              },
+                              "isLiked": {
+                                "type": "boolean"
+                              },
+                              "isPaid": {
+                                "type": "boolean"
                               }
                             },
                             "required": [
@@ -5983,6 +6460,7 @@
                               "type",
                               "content",
                               "images",
+                              "sort",
                               "summary",
                               "views",
                               "likes",
@@ -5992,13 +6470,12 @@
                               "author",
                               "category",
                               "tags",
+                              "downloads",
+                              "downloadCount",
                               "createdAt",
                               "updatedAt",
                               "isLiked",
-                              "isPaid",
-                              "01K2VE6CR5FTXYYZ85WRYSGR7S",
-                              "downloads",
-                              "downloadsCount"
+                              "isPaid"
                             ]
                           }
                         },
@@ -6216,7 +6693,7 @@
                           "type": "string"
                         },
                         "content": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "images": {
                           "type": "array",
@@ -6224,8 +6701,11 @@
                             "type": "string"
                           }
                         },
+                        "sort": {
+                          "type": "integer"
+                        },
                         "summary": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "views": {
                           "type": "integer"
@@ -6263,6 +6743,15 @@
                             "membershipLevel": {
                               "type": "integer"
                             },
+                            "membershipStatus": {
+                              "type": "string"
+                            },
+                            "membershipStartDate": {
+                              "type": "string"
+                            },
+                            "membershipEndDate": {
+                              "type": "string"
+                            },
                             "status": {
                               "type": "string"
                             },
@@ -6273,13 +6762,25 @@
                               "type": "string"
                             },
                             "description": {
-                              "type": "null"
+                              "type": "string"
                             },
                             "followerCount": {
                               "type": "integer"
                             },
                             "followingCount": {
                               "type": "integer"
+                            },
+                            "lastActiveAt": {
+                              "type": "null"
+                            },
+                            "lastLoginAt": {
+                              "type": "string"
+                            },
+                            "gender": {
+                              "type": "string"
+                            },
+                            "isMember": {
+                              "type": "boolean"
                             },
                             "isFollowed": {
                               "type": "boolean"
@@ -6289,14 +6790,22 @@
                             "id",
                             "username",
                             "nickname",
+                            "avatar",
                             "level",
                             "membershipLevel",
+                            "membershipStatus",
+                            "membershipStartDate",
+                            "membershipEndDate",
                             "status",
                             "createdAt",
                             "updatedAt",
                             "description",
                             "followerCount",
                             "followingCount",
+                            "lastActiveAt",
+                            "lastLoginAt",
+                            "gender",
+                            "isMember",
                             "isFollowed"
                           ]
                         },
@@ -6315,6 +6824,9 @@
                             "parentId": {
                               "type": "integer"
                             },
+                            "link": {
+                              "type": "null"
+                            },
                             "parent": {
                               "type": "object",
                               "properties": {
@@ -6328,6 +6840,9 @@
                                   "type": "string"
                                 },
                                 "parentId": {
+                                  "type": "null"
+                                },
+                                "link": {
                                   "type": "null"
                                 },
                                 "avatar": {
@@ -6363,6 +6878,7 @@
                                 "name",
                                 "description",
                                 "parentId",
+                                "link",
                                 "avatar",
                                 "background",
                                 "cover",
@@ -6400,64 +6916,6 @@
                             },
                             "updatedAt": {
                               "type": "string"
-                            },
-                            "downloads": {
-                              "type": "array",
-                              "items": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "number"
-                                  },
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "baidu",
-                                      "google",
-                                      "dropbox",
-                                      "lanzou",
-                                      "mega",
-                                      "onedrive",
-                                      "direct",
-                                      "other",
-                                      "aliyun",
-                                      "quark"
-                                    ]
-                                  },
-                                  "url": {
-                                    "type": "string"
-                                  },
-                                  "password": {
-                                    "type": "string"
-                                  },
-                                  "extractionCode": {
-                                    "type": "string"
-                                  },
-                                  "articleId": {
-                                    "type": "number"
-                                  },
-                                  "createdAt": {
-                                    "type": "string"
-                                  },
-                                  "updatedAt": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "id",
-                                  "type",
-                                  "url",
-                                  "password",
-                                  "extractionCode",
-                                  "articleId",
-                                  "createdAt",
-                                  "updatedAt"
-                                ]
-                              },
-                              "nullable": true
-                            },
-                            "downloadsCount": {
-                              "type": "number"
                             }
                           },
                           "required": [
@@ -6465,6 +6923,7 @@
                             "name",
                             "description",
                             "parentId",
+                            "link",
                             "parent",
                             "avatar",
                             "background",
@@ -6489,16 +6948,19 @@
                                 "type": "string"
                               },
                               "description": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "avatar": {
                                 "type": "string"
                               },
                               "background": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "cover": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "sort": {
                                 "type": "integer"
@@ -6531,40 +6993,16 @@
                             ]
                           }
                         },
-                        "createdAt": {
-                          "type": "string"
-                        },
-                        "updatedAt": {
-                          "type": "string"
-                        },
-                        "isLiked": {
-                          "type": "boolean"
-                        },
-                        "isPaid": {
-                          "type": "boolean"
-                        },
                         "downloads": {
                           "type": "array",
                           "items": {
                             "type": "object",
                             "properties": {
                               "id": {
-                                "type": "number"
+                                "type": "integer"
                               },
                               "type": {
-                                "type": "string",
-                                "enum": [
-                                  "baidu",
-                                  "google",
-                                  "dropbox",
-                                  "lanzou",
-                                  "mega",
-                                  "onedrive",
-                                  "direct",
-                                  "other",
-                                  "aliyun",
-                                  "quark"
-                                ]
+                                "type": "string"
                               },
                               "url": {
                                 "type": "string"
@@ -6576,7 +7014,7 @@
                                 "type": "string"
                               },
                               "articleId": {
-                                "type": "number"
+                                "type": "integer"
                               },
                               "createdAt": {
                                 "type": "string"
@@ -6584,22 +7022,23 @@
                               "updatedAt": {
                                 "type": "string"
                               }
-                            },
-                            "required": [
-                              "id",
-                              "type",
-                              "url",
-                              "password",
-                              "extractionCode",
-                              "articleId",
-                              "createdAt",
-                              "updatedAt"
-                            ]
-                          },
-                          "nullable": true
+                            }
+                          }
                         },
-                        "downloadsCount": {
-                          "type": "number"
+                        "downloadCount": {
+                          "type": "integer"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "isLiked": {
+                          "type": "boolean"
+                        },
+                        "isPaid": {
+                          "type": "boolean"
                         }
                       },
                       "required": [
@@ -6613,6 +7052,7 @@
                         "type",
                         "content",
                         "images",
+                        "sort",
                         "summary",
                         "views",
                         "likes",
@@ -6622,12 +7062,12 @@
                         "author",
                         "category",
                         "tags",
+                        "downloads",
+                        "downloadCount",
                         "createdAt",
                         "updatedAt",
                         "isLiked",
-                        "isPaid",
-                        "downloads",
-                        "downloadsCount"
+                        "isPaid"
                       ]
                     }
                   },
@@ -7098,6 +7538,9 @@
                               "requirePayment": {
                                 "type": "boolean"
                               },
+                              "requireMembership": {
+                                "type": "boolean"
+                              },
                               "viewPrice": {
                                 "type": "string"
                               },
@@ -7105,7 +7548,8 @@
                                 "type": "string"
                               },
                               "content": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "images": {
                                 "type": "array",
@@ -7113,8 +7557,11 @@
                                   "type": "string"
                                 }
                               },
+                              "sort": {
+                                "type": "integer"
+                              },
                               "summary": {
-                                "type": "null"
+                                "type": "string"
                               },
                               "views": {
                                 "type": "integer"
@@ -7146,6 +7593,21 @@
                                   "avatar": {
                                     "type": "string"
                                   },
+                                  "level": {
+                                    "type": "integer"
+                                  },
+                                  "membershipLevel": {
+                                    "type": "integer"
+                                  },
+                                  "membershipStatus": {
+                                    "type": "string"
+                                  },
+                                  "membershipStartDate": {
+                                    "type": "string"
+                                  },
+                                  "membershipEndDate": {
+                                    "type": "string"
+                                  },
                                   "status": {
                                     "type": "string"
                                   },
@@ -7156,13 +7618,28 @@
                                     "type": "string"
                                   },
                                   "description": {
-                                    "type": "null"
+                                    "type": "string"
                                   },
                                   "followerCount": {
                                     "type": "integer"
                                   },
                                   "followingCount": {
                                     "type": "integer"
+                                  },
+                                  "lastActiveAt": {
+                                    "type": "string"
+                                  },
+                                  "lastLoginAt": {
+                                    "type": "string"
+                                  },
+                                  "gender": {
+                                    "type": "string"
+                                  },
+                                  "isMember": {
+                                    "type": "boolean"
+                                  },
+                                  "isFollowed": {
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
@@ -7170,12 +7647,22 @@
                                   "username",
                                   "nickname",
                                   "avatar",
+                                  "level",
+                                  "membershipLevel",
+                                  "membershipStatus",
+                                  "membershipStartDate",
+                                  "membershipEndDate",
                                   "status",
                                   "createdAt",
                                   "updatedAt",
                                   "description",
                                   "followerCount",
-                                  "followingCount"
+                                  "followingCount",
+                                  "lastActiveAt",
+                                  "lastLoginAt",
+                                  "gender",
+                                  "isMember",
+                                  "isFollowed"
                                 ]
                               },
                               "category": {
@@ -7193,6 +7680,9 @@
                                   "parentId": {
                                     "type": "integer"
                                   },
+                                  "link": {
+                                    "type": "null"
+                                  },
                                   "parent": {
                                     "type": "object",
                                     "properties": {
@@ -7206,6 +7696,9 @@
                                         "type": "string"
                                       },
                                       "parentId": {
+                                        "type": "null"
+                                      },
+                                      "link": {
                                         "type": "null"
                                       },
                                       "avatar": {
@@ -7241,6 +7734,7 @@
                                       "name",
                                       "description",
                                       "parentId",
+                                      "link",
                                       "avatar",
                                       "background",
                                       "cover",
@@ -7285,6 +7779,7 @@
                                   "name",
                                   "description",
                                   "parentId",
+                                  "link",
                                   "parent",
                                   "avatar",
                                   "background",
@@ -7309,16 +7804,19 @@
                                       "type": "string"
                                     },
                                     "description": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     },
                                     "avatar": {
                                       "type": "string"
                                     },
                                     "background": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     },
                                     "cover": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "nullable": true
                                     },
                                     "sort": {
                                       "type": "integer"
@@ -7351,13 +7849,82 @@
                                   ]
                                 }
                               },
+                              "downloads": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    },
+                                    "type": {
+                                      "type": "string"
+                                    },
+                                    "url": {
+                                      "type": "string"
+                                    },
+                                    "password": {
+                                      "type": "string"
+                                    },
+                                    "extractionCode": {
+                                      "type": "string"
+                                    },
+                                    "articleId": {
+                                      "type": "integer"
+                                    },
+                                    "createdAt": {
+                                      "type": "string"
+                                    },
+                                    "updatedAt": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "downloadCount": {
+                                "type": "integer"
+                              },
                               "createdAt": {
                                 "type": "string"
                               },
                               "updatedAt": {
                                 "type": "string"
+                              },
+                              "isLiked": {
+                                "type": "boolean"
+                              },
+                              "isPaid": {
+                                "type": "boolean"
                               }
-                            }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "requireLogin",
+                              "requireFollow",
+                              "requirePayment",
+                              "requireMembership",
+                              "viewPrice",
+                              "type",
+                              "content",
+                              "images",
+                              "sort",
+                              "summary",
+                              "views",
+                              "likes",
+                              "status",
+                              "cover",
+                              "authorId",
+                              "author",
+                              "category",
+                              "tags",
+                              "downloads",
+                              "downloadCount",
+                              "createdAt",
+                              "updatedAt",
+                              "isLiked",
+                              "isPaid"
+                            ]
                           }
                         },
                         "meta": {
@@ -8564,6 +9131,15 @@
                                   "membershipLevel": {
                                     "type": "integer"
                                   },
+                                  "membershipStatus": {
+                                    "type": "string"
+                                  },
+                                  "membershipStartDate": {
+                                    "type": "string"
+                                  },
+                                  "membershipEndDate": {
+                                    "type": "string"
+                                  },
                                   "status": {
                                     "type": "string"
                                   },
@@ -8581,21 +9157,40 @@
                                   },
                                   "followingCount": {
                                     "type": "integer"
+                                  },
+                                  "lastActiveAt": {
+                                    "type": "null"
+                                  },
+                                  "lastLoginAt": {
+                                    "type": "string"
+                                  },
+                                  "gender": {
+                                    "type": "string"
+                                  },
+                                  "isMember": {
+                                    "type": "boolean"
                                   }
                                 },
                                 "required": [
                                   "id",
                                   "username",
                                   "nickname",
+                                  "avatar",
                                   "level",
                                   "membershipLevel",
+                                  "membershipStatus",
+                                  "membershipStartDate",
+                                  "membershipEndDate",
                                   "status",
                                   "createdAt",
                                   "updatedAt",
                                   "description",
                                   "followerCount",
                                   "followingCount",
-                                  "avatar"
+                                  "lastActiveAt",
+                                  "lastLoginAt",
+                                  "gender",
+                                  "isMember"
                                 ]
                               },
                               "article": {
@@ -8631,6 +9226,9 @@
                                   "cover": {
                                     "type": "string"
                                   },
+                                  "downloadCount": {
+                                    "type": "integer"
+                                  },
                                   "createdAt": {
                                     "type": "string"
                                   },
@@ -8649,6 +9247,7 @@
                                   "views",
                                   "likes",
                                   "cover",
+                                  "downloadCount",
                                   "createdAt",
                                   "updatedAt"
                                 ]
@@ -8692,13 +9291,22 @@
                                           "type": "string"
                                         },
                                         "avatar": {
-                                          "type": "null"
+                                          "type": "string"
                                         },
                                         "level": {
                                           "type": "integer"
                                         },
                                         "membershipLevel": {
                                           "type": "integer"
+                                        },
+                                        "membershipStatus": {
+                                          "type": "string"
+                                        },
+                                        "membershipStartDate": {
+                                          "type": "string"
+                                        },
+                                        "membershipEndDate": {
+                                          "type": "string"
                                         },
                                         "status": {
                                           "type": "string"
@@ -8710,13 +9318,22 @@
                                           "type": "string"
                                         },
                                         "description": {
-                                          "type": "null"
+                                          "type": "string"
                                         },
                                         "followerCount": {
                                           "type": "integer"
                                         },
                                         "followingCount": {
                                           "type": "integer"
+                                        },
+                                        "lastActiveAt": {
+                                          "type": "null"
+                                        },
+                                        "lastLoginAt": {
+                                          "type": "string"
+                                        },
+                                        "gender": {
+                                          "type": "string"
                                         }
                                       },
                                       "required": [
@@ -8726,12 +9343,18 @@
                                         "avatar",
                                         "level",
                                         "membershipLevel",
+                                        "membershipStatus",
+                                        "membershipStartDate",
+                                        "membershipEndDate",
                                         "status",
                                         "createdAt",
                                         "updatedAt",
                                         "description",
                                         "followerCount",
-                                        "followingCount"
+                                        "followingCount",
+                                        "lastActiveAt",
+                                        "lastLoginAt",
+                                        "gender"
                                       ]
                                     },
                                     "article": {
@@ -8767,6 +9390,9 @@
                                         "cover": {
                                           "type": "string"
                                         },
+                                        "downloadCount": {
+                                          "type": "integer"
+                                        },
                                         "createdAt": {
                                           "type": "string"
                                         },
@@ -8785,6 +9411,7 @@
                                         "views",
                                         "likes",
                                         "cover",
+                                        "downloadCount",
                                         "createdAt",
                                         "updatedAt"
                                       ]
@@ -8808,13 +9435,22 @@
                                               "type": "string"
                                             },
                                             "avatar": {
-                                              "type": "null"
+                                              "type": "string"
                                             },
                                             "level": {
                                               "type": "integer"
                                             },
                                             "membershipLevel": {
                                               "type": "integer"
+                                            },
+                                            "membershipStatus": {
+                                              "type": "string"
+                                            },
+                                            "membershipStartDate": {
+                                              "type": "string"
+                                            },
+                                            "membershipEndDate": {
+                                              "type": "string"
                                             },
                                             "status": {
                                               "type": "string"
@@ -8826,13 +9462,22 @@
                                               "type": "string"
                                             },
                                             "description": {
-                                              "type": "null"
+                                              "type": "string"
                                             },
                                             "followerCount": {
                                               "type": "integer"
                                             },
                                             "followingCount": {
                                               "type": "integer"
+                                            },
+                                            "lastActiveAt": {
+                                              "type": "null"
+                                            },
+                                            "lastLoginAt": {
+                                              "type": "string"
+                                            },
+                                            "gender": {
+                                              "type": "string"
                                             }
                                           },
                                           "required": [
@@ -8842,12 +9487,18 @@
                                             "avatar",
                                             "level",
                                             "membershipLevel",
+                                            "membershipStatus",
+                                            "membershipStartDate",
+                                            "membershipEndDate",
                                             "status",
                                             "createdAt",
                                             "updatedAt",
                                             "description",
                                             "followerCount",
-                                            "followingCount"
+                                            "followingCount",
+                                            "lastActiveAt",
+                                            "lastLoginAt",
+                                            "gender"
                                           ]
                                         }
                                       },
@@ -8880,12 +9531,7 @@
                               "parentId": {
                                 "type": "null"
                               }
-                            },
-                            "required": [
-                              "author",
-                              "createdAt",
-                              "updatedAt"
-                            ]
+                            }
                           }
                         },
                         "meta": {

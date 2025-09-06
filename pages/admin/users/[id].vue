@@ -99,7 +99,7 @@
                 <UInput
                   v-model="membershipState.membershipLevel"
                   type="number"
-                  min="1"
+                  min="0"
                   max="5"
                   class="w-full"
                 />
@@ -285,7 +285,7 @@
   const schema = z.object({
     username: z.string().min(1, '用户名不能为空'),
     nickname: z.string().optional(),
-    email: z.string().email('邮箱格式不正确').optional().or(z.literal('')),
+    email: z.email('邮箱格式不正确').optional().or(z.literal('')),
     phone: z.string().optional(),
     status: z.string().min(1, '状态不能为空'),
     gender: z.string().optional(),
@@ -295,7 +295,7 @@
   });
 
   const membershipSchema = z.object({
-    membershipLevel: z.number().min(1, '会员等级不能小于1').max(5, '会员等级不能大于5'),
+    membershipLevel: z.number().min(0, '会员等级不能小于1').max(5, '会员等级不能大于5'),
     membershipStatus: z.string().optional(),
     membershipStartDate: z.string().optional(),
     membershipEndDate: z.string().optional()
@@ -348,6 +348,13 @@
     { label: 'ACTIVE', value: 'ACTIVE' },
     { label: 'INACTIVE', value: 'INACTIVE' }
   ];
+
+  // 格式化日期为input格式
+  const formatDateForInput = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().slice(0, 16);
+  };
 
   // 保存状态
   const saving = ref(false);
@@ -431,12 +438,5 @@
   const formatDate = (dateString?: string) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleString();
-  };
-
-  // 格式化日期为input格式
-  const formatDateForInput = (dateString: string) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toISOString().slice(0, 16);
   };
 </script>

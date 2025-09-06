@@ -114,6 +114,15 @@
       "paymentWechatAppId": "微信应用ID",
       "paymentWechatApiKey": "微信API密钥",
       "paymentWechatMchId": "微信商户号",
+      "paymentWechatPrivateKey": "微信私钥",
+      "paymentWechatPublicKey": "微信公钥",
+      "paymentWechatSerialNo": "微信序列号",
+      "paymentAlipayGateway": "支付宝网关",
+      "paymentEpayAppId": "易支付应用ID",
+      "paymentEpayAppKey": "易支付应用密钥",
+      "paymentEpayGateway": "易支付网关",
+      "paymentNotifyUrl": "支付通知地址",
+      "paymentReturnUrl": "支付返回地址",
       "paymentEpayPid": "易支付商户ID",
       "paymentEpayKey": "易支付密钥",
       "paymentEpayNotifyUrl": "易支付通知地址",
@@ -144,17 +153,18 @@
       "adGlobalContent": "全局广告内容",
       "adGlobalPosition": "全局广告位置",
       "adGlobalStyle": "全局广告样式",
-      "paymentAlipayGateway": "支付宝网关",
-      "paymentAlipayNotifyUrl": "支付宝通知URL",
-      "paymentAlipayReturnUrl": "支付宝返回URL",
-      "paymentWechatPrivateKey": "微信私钥",
-      "paymentWechatPublicKey": "微信公钥",
-      "paymentWechatSerialNo": "微信序列号",
-      "paymentEpayAppId": "易支付应用ID",
-      "paymentEpayAppKey": "易支付应用密钥",
-      "paymentEpayGateway": "易支付网关",
-      "paymentNotifyUrl": "支付通知URL(通用)",
-      "paymentReturnUrl": "支付返回URL(通用)"
+      "adPositionTop": "顶部",
+      "adPositionBottom": "底部",
+      "adPositionSidebar": "侧边栏",
+      "adPositionFixedTop": "固定顶部",
+      "adPositionFixedBottom": "固定底部",
+      "adPositionFloating": "浮动",
+      "adContentPlaceholder": "请输入广告内容（支持HTML）",
+      "adStylePlaceholder": "请输入CSS样式",
+      "saveFailed": "设置保存失败",
+      "adPreview": "广告预览",
+      "adPreviewContainer": "广告预览容器",
+      "adPreviewEmpty": "没有广告内容，请输入广告内容查看预览"
     },
     "payment": {
       "title": "支付",
@@ -184,30 +194,6 @@
       "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
       "networkError": "网络错误",
       "unknownError": "未知错误"
-    },
-    "adPositionTop": {
-      "adPositionBottom": "底部",
-      "adPositionSidebar": "侧边栏",
-      "adPositionFixedTop": "固定顶部",
-      "adPositionFixedBottom": "固定底部",
-      "adPositionFloating": "浮动",
-      "adContentPlaceholder": "请输入广告内容（支持HTML）",
-      "adStylePlaceholder": "请输入CSS样式",
-      "adPreview": "广告预览",
-      "adPreviewContainer": "预览容器",
-      "adPreviewEmpty": "暂无广告内容，请输入广告内容后查看预览效果",
-      "adStats": {
-        "title": "广告统计",
-        "impressions": "展示次数",
-        "clicks": "点击次数",
-        "ctr": "点击率",
-        "last7Days": "最近7天",
-        "last30Days": "最近30天",
-        "last90Days": "最近90天",
-        "chartPlaceholder": "图表区域（可集成图表库）"
-      },
-      "saveSuccess": "设置保存成功",
-      "saveFailed": "设置保存失败"
     },
     "categories": {
       "searchAndFilter": "搜索和筛选",
@@ -339,8 +325,8 @@
       "selectImage": "选择图片",
       "selectImages": "选择图片",
       "remove": "删除",
-      "removeAll": "删除全部",
-      "change": "改变",
+      "removeAll": "全部删除",
+      "change": "更改",
       "replace": "代替"
     },
     "message": {
@@ -350,8 +336,8 @@
       "createSuccess": "创建成功",
       "deleteFailed": "删除失败",
       "deleteSuccess": "删除成功",
-      "fetchFailed": "无法获得数据",
-      "loadError": "负载失败",
+      "fetchFailed": "获取数据失败",
+      "loadError": "加载失败",
       "networkError": "网络连接失败",
       "networkErrorDescription": "无法连接到服务器，请检查网络连接",
       "uploadFailed": "上传失败",
@@ -410,20 +396,20 @@
     "edit": "编辑",
     "error": {
       "description": "页面加载失败，请稍后再试",
-      "retry": "重新加载",
+      "retry": "重试",
       "title": "加载失败"
     },
-    "remove": "消除",
+    "remove": "删除",
     "removeAll": "删除全部",
-    "replace": "代替",
-    "retry": "重新加载",
-    "save": "节省",
+    "replace": "替换",
+    "retry": "重试",
+    "save": "保存",
     "saving": "保存...",
-    "selectImage": "选择图像",
-    "selectImages": "选择图像",
+    "selectImage": "选择图片",
+    "selectImages": "选择图片",
     "status": {
-      "inactive": "不活动",
-      "active": "积极的"
+      "inactive": "禁用",
+      "active": "启用"
     }
   },
   "role": {
@@ -600,7 +586,7 @@
       "selectPackage": "选择套餐",
       "month": "个月",
       "perMonth": "月均",
-      "save": "节省",
+      "save": "保存",
       "save10": "10%",
       "save15": "15%",
       "package1Description": "基础套餐",
@@ -610,7 +596,7 @@
       "alipay": "支付宝",
       "wechat": "微信支付",
       "epay": "易支付",
-      "balance": "余额支付",
+      "balance": "余额",
       "confirmOrder": "确认订单",
       "package": "套餐",
       "paymentMethod": "支付方式",
@@ -1068,6 +1054,7 @@
       "resourceConflict": "资源冲突"
     },
     "success": {
+      "logout": "已退出",
       "verificationCodeSent": "验证码已发送",
       "profileSaved": "资料保存成功",
       "profileSavedFailed": "资料保存失败",
@@ -1118,7 +1105,7 @@
     "wechatDesc": "微信安全支付",
     "epay": "易支付",
     "epayAlipay": "支付宝",
-    "epayWechat": "微信支付",
+    "epayWechat": "微信",
     "selectEpayType": "请选择易支付类型",
     "insufficientBalance": "余额不足",
     "processing": "处理中...",
@@ -1135,7 +1122,16 @@
     "unknownError": "未知错误"
   },
   "status": {
-    "active": "积极的",
-    "inactive": "不活动"
+    "active": "启用",
+    "inactive": "禁用"
+  },
+  "maintenance": {
+    "title": "网站维护中",
+    "description": "我们正在进行系统维护，暂时无法访问网站",
+    "pageTitle": "网站维护",
+    "pageDescription": "网站正在维护中，请稍后访问",
+    "refresh": "刷新页面",
+    "goToAdmin": "进入管理后台",
+    "copyright": "版权所有"
   }
 }

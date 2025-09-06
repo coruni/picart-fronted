@@ -7,15 +7,19 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8">
       <!-- Tab切换 -->
-      <div class="flex justify-center mb-8 md:justify-end">
+      <div class="flex justify-center mb-8">
         <UTabs
           v-model="currentTab"
-          :items="mobileTabs"
+          :items="tabs"
           variant="pill"
           class="w-auto"
           :default-value="0"
           :ui="{ trigger: 'cursor-pointer' }"
-        />
+        >
+          <template #default="{ item }">
+            <span class="hidden md:inline">{{ item.label }}</span>
+          </template>
+        </UTabs>
       </div>
       <!-- 瀑布流展示 -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
@@ -69,6 +73,8 @@
     title: homeTitle,
     titleTemplate: null
   });
+
+  // 统一的tab配置
   const tabs: TabsItem[] = [
     { id: 'all', label: t('home.tab.all'), value: 'all', icon: 'mynaui:brand-trello' },
     { id: 'popular', label: t('home.tab.popular'), value: 'popular', icon: 'mynaui:fire' },
@@ -80,23 +86,6 @@
       icon: 'mynaui:heart'
     }
   ];
-
-  // 响应式处理移动端和桌面端的标签显示
-  const windowWidth = ref(import.meta.client ? window.innerWidth : 1024);
-
-  // 窗口大小变化处理函数
-  const handleResize = () => {
-    windowWidth.value = window.innerWidth;
-  };
-
-  const mobileTabs = computed(() => {
-    const isMobile = windowWidth.value < 768;
-    return tabs.map(tab => ({
-      ...tab,
-      label: isMobile ? '' : tab.label, // 移动端只显示图标，桌面端显示完整标签
-      icon: tab.icon
-    }));
-  });
 
   const currentTab = ref('all');
   const pagination = ref({
@@ -171,15 +160,13 @@
   };
 
   loadArticles();
+
   // 计算显示的项目
   const displayItems = computed(() => {
     return allItems.value;
   });
 
   onMounted(() => {
-    // 监听窗口大小变化
-    window.addEventListener('resize', handleResize);
-
     // 初始化 Intersection Observer
     if (observerTarget.value) {
       observer = new IntersectionObserver(
@@ -198,13 +185,11 @@
     }
   });
 
-  // 组件销毁时断开观察器
   onUnmounted(() => {
+    // 清理 Intersection Observer
     if (observer) {
       observer.disconnect();
     }
-    // 清理窗口大小监听器
-    window.removeEventListener('resize', handleResize);
   });
 </script>
 

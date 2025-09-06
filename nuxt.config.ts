@@ -52,7 +52,6 @@ export default defineNuxtConfig({
     sitemap: [
       'https://www.kawax.org/sitemap_index.xml',
       'https://www.kawax.org/sitemap_articles.xml',
-      'https://www.kawax.org/sitemap_authors.xml',
       'https://www.kawax.org/sitemap_categories.xml'
     ],
     crawlDelay: 1

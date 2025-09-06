@@ -116,11 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    orderControllerCreateMembershipOrder,
-    userControllerFollow,
-    orderControllerCreateArticleOrder
-  } from '~/api';
+  import { userControllerFollow, orderControllerCreateArticleOrder } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   interface Props {

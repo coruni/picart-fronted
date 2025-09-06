@@ -14,8 +14,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
         role => role.name === 'admin' || role.name === 'super-admin'
       );
 
-      console.log('已登录用户访问登录页，是否管理员:', isAdmin);
-
       if (isAdmin) {
         return navigateTo(localePath('/admin'));
       }
@@ -36,8 +34,18 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
 
     // 检查管理员权限（如果是 admin 路径）
-    if (to.path.startsWith(localePath('/admin')) && userStore.isAuthenticated) {
-      // 检查用户是否有管理员角色 - 注意这里使用连字符
+    if (to.path.startsWith(localePath('/admin'))) {
+      // 如果用户未登录，重定向到登录页
+      if (!userStore.isAuthenticated) {
+        console.log('访问管理面板但用户未登录，重定向到登录页');
+        const redirectPath = to.fullPath;
+        return navigateTo({
+          path: localePath('/user/login'),
+          query: { redirect: redirectPath }
+        });
+      }
+
+      // 检查用户是否有管理员角色
       const hasAdminRole = userStore.userInfo?.roles?.some(
         role =>
           role.name === 'admin' || role.name === 'super-admin' || role.name === 'administrator'

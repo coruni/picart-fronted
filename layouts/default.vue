@@ -1,5 +1,5 @@
 <template>
-  <DefaultHeader :categories="categories?.data.data" />
+  <DefaultHeader :categories="categories?.data.data || []" />
   <div class="flex-1 w-full pt-16 h-full">
     <NuxtPage
       :keepalive="{

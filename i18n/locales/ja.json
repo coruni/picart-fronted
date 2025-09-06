@@ -113,6 +113,15 @@
       "paymentWechatAppId": "WeChatアプリID",
       "paymentWechatApiKey": "WeChat APIキー",
       "paymentWechatMchId": "WeChatマーチャントID",
+      "paymentWechatPrivateKey": "WeChat秘密鍵",
+      "paymentWechatPublicKey": "WeChat公開鍵",
+      "paymentWechatSerialNo": "WeChatシリアル番号",
+      "paymentAlipayGateway": "Alipayゲートウェイ",
+      "paymentEpayAppId": "EpayアプリID",
+      "paymentEpayAppKey": "Epayアプリキー",
+      "paymentEpayGateway": "Epayゲートウェイ",
+      "paymentNotifyUrl": "支払い通知URL",
+      "paymentReturnUrl": "支払い戻りURL",
       "paymentEpayPid": "EpayマーチャントID",
       "paymentEpayKey": "Epayキー",
       "paymentEpayNotifyUrl": "Epay通知URL",
@@ -142,7 +151,19 @@
       "adGlobalEnabled": "グローバル広告を有効にする",
       "adGlobalContent": "グローバル広告コンテンツ",
       "adGlobalPosition": "グローバル広告位置",
-      "adGlobalStyle": "グローバル広告スタイル"
+      "adGlobalStyle": "グローバル広告スタイル",
+      "adPositionTop": "上部",
+      "adPositionBottom": "下部",
+      "adPositionSidebar": "サイドバー",
+      "adPositionFixedTop": "固定上部",
+      "adPositionFixedBottom": "固定下部",
+      "adPositionFloating": "フローティング",
+      "adContentPlaceholder": "広告コンテンツを入力してください（HTML対応）",
+      "adStylePlaceholder": "CSSスタイルを入力してください",
+      "saveFailed": "設定保存に失敗しました",
+      "adPreview": "広告プレビュー",
+      "adPreviewContainer": "プレビューコンテナ",
+      "adPreviewEmpty": "広告コンテンツがありません。広告コンテンツを入力してプレビューを確認してください"
     },
     "payment": {
       "title": "支払い",
@@ -1002,7 +1023,8 @@
       "tagDelete": "タグ削除成功",
       "tagUpdate": "タグ更新成功",
       "userDelete": "ユーザー削除成功",
-      "userUpdate": "ユーザー更新成功"
+      "userUpdate": "ユーザー更新成功",
+      "logout": "ログアウト"
     }
   },
   "Unauthorized": "ユーザーがログインしていません",
@@ -1125,5 +1147,18 @@
     "articlePaymentSuccess": "支払いが成功しました。記事の内容を確認できます",
     "networkError": "ネットワークエラー",
     "unknownError": "不明なエラー"
+  },
+  "status": {
+    "active": "有効",
+    "inactive": "無効"
+  },
+  "maintenance": {
+    "title": "ウェブサイトメンテナンス中",
+    "description": "現在システムメンテナンスを行っており、ウェブサイトが一時的に利用できません",
+    "pageTitle": "ウェブサイトメンテナンス",
+    "pageDescription": "ウェブサイトは現在メンテナンス中です。後ほど再度アクセスしてください",
+    "refresh": "ページを更新",
+    "goToAdmin": "管理パネルへ",
+    "copyright": "著作権所有"
   }
 }

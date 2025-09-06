@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia';
-import { userControllerLogout, type UserControllerGetProfileResponse } from '~~/api';
+import {
+  userControllerGetProfile,
+  userControllerLogout,
+  type UserControllerGetProfileResponse
+} from '~~/api';
 type UserInfo = UserControllerGetProfileResponse['data'];
 
 interface UserState {
@@ -55,6 +59,14 @@ export const useUserStore = defineStore('user', {
       this.refreshToken = refreshToken;
     },
 
+    async getUserInfo() {
+      if (!this.isLoggedIn) return;
+      const { data } = await userControllerGetProfile({
+        composable: '$fetch'
+      });
+      this.userInfo = data;
+    },
+
     async clearAuth() {
       if (import.meta.client) {
         await userControllerLogout({
@@ -88,30 +100,20 @@ export const useUserStore = defineStore('user', {
           // 使用 document.cookie 直接清除，不设置额外的属性
           document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
         });
-
-        // 清除localStorage（保留 device-id）
         try {
           localStorage.removeItem('auth-token');
           localStorage.removeItem('refresh-token');
           localStorage.removeItem('user');
           localStorage.removeItem('app');
-          // 注意：不删除 device-id，保持设备标识
-        } catch (error) {
-          console.warn('Failed to clear localStorage:', error);
-        }
-
-        // 添加调试信息
-        console.log('清除认证信息完成');
-        console.log('当前 cookies:', document.cookie);
-
+        } catch (error) {}
         // 强制刷新页面，确保所有状态都被重置
+        this.token = null;
+        this.userInfo = null;
+        this.isAuthenticated = false;
+        this.rememberedUsername = null;
+        this.refreshToken = null;
         window.location.href = '/';
       }
-      this.token = null;
-      this.userInfo = null;
-      this.isAuthenticated = false;
-      this.rememberedUsername = null;
-      this.refreshToken = null;
     }
   },
 

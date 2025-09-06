@@ -114,6 +114,15 @@
       "paymentWechatAppId": "WeChat App ID",
       "paymentWechatApiKey": "WeChat API Key",
       "paymentWechatMchId": "WeChat Merchant ID",
+      "paymentWechatPrivateKey": "WeChat Private Key",
+      "paymentWechatPublicKey": "WeChat Public Key",
+      "paymentWechatSerialNo": "WeChat Serial Number",
+      "paymentAlipayGateway": "Alipay Gateway",
+      "paymentEpayAppId": "Epay App ID",
+      "paymentEpayAppKey": "Epay App Key",
+      "paymentEpayGateway": "Epay Gateway",
+      "paymentNotifyUrl": "Payment Notify URL",
+      "paymentReturnUrl": "Payment Return URL",
       "paymentEpayPid": "Epay Merchant ID",
       "paymentEpayKey": "Epay Key",
       "paymentEpayNotifyUrl": "Epay Notify URL",
@@ -143,7 +152,19 @@
       "adGlobalEnabled": "Enable Global Advertisement",
       "adGlobalContent": "Global Advertisement Content",
       "adGlobalPosition": "Global Advertisement Position",
-      "adGlobalStyle": "Global Advertisement Style"
+      "adGlobalStyle": "Global Advertisement Style",
+      "adPositionTop": "Top",
+      "adPositionBottom": "Bottom",
+      "adPositionSidebar": "Sidebar",
+      "adPositionFixedTop": "Fixed Top",
+      "adPositionFixedBottom": "Fixed Bottom",
+      "adPositionFloating": "Floating",
+      "adContentPlaceholder": "Please enter ad content (HTML supported)",
+      "adStylePlaceholder": "Please enter CSS styles",
+      "saveFailed": "Settings save failed",
+      "adPreview": "Ad Preview",
+      "adPreviewContainer": "Preview Container",
+      "adPreviewEmpty": "No ad content, please enter ad content to view preview"
     },
     "payment": {
       "title": "Payment",
@@ -196,6 +217,7 @@
         "chartPlaceholder": "Chart Area (can integrate chart library)"
       },
       "saveSuccess": "Settings saved successfully",
+
       "saveFailed": "Failed to save settings"
     },
     "categories": {
@@ -999,7 +1021,8 @@
       "tagDelete": "Tag deleted successfully",
       "tagUpdate": "Tag updated successfully",
       "userDelete": "User deleted successfully",
-      "userUpdate": "User updated successfully"
+      "userUpdate": "User updated successfully",
+      "logout": "Logged out"
     }
   },
   "Unauthorized": "User not logged in",
@@ -1124,7 +1147,16 @@
     "unknownError": "Unknown error"
   },
   "status": {
-    "active": "ACtive",
+    "active": "Active",
     "inactive": "Inactive"
+  },
+  "maintenance": {
+    "title": "Website Under Maintenance",
+    "description": "We are currently performing system maintenance and the website is temporarily unavailable",
+    "pageTitle": "Website Maintenance",
+    "pageDescription": "The website is currently under maintenance, please visit again later",
+    "refresh": "Refresh Page",
+    "goToAdmin": "Go to Admin Panel",
+    "copyright": "All Rights Reserved"
   }
 }
