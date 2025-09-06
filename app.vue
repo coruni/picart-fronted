@@ -15,11 +15,6 @@
   });
   // 提供配置
   provide('siteConfig', configs.data.value?.data);
-
-  //应用刷新或者启动的时候判断用户是否登录去请求最新数据 防止数据滞后
-  const userStore = useUserStore();
-  userStore.getUserInfo();
-
   // 构建全局元数据和SEO
   useSeoMeta({
     title: configs.data.value?.data?.site_name,

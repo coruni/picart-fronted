@@ -546,7 +546,7 @@
 
   // 处理登出
   const handleLogout = () => {
-    userStore.clearAuth();
+    userStore.clearAuth(true);
     closeMobileMenu();
     // clearAuth 方法已经处理了页面跳转，这里不需要额外的跳转
   };

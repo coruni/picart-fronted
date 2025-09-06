@@ -61,14 +61,19 @@ export const useUserStore = defineStore('user', {
 
     async getUserInfo() {
       if (!this.isLoggedIn) return;
-      const { data } = await userControllerGetProfile({
-        composable: '$fetch'
-      });
-      this.userInfo = data;
+      try {
+        const { data } = await userControllerGetProfile({
+          composable: 'useFetch'
+        });
+        this.userInfo = data.value?.data!;
+      } catch (error) {
+        // 获取失败时清空
+        this.clearAuth(false);
+      }
     },
 
-    async clearAuth() {
-      if (import.meta.client) {
+    async clearAuth(logout: boolean = true) {
+      if (import.meta.client && logout) {
         await userControllerLogout({
           composable: '$fetch'
         });

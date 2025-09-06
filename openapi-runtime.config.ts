@@ -114,6 +114,11 @@ export const createClientConfig: CreateClientConfig = config => {
     onResponse: context => {
       // 只允许200和201状态码继续处理
       if (![200, 201].includes(context.response.status)) {
+        if (context.response.status === 401) {
+          clearAuthToken();
+          navigateTo('/user/login');
+          return;
+        }
         const error = new Error(context.response._data?.message);
         // 将响应数据附加到错误上以便调用者访问
         Object.assign(error, { response: context.response });
@@ -121,12 +126,6 @@ export const createClientConfig: CreateClientConfig = config => {
         const toast = useToast();
         const { $i18n } = useNuxtApp();
         const t = $i18n.t;
-
-        if (context.response.status === 401) {
-          clearAuthToken();
-          navigateTo('/user/login');
-          return context;
-        }
 
         toast.add({
           title: t(error.message),
@@ -152,18 +151,6 @@ export const createClientConfig: CreateClientConfig = config => {
     }
   };
 };
-
-// 设置token到cookie的辅助函数
-export function setTokenToCookie(token: string): void {
-  // 这个函数现在在插件中处理
-  // console.log('setTokenToCookie called with:', token);
-}
-
-// 清除token cookie的辅助函数
-export function clearTokenCookie(): void {
-  // 这个函数现在在插件中处理
-  // console.log('clearTokenCookie called');
-}
 
 // 辅助函数：更新请求headers
 async function updateRequestHeaders(
@@ -223,48 +210,40 @@ export function setAuthToken(token: string, userStore?: any): void {
 
 // 用户登出时调用此函数
 export function clearAuthToken(): void {
-  // 清除cookie（通过插件处理）
   if (import.meta.client) {
-    const authTokenCookie = useCookie('auth-token', {
-      default: () => null,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false,
-      watch: true
-    });
-    const tokenCookie = useCookie('token', {
-      default: () => null,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false,
-      watch: true
-    });
-    const deviceIdCookie = useCookie('device-id', {
+    // 使用与登录时相同的配置来清除 cookie
+    const authToken = useCookie('auth-token', {
       default: () => '',
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365,
-      httpOnly: false,
-      watch: true
+      httpOnly: false
     });
 
-    authTokenCookie.value = null;
-    tokenCookie.value = null;
-    deviceIdCookie.value = '';
-  }
+    const refreshToken = useCookie('refresh-token', {
+      default: () => '',
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
+    });
 
-  // 清除localStorage
-  if (import.meta.client) {
+    // 清除 cookie 值
+    authToken.value = '';
+    refreshToken.value = '';
+
+    // 使用更简单的方式清除 cookie（保留 device-id）
+    const cookiesToClear = ['auth-token', 'refresh-token', 'token'];
+
+    cookiesToClear.forEach(cookieName => {
+      // 使用 document.cookie 直接清除，不设置额外的属性
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
     try {
       localStorage.removeItem('auth-token');
-      localStorage.removeItem('token');
-      localStorage.removeItem('device-id');
+      localStorage.removeItem('refresh-token');
       localStorage.removeItem('user');
       localStorage.removeItem('app');
-    } catch (error) {
-      // console.warn('Failed to clear token from localStorage:', error);
-    }
+    } catch (error) {}
   }
 }

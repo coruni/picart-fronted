@@ -19,8 +19,7 @@ export default defineNuxtPlugin(async () => {
   // 在客户端，如果用户已认证但用户信息为空，尝试重新获取用户信息
   if (import.meta.client) {
     await nextTick();
-
-    if (userStore.isLoggedIn && !userStore.userInfo) {
+    if (userStore.isLoggedIn) {
       try {
         const { userControllerGetProfile } = await import('~/api');
         const response = await userControllerGetProfile({
@@ -33,7 +32,7 @@ export default defineNuxtPlugin(async () => {
       } catch (error) {
         console.warn('Failed to refresh user info:', error);
         // 如果获取用户信息失败，可能是token过期，清除认证状态
-        userStore.clearAuth();
+        userStore.clearAuth(false);
       }
     }
   }

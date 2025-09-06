@@ -921,15 +921,12 @@
 
     const userInfo = userStore.userInfo;
     if (!userInfo) return false;
-    console.log(userInfo.membershipLevel, userInfo.membershipStatus, userInfo.membershipEndDate);
 
     // 兜底计算
     const isMember =
       userInfo.membershipLevel > 0 &&
       userInfo.membershipStatus === 'ACTIVE' &&
       (new Date(userInfo.membershipEndDate) > new Date() || userInfo.membershipEndDate === null);
-
-    console.log(userInfo.isMember, isMember);
 
     return userInfo.isMember || isMember;
   });

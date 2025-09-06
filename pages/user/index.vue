@@ -676,7 +676,7 @@
   // 处理登出
   const handleLogout = () => {
     // 清除认证信息
-    userStore.clearAuth();
+    userStore.clearAuth(true);
     // 跳转到首页
     router.push(localPath('/'));
   };
