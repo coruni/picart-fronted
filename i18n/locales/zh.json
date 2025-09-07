@@ -838,7 +838,8 @@
     },
     "deleteConfirm": "删除确认",
     "edit": "编辑",
-    "delete": "删除"
+    "delete": "删除",
+    "scrollToDownloads": "前往下载"
   },
   "validation": {
     "required": "此字段为必填项",

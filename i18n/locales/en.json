@@ -217,7 +217,6 @@
         "chartPlaceholder": "Chart Area (can integrate chart library)"
       },
       "saveSuccess": "Settings saved successfully",
-
       "saveFailed": "Failed to save settings"
     },
     "categories": {
@@ -638,7 +637,8 @@
     },
     "deleteConfirm": "Delete Confirm",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "scrollToDownloads": "Go to download"
   },
   "validation": {
     "required": "This field is required",

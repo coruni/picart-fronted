@@ -357,27 +357,42 @@
             </div>
 
             <!-- 作者管理按钮 -->
-            <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
-              <UButton
-                @click="handleEdit"
-                variant="ghost"
-                size="sm"
-                class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
-              >
-                <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
-                <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
-              </UButton>
+            <div class="flex items-center space-x-2 flex-1">
+              <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
+                <UButton
+                  @click="handleEdit"
+                  variant="ghost"
+                  size="sm"
+                  class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
+                >
+                  <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
+                </UButton>
 
-              <UButton
-                @click="handleDelete"
-                variant="ghost"
-                color="error"
-                size="sm"
-                class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
-              >
-                <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
-                <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
-              </UButton>
+                <UButton
+                  @click="handleDelete"
+                  variant="ghost"
+                  color="error"
+                  size="sm"
+                  class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+                >
+                  <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
+                  <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
+                </UButton>
+              </div>
+
+              <div class="flex-1 flex justify-end items-center" v-if="shouldShowDownloads">
+                <UButton
+                  variant="ghost"
+                  color="primary"
+                  size="sm"
+                  icon="mynaui:arrow-down"
+                  class="cursor-pointer"
+                  @click="scrollToDownloads"
+                >
+                  {{ $t('article.scrollToDownloads') }}
+                </UButton>
+              </div>
             </div>
           </div>
         </div>
@@ -495,7 +510,7 @@
         </div>
 
         <!-- 内容限制组件 -->
-        <ClientOnly v-else-if="restrictionType">
+        <ClientOnly v-else-if="restrictionType" id="restriction">
           <ArticleContentRestriction
             :type="restrictionType"
             :price="article?.data.viewPrice"
@@ -549,6 +564,7 @@
         <div
           v-if="article?.data.downloads && article.data.downloads.length > 0 && shouldShowContent"
           class="mb-6 md:mb-8"
+          id="downloads"
         >
           <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
             {{ $t('article.downloads') }}
@@ -1298,6 +1314,30 @@
     img.onload = () => onImageLoad(index);
     img.onerror = () => onImageError(index);
     img.src = `${article.value?.data.images?.[index]}?t=${Date.now()}`;
+  };
+
+  const shouldShowDownloads = computed(() => {
+    return (
+      article.value?.data.downloads &&
+      article.value.data.downloads.length > 0 &&
+      shouldShowContent.value
+    );
+  });
+
+  const scrollToDownloads = async () => {
+    if (import.meta.client) {
+      await nextTick();
+      const downloadsElement = document.getElementById('downloads');
+      if (downloadsElement) {
+        console.log('downloadsElement');
+        downloadsElement.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        const restrictionElement = document.getElementById('restriction');
+        if (restrictionElement) {
+          restrictionElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
   };
 </script>
 
