@@ -586,18 +586,6 @@
               </div>
 
               <div class="space-y-2">
-                <div class="flex items-center space-x-2">
-                  <Icon name="mynaui:link" class="w-4 h-4 text-gray-400" />
-                  <a
-                    :href="download.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm text-primary hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 truncate"
-                  >
-                    {{ download.url }}
-                  </a>
-                </div>
-
                 <div v-if="download.password" class="flex items-center space-x-2">
                   <Icon name="mynaui:lock" class="w-4 h-4 text-gray-400" />
                   <span class="text-sm text-gray-600 dark:text-gray-400">
@@ -615,8 +603,7 @@
 
               <div class="mt-3">
                 <UButton
-                  :href="download.url"
-                  target="_blank"
+                  @click="handleDownloadClick(download.url)"
                   rel="noopener noreferrer"
                   variant="soft"
                   size="sm"
@@ -1337,6 +1324,12 @@
           restrictionElement.scrollIntoView({ behavior: 'smooth' });
         }
       }
+    }
+  };
+
+  const handleDownloadClick = (url: string) => {
+    if (import.meta.client) {
+      window.open(url, '_blank');
     }
   };
 </script>
