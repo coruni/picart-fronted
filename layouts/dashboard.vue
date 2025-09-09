@@ -111,7 +111,7 @@
               <a
                 href="#"
                 class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
-                >退出登录</a
+                >{{ $t('user.logout') }}</a
               >
             </div>
           </div>
@@ -123,7 +123,22 @@
         <div
           class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
         >
-          <NuxtPage keepalive />
+          <NuxtPage
+            :keepalive="{
+              exclude: [
+                '/admin/articles/*',
+                '/admin/categories/*',
+                '/admin/tags/*',
+                '/admin/roles/*',
+                '/admin/users/*',
+                '/admin/orders/*',
+                '/admin/comments/*',
+                '/admin/banners/*',
+                '/admin/settings/*'
+              ],
+              max: 10
+            }"
+          />
         </div>
       </div>
     </main>
