@@ -16,7 +16,7 @@
     "docker:run": "docker run -p 3000:3000 picart-frontend",
     "docker:compose": "docker-compose up -d",
     "docker:compose:build": "docker-compose up --build -d",
-    "fix-memory-limit": "cross-env LIMIT=8048 increase-memory-limit",
+    "fix-memory-limit": "cross-env LIMIT=8048 increase-memory-limit"
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.6.2",
