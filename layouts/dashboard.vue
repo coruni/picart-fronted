@@ -130,9 +130,7 @@
   </div>
 </template>
 
-<script setup>
-  import { useRoute } from 'vue-router';
-
+<script setup lang="ts">
   const route = useRoute();
   const sidebarCollapsed = ref(false);
   const toggleMobileSidebar = ref(false);
