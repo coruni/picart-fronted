@@ -123,22 +123,7 @@
         <div
           class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
         >
-          <NuxtPage
-            :keepalive="{
-              exclude: [
-                '/admin/articles/*',
-                '/admin/categories/*',
-                '/admin/tags/*',
-                '/admin/roles/*',
-                '/admin/users/*',
-                '/admin/orders/*',
-                '/admin/comments/*',
-                '/admin/banners/*',
-                '/admin/settings/*'
-              ],
-              max: 10
-            }"
-          />
+          <NuxtPage keepalive />
         </div>
       </div>
     </main>

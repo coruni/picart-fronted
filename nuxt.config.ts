@@ -3,7 +3,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-08',
-  devtools: { enabled: process.env.NODE_ENV === 'development' },
+  devtools: {
+    enabled: true
+  },
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -275,6 +277,14 @@ export default defineNuxtConfig({
           }
         }
       }
+    }
+  },
+
+  // 字体配置 - 禁用 Google Fonts 避免网络问题
+  fonts: {
+    google: process.env.DISABLE_GOOGLE_FONTS !== 'false' ? false : true,
+    providers: {
+      google: process.env.DISABLE_GOOGLE_FONTS !== 'false' ? false : true
     }
   },
 

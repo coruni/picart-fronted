@@ -603,7 +603,7 @@
 
               <div class="mt-3">
                 <UButton
-                  @click="handleDownloadClick(download.url)"
+                  @click="handleDownloadClick(download.url ?? '')"
                   rel="noopener noreferrer"
                   variant="soft"
                   size="sm"

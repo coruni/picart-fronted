@@ -15,6 +15,10 @@
   });
   // 提供配置
   provide('siteConfig', configs.data.value?.data);
+  // 提供icon
+  useHead({
+    link: [{ rel: 'icon', href: configs.data.value?.data?.site_favicon || '/favicon.ico' }]
+  });
   // 构建全局元数据和SEO
   useSeoMeta({
     title: configs.data.value?.data?.site_name,

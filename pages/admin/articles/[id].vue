@@ -29,6 +29,7 @@
           <ClientOnly>
             <Editor
               tinymce-script-src="/tinymce/tinymce.min.js"
+              license_key="gpl"
               v-model="state.content"
               :init="editorConfig"
               :placeholder="$t('form.content.placeholder')"
@@ -88,11 +89,6 @@
             :search-input="{
               placeholder: $t('form.parentCategory.searchPlaceholder')
             }"
-            :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
-              label: $t('form.parentCategory.noResults'),
-              description: $t('form.parentCategory.noResultsDesc')
-            }"
           />
         </UFormField>
         <UFormField name="category" v-show="state.parentCategory" class="flex-1">
@@ -107,11 +103,6 @@
             size="lg"
             :search-input="{
               placeholder: $t('form.category.searchPlaceholder')
-            }"
-            :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
-              label: $t('form.category.noResults'),
-              description: $t('form.category.noResultsDesc')
             }"
           />
         </UFormField>
@@ -570,7 +561,7 @@
   // 若 articleId 存在，请求文章详情数据
   if (articleId) {
     try {
-      const { data: articleData } = await articleControllerFindOne({
+      const { data: articleData, refresh: refreshArticleDetail } = await articleControllerFindOne({
         composable: 'useFetch',
         key: 'articleDetail',
         path: { id: articleId }
@@ -615,6 +606,8 @@
         if (state.cover) {
           existingCoverUrl.value = state.cover;
         }
+
+        refreshArticleDetail();
       }
     } catch (error) {
       console.error('Failed to load article:', error);
