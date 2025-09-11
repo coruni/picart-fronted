@@ -15,7 +15,8 @@
     "docker:build": "docker build -t picart-frontend .",
     "docker:run": "docker run -p 3000:3000 picart-frontend",
     "docker:compose": "docker-compose up -d",
-    "docker:compose:build": "docker-compose up --build -d"
+    "docker:compose:build": "docker-compose up --build -d",
+    "fix-memory-limit": "cross-env LIMIT=8048 increase-memory-limit",
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.6.2",
@@ -53,9 +54,11 @@
     "@types/lodash-es": "^4.17.12",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
+    "cross-env": "^10.0.0",
     "eslint": "^8.57.1",
     "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-vue": "^10.3.0",
+    "increase-memory-limit": "^1.0.7",
     "prettier": "^3.1.0"
   },
   "pnpm": {
