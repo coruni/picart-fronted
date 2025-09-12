@@ -16,14 +16,23 @@
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      scrollToTopStatus.value = true;
+    } else {
+      scrollToTopStatus.value = false;
+    }
+  };
   onMounted(() => {
     console.log('onMounted');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 100) {
-        scrollToTopStatus.value = true;
-      } else {
-        scrollToTopStatus.value = false;
-      }
+      handleScroll();
+    });
+  });
+  onUnmounted(() => {
+    window.removeEventListener('scroll', () => {
+      handleScroll();
     });
   });
 </script>

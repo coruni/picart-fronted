@@ -1,5 +1,5 @@
 export default defineAppConfig({
-  apiBaseUrl: 'http://localhost:3000/api/v1',
+  apiBaseUrl: 'https://api.kawax.org/api/v1',
   ui: {
     colors: {
       primary: 'indigo'
