@@ -234,7 +234,9 @@
       "avatarPlaceholder": "请输入头像URL",
       "backgroundPlaceholder": "请输入背景图片URL",
       "avatarHelp": "请输入有效的图片URL地址",
-      "backgroundHelp": "请输入有效的背景图片URL地址"
+      "backgroundHelp": "请输入有效的背景图片URL地址",
+      "name": "标签名称",
+      "description": "标签描述"
     },
     "users": {
       "searchAndFilter": "搜索和筛选",
@@ -306,6 +308,30 @@
       "product": "商品订单",
       "service": "服务订单",
       "article": "文章订单"
+    },
+    "adPositionTop": {
+      "adContentPlaceholder": "输入广告内容（支持HTML）",
+      "adPositionBottom": "底部",
+      "adPositionFixedBottom": "固定底部",
+      "adPositionFloating": "漂浮的",
+      "adPositionSidebar": "侧边栏",
+      "adPreview": "广告预览",
+      "adPreviewContainer": "预览容器",
+      "adPreviewEmpty": "没有广告内容，请输入广告内容以查看预览",
+      "adStats": {
+        "chartPlaceholder": "图表区域（可以集成图表库）",
+        "clicks": "点击",
+        "ctr": "CTR",
+        "impressions": "印象",
+        "last30Days": "最近30天",
+        "last7Days": "最近7天",
+        "last90Days": "最近90天",
+        "title": "广告统计"
+      },
+      "adStylePlaceholder": "输入CSS样式",
+      "saveFailed": "无法保存设置",
+      "saveSuccess": "设置成功保存",
+      "adPositionFixedTop": "固定顶部"
     }
   },
   "common": {
@@ -410,6 +436,9 @@
     "status": {
       "inactive": "禁用",
       "active": "启用"
+    },
+    "article": {
+      "create": "创建文章"
     }
   },
   "role": {
@@ -466,7 +495,11 @@
       "namePlaceholder": "请输入角色名称",
       "displayNamePlaceholder": "请输入显示名称",
       "descriptionPlaceholder": "请输入角色描述"
-    }
+    },
+    "namePlaceholder": "请输入角色名称",
+    "displayNamePlaceholder": "请输入显示名称",
+    "descriptionPlaceholder": "请输入角色描述",
+    "selectPermissions": "请选择角色权限"
   },
   "permission": {
     "title": "权限管理",

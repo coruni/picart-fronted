@@ -122,14 +122,6 @@
                       {{ $t('author.following') }}
                     </div>
                   </div>
-                  <div class="text-center">
-                    <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ authorInfo?.wallet || 0 }}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ $t('author.wallet') }}
-                    </div>
-                  </div>
                 </div>
               </div>
               <div class="flex space-x-2">

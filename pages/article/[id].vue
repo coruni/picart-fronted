@@ -126,6 +126,7 @@
         </div>
       </template>
     </VueEasyLightbox>
+    <ScrollToTop />
     <!-- 加载状态 -->
     <div v-if="isLoading" class="max-w-7xl mx-auto px-4 py-4 md:py-8">
       <div class="flex flex-col lg:flex-row gap-4 md:gap-8">

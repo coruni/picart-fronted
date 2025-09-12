@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
+    <Title>{{ $t('common.article.create') }}</Title>
     <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
       <div class="flex items-start space-x-4">
         <UFormField name="title" class="flex-1">

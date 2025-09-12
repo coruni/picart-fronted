@@ -125,6 +125,8 @@
 
   definePageMeta({
     layout: 'dashboard',
+    name: 'admin-articles',
+    keepalive: true,
     requiresAuth: true
   });
 

@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
+    <Title>{{ state.title }}</Title>
     <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
       <div class="flex items-center space-x-4">
         <UFormField name="title" class="flex-1">
@@ -558,61 +559,62 @@
     readonly: false
   };
 
-  // 若 articleId 存在，请求文章详情数据
-  if (articleId) {
-    try {
-      const { data: articleData, refresh: refreshArticleDetail } = await articleControllerFindOne({
-        composable: 'useFetch',
-        key: 'articleDetail',
-        path: { id: articleId }
-      });
-
-      if (articleData.value?.data) {
-        const data = articleData.value.data;
-
-        Object.assign(state, {
-          title: data.title ?? '',
-          content: data.content ?? '',
-          parentCategory: data.category?.parent?.id,
-          categoryId: data.category?.id,
-          images: data.images ?? '',
-          cover: data.cover ?? '',
-          type: data.type ?? 'mixed',
-          tagIds: data.tags?.map(tag => Number(tag.id)) ?? [],
-          requireLogin: data.requireLogin ?? false,
-          requireFollow: data.requireFollow ?? false,
-          requireMembership: data.requireMembership ?? false,
-          requirePayment: data.requirePayment ?? false,
-          viewPrice: Number(data.viewPrice) ?? 0,
-          status: data.status,
-          downloads:
-            data.downloads?.map(d => ({
-              type: d.type,
-              url: d.url,
-              ...(d.password && { password: d.password }),
-              ...(d.extractionCode && { extractionCode: d.extractionCode })
-            })) ?? []
+  // 若 articleId 存在，请求文章详情数据、
+  const fetchArticleDetail = async () => {
+    if (articleId) {
+      try {
+        const { data: articleData } = await articleControllerFindOne({
+          composable: 'useFetch',
+          key: `articleDetail_${articleId}`,
+          path: { id: articleId }
         });
 
-        // 初始化已有图片
-        if (state.images) {
-          // 确保 images 是字符串数组
-          state.images = Array.isArray(state.images)
-            ? state.images
-            : state.images.split(',').filter(Boolean);
-        }
+        if (articleData.value?.data) {
+          const data = articleData.value.data;
 
-        // 初始化封面图片
-        if (state.cover) {
-          existingCoverUrl.value = state.cover;
-        }
+          Object.assign(state, {
+            title: data.title ?? '',
+            content: data.content ?? '',
+            parentCategory: data.category?.parent?.id,
+            categoryId: data.category?.id,
+            images: data.images ?? '',
+            cover: data.cover ?? '',
+            type: data.type ?? 'mixed',
+            tagIds: data.tags?.map(tag => Number(tag.id)) ?? [],
+            requireLogin: data.requireLogin ?? false,
+            requireFollow: data.requireFollow ?? false,
+            requireMembership: data.requireMembership ?? false,
+            requirePayment: data.requirePayment ?? false,
+            viewPrice: Number(data.viewPrice) ?? 0,
+            status: data.status,
+            downloads:
+              data.downloads?.map(d => ({
+                type: d.type,
+                url: d.url,
+                ...(d.password && { password: d.password }),
+                ...(d.extractionCode && { extractionCode: d.extractionCode })
+              })) ?? []
+          });
 
-        refreshArticleDetail();
+          // 初始化已有图片
+          if (state.images) {
+            // 确保 images 是字符串数组
+            state.images = Array.isArray(state.images)
+              ? state.images
+              : state.images.split(',').filter(Boolean);
+          }
+
+          // 初始化封面图片
+          if (state.cover) {
+            existingCoverUrl.value = state.cover;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load article:', error);
       }
-    } catch (error) {
-      console.error('Failed to load article:', error);
     }
-  }
+  };
+  await fetchArticleDetail();
 
   // 提交表单
   const onSubmit = debounce(async () => {

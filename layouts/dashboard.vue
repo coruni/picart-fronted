@@ -123,7 +123,16 @@
         <div
           class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
         >
-          <NuxtPage keepalive />
+          <NuxtPage
+            :keepalive="{
+              include: [
+                // 使用正则表达式匹配所有列表页面（index.vue 对应的路径）
+                /^\/admin$/, // 管理后台首页
+                /^\/admin\/(articles|categories|tags|roles|users|banners|comments|orders|settings)$/ // 各模块列表页
+              ],
+              max: 10
+            }"
+          />
         </div>
       </div>
     </main>
@@ -203,11 +212,14 @@
 
   // 根据路由动态设置页面标题
   const pageTitle = computed(() => {
-    const titleMap = menuItems.reduce((map, item) => {
-      map[item.path] = item.text;
-      return map;
-    }, {});
-    return titleMap[route.path] || '管理后台';
+    const titleMap: Record<string, string> = menuItems.reduce(
+      (map: Record<string, string>, item) => {
+        map[item.path] = item.text;
+        return map;
+      },
+      {}
+    );
+    return titleMap[route.path] || '';
   });
 
   // 监听路由变化，自动关闭移动端菜单

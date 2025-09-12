@@ -55,7 +55,8 @@
       "follow": "フォロー",
       "order": "注文",
       "payment": "支払い",
-      "unknown": "不明"
+      "unknown": "不明",
+      "private": "プライベート"
     },
     "time": {
       "justNow": "今",
@@ -257,7 +258,9 @@
       "avatarPlaceholder": "アバターURLを入力",
       "backgroundPlaceholder": "背景画像URLを入力",
       "avatarHelp": "有効な画像URLを入力してください",
-      "backgroundHelp": "有効な背景画像URLを入力してください"
+      "backgroundHelp": "有効な背景画像URLを入力してください",
+      "description": "タグの説明",
+      "name": "タグ名"
     },
     "users": {
       "searchAndFilter": "検索・フィルター",
@@ -433,6 +436,9 @@
     "status": {
       "active": "アクティブ",
       "inactive": "非アクティブ"
+    },
+    "article": {
+      "create": "記事を作成します"
     }
   },
   "image": {
@@ -457,7 +463,7 @@
   },
   "uploading": "アップロード中...",
   "status": {
-    "active": "有効にする",
+    "active": "有効",
     "inactive": "無効"
   },
   "filter": {
@@ -491,7 +497,7 @@
     "image": {
       "placeholder": "画像をアップロードしてください",
       "name": "画像",
-      "help": ""
+      "help": "推奨されるサイズ1200x630ピクセルは、JPGおよびPNG形式をサポートします"
     },
     "cover": {
       "placeholder": "カバー画像をアップロードしてください",
@@ -641,7 +647,8 @@
     },
     "deleteConfirm": "確認確認を削除します",
     "edit": "編集",
-    "delete": "削除"
+    "delete": "削除",
+    "scrollToDownloads": "ダウンロードに移動します"
   },
   "validation": {
     "required": "このフィールドは必須です",
@@ -840,7 +847,8 @@
       "title": "私の注文",
       "unknownProduct": "未知の製品",
       "viewDetail": "詳細を確認してください",
-      "type": {}
+      "type": {},
+      "all": "全て"
     },
     "profileSaved": "データは正常に保存されます",
     "quickNav": "クイックナビゲーション",
@@ -1082,7 +1090,11 @@
       "namePlaceholder": "ロール名を入力してください",
       "displayNamePlaceholder": "表示名を入力してください",
       "descriptionPlaceholder": "ロール説明を入力してください"
-    }
+    },
+    "descriptionPlaceholder": "役割の説明を入力してください",
+    "displayNamePlaceholder": "表示名を入力してください",
+    "namePlaceholder": "ロール名を入力してください",
+    "selectPermissions": "役割の権限を選択してください"
   },
   "permission": {
     "title": "権限管理",
@@ -1147,10 +1159,6 @@
     "articlePaymentSuccess": "支払いが成功しました。記事の内容を確認できます",
     "networkError": "ネットワークエラー",
     "unknownError": "不明なエラー"
-  },
-  "status": {
-    "active": "有効",
-    "inactive": "無効"
   },
   "maintenance": {
     "title": "ウェブサイトメンテナンス中",

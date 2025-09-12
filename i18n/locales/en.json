@@ -258,7 +258,9 @@
       "avatarPlaceholder": "Enter avatar URL",
       "backgroundPlaceholder": "Enter background image URL",
       "avatarHelp": "Please enter a valid image URL",
-      "backgroundHelp": "Please enter a valid background image URL"
+      "backgroundHelp": "Please enter a valid background image URL",
+      "description": "Tag description",
+      "name": "Tag name"
     },
     "users": {
       "searchAndFilter": "Search & Filter",
@@ -434,7 +436,10 @@
     "replace": "Replace",
     "selectImage": "Select Image",
     "selectImages": "Select Images",
-    "toggleTheme": "Toggle Theme"
+    "toggleTheme": "Toggle Theme",
+    "article": {
+      "create": "Create an article"
+    }
   },
   "image": {
     "preview": "Image Preview",
@@ -487,7 +492,8 @@
     },
     "image": {
       "placeholder": "Please upload images",
-      "name": "Images"
+      "name": "Images",
+      "help": "Recommended size 1200x630 pixels, supports JPG and PNG formats"
     },
     "cover": {
       "placeholder": "Please upload cover image",
@@ -1080,7 +1086,11 @@
       "namePlaceholder": "Enter role name",
       "displayNamePlaceholder": "Enter display name",
       "descriptionPlaceholder": "Enter role description"
-    }
+    },
+    "descriptionPlaceholder": "Please enter a role description",
+    "displayNamePlaceholder": "Please enter the display name",
+    "namePlaceholder": "Please enter the role name",
+    "selectPermissions": "Please select role permissions"
   },
   "permission": {
     "title": "Permission Management",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <CommonSwiperClient />
-
+    <ScrollToTop />
     <!-- 首页顶部广告 -->
     <Advertisement type="homepage" position="top" />
 
