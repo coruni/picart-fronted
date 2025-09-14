@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <Title>{{ $t('admin.banners.edit') }}</Title>
     <h1 class="text-2xl font-bold mb-6">{{ t('banners.edit') }}</h1>
 
     <UForm :state="state" :schema="schema" @submit="onSubmit">
@@ -30,6 +31,7 @@
             accept="image/*"
             :max-size="5 * 1024 * 1024"
             :help-text="t('banners.imageHelp')"
+            image-type="banner"
             aspect-ratio="16/9"
           />
         </UFormField>

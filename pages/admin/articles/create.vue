@@ -62,6 +62,8 @@
             :max-size="5 * 1024 * 1024"
             :max-count="10"
             :help-text="$t('form.image.help')"
+            :selected-cover="state.cover"
+            @selectCover="handleCoverSelect"
           />
         </UFormField>
       </template>
@@ -72,6 +74,8 @@
           v-model="state.cover"
           accept="image/*"
           :max-size="2 * 1024 * 1024"
+          image-type="cover"
+          aspect-ratio="3/4"
           :help-text="$t('form.cover.help')"
         />
       </UFormField>
@@ -447,6 +451,11 @@
   ]);
 
   const statusOptions = ref<SelectMenuItem[]>(getStatusOptions(t));
+
+  // 处理封面选择
+  const handleCoverSelect = (imageUrl: string) => {
+    state.cover = imageUrl;
+  };
 
   const { locale } = useI18n();
   // TinyMCE 编辑器配置

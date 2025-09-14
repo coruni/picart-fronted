@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
+    <Title>{{ $t('admin.categories.create') }}</Title>
     <h1 class="text-2xl font-bold mb-6">{{ t('categories.create') }}</h1>
     <UForm :schema="schema" :state="form" @submit="onSubmit" class="w-full">
       <UFormField :label="t('common.table.name')" name="name" required class="w-full">

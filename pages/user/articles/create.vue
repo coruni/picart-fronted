@@ -75,7 +75,8 @@
                 accept="image/*"
                 :max-size="2 * 1024 * 1024"
                 :help-text="$t('form.cover.help')"
-                aspect-ratio="16/9"
+                image-type="cover"
+                aspect-ratio="3/4"
               />
             </div>
           </UFormField>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Title>{{ $t('admin.banners.create') }}</Title>
     <h1 class="text-2xl font-bold mb-6">{{ t('banners.create') }}</h1>
 
     <UForm :state="state" :schema="schema" @submit="onSubmit">

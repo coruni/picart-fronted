@@ -2,6 +2,7 @@ import { ref, readonly, computed } from 'vue';
 import {
   messageControllerFindAll,
   messageControllerMarkAsRead,
+  messageControllerMarkAllAsRead,
   messageControllerRemove
 } from '~/api';
 
@@ -69,8 +70,15 @@ export const useMessage = () => {
     }
   };
 
-  // 标记消息为已读
+  // 标记消息为已读（防重复执行）
   const markAsRead = async (messageId: number) => {
+    const message = messages.value.find((msg: Message) => msg.id === messageId);
+
+    // 如果消息不存在或已经是已读状态，则跳过
+    if (!message || message.isRead) {
+      return;
+    }
+
     try {
       await messageControllerMarkAsRead({
         composable: '$fetch',
@@ -78,33 +86,31 @@ export const useMessage = () => {
       });
 
       // 更新本地状态
-      const message = messages.value.find((msg: Message) => msg.id === messageId);
-      if (message) {
-        message.isRead = true;
-      }
+      message.isRead = true;
     } catch (err) {
       console.error('标记已读失败:', err);
       throw err;
     }
   };
 
-  // 标记所有消息为已读
+  // 标记所有消息为已读（只处理未读消息）
   const markAllAsRead = async () => {
-    try {
-      const unreadIds = unreadMessages.value.map((msg: Message) => msg.id);
+    const unreadMessages = messages.value.filter((msg: Message) => !msg.isRead);
 
-      // 批量标记为已读
-      await Promise.all(
-        unreadIds.map(id =>
-          messageControllerMarkAsRead({
-            composable: '$fetch',
-            path: { id: String(id) }
-          })
-        )
-      );
+    // 如果没有未读消息，直接返回
+    if (unreadMessages.length === 0) {
+      return;
+    }
+
+    try {
+      // 使用批量标记所有消息为已读的接口
+      await messageControllerMarkAllAsRead({
+        composable: '$fetch',
+        body: {}
+      });
 
       // 更新本地状态
-      messages.value.forEach((msg: Message) => {
+      unreadMessages.forEach((msg: Message) => {
         msg.isRead = true;
       });
     } catch (err) {

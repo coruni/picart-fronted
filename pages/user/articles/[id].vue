@@ -62,6 +62,8 @@
               :max-size="5 * 1024 * 1024"
               :help-text="$t('form.image.help')"
               aspect-ratio="16/9"
+              :selected-cover="state.cover"
+              @selectCover="handleCoverSelect"
             />
           </UFormField>
         </template>
@@ -75,7 +77,8 @@
               accept="image/*"
               :max-size="2 * 1024 * 1024"
               :help-text="$t('form.cover.help')"
-              aspect-ratio="16/9"
+              image-type="cover"
+              aspect-ratio="3/4"
             />
           </div>
         </UFormField>
@@ -887,6 +890,11 @@
     if (state.downloads) {
       state.downloads.splice(index, 1);
     }
+  };
+
+  // 处理封面选择
+  const handleCoverSelect = (imageUrl: string) => {
+    state.cover = imageUrl;
   };
 </script>
 

@@ -811,6 +811,34 @@
         </div>
       </div>
     </div>
+
+    <!-- 删除确认弹窗 -->
+    <UModal
+      v-model:open="showDeleteConfirm"
+      :title="$t('article.deleteConfirm.title')"
+      :ui="{ footer: 'justify-end', close: 'cursor-pointer' }"
+    >
+      <template #body>
+        <p class="text-gray-700 dark:text-gray-300">
+          {{ $t('article.deleteConfirm.message') }}
+        </p>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <UButton @click="showDeleteConfirm = false" variant="ghost" class="cursor-pointer">
+            {{ $t('common.cancel') }}
+          </UButton>
+          <UButton
+            @click="confirmDeleteArticle"
+            color="error"
+            class="cursor-pointer"
+            :loading="isDeleting"
+          >
+            {{ $t('common.delete') }}
+          </UButton>
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>
 
@@ -938,6 +966,10 @@
   // 点赞相关状态
   const isLikeLoading = ref(false);
   const isFollowLoading = ref(false);
+
+  // 删除相关状态
+  const showDeleteConfirm = ref(false);
+  const isDeleting = ref(false);
 
   // lightbox相关状态
   const lightboxVisible = ref(false);
@@ -1188,16 +1220,16 @@
     router.push(`/user/articles/${route.params.id}`);
   };
 
-  // 处理删除文章
-  const handleDelete = async () => {
+  // 显示删除确认弹窗
+  const handleDelete = () => {
     if (!isAuthor.value && !hasManagePermission.value) return;
+    showDeleteConfirm.value = true;
+  };
 
-    // 显示确认对话框
-    const confirmed = confirm(t('article.deleteConfirm.message'));
-
-    if (!confirmed) return;
-
+  // 确认删除文章
+  const confirmDeleteArticle = async () => {
     try {
+      isDeleting.value = true;
       await articleControllerRemove({
         composable: '$fetch',
         path: { id: String(route.params.id) }
@@ -1205,7 +1237,12 @@
 
       // 跳转到用户文章列表页面
       router.push(localePath('/user/articles'));
-    } catch (error) {}
+    } catch (error) {
+      console.error('删除文章失败:', error);
+    } finally {
+      isDeleting.value = false;
+      showDeleteConfirm.value = false;
+    }
   };
 
   // 获取下载类型图标

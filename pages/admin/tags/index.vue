@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col min-h-full">
+    <Title>{{ $t('admin.tags.title') }}</Title>
     <!-- 搜索和筛选面板 -->
     <UCollapsible v-model:open="showFilters" class="mb-6">
       <UButton

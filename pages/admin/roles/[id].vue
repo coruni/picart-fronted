@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 flex flex-col w-full max-w-4xl mx-auto">
+    <Title>{{ $t('admin.roles.edit') }}</Title>
     <!-- 页面头部 -->
     <div class="flex items-center justify-between mb-6">
       <div>

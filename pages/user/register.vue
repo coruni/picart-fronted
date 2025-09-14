@@ -1,5 +1,8 @@
 <template>
   <div class="max-w-md mx-auto px-4 py-8">
+    <Title>{{ $t('register.title') }}</Title>
+    <Meta name="description" :content="$t('register.description')" />
+    <Meta name="keywords" :content="$t('register.keywords')" />
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 md:p-8">
       <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
         {{ $t('register.title') }}

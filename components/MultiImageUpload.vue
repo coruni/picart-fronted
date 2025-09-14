@@ -149,41 +149,49 @@
           <!-- 图片序号标识 -->
           <div
             v-if="imageList.length > 1"
-            class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center z-10"
+            class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center z-10"
           >
             <Icon name="mynaui:image" class="w-3 h-3 mr-1" />
             {{ index + 1 }}/{{ imageList.length }}
           </div>
 
-          <!-- 悬停操作 -->
+          <!-- 封面标识 -->
           <div
-            class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 rounded-lg"
+            v-if="selectedCover === image"
+            class="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center z-10"
           >
-            <!-- 删除按钮 - 右上角 -->
-            <div
-              class="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-            >
-              <UButton
-                variant="solid"
-                color="error"
-                size="xs"
-                icon="mynaui:trash"
-                @click.stop="removeImage(index)"
-              >
-                {{ t('common.button.remove') }}
-              </UButton>
-            </div>
+            <Icon name="mynaui:star" class="w-3 h-3 mr-1" />
+            {{ t('form.cover.selected') }}
+          </div>
 
-            <!-- 放大镜图标提示 - 中心位置 -->
-            <div
-              class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+          <!-- 操作按钮组 - 左上角 -->
+          <div
+            class="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1"
+          >
+            <!-- 选择封面按钮 -->
+            <UButton
+              variant="solid"
+              color="primary"
+              size="xs"
+              icon="mynaui:star"
+              class="cursor-pointer"
+              @click.stop="selectAsCover(image)"
+              :disabled="selectedCover === image"
             >
-              <div
-                class="bg-white/90 flex items-center justify-center dark:bg-gray-800/90 rounded-full p-2"
-              >
-                <Icon name="mynaui:search" class="w-4 h-4 text-gray-700 dark:text-gray-300" />
-              </div>
-            </div>
+              {{ selectedCover === image ? t('form.cover.selected') : t('form.cover.select') }}
+            </UButton>
+
+            <!-- 删除按钮 -->
+            <UButton
+              variant="solid"
+              color="error"
+              size="xs"
+              icon="mynaui:trash"
+              class="cursor-pointer"
+              @click.stop="removeImage(index)"
+            >
+              {{ t('common.button.remove') }}
+            </UButton>
           </div>
         </div>
       </div>
@@ -274,10 +282,12 @@
     maxSize?: number; // MB
     maxCount?: number;
     helpText?: string;
+    selectedCover?: string; // 当前选中的封面
   }
 
   interface Emits {
     (e: 'update:modelValue', value: string[]): void;
+    (e: 'selectCover', value: string): void;
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -460,6 +470,11 @@
   // 更新模型值
   const updateModelValue = () => {
     emit('update:modelValue', imageList.value);
+  };
+
+  // 选择封面
+  const selectAsCover = (imageUrl: string) => {
+    emit('selectCover', imageUrl);
   };
 
   // 监听外部变化

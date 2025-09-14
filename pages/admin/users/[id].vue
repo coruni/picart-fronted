@@ -1,5 +1,6 @@
 <template>
   <div class="p-4 sm:p-6">
+    <Title>{{ $t('admin.users.edit') }}</Title>
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">{{ $t('admin.users.editUser') }}</h1>
       <div class="flex items-center space-x-2">

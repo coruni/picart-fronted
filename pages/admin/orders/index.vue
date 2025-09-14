@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col min-h-full">
+    <Title>{{ $t('admin.orders.title') }}</Title>
     <!-- 搜索和筛选区域 -->
     <UCollapsible v-model:open="showFilters" class="mb-6">
       <UButton

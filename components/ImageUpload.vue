@@ -1,5 +1,13 @@
 <template>
   <div class="space-y-4">
+    <!-- 比例选择器 -->
+    <div v-if="showAspectRatioSelector" class="flex items-center space-x-4">
+      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        {{ t('image.aspectRatio') }}:
+      </label>
+      <USelect v-model="selectedAspectRatio" :options="aspectRatioOptions" class="w-40" size="sm" />
+    </div>
+
     <!-- 隐藏的文件输入 -->
     <input ref="fileInput" type="file" :accept="accept" class="hidden" @change="handleFileSelect" />
 
@@ -114,11 +122,13 @@
 
       <!-- 图片预览卡片 -->
       <div
-        class="relative group cursor-pointer max-w-sm sm:max-w-md lg:max-w-lg mx-auto"
+        class="relative group cursor-pointer mx-auto"
+        :class="getPreviewContainerClass(selectedAspectRatio)"
         @click="openLightbox"
       >
         <div
-          class="aspect-[3/4] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
+          class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800"
+          :class="getAspectRatioClass(selectedAspectRatio)"
         >
           <NuxtImg
             :src="modelValue"
@@ -126,7 +136,7 @@
             class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
             loading="lazy"
             format="webp"
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 384px, (max-width: 1024px) 448px, 512px"
+            :sizes="getImageSizes(selectedAspectRatio)"
           />
         </div>
 
@@ -145,14 +155,6 @@
               {{ t('common.button.change') }}
             </UButton>
           </div>
-        </div>
-
-        <!-- 编辑图标提示 -->
-        <div
-          class="absolute top-2 right-2 flex items-center justify-center bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm"
-        >
-          <Icon name="mynaui:edit" class="w-3 h-3 mr-1" />
-          {{ t('common.button.change') }}
         </div>
       </div>
     </div>
@@ -221,6 +223,9 @@
     accept?: string;
     maxSize?: number; // MB
     helpText?: string;
+    aspectRatio?: string; // 宽高比，如 '16/9', '4/3', '1/1', '3/4' 等
+    showAspectRatioSelector?: boolean; // 是否显示比例选择器
+    imageType?: 'cover' | 'avatar' | 'logo' | 'banner' | 'thumbnail' | 'content'; // 图片类型，用于自动选择比例
   }
 
   interface Emits {
@@ -229,7 +234,10 @@
 
   const props = withDefaults(defineProps<Props>(), {
     accept: 'image/*',
-    maxSize: 5 // 5MB
+    maxSize: 5, // 5MB
+    aspectRatio: '16/9',
+    showAspectRatioSelector: false,
+    imageType: 'content'
   });
 
   const emit = defineEmits<Emits>();
@@ -242,6 +250,71 @@
   const error = ref('');
   const isDragOver = ref(false);
   const isUploading = ref(false);
+
+  // 根据图片类型自动选择比例
+  const getDefaultAspectRatio = (imageType: string) => {
+    const ratioMap = {
+      cover: '16/9', // 封面图片：16:9
+      avatar: '1/1', // 头像：1:1
+      logo: '1/1', // Logo：1:1
+      banner: '16/9', // 横幅：16:9
+      thumbnail: '4/3', // 缩略图：4:3
+      content: '16/9' // 内容图片：16:9
+    };
+    return ratioMap[imageType as keyof typeof ratioMap] || '16/9';
+  };
+
+  const selectedAspectRatio = ref(props.aspectRatio || getDefaultAspectRatio(props.imageType));
+
+  // 比例选项
+  const aspectRatioOptions = [
+    { label: '16:9 (横屏)', value: '16/9' },
+    { label: '4:3 (标准)', value: '4/3' },
+    { label: '1:1 (正方形)', value: '1/1' },
+    { label: '3:4 (竖屏)', value: '3/4' },
+    { label: '2:3 (竖屏)', value: '2/3' },
+    { label: '3:2 (横屏)', value: '3/2' }
+  ];
+
+  // 获取比例对应的CSS类名
+  const getAspectRatioClass = (ratio: string) => {
+    const ratioMap = {
+      '16/9': 'aspect-[16/9]',
+      '4/3': 'aspect-[4/3]',
+      '1/1': 'aspect-square',
+      '3/4': 'aspect-[3/4]',
+      '2/3': 'aspect-[2/3]',
+      '3/2': 'aspect-[3/2]'
+    };
+    return ratioMap[ratio as keyof typeof ratioMap] || 'aspect-[16/9]';
+  };
+
+  // 获取预览容器的最大尺寸类名
+  const getPreviewContainerClass = (ratio: string) => {
+    const containerMap = {
+      '16/9': 'max-w-sm sm:max-w-md lg:max-w-lg', // 横屏：较大宽度
+      '4/3': 'max-w-xs sm:max-w-sm lg:max-w-md', // 标准：中等宽度
+      '1/1': 'max-w-48 sm:max-w-56 lg:max-w-64', // 正方形：较小宽度
+      '3/4': 'max-w-40 sm:max-w-48 lg:max-w-56', // 竖屏：较小宽度
+      '2/3': 'max-w-36 sm:max-w-44 lg:max-w-52', // 竖屏：更小宽度
+      '3/2': 'max-w-sm sm:max-w-md lg:max-w-lg' // 横屏：较大宽度
+    };
+    return containerMap[ratio as keyof typeof containerMap] || 'max-w-sm sm:max-w-md lg:max-w-lg';
+  };
+
+  // 根据比例获取图片尺寸
+  const getImageSizes = (ratio: string) => {
+    const sizeMap = {
+      '16/9':
+        '(max-width: 640px) 100vw, (max-width: 768px) 384px, (max-width: 1024px) 448px, 512px',
+      '4/3': '(max-width: 640px) 100vw, (max-width: 768px) 320px, (max-width: 1024px) 384px, 448px',
+      '1/1': '(max-width: 640px) 100vw, (max-width: 768px) 256px, (max-width: 1024px) 320px, 384px',
+      '3/4': '(max-width: 640px) 100vw, (max-width: 768px) 240px, (max-width: 1024px) 288px, 336px',
+      '2/3': '(max-width: 640px) 100vw, (max-width: 768px) 200px, (max-width: 1024px) 240px, 280px',
+      '3/2': '(max-width: 640px) 100vw, (max-width: 768px) 360px, (max-width: 1024px) 432px, 504px'
+    };
+    return sizeMap[ratio as keyof typeof sizeMap] || sizeMap['16/9'];
+  };
 
   // Lightbox相关状态
   const lightboxVisible = ref(false);
@@ -346,6 +419,17 @@
     // 发送事件
     emit('update:modelValue', '');
   };
+
+  // 监听图片类型变化，自动更新比例
+  watch(
+    () => props.imageType,
+    newType => {
+      if (!props.aspectRatio) {
+        selectedAspectRatio.value = getDefaultAspectRatio(newType);
+      }
+    },
+    { immediate: true }
+  );
 </script>
 
 <style scoped>

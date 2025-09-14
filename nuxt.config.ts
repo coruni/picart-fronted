@@ -50,7 +50,16 @@ export default defineNuxtConfig({
   // Robots 配置
   robots: {
     disallow: ['/admin/*', '/user/*'],
-    allow: ['/', '/article', '/author', '/category', '/search'],
+    allow: [
+      '/',
+      '/article',
+      '/author',
+      '/category',
+      '/search',
+      '/user/login',
+      '/user/register',
+      '/user/forgot-password'
+    ],
     sitemap: [
       'https://www.kawax.org/sitemap_index.xml',
       'https://www.kawax.org/sitemap_articles.xml',

@@ -176,7 +176,7 @@
           </div>
 
           <!-- 易支付 -->
-          <div v-if="siteConfig?.payment_epay_enabled" class="space-y-2">
+          <div v-if="siteConfig?.payment_epay_enabled && epayTypes.length > 0" class="space-y-2">
             <div class="text-sm font-medium text-gray-900 dark:text-white">
               {{ $t('payment.epay') }}
             </div>
@@ -288,7 +288,7 @@
 
   const selectedPackage = ref<Package | null>(null);
   const selectedPaymentMethod = ref<'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY' | null>(null);
-  const selectedEpayType = ref<'alipay' | 'wxpay' | null>(null);
+  const selectedEpayType = ref<'alipay' | 'wxpay' | 'usdt' | null>(null);
   const processing = ref(false);
 
   // 套餐选项
@@ -321,18 +321,35 @@
   ]);
 
   // 易支付类型选项
-  const epayTypes = computed(() => [
-    {
-      value: 'alipay' as const,
-      label: t('payment.epayAlipay'),
-      icon: 'mynaui:brand-alipay'
-    },
-    {
-      value: 'wxpay' as const,
-      label: t('payment.epayWechat'),
-      icon: 'mynaui:brand-wechat'
+  const epayTypes = computed(() => {
+    const types = [];
+
+    if (siteConfig?.payment_epay_alipay_enabled) {
+      types.push({
+        value: 'alipay' as const,
+        label: t('payment.epayAlipay'),
+        icon: 'mynaui:brand-alipay'
+      });
     }
-  ]);
+
+    if (siteConfig?.payment_epay_wxpay_enabled) {
+      types.push({
+        value: 'wxpay' as const,
+        label: t('payment.epayWechat'),
+        icon: 'mynaui:brand-wechat'
+      });
+    }
+
+    if (siteConfig?.payment_epay_usdt_enabled) {
+      types.push({
+        value: 'usdt' as const,
+        label: t('payment.epayUsdt'),
+        icon: 'mynaui:currency-dollar'
+      });
+    }
+
+    return types;
+  });
 
   // 选择套餐
   const selectPackage = (pkg: Package) => {
@@ -343,9 +360,9 @@
   const selectPaymentMethod = (method: 'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY') => {
     selectedPaymentMethod.value = method;
 
-    // 如果选择易支付，默认选择支付宝
-    if (method === 'EPAY' && !selectedEpayType.value) {
-      selectedEpayType.value = 'alipay';
+    // 如果选择易支付，默认选择第一个可用的易支付方式
+    if (method === 'EPAY' && !selectedEpayType.value && epayTypes.value.length > 0) {
+      selectedEpayType.value = epayTypes.value[0].value;
     }
 
     // 如果选择其他支付方式，清除易支付类型选择
@@ -355,7 +372,7 @@
   };
 
   // 选择易支付类型
-  const selectEpayType = (type: 'alipay' | 'wxpay') => {
+  const selectEpayType = (type: 'alipay' | 'wxpay' | 'usdt') => {
     selectedEpayType.value = type;
     selectedPaymentMethod.value = 'EPAY';
   };
@@ -383,7 +400,8 @@
         return t('payment.epayAlipay');
       case 'wxpay':
         return t('payment.epayWechat');
-
+      case 'usdt':
+        return t('payment.epayUsdt');
       default:
         return '';
     }

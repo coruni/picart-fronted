@@ -75,6 +75,7 @@
             <!-- 触发器：消息项 -->
             <div
               class="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors"
+              @click="handleMessageClick(message)"
             >
               <!-- 消息图标 -->
               <UAvatar
@@ -172,6 +173,29 @@
         </div>
       </TransitionGroup>
 
+      <!-- 删除确认弹窗 -->
+      <UModal v-model:open="showDeleteConfirm" :title="$t('message.deleteConfirm')">
+        <template #body>
+          <p class="text-gray-700 dark:text-gray-300">
+            {{ $t('message.confirmDelete') }}
+          </p>
+        </template>
+        <template #footer>
+          <div class="flex justify-end gap-3">
+            <UButton @click="showDeleteConfirm = false" variant="ghost">
+              {{ $t('common.cancel') }}
+            </UButton>
+            <UButton
+              @click="confirmDeleteMessage"
+              color="error"
+              :loading="deleting === messageToDelete"
+            >
+              {{ $t('common.delete') }}
+            </UButton>
+          </div>
+        </template>
+      </UModal>
+
       <!-- 没有更多数据提示 -->
       <div
         v-if="!hasMore && displayMessages.length > 0"
@@ -190,6 +214,7 @@
   import {
     messageControllerFindAll,
     messageControllerMarkAsRead,
+    messageControllerMarkAllAsRead,
     messageControllerRemove
   } from '~/api';
   import type { MessageControllerFindAllResponse } from '~/api';
@@ -209,6 +234,8 @@
   const markingAsRead = ref<number | null>(null);
   const markingAllAsRead = ref(false);
   const deleting = ref<number | null>(null);
+  const showDeleteConfirm = ref(false);
+  const messageToDelete = ref<number | null>(null);
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
 
@@ -442,8 +469,26 @@
     }
   };
 
-  // 标记消息为已读（带错误处理）
+  // 处理消息点击事件（自动标记已读）
+  const handleMessageClick = async (message: Message) => {
+    // 只对未读消息执行标记已读操作
+    if (!message.isRead) {
+      await handleMarkAsRead(message.id || 0);
+    }
+  };
+
+  // 标记消息为已读（带错误处理和防重复执行）
   const handleMarkAsRead = async (messageId: number) => {
+    // 防止重复执行：如果正在处理该消息或消息已经是已读状态，则跳过
+    if (markingAsRead.value === messageId) {
+      return;
+    }
+
+    const message = messages.value.find((msg: Message) => msg.id === messageId);
+    if (!message || message.isRead) {
+      return;
+    }
+
     try {
       markingAsRead.value = messageId;
       await messageControllerMarkAsRead({
@@ -452,10 +497,7 @@
       });
 
       // 更新本地状态
-      const message = messages.value.find((msg: Message) => msg.id === messageId);
-      if (message) {
-        message.isRead = true;
-      }
+      message.isRead = true;
     } catch (error) {
       console.error('标记已读失败:', error);
     } finally {
@@ -463,26 +505,26 @@
     }
   };
 
-  // 标记所有消息为已读（带错误处理）
+  // 标记所有消息为已读（带错误处理，只处理未读消息）
   const handleMarkAllAsRead = async () => {
+    const unreadMessages = messages.value.filter((msg: Message) => !msg.isRead);
+
+    // 如果没有未读消息，直接返回
+    if (unreadMessages.length === 0) {
+      return;
+    }
+
     try {
       markingAllAsRead.value = true;
-      const unreadIds = messages.value
-        .filter((msg: Message) => !msg.isRead)
-        .map((msg: Message) => msg.id);
 
-      // 批量标记为已读
-      await Promise.all(
-        unreadIds.map(id =>
-          messageControllerMarkAsRead({
-            composable: '$fetch',
-            path: { id: String(id) }
-          })
-        )
-      );
+      // 使用批量标记所有消息为已读的接口
+      await messageControllerMarkAllAsRead({
+        composable: '$fetch',
+        body: {}
+      });
 
       // 更新本地状态
-      messages.value.forEach((msg: Message) => {
+      unreadMessages.forEach((msg: Message) => {
         msg.isRead = true;
       });
     } catch (error) {
@@ -492,17 +534,25 @@
     }
   };
 
-  // 删除消息（带错误处理）
-  const handleDeleteMessage = async (messageId: number) => {
+  // 显示删除确认弹窗
+  const handleDeleteMessage = (messageId: number) => {
+    messageToDelete.value = messageId;
+    showDeleteConfirm.value = true;
+  };
+
+  // 确认删除消息
+  const confirmDeleteMessage = async () => {
+    if (!messageToDelete.value) return;
+
     try {
-      deleting.value = messageId;
+      deleting.value = messageToDelete.value;
       await messageControllerRemove({
         composable: '$fetch',
-        path: { id: String(messageId) }
+        path: { id: String(messageToDelete.value) }
       });
 
       // 从本地状态中移除
-      const index = messages.value.findIndex((msg: Message) => msg.id === messageId);
+      const index = messages.value.findIndex((msg: Message) => msg.id === messageToDelete.value);
       if (index > -1) {
         messages.value.splice(index, 1);
       }
@@ -510,6 +560,8 @@
       console.error('删除消息失败:', error);
     } finally {
       deleting.value = null;
+      showDeleteConfirm.value = false;
+      messageToDelete.value = null;
     }
   };
 

@@ -1556,6 +1556,9 @@ export type ConfigControllerGetPublicResponses = {
       ad_global_content: string;
       ad_global_position: string;
       ad_global_style: string;
+      payment_epay_wxpay_enabled: boolean;
+      payment_epay_alipay_enabled: boolean;
+      payment_epay_usdt_enabled: boolean;
     };
   };
 };

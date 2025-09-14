@@ -1,5 +1,6 @@
 <template>
   <div class="p-4 sm:p-6">
+    <Title>{{ $t('admin.settings.title') }}</Title>
     <h1 class="text-2xl font-bold mb-6">{{ t('admin.settings.title') }}</h1>
 
     <UTabs :items="tabs" class="w-full" v-model="activeTab" :ui="{ trigger: 'cursor-pointer' }">
@@ -113,6 +114,40 @@
             class="w-full"
           >
             <USwitch v-model="config.payment_epay_enabled" />
+          </UFormField>
+
+          <!-- 易支付具体支付方式开关 -->
+          <UFormField
+            :label="t('admin.settings.paymentEpayAlipayEnabled')"
+            name="payment_epay_alipay_enabled"
+            class="w-full"
+          >
+            <USwitch
+              v-model="config.payment_epay_alipay_enabled"
+              :disabled="!config.payment_epay_enabled"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentEpayWxpayEnabled')"
+            name="payment_epay_wxpay_enabled"
+            class="w-full"
+          >
+            <USwitch
+              v-model="config.payment_epay_wxpay_enabled"
+              :disabled="!config.payment_epay_enabled"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.paymentEpayUsdtEnabled')"
+            name="payment_epay_usdt_enabled"
+            class="w-full"
+          >
+            <USwitch
+              v-model="config.payment_epay_usdt_enabled"
+              :disabled="!config.payment_epay_enabled"
+            />
           </UFormField>
 
           <!-- 支付宝配置 -->
@@ -729,6 +764,9 @@
     payment_alipay_enabled: true,
     payment_wechat_enabled: true,
     payment_epay_enabled: true,
+    payment_epay_alipay_enabled: true,
+    payment_epay_wxpay_enabled: true,
+    payment_epay_usdt_enabled: false,
     membership_enabled: true,
     membership_name: '',
     membership_price: 0,
