@@ -26,11 +26,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // 如果页面需要认证且用户未登录，重定向到登录页
     if (requiresAuth && !userStore.isAuthenticated) {
       console.log('页面需要认证但用户未登录，重定向到登录页');
-      const redirectPath = to.fullPath;
-      return navigateTo({
-        path: localePath('/user/login'),
-        query: { redirect: redirectPath }
-      });
+      return navigateToLoginWithNavigateTo(to.fullPath);
     }
 
     // 检查管理员权限（如果是 admin 路径）

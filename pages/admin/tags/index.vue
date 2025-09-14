@@ -56,7 +56,23 @@
       :key="tableKey"
       class="flex-1"
     />
-    <div class="flex justify-center border-t border-default pt-4">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-default pt-4"
+    >
+      <!-- 页面大小选择器 -->
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-gray-600 dark:text-gray-400"
+          >{{ $t('common.table.itemsPerPage') }}:</span
+        >
+        <USelect
+          :model-value="pagination.pageSize"
+          :items="[10, 20, 50, 100]"
+          @update:model-value="value => handlePageSizeChange(value as number)"
+          class="w-20"
+        />
+      </div>
+
+      <!-- 分页器 -->
       <UPagination
         :page="currentPage"
         :items-per-page="pagination.pageSize"
@@ -99,6 +115,8 @@
   import type { Row } from '@tanstack/vue-table';
   import type { Tag } from '~~/types/tag';
 
+  const router = useRouter();
+  const route = useRoute();
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
   const UModal = resolveComponent('UModal');
@@ -106,21 +124,21 @@
   const table = useTemplateRef('table');
   const { t } = useI18n();
 
-  // 分页状态
+  // 分页状态 - 使用URL查询参数持久化
   const pagination = ref({
-    pageIndex: 0,
-    pageSize: 20
+    pageIndex: parseInt(route.query.pageIndex as string) || 0,
+    pageSize: parseInt(route.query.pageSize as string) || 20
   });
 
-  // 关键修改点2: 添加当前页面计算属性和表格key
+  // 当前页面计算属性和表格key
   const currentPage = computed(() => pagination.value.pageIndex + 1);
   const tableKey = ref(0); // 强制重新渲染表格
 
-  // 筛选状态
+  // 筛选状态 - 从URL查询参数初始化
   const showFilters = ref(false);
   const filters = ref({
-    name: '',
-    description: ''
+    name: (route.query.name as string) || '',
+    description: (route.query.description as string) || ''
   });
 
   // 删除确认模态框状态
@@ -132,9 +150,34 @@
     requiresAuth: true
   });
 
-  // 搜索功能 - 关键修改点3: 修改搜索逻辑
+  // 更新URL查询参数
+  const updateQueryParams = () => {
+    const query: Record<string, string> = {};
+
+    // 分页参数
+    if (pagination.value.pageIndex > 0) {
+      query.pageIndex = pagination.value.pageIndex.toString();
+    }
+    if (pagination.value.pageSize !== 20) {
+      query.pageSize = pagination.value.pageSize.toString();
+    }
+
+    // 筛选参数
+    if (filters.value.name) {
+      query.name = filters.value.name;
+    }
+    if (filters.value.description) {
+      query.description = filters.value.description;
+    }
+
+    // 更新URL
+    router.replace({ query });
+  };
+
+  // 搜索功能
   const handleSearch = () => {
     pagination.value.pageIndex = 0;
+    updateQueryParams();
     tableKey.value++; // 强制重新渲染
   };
 
@@ -143,9 +186,19 @@
     table.value?.tableApi?.setPageIndex(0);
   }, 300);
 
-  // 关键修改点4: 添加页面变化处理函数
+  // 页面变化处理函数
   const handlePageChange = (newPage: number) => {
     pagination.value.pageIndex = newPage - 1;
+    updateQueryParams();
+    tableKey.value++; // 强制重新渲染
+  };
+
+  // 页面大小变化处理函数
+  const handlePageSizeChange = (newPageSize: number | string) => {
+    const pageSize = typeof newPageSize === 'string' ? parseInt(newPageSize) : newPageSize;
+    pagination.value.pageSize = pageSize;
+    pagination.value.pageIndex = 0; // 重置到第一页
+    updateQueryParams();
     tableKey.value++; // 强制重新渲染
   };
 

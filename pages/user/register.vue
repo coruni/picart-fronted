@@ -147,12 +147,13 @@
       <div class="mt-6 text-center">
         <p class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('register.hasAccount') }}
-          <NuxtLinkLocale
-            to="/user/login"
-            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+          <UButton
+            @click="handleLoginClick"
+            variant="link"
+            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 cursor-pointer"
           >
             {{ $t('register.login') }}
-          </NuxtLinkLocale>
+          </UButton>
         </p>
       </div>
     </div>
@@ -163,6 +164,7 @@
   import { userControllerRegisterUser, userControllerSendVerificationCode } from '~~/api';
   import type { ConfigControllerGetPublicResponse } from '~~/api';
   import { z } from 'zod';
+  import { navigateToLogin } from '~/utils/auth';
   const userStore = useUserStore();
   const localePath = useLocalePath();
   const { t } = useI18n();
@@ -300,6 +302,11 @@
     } finally {
       loading.value = false;
     }
+  };
+
+  // 处理登录点击
+  const handleLoginClick = () => {
+    navigateToLogin();
   };
 
   // 页面元数据

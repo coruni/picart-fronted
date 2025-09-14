@@ -442,7 +442,8 @@
       "content": "Content",
       "article": "Article",
       "replyCount": "Replies",
-      "rootId": "Root Comment ID"
+      "rootId": "Root Comment ID",
+      "itemsPerPage": "Items per page"
     },
     "message": {
       "deleteSuccess": "Delete Successful",

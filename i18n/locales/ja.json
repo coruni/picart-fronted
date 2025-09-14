@@ -444,7 +444,8 @@
       "content": "コンテンツ",
       "article": "記事",
       "replyCount": "返信数",
-      "rootId": "ルートコメントID"
+      "rootId": "ルートコメントID",
+      "itemsPerPage": "ページあたりの項目数"
     },
     "message": {
       "deleteSuccess": "削除成功",

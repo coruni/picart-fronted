@@ -77,12 +77,13 @@
       <div class="mt-6 text-center">
         <p class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('forgotPassword.rememberPassword') }}
-          <NuxtLinkLocale
-            to="/user/login"
-            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+          <UButton
+            @click="handleLoginClick"
+            variant="link"
+            class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 cursor-pointer"
           >
             {{ $t('forgotPassword.backToLogin') }}
-          </NuxtLinkLocale>
+          </UButton>
         </p>
       </div>
     </div>
@@ -93,6 +94,7 @@
   import { ref } from 'vue';
   import { userControllerPasswordReset, userControllerSendVerificationCode } from '~~/api';
   import { z } from 'zod';
+  import { navigateToLogin } from '~/utils/auth';
 
   const { t } = useI18n();
   const router = useRouter();
@@ -186,6 +188,11 @@
     } finally {
       loading.value = false;
     }
+  };
+
+  // 处理登录点击
+  const handleLoginClick = () => {
+    navigateToLogin();
   };
 
   // 页面元数据

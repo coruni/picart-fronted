@@ -474,7 +474,8 @@
       "roles": "角色",
       "title": "标题",
       "summary": "摘要",
-      "category": "类别"
+      "category": "类别",
+      "itemsPerPage": "每页显示"
     },
     "loading": {
       "loading": "加载中...",

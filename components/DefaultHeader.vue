@@ -174,12 +174,13 @@
           </div>
         </template>
         <template v-else>
-          <NuxtLinkLocale
-            to="/user/login"
-            class="px-4 py-2 text-sm font-medium text-primary hover:text-primary-600 dark:hover:text-primary-400"
+          <UButton
+            @click="handleLoginClick"
+            variant="link"
+            class="px-4 py-2 text-sm font-medium text-primary hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
           >
             {{ $t('login.login') }}
-          </NuxtLinkLocale>
+          </UButton>
         </template>
       </div>
 
@@ -369,13 +370,13 @@
                 </button>
               </template>
               <template v-else>
-                <NuxtLinkLocale
-                  to="/user/login"
-                  class="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-                  @click="closeMobileMenu"
+                <UButton
+                  @click="handleLoginClick"
+                  variant="link"
+                  class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer"
                 >
                   {{ $t('login.login') }}
-                </NuxtLinkLocale>
+                </UButton>
               </template>
             </div>
           </div>
@@ -387,6 +388,7 @@
 <script lang="ts" setup>
   import type { Category } from '~~/types/category';
   import type { ConfigControllerGetPublicResponse } from '~/api';
+  import { navigateToLogin } from '~/utils/auth';
   type Config = ConfigControllerGetPublicResponse['data'];
   const siteConfig = inject<Config>('siteConfig');
   const userStore = useUserStore();
@@ -419,6 +421,11 @@
     if (searchQuery.value.trim()) {
       router.push({ path: localePath('/search'), query: { q: searchQuery.value } });
     }
+  };
+
+  // 处理登录点击
+  const handleLoginClick = () => {
+    navigateToLogin();
   };
 
   defineProps({

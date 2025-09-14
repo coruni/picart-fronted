@@ -126,11 +126,18 @@
           <NuxtPage
             :keepalive="{
               include: [
-                // 使用正则表达式匹配所有列表页面（index.vue 对应的路径）
+                // 只持久化数据列表页面，不包括创建、编辑、详情页面
                 /^\/admin$/, // 管理后台首页
-                /^\/admin\/(articles|categories|tags|roles|users|banners|comments|orders|settings)$/ // 各模块列表页
+                /^\/admin\/(articles|categories|tags|roles|users|banners|comments|orders|settings)$/ // 各模块列表页（index.vue）
               ],
-              max: 10
+              exclude: [
+                // 排除创建、编辑、详情页面
+                /\/create$/, // 创建页面
+                /\/\[id\]$/, // 编辑/详情页面（动态路由）
+                /\/edit$/, // 编辑页面
+                /\/new$/ // 新建页面
+              ],
+              max: 8 // 减少最大缓存数量
             }"
           />
         </div>
