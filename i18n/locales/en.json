@@ -47,6 +47,8 @@
     "markAllReadError": "Failed to mark all as read",
     "deleteSuccess": "Message deleted",
     "deleteError": "Failed to delete message",
+    "deleteConfirm": "Delete Confirmation",
+    "confirmDelete": "Are you sure you want to delete this message? This action cannot be undone.",
     "type": {
       "system": "System",
       "notification": "Notification",
@@ -66,6 +68,187 @@
     }
   },
   "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "welcome": "Welcome back!",
+      "welcomeMessage": "This is your management console where you can view system overview and statistics.",
+      "stats": {
+        "articles": "Total Articles",
+        "users": "Total Users",
+        "comments": "Total Comments",
+        "orders": "Total Orders",
+        "thisMonth": "This Month"
+      },
+      "charts": {
+        "visits": "Visit Trends",
+        "placeholder": "Chart Placeholder",
+        "totalVisits": "Total Visits",
+        "userGrowth": "User Growth Trend",
+        "growthRate": "Growth Rate",
+        "contentDistribution": "Content Type Distribution",
+        "articles": "Articles",
+        "images": "Images",
+        "videos": "Videos"
+      },
+      "tables": {
+        "popularArticles": "Popular Articles",
+        "recentActivity": "Recent Activity",
+        "views": "views",
+        "status": {
+          "published": "Published",
+          "draft": "Draft",
+          "archived": "Archived"
+        },
+        "activity": {
+          "success": "Success",
+          "warning": "Warning",
+          "info": "Info"
+        }
+      },
+      "periods": {
+        "week": "This Week",
+        "month": "This Month",
+        "year": "This Year"
+      },
+      "activities": {
+        "newArticle": "New article published",
+        "newUser": "New user registered",
+        "newComment": "New comment pending review",
+        "newOrder": "New order created",
+        "timeAgo": "{time} minutes ago"
+      }
+    },
+    "articles": {
+      "title": "Article Management",
+      "create": "Create Article",
+      "edit": "Edit Article",
+      "searchAndFilter": "Search & Filter"
+    },
+    "banners": {
+      "title": "Banner Management",
+      "create": "Create Banner",
+      "edit": "Edit Banner",
+      "searchAndFilter": "Search & Filter"
+    },
+    "categories": {
+      "title": "Category Management",
+      "create": "Create Category",
+      "edit": "Edit Category",
+      "searchAndFilter": "Search & Filter",
+      "editDescription": "Modify category basic information and media resources",
+      "basicInfo": "Basic Information",
+      "media": "Media Resources",
+      "preview": "Preview",
+      "namePlaceholder": "Enter category name",
+      "descriptionPlaceholder": "Enter category description",
+      "sortPlaceholder": "Enter sort value",
+      "selectParent": "Select parent category",
+      "avatarPlaceholder": "Upload avatar",
+      "coverPlaceholder": "Upload cover",
+      "linkPlaceholder": "Enter link address (optional)",
+      "avatarHelp": "Recommended size: 200x200px, supports JPG, PNG format",
+      "coverHelp": "Recommended size: 800x400px, supports JPG, PNG format",
+      "cannotBeOwnParent": "Category cannot select itself as parent",
+      "subCategories": "Sub-categories",
+      "parentCategory": "Parent Category",
+      "noDescription": "No description",
+      "totalArticles": "Total articles",
+      "noCategory": "No category"
+    },
+    "comments": {
+      "title": "Comment Management",
+      "searchAndFilter": "Search & Filter"
+    },
+    "orders": {
+      "title": "Order Management",
+      "searchAndFilter": "Search & Filter",
+      "orderNo": "Order No",
+      "userId": "User ID",
+      "type": "Order Type",
+      "status": "Order Status",
+      "amount": "Amount",
+      "createdAt": "Created At",
+      "description": "Order Description",
+      "orderDetail": "Order Detail",
+      "viewDetail": "View Detail",
+      "selectStatus": "Select Status",
+      "selectType": "Select Type",
+      "searchUserId": "Search User ID",
+      "allStatus": "All Status",
+      "allTypes": "All Types",
+      "pending": "Pending",
+      "paid": "Paid",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded",
+      "membership": "Membership",
+      "product": "Product",
+      "service": "Service",
+      "article": "Article"
+    },
+    "roles": {
+      "title": "Role Management",
+      "create": "Create Role",
+      "edit": "Edit Role"
+    },
+    "tags": {
+      "title": "Tag Management",
+      "create": "Create Tag",
+      "edit": "Edit Tag",
+      "searchAndFilter": "Search & Filter",
+      "createDescription": "Create a new tag with basic information and media resources",
+      "editDescription": "Modify tag basic information and media resources",
+      "basicInfo": "Basic Information",
+      "media": "Media Resources",
+      "preview": "Preview",
+      "namePlaceholder": "Enter tag name",
+      "descriptionPlaceholder": "Enter tag description",
+      "sortPlaceholder": "Enter sort value",
+      "avatarPlaceholder": "Enter avatar URL",
+      "backgroundPlaceholder": "Enter background image URL",
+      "avatarHelp": "Please enter a valid image URL",
+      "backgroundHelp": "Please enter a valid background image URL",
+      "description": "Tag description",
+      "name": "Tag name"
+    },
+    "users": {
+      "title": "User Management",
+      "edit": "Edit User",
+      "searchAndFilter": "Search & Filter",
+      "searchUsername": "Search username",
+      "editUser": "Edit User",
+      "userDetails": "User Details",
+      "basicInfo": "Basic Information",
+      "membershipInfo": "Membership Information",
+      "banInfo": "Ban Information",
+      "avatar": "Avatar",
+      "statistics": "Statistics",
+      "timestamps": "Timestamps",
+      "username": "Username",
+      "nickname": "Nickname",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Status",
+      "gender": "Gender",
+      "description": "Description",
+      "address": "Address",
+      "birthDate": "Birth Date",
+      "membershipLevel": "Membership Level",
+      "membershipStatus": "Membership Status",
+      "membershipStartDate": "Membership Start Date",
+      "membershipEndDate": "Membership End Date",
+      "banReason": "Ban Reason",
+      "bannedAt": "Banned At",
+      "followerCount": "Followers",
+      "followingCount": "Following",
+      "articleCount": "Articles",
+      "score": "Score",
+      "wallet": "Wallet",
+      "level": "Level",
+      "experience": "Experience",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "lastLoginAt": "Last Login At"
+    },
     "menu": {
       "dashboard": "Dashboard",
       "users": "Users",
@@ -108,6 +291,9 @@
       "paymentAlipayEnabled": "Alipay Payment Enabled",
       "paymentWechatEnabled": "WeChat Payment Enabled",
       "paymentEpayEnabled": "Epay Payment Enabled",
+      "paymentEpayAlipayEnabled": "Epay - Alipay",
+      "paymentEpayWxpayEnabled": "Epay - WeChat Pay",
+      "paymentEpayUsdtEnabled": "Epay - USDT",
       "paymentAlipayAppId": "Alipay App ID",
       "paymentAlipayPrivateKey": "Alipay Private Key",
       "paymentAlipayPublicKey": "Alipay Public Key",
@@ -180,6 +366,7 @@
       "epay": "Easy Pay",
       "epayAlipay": "Alipay",
       "epayWechat": "WeChat",
+      "epayUsdt": "USDT",
       "selectEpayType": "Please select Easy Pay type",
       "insufficientBalance": "Insufficient Balance",
       "processing": "Processing...",
@@ -218,120 +405,6 @@
       },
       "saveSuccess": "Settings saved successfully",
       "saveFailed": "Failed to save settings"
-    },
-    "categories": {
-      "searchAndFilter": "Search & Filter",
-      "title": "Category Management",
-      "edit": "Edit Category",
-      "editDescription": "Modify category basic information and media resources",
-      "basicInfo": "Basic Information",
-      "media": "Media Resources",
-      "preview": "Preview",
-      "namePlaceholder": "Enter category name",
-      "descriptionPlaceholder": "Enter category description",
-      "sortPlaceholder": "Enter sort value",
-      "selectParent": "Select parent category",
-      "avatarPlaceholder": "Upload avatar",
-      "coverPlaceholder": "Upload cover",
-      "linkPlaceholder": "Enter link address (optional)",
-      "avatarHelp": "Recommended size: 200x200px, supports JPG, PNG format",
-      "coverHelp": "Recommended size: 800x400px, supports JPG, PNG format",
-      "cannotBeOwnParent": "Category cannot select itself as parent",
-      "subCategories": "Sub Categories",
-      "parentCategory": "Parent Category",
-      "noDescription": "No Description",
-      "totalArticles": "Total Articles",
-      "noCategory": "No Category"
-    },
-    "tags": {
-      "searchAndFilter": "Search & Filter",
-      "create": "Create Tag",
-      "createDescription": "Create a new tag with basic information and media resources",
-      "edit": "Edit Tag",
-      "editDescription": "Modify tag basic information and media resources",
-      "basicInfo": "Basic Information",
-      "media": "Media Resources",
-      "preview": "Preview",
-      "namePlaceholder": "Enter tag name",
-      "descriptionPlaceholder": "Enter tag description",
-      "sortPlaceholder": "Enter sort value",
-      "avatarPlaceholder": "Enter avatar URL",
-      "backgroundPlaceholder": "Enter background image URL",
-      "avatarHelp": "Please enter a valid image URL",
-      "backgroundHelp": "Please enter a valid background image URL",
-      "description": "Tag description",
-      "name": "Tag name"
-    },
-    "users": {
-      "searchAndFilter": "Search & Filter",
-      "searchUsername": "Search username",
-      "editUser": "Edit User",
-      "userDetails": "User Details",
-      "basicInfo": "Basic Information",
-      "membershipInfo": "Membership Information",
-      "banInfo": "Ban Information",
-      "avatar": "Avatar",
-      "statistics": "Statistics",
-      "timestamps": "Timestamps",
-      "username": "Username",
-      "nickname": "Nickname",
-      "email": "Email",
-      "phone": "Phone",
-      "status": "Status",
-      "gender": "Gender",
-      "description": "Description",
-      "address": "Address",
-      "birthDate": "Birth Date",
-      "membershipLevel": "Membership Level",
-      "membershipStatus": "Membership Status",
-      "membershipStartDate": "Membership Start Date",
-      "membershipEndDate": "Membership End Date",
-      "banReason": "Ban Reason",
-      "bannedAt": "Banned At",
-      "followerCount": "Followers",
-      "followingCount": "Following",
-      "articleCount": "Articles",
-      "score": "Score",
-      "wallet": "Wallet",
-      "level": "Level",
-      "experience": "Experience",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At",
-      "lastLoginAt": "Last Login At"
-    },
-    "articles": {
-      "searchAndFilter": "Search & Filter"
-    },
-    "comments": {
-      "searchAndFilter": "Search & Filter"
-    },
-    "banners": {
-      "searchAndFilter": "Search & Filter"
-    },
-    "orders": {
-      "orderNo": "Order No",
-      "userId": "User ID",
-      "type": {},
-      "status": "Order Status",
-      "amount": "Amount",
-      "createdAt": "Created At",
-      "description": "Order Description",
-      "orderDetail": "Order Detail",
-      "viewDetail": "View Detail",
-      "selectStatus": "Select Status",
-      "selectType": "Select Type",
-      "searchUserId": "Search User ID",
-      "searchAndFilter": "Search & Filter",
-      "allStatus": "All Status",
-      "allTypes": "All Types",
-      "pending": "Pending",
-      "paid": "Paid",
-      "cancelled": "Cancelled",
-      "refunded": "Refunded",
-      "membership": "Membership",
-      "product": "Product",
-      "service": "Service",
-      "article": "Article"
     }
   },
   "common": {
@@ -459,7 +532,8 @@
     "loading": "Loading...",
     "loadFailed": "Image load failed",
     "retry": "Retry",
-    "loadError": "Load failed"
+    "loadError": "Load failed",
+    "aspectRatio": "Aspect Ratio"
   },
   "uploading": "Uploading...",
   "filter": {
@@ -498,7 +572,9 @@
     "cover": {
       "placeholder": "Please upload cover image",
       "name": "Cover Image",
-      "help": "Recommended size 1200x630 pixels, supports JPG, PNG format"
+      "help": "Recommended size 1200x630 pixels, supports JPG, PNG format",
+      "select": "Set as Cover",
+      "selected": "Selected Cover"
     },
     "submit": "Submit",
     "type": {
@@ -641,7 +717,10 @@
         "upgradeButton": "Upgrade membership"
       }
     },
-    "deleteConfirm": "Delete Confirm",
+    "deleteConfirm": {
+      "title": "Delete Confirmation",
+      "message": "Are you sure you want to delete this article? This action cannot be undone."
+    },
     "edit": "Edit",
     "delete": "Delete",
     "scrollToDownloads": "Go to download"
@@ -700,10 +779,14 @@
     "noAccount": "Don't have an account?",
     "register": "Register now",
     "loginFailed": "Login failed, please check your username and password",
-    "loginFailedDescription": "Please check if username and password are correct"
+    "loginFailedDescription": "Please check if username and password are correct",
+    "description": "Please enter your username and password to login",
+    "keywords": "login, register, forgot password"
   },
   "forgotPassword": {
     "title": "Forgot Password",
+    "description": "Reset your account password through email verification",
+    "keywords": "forgot password, password reset, recover password",
     "email": "Email",
     "emailPlaceholder": "Please enter your email address",
     "verificationCode": "Verification Code",
@@ -725,6 +808,8 @@
   },
   "register": {
     "title": "User Registration",
+    "description": "Create a new account and start your amazing journey",
+    "keywords": "register, new user, create account",
     "username": "Username",
     "usernamePlaceholder": "Please enter your username",
     "email": "Email",
@@ -949,9 +1034,6 @@
     "titlePlaceholder": "Input Title",
     "description": "Description",
     "imageHelp": "Recommended size: 1920x1080px, supports JPG, PNG format, max 5MB"
-  },
-  "categories": {
-    "create": "Create Category"
   },
   "response": {
     "error": {

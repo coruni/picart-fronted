@@ -47,6 +47,8 @@
     "markAllReadError": "标记全部已读失败",
     "deleteSuccess": "删除成功",
     "deleteError": "删除失败",
+    "deleteConfirm": "删除确认",
+    "confirmDelete": "确定要删除这条消息吗？此操作不可撤销。",
     "type": {
       "system": "系统消息",
       "notification": "通知",
@@ -66,6 +68,142 @@
     }
   },
   "admin": {
+    "dashboard": {
+      "title": "管理后台",
+      "welcome": "欢迎回来！",
+      "welcomeMessage": "这里是您的管理控制台，可以查看系统概览和统计数据。",
+      "stats": {
+        "articles": "文章总数",
+        "users": "用户总数",
+        "comments": "评论总数",
+        "orders": "订单总数",
+        "thisMonth": "本月"
+      },
+      "charts": {
+        "visits": "访问量趋势",
+        "placeholder": "图表占位符",
+        "totalVisits": "总访问量",
+        "userGrowth": "用户增长趋势",
+        "growthRate": "增长率",
+        "contentDistribution": "内容类型分布",
+        "articles": "文章",
+        "images": "图片",
+        "videos": "视频"
+      },
+      "tables": {
+        "popularArticles": "热门文章",
+        "recentActivity": "最近活动",
+        "views": "次浏览",
+        "status": {
+          "published": "已发布",
+          "draft": "草稿",
+          "archived": "已归档"
+        },
+        "activity": {
+          "success": "成功",
+          "warning": "警告",
+          "info": "信息"
+        }
+      },
+      "periods": {
+        "week": "本周",
+        "month": "本月",
+        "year": "本年"
+      },
+      "activities": {
+        "newArticle": "新文章已发布",
+        "newUser": "新用户注册",
+        "newComment": "新评论待审核",
+        "newOrder": "新订单已创建",
+        "timeAgo": "{time} 分钟前"
+      }
+    },
+    "articles": {
+      "title": "文章管理",
+      "create": "创建文章",
+      "edit": "编辑文章",
+      "searchAndFilter": "搜索和筛选"
+    },
+    "banners": {
+      "title": "轮播管理",
+      "create": "创建轮播",
+      "edit": "编辑轮播",
+      "searchAndFilter": "搜索和筛选"
+    },
+    "categories": {
+      "title": "分类管理",
+      "create": "创建分类",
+      "edit": "编辑分类",
+      "searchAndFilter": "搜索和筛选",
+      "editDescription": "修改分类的基本信息和媒体资源",
+      "basicInfo": "基本信息",
+      "media": "媒体资源",
+      "preview": "预览",
+      "namePlaceholder": "请输入分类名称",
+      "descriptionPlaceholder": "请输入分类描述",
+      "sortPlaceholder": "请输入排序值",
+      "selectParent": "请选择父分类",
+      "avatarPlaceholder": "上传头像",
+      "coverPlaceholder": "上传封面",
+      "linkPlaceholder": "请输入链接地址（可选）",
+      "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
+      "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
+      "cannotBeOwnParent": "分类不能选择自己作为父分类",
+      "subCategories": "子分类",
+      "parentCategory": "父分类",
+      "noDescription": "无描述",
+      "totalArticles": "总文章数",
+      "noCategory": "无分类"
+    },
+    "comments": {
+      "title": "评论管理",
+      "searchAndFilter": "搜索和筛选"
+    },
+    "orders": {
+      "title": "订单管理",
+      "searchAndFilter": "搜索和筛选",
+      "orderNo": "订单号",
+      "userId": "用户ID",
+      "type": "订单类型",
+      "status": "订单状态",
+      "amount": "金额",
+      "createdAt": "创建时间",
+      "description": "订单描述",
+      "viewDetail": "查看详情",
+      "all": "全部",
+      "pending": "待支付",
+      "paid": "已支付",
+      "cancelled": "已取消",
+      "refunded": "已退款",
+      "membership": "会员订单",
+      "article": "文章订单"
+    },
+    "roles": {
+      "title": "角色管理",
+      "create": "创建角色",
+      "edit": "编辑角色",
+      "searchAndFilter": "搜索和筛选"
+    },
+    "tags": {
+      "title": "标签管理",
+      "create": "创建标签",
+      "edit": "编辑标签",
+      "searchAndFilter": "搜索和筛选",
+      "createDescription": "创建新的标签，设置基本信息和媒体资源",
+      "editDescription": "修改标签的基本信息和媒体资源",
+      "basicInfo": "基本信息",
+      "media": "媒体资源",
+      "preview": "预览",
+      "namePlaceholder": "请输入标签名称",
+      "descriptionPlaceholder": "请输入标签描述",
+      "sortPlaceholder": "请输入排序值",
+      "avatarPlaceholder": "上传头像",
+      "coverPlaceholder": "上传封面",
+      "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
+      "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
+      "noDescription": "无描述",
+      "totalArticles": "总文章数"
+    },
     "menu": {
       "dashboard": "仪表盘",
       "users": "用户管理",
@@ -108,6 +246,9 @@
       "paymentAlipayEnabled": "启用支付宝支付",
       "paymentWechatEnabled": "启用微信支付",
       "paymentEpayEnabled": "启用易支付",
+      "paymentEpayAlipayEnabled": "易支付-支付宝",
+      "paymentEpayWxpayEnabled": "易支付-微信支付",
+      "paymentEpayUsdtEnabled": "易支付-USDT",
       "paymentAlipayAppId": "支付宝应用ID",
       "paymentAlipayPrivateKey": "支付宝私钥",
       "paymentAlipayPublicKey": "支付宝公钥",
@@ -180,6 +321,7 @@
       "epay": "易支付",
       "epayAlipay": "支付宝",
       "epayWechat": "微信",
+      "epayUsdt": "USDT",
       "selectEpayType": "请选择易支付类型",
       "insufficientBalance": "余额不足",
       "processing": "处理中...",
@@ -194,49 +336,6 @@
       "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
       "networkError": "网络错误",
       "unknownError": "未知错误"
-    },
-    "categories": {
-      "searchAndFilter": "搜索和筛选",
-      "title": "分类管理",
-      "edit": "编辑分类",
-      "editDescription": "修改分类的基本信息和媒体资源",
-      "basicInfo": "基本信息",
-      "media": "媒体资源",
-      "preview": "预览",
-      "namePlaceholder": "请输入分类名称",
-      "descriptionPlaceholder": "请输入分类描述",
-      "sortPlaceholder": "请输入排序值",
-      "selectParent": "请选择父分类",
-      "avatarPlaceholder": "上传头像",
-      "coverPlaceholder": "上传封面",
-      "linkPlaceholder": "请输入链接地址（可选）",
-      "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
-      "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
-      "cannotBeOwnParent": "分类不能选择自己作为父分类",
-      "subCategories": "子分类",
-      "parentCategory": "父分类",
-      "noDescription": "无描述",
-      "totalArticles": "总文章数",
-      "noCategory": "无分类"
-    },
-    "tags": {
-      "searchAndFilter": "搜索和筛选",
-      "create": "创建标签",
-      "createDescription": "创建新的标签，设置基本信息和媒体资源",
-      "edit": "编辑标签",
-      "editDescription": "修改标签的基本信息和媒体资源",
-      "basicInfo": "基本信息",
-      "media": "媒体资源",
-      "preview": "预览",
-      "namePlaceholder": "请输入标签名称",
-      "descriptionPlaceholder": "请输入标签描述",
-      "sortPlaceholder": "请输入排序值",
-      "avatarPlaceholder": "请输入头像URL",
-      "backgroundPlaceholder": "请输入背景图片URL",
-      "avatarHelp": "请输入有效的图片URL地址",
-      "backgroundHelp": "请输入有效的背景图片URL地址",
-      "name": "标签名称",
-      "description": "标签描述"
     },
     "users": {
       "searchAndFilter": "搜索和筛选",
@@ -273,41 +372,9 @@
       "experience": "经验值",
       "createdAt": "创建时间",
       "updatedAt": "更新时间",
-      "lastLoginAt": "最后登录时间"
-    },
-    "articles": {
-      "searchAndFilter": "搜索和筛选"
-    },
-    "comments": {
-      "searchAndFilter": "搜索和筛选"
-    },
-    "banners": {
-      "searchAndFilter": "搜索和筛选"
-    },
-    "orders": {
-      "orderNo": "订单号",
-      "userId": "用户ID",
-      "type": "订单类型",
-      "status": "订单状态",
-      "amount": "金额",
-      "createdAt": "创建时间",
-      "description": "订单描述",
-      "orderDetail": "订单详情",
-      "viewDetail": "查看详情",
-      "selectStatus": "选择状态",
-      "selectType": "选择类型",
-      "searchUserId": "搜索用户ID",
-      "searchAndFilter": "搜索和筛选",
-      "allStatus": "全部状态",
-      "allTypes": "全部类型",
-      "pending": "待支付",
-      "paid": "已支付",
-      "cancelled": "已取消",
-      "refunded": "已退款",
-      "membership": "会员订单",
-      "product": "商品订单",
-      "service": "服务订单",
-      "article": "文章订单"
+      "lastLoginAt": "最后登录时间",
+      "title": "用户管理",
+      "edit": "编辑用户"
     },
     "adPositionTop": {
       "adContentPlaceholder": "输入广告内容（支持HTML）",
@@ -554,6 +621,7 @@
     "loading": "加载中...",
     "loadFailed": "图片加载失败",
     "retry": "重试",
+    "aspectRatio": "宽高比",
     "loadError": "加载失败"
   },
   "uploading": "上传中...",
@@ -726,7 +794,9 @@
     "cover": {
       "placeholder": "请上传封面图片",
       "name": "封面图片",
-      "help": "建议尺寸 1200x630 像素，支持 JPG、PNG 格式"
+      "help": "建议尺寸 1200x630 像素，支持 JPG、PNG 格式",
+      "select": "设为封面",
+      "selected": "已选封面"
     },
     "submit": "提交",
     "type": {
@@ -869,7 +939,10 @@
         "contactText": "如有疑问，请联系客服"
       }
     },
-    "deleteConfirm": "删除确认",
+    "deleteConfirm": {
+      "title": "删除确认",
+      "message": "确定要删除这篇文章吗？此操作不可撤销。"
+    },
     "edit": "编辑",
     "delete": "删除",
     "scrollToDownloads": "前往下载"
@@ -928,10 +1001,14 @@
     "loginFailed": "登录失败，请检查账号和密码",
     "loginFailedDescription": "请检查账号和密码是否正确",
     "username": "用户名",
-    "usernamePlaceholder": "请输入您的用户名"
+    "usernamePlaceholder": "请输入您的用户名",
+    "description": "请输入您的用户名和密码登录",
+    "keywords": "登录, 注册, 忘记密码"
   },
   "forgotPassword": {
     "title": "忘记密码",
+    "description": "通过邮箱验证重置您的账户密码",
+    "keywords": "忘记密码, 密码重置, 找回密码",
     "email": "邮箱",
     "emailPlaceholder": "请输入邮箱地址",
     "verificationCode": "验证码",
@@ -953,6 +1030,8 @@
   },
   "register": {
     "title": "用户注册",
+    "description": "创建新账户，开始您的精彩之旅",
+    "keywords": "注册, 新用户, 创建账户",
     "username": "用户名",
     "usernamePlaceholder": "请输入用户名",
     "email": "邮箱",
@@ -1044,9 +1123,6 @@
     "titleRequired": "请输入标题",
     "imageHelp": "建议尺寸：1920x1080px，支持 JPG、PNG 格式，最大 5MB"
   },
-  "categories": {
-    "create": "创建分类"
-  },
   "response": {
     "error": {
       "followSelf": "不能关注自己",
@@ -1122,7 +1198,8 @@
       "tagDelete": "标签删除成功",
       "tagUpdate": "标签更新成功",
       "userDelete": "用户删除成功",
-      "userUpdate": "用户更新成功"
+      "userUpdate": "用户更新成功",
+      "messageMarkAllAsRead": "消息标记全部已读成功"
     }
   },
   "Unauthorized": "请先登录",
