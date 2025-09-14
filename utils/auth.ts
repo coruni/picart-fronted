@@ -3,6 +3,45 @@
  */
 
 /**
+ * 检查路径是否为登录相关页面
+ * @param path 要检查的路径
+ * @returns 是否为登录相关页面
+ */
+const isLoginRelatedPath = (path: string): boolean => {
+  const loginPaths = ['/user/login', '/user/register', '/user/forgot-password'];
+  return loginPaths.some(loginPath => path.includes(loginPath));
+};
+
+/**
+ * 检查重定向路径是否安全
+ * @param redirectPath 重定向路径
+ * @returns 是否安全
+ */
+export const isSafeRedirectPath = (redirectPath: string): boolean => {
+  // 检查是否为空
+  if (!redirectPath || redirectPath.trim() === '') {
+    return false;
+  }
+
+  // 检查是否为登录相关页面
+  if (isLoginRelatedPath(redirectPath)) {
+    return false;
+  }
+
+  // 检查是否包含多个重定向参数（防止重定向链）
+  if (redirectPath.includes('redirect=')) {
+    return false;
+  }
+
+  // 检查是否为外部链接
+  if (redirectPath.startsWith('http://') || redirectPath.startsWith('https://')) {
+    return false;
+  }
+
+  return true;
+};
+
+/**
  * 跳转到登录页面，自动添加重定向参数
  * @param currentPath 当前页面路径，用于登录后重定向
  * @param router 路由实例（可选，如果不提供则使用默认的）
@@ -17,7 +56,9 @@ export const navigateToLogin = (currentPath?: string, router?: any) => {
 
   // 构建登录URL，包含重定向参数
   const loginPath = localePath('/user/login');
-  const query = redirectPath && redirectPath !== '/user/login' ? { redirect: redirectPath } : {};
+
+  // 检查重定向路径是否安全
+  const query = isSafeRedirectPath(redirectPath) ? { redirect: redirectPath } : {};
 
   return routerInstance.push({
     path: loginPath,
@@ -38,7 +79,9 @@ export const navigateToLoginWithNavigateTo = (currentPath?: string) => {
 
   // 构建登录URL，包含重定向参数
   const loginPath = localePath('/user/login');
-  const query = redirectPath && redirectPath !== '/user/login' ? { redirect: redirectPath } : {};
+
+  // 检查重定向路径是否安全
+  const query = isSafeRedirectPath(redirectPath) ? { redirect: redirectPath } : {};
 
   return navigateTo({
     path: loginPath,
@@ -65,9 +108,12 @@ export const checkAuthRedirect = (
     const redirectPath = currentPath || route.fullPath;
     const loginPath = localePath('/user/login');
 
+    // 检查重定向路径是否安全
+    const query = isSafeRedirectPath(redirectPath) ? { redirect: redirectPath } : {};
+
     return {
       path: loginPath,
-      query: redirectPath && redirectPath !== '/user/login' ? { redirect: redirectPath } : {}
+      query
     };
   }
 

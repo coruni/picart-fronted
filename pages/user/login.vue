@@ -75,6 +75,7 @@
   import { ref } from 'vue';
   import { userControllerLogin } from '~~/api';
   import { z } from 'zod';
+  import { isSafeRedirectPath } from '~/utils/auth';
   const localePath = useLocalePath();
   const route = useRoute();
 
@@ -143,9 +144,9 @@
           userStore.clearRememberedUsername();
         }
 
-        // 跳转处理
+        // 跳转处理 - 安全检查重定向路径
         const redirectPath = route.query.redirect as string;
-        if (redirectPath && redirectPath !== '/login') {
+        if (redirectPath && isSafeRedirectPath(redirectPath)) {
           await router.push(localePath(redirectPath));
         } else {
           await router.push(localePath('/user'));

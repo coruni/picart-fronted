@@ -118,6 +118,7 @@
 <script lang="ts" setup>
   import { userControllerFollow, orderControllerCreateArticleOrder } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
+  import { navigateToLogin } from '~/utils/auth';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   interface Props {
     type: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
@@ -166,7 +167,7 @@
 
   // 处理登录
   const handleLogin = () => {
-    router.push(localePath('/user/login?redirect=' + route.path));
+    navigateToLogin();
   };
 
   // 处理关注
