@@ -399,18 +399,82 @@
           </UFormField>
 
           <UFormField
-            :label="t('admin.settings.membershipPrice')"
-            name="membership_price"
+            :label="t('admin.settings.membershipPrice1m')"
+            name="membership_price_1m"
             class="w-full"
           >
             <UInput
-              v-model="config.membership_price"
+              v-model="config.membership_price_1m"
               type="number"
               min="0"
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price = Number(value) || 0)"
+              @update:modelValue="value => (config.membership_price_1m = Number(value) || 0)"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.membershipPrice3m')"
+            name="membership_price_3m"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.membership_price_3m"
+              type="number"
+              min="0"
+              step="0.01"
+              :disabled="!config.membership_enabled"
+              class="w-full"
+              @update:modelValue="value => (config.membership_price_3m = Number(value) || 0)"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.membershipPrice6m')"
+            name="membership_price_6m"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.membership_price_6m"
+              type="number"
+              min="0"
+              step="0.01"
+              :disabled="!config.membership_enabled"
+              class="w-full"
+              @update:modelValue="value => (config.membership_price_6m = Number(value) || 0)"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.membershipPrice12m')"
+            name="membership_price_12m"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.membership_price_12m"
+              type="number"
+              min="0"
+              step="0.01"
+              :disabled="!config.membership_enabled"
+              class="w-full"
+              @update:modelValue="value => (config.membership_price_12m = Number(value) || 0)"
+            />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.membershipPriceLifetime')"
+            name="membership_price_lifetime"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.membership_price_lifetime"
+              type="number"
+              min="0"
+              step="0.01"
+              :disabled="!config.membership_enabled"
+              class="w-full"
+              @update:modelValue="value => (config.membership_price_lifetime = Number(value) || 0)"
             />
           </UFormField>
         </div>
@@ -769,7 +833,11 @@
     payment_epay_usdt_enabled: false,
     membership_enabled: true,
     membership_name: '',
-    membership_price: 0,
+    membership_price_1m: 0,
+    membership_price_3m: 0,
+    membership_price_6m: 0,
+    membership_price_12m: 0,
+    membership_price_lifetime: 0,
     maintenance_mode: false,
     maintenance_message: '',
     invite_code_required: true,

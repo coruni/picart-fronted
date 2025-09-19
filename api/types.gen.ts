@@ -171,6 +171,10 @@ export type CreateArticleDto = {
    */
   requireMembership?: boolean;
   /**
+   * 是否未登录显示
+   */
+  listRequireLogin: boolean;
+  /**
    * 查看所需支付金额
    */
   viewPrice?: number;
@@ -249,6 +253,10 @@ export type UpdateArticleDto = {
    * 是否需要支付后才能查看
    */
   requirePayment?: boolean;
+  /**
+   * 是否未登录显示
+   */
+  listRequireLogin?: boolean;
   /**
    * 查看所需支付金额
    */
@@ -627,7 +635,8 @@ export type CreateMembershipOrderDto = {
   /**
    * 充值时长（月）
    */
-  duration: number;
+  duration?: number;
+  plan?: '1m' | '3m' | '6m' | '12m' | 'lifetime';
   /**
    * 备注
    */
@@ -1559,6 +1568,11 @@ export type ConfigControllerGetPublicResponses = {
       payment_epay_wxpay_enabled: boolean;
       payment_epay_alipay_enabled: boolean;
       payment_epay_usdt_enabled: boolean;
+      membership_price_1m: number;
+      membership_price_3m: number;
+      membership_price_6m: number;
+      membership_price_12m: number;
+      membership_price_lifetime: number;
     };
   };
 };

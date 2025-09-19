@@ -273,6 +273,11 @@
       "membershipEnabled": "启用会员功能",
       "membershipName": "会员名称",
       "membershipPrice": "会员价格",
+      "membershipPrice1m": "会员价格（1个月）",
+      "membershipPrice3m": "会员价格（3个月）",
+      "membershipPrice6m": "会员价格（6个月）",
+      "membershipPrice12m": "会员价格（12个月）",
+      "membershipPriceLifetime": "会员价格（终身）",
       "maintenanceMode": "维护模式",
       "maintenanceMessage": "维护模式消息",
       "inviteCodeEnabled": "启用邀请码功能",
@@ -694,6 +699,9 @@
       "package1Description": "基础套餐",
       "package3Description": "季度套餐",
       "package12Description": "年度套餐",
+      "package6Description": "半年套餐",
+      "lifetime": "终身",
+      "monthShort": "{n}个月",
       "selectPayment": "选择支付方式",
       "alipay": "支付宝",
       "wechat": "微信支付",
@@ -807,6 +815,7 @@
       "searchPlaceholder": "选择类型"
     },
     "advancedOptions": "高级设置",
+    "listRequireLogin": "列表页登录可见",
     "requireFollow": "需要关注",
     "requirePayment": "付费查看",
     "viewPrice": {
@@ -824,6 +833,7 @@
     },
     "status": {
       "published": "发布",
+      "pending": "待发布",
       "draft": "草稿",
       "archived": "归档",
       "rejected": "驳回",

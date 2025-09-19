@@ -52,25 +52,31 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div
               v-for="pkg in packages"
-              :key="pkg.duration"
+              :key="pkg.plan || pkg.duration"
               @click="selectPackage(pkg)"
               :class="[
                 'p-4 border rounded-lg cursor-pointer transition-all',
-                selectedPackage?.duration === pkg.duration
+                (selectedPackage?.plan || selectedPackage?.duration) === (pkg.plan || pkg.duration)
                   ? 'border-primary bg-primary/5'
                   : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
               ]"
             >
               <div class="text-center">
                 <div class="text-2xl font-bold text-gray-900 dark:text-white">
-                  {{ pkg.duration }}{{ $t('user.recharge.month') }}
+                  {{
+                    pkg.plan === 'lifetime'
+                      ? $t('user.recharge.lifetime')
+                      : `${pkg?.duration || ''}${$t('user.recharge.month')}`
+                  }}
                 </div>
                 <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   {{ pkg.description }}
                 </div>
                 <div class="text-lg font-bold text-primary mt-2">¥{{ pkg.price }}</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ $t('user.recharge.perMonth') }} ¥{{ (pkg.price / pkg.duration).toFixed(2) }}
+                <div v-if="pkg.duration" class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ $t('user.recharge.perMonth') }} ¥{{
+                    (pkg.price / (pkg.duration || 1)).toFixed(2)
+                  }}
                 </div>
                 <div v-if="pkg.save" class="text-xs text-green-600 dark:text-green-400 mt-1">
                   {{ $t('user.recharge.save') }} {{ pkg.save }}
@@ -213,7 +219,11 @@
                 $t('user.recharge.package')
               }}</span>
               <span class="text-sm text-gray-900 dark:text-white">
-                {{ selectedPackage.duration }}{{ $t('user.recharge.month') }}
+                {{
+                  selectedPackage.plan === 'lifetime'
+                    ? $t('user.recharge.lifetime')
+                    : `${selectedPackage.duration}${$t('user.recharge.month')}`
+                }}
               </span>
             </div>
             <div class="flex justify-between">
@@ -293,32 +303,59 @@
 
   // 套餐选项
   interface Package {
-    duration: number;
+    duration?: number;
+    plan?: '1m' | '3m' | '6m' | '12m' | 'lifetime';
     price: number;
     description: string;
     save?: string;
+    label?: string;
   }
 
-  const packages = computed(() => [
-    {
-      duration: 1,
-      price: siteConfig?.membership_price || 30,
-      description: t('user.recharge.package1Description'),
-      save: undefined
-    },
-    {
-      duration: 3,
-      price: (siteConfig?.membership_price || 30) * 3,
-      description: t('user.recharge.package3Description'),
-      save: undefined
-    },
-    {
-      duration: 12,
-      price: (siteConfig?.membership_price || 30) * 12,
-      description: t('user.recharge.package12Description'),
-      save: undefined
-    }
-  ]);
+  const packages = computed<Package[]>(() => {
+    const p1 = Number(siteConfig?.membership_price_1m ?? siteConfig?.membership_price ?? 0) || 0;
+    const p3 = Number(siteConfig?.membership_price_3m ?? 0) || (p1 > 0 ? p1 * 3 : 0);
+    const p6 = Number(siteConfig?.membership_price_6m ?? 0) || (p1 > 0 ? p1 * 6 : 0);
+    const p12 = Number(siteConfig?.membership_price_12m ?? 0) || (p1 > 0 ? p1 * 12 : 0);
+    const plife = Number(siteConfig?.membership_price_lifetime ?? 0) || 0;
+
+    const list: Package[] = [];
+    if (p1 > 0)
+      list.push({
+        plan: '1m',
+        duration: 1,
+        price: p1,
+        description: t('user.recharge.package1Description')
+      });
+    if (p3 > 0)
+      list.push({
+        plan: '3m',
+        duration: 3,
+        price: p3,
+        description: t('user.recharge.package3Description')
+      });
+    if (p6 > 0)
+      list.push({
+        plan: '6m',
+        duration: 6,
+        price: p6,
+        description: t('user.recharge.package6Description')
+      });
+    if (p12 > 0)
+      list.push({
+        plan: '12m',
+        duration: 12,
+        price: p12,
+        description: t('user.recharge.package12Description')
+      });
+    if (plife > 0)
+      list.push({
+        plan: 'lifetime',
+        price: plife,
+        description: t('user.recharge.packageLifetimeDescription')
+      });
+
+    return list;
+  });
 
   // 易支付类型选项
   const epayTypes = computed(() => {
@@ -459,7 +496,8 @@
         composable: '$fetch',
         body: {
           duration: selectedPackage.value.duration,
-          remark: `${t('user.recharge.membershipRecharge')} ${selectedPackage.value.duration}${t('user.recharge.month')}`
+          plan: selectedPackage.value.plan,
+          remark: `${t('user.recharge.membershipRecharge')} ${selectedPackage.value.plan === 'lifetime' ? t('user.recharge.lifetime') : `${selectedPackage.value.duration}${t('user.recharge.month')}`}`
         }
       });
 

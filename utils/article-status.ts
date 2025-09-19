@@ -3,6 +3,7 @@ import type { SelectMenuItem } from '#ui/types';
 // 完整的文章状态枚举
 export enum ArticleStatus {
   DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
   PUBLISHED = 'PUBLISHED',
   ARCHIVED = 'ARCHIVED',
   DELETED = 'DELETED',
@@ -20,6 +21,12 @@ export const getStatusOptions = (t: (key: string) => string): SelectMenuItem[] =
     icon: 'mynaui:check',
     class: 'cursor-pointer',
     value: 'PUBLISHED'
+  },
+  {
+    label: t('form.status.pending'),
+    icon: 'mynaui:clock',
+    class: 'cursor-pointer',
+    value: 'PENDING'
   },
   {
     label: t('form.status.draft'),
@@ -58,6 +65,8 @@ export const getStatusIcon = (status: string): string => {
   switch (status) {
     case 'DRAFT':
       return 'mynaui:edit';
+    case 'PENDING':
+      return 'mynaui:clock';
     case 'PUBLISHED':
       return 'mynaui:check';
     case 'ARCHIVED':
@@ -78,6 +87,8 @@ export const getStatusColor = (status: string): string => {
   switch (status) {
     case 'DRAFT':
       return 'text-gray-500';
+    case 'PENDING':
+      return 'text-amber-500';
     case 'PUBLISHED':
       return 'text-green-500';
     case 'ARCHIVED':
@@ -98,6 +109,8 @@ export const getStatusText = (status: string, t: (key: string) => string): strin
   switch (status) {
     case 'DRAFT':
       return t('form.status.draft');
+    case 'PENDING':
+      return t('form.status.pending');
     case 'PUBLISHED':
       return t('form.status.published');
     case 'ARCHIVED':

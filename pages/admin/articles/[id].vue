@@ -269,6 +269,14 @@
         <template #advanced>
           <div class="space-y-4 mt-4">
             <UFormField
+              name="listRequireLogin"
+              :label="$t('form.listRequireLogin')"
+              class="flex items-center justify-between"
+            >
+              <USwitch v-model="state.listRequireLogin" />
+            </UFormField>
+
+            <UFormField
               name="requireLogin"
               :label="$t('form.requireLogin')"
               class="flex items-center justify-between"
@@ -373,6 +381,7 @@
       .array(z.union([z.string(), z.number()]))
       .optional()
       .default([]),
+    listRequireLogin: z.boolean().default(false),
     requireLogin: z.boolean().default(false),
     requireFollow: z.boolean().default(false),
     requireMembership: z.boolean().default(false),
@@ -414,6 +423,7 @@
     cover: '',
     type: 'mixed',
     tagIds: [],
+    listRequireLogin: false,
     requireLogin: false,
     requireFollow: false,
     requireMembership: false,
@@ -590,6 +600,7 @@
             cover: data.cover ?? '',
             type: data.type ?? 'mixed',
             tagIds: data.tags?.map(tag => Number(tag.id)) ?? [],
+            listRequireLogin: data.listRequireLogin ?? false,
             requireLogin: data.requireLogin ?? false,
             requireFollow: data.requireFollow ?? false,
             requireMembership: data.requireMembership ?? false,

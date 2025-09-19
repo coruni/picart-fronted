@@ -2435,6 +2435,21 @@
                         },
                         "payment_epay_usdt_enabled": {
                           "type": "boolean"
+                        },
+                        "membership_price_1m": {
+                          "type": "integer"
+                        },
+                        "membership_price_3m": {
+                          "type": "integer"
+                        },
+                        "membership_price_6m": {
+                          "type": "integer"
+                        },
+                        "membership_price_12m": {
+                          "type": "integer"
+                        },
+                        "membership_price_lifetime": {
+                          "type": "integer"
                         }
                       },
                       "required": [
@@ -2471,7 +2486,12 @@
                         "ad_global_style",
                         "payment_epay_wxpay_enabled",
                         "payment_epay_alipay_enabled",
-                        "payment_epay_usdt_enabled"
+                        "payment_epay_usdt_enabled",
+                        "membership_price_1m",
+                        "membership_price_3m",
+                        "membership_price_6m",
+                        "membership_price_12m",
+                        "membership_price_lifetime"
                       ]
                     }
                   },
@@ -18628,6 +18648,10 @@
             "type": "boolean",
             "description": "是否需要会员"
           },
+          "listRequireLogin": {
+            "type": "boolean",
+            "description": "是否未登录显示"
+          },
           "viewPrice": {
             "type": "number",
             "description": "查看所需支付金额",
@@ -18650,7 +18674,8 @@
         "required": [
           "title",
           "categoryId",
-          "type"
+          "type",
+          "listRequireLogin"
         ]
       },
       "UpdateArticleDto": {
@@ -18770,6 +18795,10 @@
             "type": "boolean",
             "description": "是否需要支付后才能查看",
             "default": false
+          },
+          "listRequireLogin": {
+            "type": "boolean",
+            "description": "是否未登录显示"
           },
           "viewPrice": {
             "type": "number",
@@ -19348,14 +19377,22 @@
             "type": "number",
             "description": "充值时长（月）"
           },
+          "plan": {
+            "type": "string",
+            "enum": [
+              "1m",
+              "3m",
+              "6m",
+              "12m",
+              "lifetime"
+            ],
+            "default": "1m"
+          },
           "remark": {
             "type": "string",
             "description": "备注"
           }
-        },
-        "required": [
-          "duration"
-        ]
+        }
       },
       "CreatePaymentDto": {
         "type": "object",
