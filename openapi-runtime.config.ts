@@ -78,6 +78,44 @@ export const createClientConfig: CreateClientConfig = config => {
           } catch (error) {
             // console.warn('SSR: Failed to read cookies from request headers:', error);
           }
+
+          // SSR阶段：如果从cookie没有获取到token，尝试从useCookie获取
+          if (!token) {
+            try {
+              const authTokenCookie = useCookie('auth-token', {
+                default: () => null,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 24 * 7,
+                httpOnly: false
+              });
+
+              const tokenCookie = useCookie('token', {
+                default: () => null,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 24 * 7,
+                httpOnly: false
+              });
+
+              // 优先使用 auth-token，如果没有则使用 token
+              token = authTokenCookie.value || tokenCookie.value;
+            } catch (error) {
+              // console.warn('SSR: Failed to get token from useCookie:', error);
+            }
+          }
+
+          // SSR阶段：如果仍然没有token，尝试从用户store获取
+          if (!token) {
+            try {
+              const userStore = useUserStore();
+              if (userStore?.isLoggedIn && userStore.userToken) {
+                token = userStore.userToken;
+              }
+            } catch (error) {
+              // console.warn('SSR: Failed to get token from user store:', error);
+            }
+          }
         }
 
         // 调试日志
@@ -115,11 +153,11 @@ export const createClientConfig: CreateClientConfig = config => {
       // 只允许200和201状态码继续处理
       if (![200, 201].includes(context.response.status)) {
         if (context.response.status === 401) {
-          clearAuthToken();
-          navigateTo('/user/login');
+          // 使用新的统一登出函数
+          performLogout();
           return;
         }
-        const error = new Error(context.response._data?.message);
+        const error = new Error((context.response._data as any)?.message || 'Request failed');
         // 将响应数据附加到错误上以便调用者访问
         Object.assign(error, { response: context.response });
         // 发起提示
@@ -136,12 +174,12 @@ export const createClientConfig: CreateClientConfig = config => {
 
         throw error;
       }
-      if (context.response._data?.data?.message) {
+      if ((context.response._data as any)?.data?.message) {
         const toast = useToast();
         const { $i18n } = useNuxtApp();
         const t = $i18n.t;
         toast.add({
-          title: t(context.response._data.data.message),
+          title: t((context.response._data as any).data.message || 'Success'),
           color: 'primary',
           icon: 'mynaui:check-circle',
           ui: { close: 'cursor-pointer' }
@@ -208,42 +246,70 @@ export function setAuthToken(token: string, userStore?: any): void {
   }
 }
 
-// 用户登出时调用此函数
+// 用户登出时调用此函数 - 已弃用，请使用 userStore.clearAuth()
 export function clearAuthToken(): void {
+  console.warn('clearAuthToken() is deprecated. Please use userStore.clearAuth() instead.');
+
   if (import.meta.client) {
-    // 使用与登录时相同的配置来清除 cookie
-    const authToken = useCookie('auth-token', {
-      default: () => '',
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      httpOnly: false
-    });
-
-    const refreshToken = useCookie('refresh-token', {
-      default: () => '',
-      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      httpOnly: false
-    });
-
-    // 清除 cookie 值
-    authToken.value = '';
-    refreshToken.value = '';
-
-    // 使用更简单的方式清除 cookie（保留 device-id）
-    const cookiesToClear = ['auth-token', 'refresh-token', 'token'];
-
-    cookiesToClear.forEach(cookieName => {
-      // 使用 document.cookie 直接清除，不设置额外的属性
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    });
     try {
-      localStorage.removeItem('auth-token');
-      localStorage.removeItem('refresh-token');
-      localStorage.removeItem('user');
-      localStorage.removeItem('app');
-    } catch (error) {}
+      // 清理认证相关的cookie
+      const cookiesToClear = ['auth-token', 'refresh-token', 'token', 'user-session'];
+
+      cookiesToClear.forEach(cookieName => {
+        // 使用多种方式确保cookie被清除
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
+      });
+
+      // 清理localStorage
+      const localStorageKeys = [
+        'auth-token',
+        'refresh-token',
+        'user',
+        'app',
+        'user-session',
+        'pinia-user',
+        'pinia-app'
+      ];
+
+      localStorageKeys.forEach(key => {
+        try {
+          localStorage.removeItem(key);
+        } catch (error) {
+          console.warn(`Failed to remove localStorage key ${key}:`, error);
+        }
+      });
+
+      // 清理sessionStorage
+      const sessionStorageKeys = ['auth-token', 'refresh-token', 'user-session'];
+
+      sessionStorageKeys.forEach(key => {
+        try {
+          sessionStorage.removeItem(key);
+        } catch (error) {
+          console.warn(`Failed to remove sessionStorage key ${key}:`, error);
+        }
+      });
+    } catch (error) {
+      console.error('Error in clearAuthToken:', error);
+    }
+  }
+}
+
+// 新的统一登出函数
+export async function performLogout(): Promise<void> {
+  try {
+    // 获取用户store
+    const userStore = useUserStore();
+
+    // 调用store的登出方法
+    await userStore.clearAuth(true);
+  } catch (error) {
+    console.error('Error during logout:', error);
+    // 即使出错也要跳转到首页
+    if (import.meta.client) {
+      navigateTo('/', { replace: true });
+    }
   }
 }

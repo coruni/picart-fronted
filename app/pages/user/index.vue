@@ -465,6 +465,7 @@
   import { uploadControllerUploadFile } from '~/api';
   import { z } from 'zod';
   import { useUserStore } from '~/stores/user';
+  import { confirmLogout } from '~/utils/logout';
   const toast = useToast();
 
   const { t } = useI18n();
@@ -675,11 +676,8 @@
   });
 
   // 处理登出
-  const handleLogout = () => {
-    // 清除认证信息
-    userStore.clearAuth(true);
-    // 跳转到首页
-    router.push(localPath('/'));
+  const handleLogout = async () => {
+    await confirmLogout();
   };
 
   // 表单验证函数
@@ -738,7 +736,7 @@
         }
       });
 
-      editForm.value.avatar = res.data[0].url!;
+      editForm.value.avatar = res.data?.[0]?.url || '';
 
       // 显示上传成功提示
       toast.add({

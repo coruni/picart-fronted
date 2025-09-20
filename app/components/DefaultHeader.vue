@@ -390,6 +390,7 @@
   import type { ConfigControllerGetPublicResponse } from '~/api';
   import { navigateToLogin } from '~/utils/auth';
   import { useUserStore } from '~/stores/user';
+  import { confirmLogout } from '~/utils/logout';
   type Config = ConfigControllerGetPublicResponse['data'];
   const siteConfig = inject<Config>('siteConfig');
   const userStore = useUserStore();
@@ -554,10 +555,9 @@
   });
 
   // 处理登出
-  const handleLogout = () => {
-    userStore.clearAuth(true);
+  const handleLogout = async () => {
+    await confirmLogout();
     closeMobileMenu();
-    // clearAuth 方法已经处理了页面跳转，这里不需要额外的跳转
   };
 </script>
 <style scoped>

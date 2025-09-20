@@ -108,11 +108,12 @@
                 >账户设置</a
               >
               <hr class="my-1 sm:my-2 mx-1 sm:mx-2 border-gray-200 dark:border-gray-600" />
-              <a
-                href="#"
-                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
-                >{{ $t('user.logout') }}</a
+              <button
+                @click="handleLogout"
+                class="block w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
               >
+                {{ $t('user.logout') }}
+              </button>
             </div>
           </div>
         </div>
@@ -131,6 +132,8 @@
 </template>
 
 <script setup lang="ts">
+  import { confirmLogout } from '~/utils/logout';
+
   const route = useRoute();
   const sidebarCollapsed = ref(false);
   const toggleMobileSidebar = ref(false);
@@ -140,6 +143,11 @@
 
   const toggleColorMode = () => {
     colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
+  };
+
+  // 处理登出
+  const handleLogout = async () => {
+    await confirmLogout();
   };
 
   // 菜单数据
