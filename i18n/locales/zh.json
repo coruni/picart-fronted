@@ -176,7 +176,15 @@
       "cancelled": "已取消",
       "refunded": "已退款",
       "membership": "会员订单",
-      "article": "文章订单"
+      "article": "文章订单",
+      "allStatus": "所有状态",
+      "allTypes": "所有类型",
+      "orderDetail": "订购细节",
+      "product": "产品",
+      "searchUserId": "搜索用户ID",
+      "selectStatus": "选择状态",
+      "selectType": "选择类型",
+      "service": "服务"
     },
     "roles": {
       "title": "角色管理",
@@ -202,7 +210,10 @@
       "avatarHelp": "建议尺寸：200x200px，支持 JPG、PNG 格式",
       "coverHelp": "建议尺寸：800x400px，支持 JPG、PNG 格式",
       "noDescription": "无描述",
-      "totalArticles": "总文章数"
+      "totalArticles": "总文章数",
+      "backgroundHelp": "请输入有效的背景图像URL",
+      "backgroundPlaceholder": "输入背景图像URL",
+      "description": "标签描述"
     },
     "menu": {
       "dashboard": "仪表盘",
@@ -719,7 +730,16 @@
       "successMessage": "充值成功",
       "balancePaymentSuccess": "余额支付成功",
       "redirectToPayment": "正在跳转到支付页面...",
-      "membershipRecharge": "会员充值"
+      "membershipRecharge": "会员充值",
+      "save30": "节省30%",
+      "save35": "",
+      "save40": "",
+      "save45": "",
+      "save50": "",
+      "save100": "",
+      "save20": "",
+      "save25": "",
+      "packageLifetimeDescription": "终身套餐"
     },
     "orders": {
       "title": "我的订单",
@@ -1172,7 +1192,8 @@
       "unauthorized": "未登录",
       "uploadFileEmpty": "上传文件为空",
       "resourceNotFound": "资源不存在",
-      "resourceConflict": "资源冲突"
+      "resourceConflict": "资源冲突",
+      "followed": "已关注"
     },
     "success": {
       "logout": "已退出",
@@ -1210,7 +1231,9 @@
       "tagUpdate": "标签更新成功",
       "userDelete": "用户删除成功",
       "userUpdate": "用户更新成功",
-      "messageMarkAllAsRead": "消息标记全部已读成功"
+      "messageMarkAllAsRead": "消息标记全部已读成功",
+      "unfollow": "取消关注",
+      "follow": "关注"
     }
   },
   "Unauthorized": "请先登录",
