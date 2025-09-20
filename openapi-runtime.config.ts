@@ -1,6 +1,6 @@
 import { usePinia } from '#imports';
-import type { CreateClientConfig } from './api/client.gen';
-import appConfig from './app.config';
+import type { CreateClientConfig } from './app/api/client.gen';
+import appConfig from './app/app.config';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 export const createClientConfig: CreateClientConfig = config => {

@@ -5,7 +5,7 @@ export default defineConfig({
   output: {
     format: 'prettier',
     lint: 'eslint',
-    path: './api'
+    path: './app/api'
   },
   plugins: [
     {

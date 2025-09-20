@@ -26,6 +26,9 @@ export default defineNuxtConfig({
     payloadExtraction: false,
     renderJsonPayloads: true
   },
+  ui: {
+    fonts: false
+  },
 
   // 构建优化
   build: {
@@ -231,6 +234,14 @@ export default defineNuxtConfig({
     //   crawlLinks: true,
     //   routes: ['/']
     // }
+  },
+  future: {
+    compatibilityVersion: 4
+  },
+
+  // Pinia 配置
+  pinia: {
+    storesDirs: ['./app/stores/**']
   },
 
   // 配置Vite
