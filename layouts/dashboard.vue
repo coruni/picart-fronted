@@ -123,23 +123,7 @@
         <div
           class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
         >
-          <NuxtPage
-            :keepalive="{
-              include: [
-                // 只持久化数据列表页面，不包括创建、编辑、详情页面
-                /^\/admin$/, // 管理后台首页
-                /^\/admin\/(articles|categories|tags|roles|users|banners|comments|orders|settings)$/ // 各模块列表页（index.vue）
-              ],
-              exclude: [
-                // 排除创建、编辑、详情页面
-                /\/create$/, // 创建页面
-                /\/\[id\]$/, // 编辑/详情页面（动态路由）
-                /\/edit$/, // 编辑页面
-                /\/new$/ // 新建页面
-              ],
-              max: 8 // 减少最大缓存数量
-            }"
-          />
+          <NuxtPage keepalive />
         </div>
       </div>
     </main>

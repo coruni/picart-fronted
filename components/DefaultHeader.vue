@@ -396,7 +396,8 @@
   const router = useRouter();
   const localePath = useLocalePath();
   // 消息相关数据
-  const { unreadCount, totalCount } = useMessage();
+  const { unreadCount } = useMessageCount();
+  const { totalCount } = useMessage();
 
   // 语言切换相关
   const { locale: currentLocale, locales, setLocale } = useI18n();

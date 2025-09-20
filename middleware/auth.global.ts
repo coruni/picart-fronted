@@ -25,7 +25,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     // 如果页面需要认证且用户未登录，重定向到登录页
     if (requiresAuth && !userStore.isAuthenticated) {
-      console.log('页面需要认证但用户未登录，重定向到登录页');
       return navigateToLoginWithNavigateTo(to.fullPath);
     }
 
@@ -33,7 +32,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (to.path.startsWith(localePath('/admin'))) {
       // 如果用户未登录，重定向到登录页
       if (!userStore.isAuthenticated) {
-        console.log('访问管理面板但用户未登录，重定向到登录页');
         const redirectPath = to.fullPath;
         return navigateTo({
           path: localePath('/user/login'),
@@ -47,15 +45,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
           role.name === 'admin' || role.name === 'super-admin' || role.name === 'administrator'
       );
 
-      console.log('访问管理面板，用户是否有管理员权限:', hasAdminRole);
-
       if (!hasAdminRole) {
         // 非管理员用户访问管理页面，重定向到用户主页
-        console.log('用户没有管理员权限，重定向到用户面板');
         return navigateTo(localePath('/user'));
       }
-
-      console.log('管理员权限验证通过，允许访问');
     }
   }
 });

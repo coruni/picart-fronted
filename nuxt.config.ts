@@ -198,7 +198,9 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: '',
       appName: 'PicArt',
-      appVersion: '1.0.1'
+      appVersion: '1.0.1',
+      // TinyMCE 许可证配置
+      tinymceLicenseKey: 'gpl'
     }
   },
 

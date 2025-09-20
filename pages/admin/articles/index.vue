@@ -157,10 +157,10 @@
     categoryId: route.query.categoryId ? parseInt(route.query.categoryId as string) : null
   });
 
-  // 分页状态 - 使用URL查询参数持久化
+  // 分页状态
   const pagination = ref({
-    pageIndex: parseInt(route.query.pageIndex as string) || 0,
-    pageSize: parseInt(route.query.pageSize as string) || 20
+    pageIndex: 0,
+    pageSize: 20
   });
 
   // 当前页面计算属性
@@ -174,14 +174,6 @@
   // 更新URL查询参数
   const updateQueryParams = () => {
     const query: Record<string, string> = {};
-
-    // 分页参数
-    if (pagination.value.pageIndex > 0) {
-      query.pageIndex = pagination.value.pageIndex.toString();
-    }
-    if (pagination.value.pageSize !== 20) {
-      query.pageSize = pagination.value.pageSize.toString();
-    }
 
     // 筛选参数
     if (filters.value.title) {

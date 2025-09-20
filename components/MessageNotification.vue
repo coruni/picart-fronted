@@ -141,7 +141,6 @@
     messages,
     loading,
     hasMore,
-    unreadCount,
     fetchMessages,
     markAsRead,
     markAllAsRead,
@@ -153,6 +152,10 @@
     getMessageTypeLabel,
     formatTime
   } = useMessage();
+
+  // 使用专门的消息数量管理
+  const { unreadCount, fetchUnreadCount, decrementUnreadCount, resetUnreadCount } =
+    useMessageCount();
 
   // 响应式状态
   const isMessagePanelOpen = ref(false);
@@ -199,6 +202,8 @@
   const handleMarkAsRead = async (messageId: number) => {
     try {
       await markAsRead(messageId);
+      // 减少未读数量
+      decrementUnreadCount();
     } catch (error) {
       // 静默处理错误
     }
@@ -208,6 +213,8 @@
   const handleMarkAllAsRead = async () => {
     try {
       await markAllAsRead();
+      // 重置未读数量
+      resetUnreadCount();
     } catch (error) {
       // 静默处理错误
     }
@@ -224,9 +231,10 @@
 
   // 处理鼠标悬停事件
   const handleMouseEnter = () => {
-    // 在桌面端，鼠标悬停时获取消息
+    // 在桌面端，鼠标悬停时获取消息和刷新未读数量
     if (typeof window !== 'undefined' && window.innerWidth >= 768) {
       fetchMessages(true);
+      fetchUnreadCount();
     }
   };
 
@@ -237,6 +245,7 @@
       isMessagePanelOpen.value = !isMessagePanelOpen.value;
       if (isMessagePanelOpen.value) {
         fetchMessages(true);
+        fetchUnreadCount();
       }
     }
   };
@@ -257,8 +266,9 @@
 
   // 生命周期
   onMounted(() => {
-    // 初始加载消息
+    // 初始加载消息和未读数量
     fetchMessages(true);
+    fetchUnreadCount();
   });
 
   // 暴露给父组件的方法
