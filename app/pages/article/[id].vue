@@ -505,6 +505,7 @@
         <!-- 文章内容 -->
         <div v-if="shouldShowContent" class="mb-6 md:mb-12">
           <div
+            ref="articleContent"
             class="prose max-w-none whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
             v-html="article?.data.content"
           ></div>
@@ -843,6 +844,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref, computed, watch, nextTick, onMounted } from 'vue';
   import zod from 'zod';
   import { useUserStore } from '~/stores/user';
   import {
@@ -973,7 +975,19 @@
   // lightbox相关状态
   const lightboxVisible = ref(false);
   const lightboxIndex = ref(0);
-  const lightboxImages = computed(() => article.value?.data?.images || []);
+  const lightboxImages = computed(() => {
+    const articleImages = article.value?.data?.images || [];
+    const htmlImages: string[] = [];
+
+    if (articleContent.value) {
+      const images = articleContent.value.querySelectorAll('img');
+      htmlImages.push(...Array.from(images).map(img => img.src));
+    }
+
+    // 合并去重
+    return [...new Set([...articleImages, ...htmlImages])];
+  });
+  const articleContent = ref<HTMLElement | null>(null);
 
   // 打开lightbox
   const openLightbox = (index: number) => {
@@ -982,6 +996,64 @@
       lightboxVisible.value = true;
     }
   };
+
+  // 简单的图片点击事件处理
+  const setupImageClickHandlers = () => {
+    // 检查内容是否已加载
+    if (!articleContent.value || !article.value?.data?.content) {
+      console.log('Content not ready yet, skipping image handler setup');
+      return;
+    }
+
+    const images = articleContent.value.querySelectorAll('img');
+
+    if (images.length === 0) {
+      console.log('No images found in content');
+      return;
+    }
+
+    console.log(`Setting up click handlers for ${images.length} images`);
+
+    images.forEach(img => {
+      // 避免重复绑定事件
+      if (img.dataset.clickHandlerBound) return;
+
+      // 添加点击事件
+      img.addEventListener('click', () => {
+        // 获取所有图片URL
+        const htmlImages = Array.from(images).map(img => img.src);
+        const articleImages = [...lightboxImages.value];
+
+        // 合并去重
+        const uniqueImages = [...new Set([...articleImages, ...htmlImages])];
+
+        // 找到当前图片的索引
+        const currentIndex = uniqueImages.indexOf(img.src);
+
+        if (currentIndex !== -1) {
+          lightboxIndex.value = currentIndex;
+          lightboxVisible.value = true;
+        }
+      });
+
+      // 添加样式
+      img.style.cursor = 'pointer';
+      img.style.transition = 'transform 0.2s ease';
+
+      // 悬停效果
+      img.addEventListener('mouseenter', () => {
+        img.style.transform = 'scale(1.02)';
+      });
+
+      img.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+      });
+
+      // 标记已绑定事件
+      img.dataset.clickHandlerBound = 'true';
+    });
+  };
+
   const {
     data: article,
     pending: articlePending,
@@ -1297,6 +1369,31 @@
     { immediate: true }
   );
 
+  // 监听文章内容变化，设置图片点击事件
+  watch(
+    () => article.value?.data?.content,
+    newContent => {
+      if (newContent) {
+        nextTick(() => {
+          setupImageClickHandlers();
+        });
+      }
+    },
+    { flush: 'post' }
+  );
+
+  // 监听加载状态变化，确保内容加载完成后绑定事件
+  watch(
+    () => articlePending.value,
+    isPending => {
+      if (!isPending && article.value?.data?.content) {
+        nextTick(() => {
+          setupImageClickHandlers();
+        });
+      }
+    }
+  );
+
   const onImageLoad = (index: number) => {
     imageLoaded.value[index] = true;
     imageErrors.value[index] = false;
@@ -1369,6 +1466,27 @@
       window.open(url, '_blank');
     }
   };
+
+  // 组件挂载后设置图片点击事件
+  onMounted(() => {
+    // 如果内容已经加载，立即设置
+    if (article.value?.data?.content) {
+      nextTick(() => {
+        setupImageClickHandlers();
+      });
+    } else {
+      // 如果内容还在加载，使用重试机制
+      const retrySetup = () => {
+        if (article.value?.data?.content && articleContent.value) {
+          setupImageClickHandlers();
+        } else {
+          // 每100ms重试一次，最多重试50次（5秒）
+          setTimeout(retrySetup, 100);
+        }
+      };
+      retrySetup();
+    }
+  });
 </script>
 
 <style scoped>

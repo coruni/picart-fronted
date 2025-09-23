@@ -1261,5 +1261,42 @@
     "refresh": "Refresh Page",
     "goToAdmin": "Go to Admin Panel",
     "copyright": "All Rights Reserved"
+  },
+  "tags": {
+    "title": "Tag Cloud",
+    "description": "Browse all tags and discover interesting content",
+    "searchPlaceholder": "Search tags...",
+    "sortBy": "Sort by",
+    "sortByName": "Name",
+    "sortByArticles": "Articles",
+    "sortByFollowers": "Followers",
+    "sortByCreated": "Created",
+    "cloudView": "Cloud View",
+    "listView": "List View",
+    "articles": "articles",
+    "followers": "followers",
+    "viewTag": "View Tag",
+    "next": "Next",
+    "loadError": "Load Failed",
+    "noTags": "No Tags",
+    "noTagsDescription": "No tags available yet, please check back later"
+  },
+  "tag": {
+    "title": "Tag Details",
+    "description": "Tag details page",
+    "articles": "Articles",
+    "followers": "Followers",
+    "createdAt": "Created",
+    "follow": "Follow",
+    "following": "Following",
+    "unfollow": "Unfollow",
+    "sortBy": "Sort by",
+    "latest": "Latest",
+    "popular": "Popular",
+    "mostLiked": "Most Liked",
+    "noArticles": "No Articles",
+    "noArticlesDescription": "No articles have been published under this tag yet",
+    "notFound": "Tag Not Found",
+    "backToTags": "Back to Tags"
   }
 }

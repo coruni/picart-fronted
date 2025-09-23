@@ -1280,5 +1280,42 @@
     "refresh": "ページを更新",
     "goToAdmin": "管理パネルへ",
     "copyright": "著作権所有"
+  },
+  "tags": {
+    "title": "タグクラウド",
+    "description": "すべてのタグを閲覧し、興味深いコンテンツを発見",
+    "searchPlaceholder": "タグを検索...",
+    "sortBy": "並び替え",
+    "sortByName": "名前",
+    "sortByArticles": "記事数",
+    "sortByFollowers": "フォロワー数",
+    "sortByCreated": "作成日",
+    "cloudView": "クラウドビュー",
+    "listView": "リストビュー",
+    "articles": "記事",
+    "followers": "フォロワー",
+    "viewTag": "タグを表示",
+    "next": "次へ",
+    "loadError": "読み込み失敗",
+    "noTags": "タグがありません",
+    "noTagsDescription": "まだタグがありません。後でもう一度確認してください"
+  },
+  "tag": {
+    "title": "タグ詳細",
+    "description": "タグ詳細ページ",
+    "articles": "記事",
+    "followers": "フォロワー",
+    "createdAt": "作成日",
+    "follow": "フォロー",
+    "following": "フォロー中",
+    "unfollow": "フォロー解除",
+    "sortBy": "並び替え",
+    "latest": "最新",
+    "popular": "人気",
+    "mostLiked": "最もいいね",
+    "noArticles": "記事がありません",
+    "noArticlesDescription": "このタグの下にはまだ記事が公開されていません",
+    "notFound": "タグが見つかりません",
+    "backToTags": "タグクラウドに戻る"
   }
 }
