@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md mx-auto px-4 py-8">
+  <div class="m-auto max-w-lg w-full">
     <Title>{{ $t('forgotPassword.title') }}</Title>
     <Meta name="description" :content="$t('forgotPassword.description')" />
     <Meta name="keywords" :content="$t('forgotPassword.keywords')" />

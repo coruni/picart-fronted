@@ -1,9 +1,9 @@
 <template>
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
-    <div class="flex flex-col min-h-screen">
-      <NuxtLayout />
-    </div>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>
 

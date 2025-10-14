@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-[calc(100vh-4rem)]">
-    <div class="sticky top-16 z-10 bg-white/80 backdrop-blur-md dark:bg-gray-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <div class="flex-1 flex-col flex gap-12">
+    <div class="sticky top-0 mt-6 z-10 bg-white/80 backdrop-blur-md dark:bg-gray-800">
+      <div class="">
         <div class="flex flex-col items-center justify-center">
           <!-- 搜索输入框 -->
           <div class="w-full max-w-2xl flex gap-2">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- 搜索结果 -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div>
       <!-- 空状态 -->
       <div v-if="!loading && displayArticles.length === 0 && hasSearched" class="text-center py-16">
         <Icon name="mynaui:search" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -44,7 +44,7 @@
       </div>
 
       <!-- 文章网格 -->
-      <div v-if="hasSearched" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+      <div v-if="hasSearched" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6">
         <TransitionGroup name="list" tag="div" class="contents">
           <div
             v-for="article in displayArticles"
@@ -57,8 +57,8 @@
       </div>
 
       <!-- 加载指示器 -->
-      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 py-8">
-        <ArticleSkeleton v-for="i in 8" :key="i" />
+      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6 py-8">
+        <ArticleSkeleton v-for="i in 12" :key="i" />
       </div>
 
       <!-- 没有更多数据提示 -->

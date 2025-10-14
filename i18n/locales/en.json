@@ -10,7 +10,11 @@
       "admin": "Admin Center",
       "message": "Message Center",
       "setting": "Setting",
-      "language": "language"
+      "language": "Language",
+      "theme": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
     }
   },
   "home": {

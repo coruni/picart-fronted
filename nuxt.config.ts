@@ -37,7 +37,7 @@ export default defineNuxtConfig({
 
   // SEO 配置
   site: {
-    url: 'https://www.kawax.org',
+    url: 'https://www.cosv.cc',
     name: 'PicArt',
     description: '图片分享社区',
     defaultLocale: 'zh',
@@ -64,9 +64,9 @@ export default defineNuxtConfig({
       '/user/forgot-password'
     ],
     sitemap: [
-      'https://www.kawax.org/sitemap_index.xml',
-      'https://www.kawax.org/sitemap_articles.xml',
-      'https://www.kawax.org/sitemap_categories.xml'
+      'https://www.cosv.cc/sitemap_index.xml',
+      'https://www.cosv.cc/sitemap_articles.xml',
+      'https://www.cosv.cc/sitemap_categories.xml'
     ],
     crawlDelay: 1
   },
@@ -327,12 +327,12 @@ export default defineNuxtConfig({
             '@type': 'WebSite',
             name: 'PicArt',
             description: '图片分享社区',
-            url: 'https://www.kawax.org',
+            url: 'https://www.cosv.cc',
             potentialAction: {
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `https://www.kawax.org/search?q={search_term_string}`
+                urlTemplate: `https://www.cosv.cc/search?q={search_term_string}`
               },
               'query-input': 'required name=search_term_string'
             }

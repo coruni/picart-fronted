@@ -1,212 +1,203 @@
 <template>
   <div class="min-h-screen">
-    <div class="max-w-4xl mx-auto p-4 sm:p-6">
-      <!-- 页面标题 -->
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-          {{ $t('message.title') }}
-        </h1>
-        <p class="text-gray-500 dark:text-gray-400 mt-1 text-xs">
-          {{ $t('message.description') }}
-        </p>
-      </div>
+    <!-- 页面标题 -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        {{ $t('message.title') }}
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1 text-xs">
+        {{ $t('message.description') }}
+      </p>
+    </div>
 
-      <!-- 操作栏 -->
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-2">
-          <UButton
-            v-if="unreadCount > 0"
-            @click="handleMarkAllAsRead"
-            variant="soft"
-            color="primary"
-            :loading="markingAllAsRead"
-            size="sm"
-          >
-            <Icon name="mynaui:check" class="w-4 h-4" />
-            {{ $t('message.markAllRead') }}
-          </UButton>
-          <UButton @click="refreshMessages" variant="ghost" :loading="loading" size="sm">
-            <Icon v-if="!loading" name="mynaui:refresh" class="w-4 h-4" />
-            {{ $t('message.refresh') }}
-          </UButton>
-        </div>
-        <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <span>{{ $t('message.totalCount', { count: totalCount }) }}</span>
-          <UBadge v-if="unreadCount > 0" color="error" variant="soft">
-            {{ $t('message.unreadCount', { count: unreadCount }) }}
-          </UBadge>
-        </div>
-      </div>
-
-      <!-- 加载状态 -->
-      <div
-        v-if="(loading || initialLoading) && displayMessages.length === 0"
-        class="text-center py-12"
-      >
-        <UIcon name="mynaui:loading" class="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-        <p class="text-gray-500 dark:text-gray-400">{{ $t('message.loading') }}</p>
-      </div>
-
-      <!-- 空状态 -->
-      <div v-else-if="displayMessages.length === 0" class="text-center py-12">
-        <UIcon name="mynaui:bell" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {{ $t('message.noMessages') }}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400">
-          {{ $t('message.noMessagesDescription') }}
-        </p>
-      </div>
-
-      <!-- 消息列表 -->
-      <TransitionGroup name="list" tag="div" class="space-y-3">
-        <div
-          v-for="message in displayMessages"
-          :key="message.id"
-          class="transform transition-transform hover:scale-105 duration-300"
+    <!-- 操作栏 -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-2">
+        <UButton
+          v-if="unreadCount > 0"
+          @click="handleMarkAllAsRead"
+          variant="soft"
+          color="primary"
+          :loading="markingAllAsRead"
+          size="sm"
         >
-          <UModal
-            :title="message.title"
-            :ui="{
-              close: 'cursor-pointer'
-            }"
-            aria-describedby="message-detail-description"
+          <Icon name="mynaui:check" class="w-4 h-4" />
+          {{ $t('message.markAllRead') }}
+        </UButton>
+        <UButton @click="refreshMessages" variant="ghost" :loading="loading" size="sm">
+          <Icon v-if="!loading" name="mynaui:refresh" class="w-4 h-4" />
+          {{ $t('message.refresh') }}
+        </UButton>
+      </div>
+      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <span>{{ $t('message.totalCount', { count: totalCount }) }}</span>
+        <UBadge v-if="unreadCount > 0" color="error" variant="soft">
+          {{ $t('message.unreadCount', { count: unreadCount }) }}
+        </UBadge>
+      </div>
+    </div>
+
+    <!-- 加载状态 -->
+    <div
+      v-if="(loading || initialLoading) && displayMessages.length === 0"
+      class="text-center py-12"
+    >
+      <UIcon name="mynaui:loading" class="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
+      <p class="text-gray-500 dark:text-gray-400">{{ $t('message.loading') }}</p>
+    </div>
+
+    <!-- 空状态 -->
+    <div v-else-if="displayMessages.length === 0" class="text-center py-12">
+      <UIcon name="mynaui:bell" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        {{ $t('message.noMessages') }}
+      </h3>
+      <p class="text-gray-500 dark:text-gray-400">
+        {{ $t('message.noMessagesDescription') }}
+      </p>
+    </div>
+
+    <!-- 消息列表 -->
+    <TransitionGroup name="list" tag="div" class="space-y-3">
+      <div
+        v-for="message in displayMessages"
+        :key="message.id"
+        class="transform transition-transform hover:scale-105 duration-300"
+      >
+        <UModal
+          :title="message.title"
+          :ui="{
+            close: 'cursor-pointer'
+          }"
+          aria-describedby="message-detail-description"
+        >
+          <!-- 触发器：消息项 -->
+          <div
+            class="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors"
+            @click="handleMessageClick(message)"
           >
-            <!-- 触发器：消息项 -->
-            <div
-              class="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors"
-              @click="handleMessageClick(message)"
-            >
-              <!-- 消息图标 -->
-              <UAvatar
-                :icon="getMessageIcon(message.type || '')"
-                :color="getMessageIconClass(message.type || '').includes('blue') ? 'blue' : 'gray'"
-                size="sm"
-              />
+            <!-- 消息图标 -->
+            <UAvatar
+              :icon="getMessageIcon(message.type || '')"
+              :color="getMessageIconClass(message.type || '').includes('blue') ? 'blue' : 'gray'"
+              size="sm"
+            />
 
-              <!-- 消息内容 -->
-              <div class="flex-1 min-w-0">
-                <!-- 第一行：标题和状态 -->
-                <div class="flex items-center justify-between mb-1">
-                  <h3 class="font-semibold text-gray-900 dark:text-white truncate text-base">
-                    {{ message.title }}
-                  </h3>
-                  <div class="flex items-center gap-2 ml-2">
-                    <UBadge v-if="!message.isRead" color="info" variant="soft" size="xs">
-                      {{ $t('message.unread') }}
-                    </UBadge>
-                    <UDropdownMenu :items="getMessageActions(message)">
-                      <UButton
-                        variant="ghost"
-                        size="xs"
-                        icon="mynaui:more-horizontal"
-                        @click.stop
-                      />
-                    </UDropdownMenu>
-                  </div>
+            <!-- 消息内容 -->
+            <div class="flex-1 min-w-0">
+              <!-- 第一行：标题和状态 -->
+              <div class="flex items-center justify-between mb-1">
+                <h3 class="font-semibold text-gray-900 dark:text-white truncate text-base">
+                  {{ message.title }}
+                </h3>
+                <div class="flex items-center gap-2 ml-2">
+                  <UBadge v-if="!message.isRead" color="info" variant="soft" size="xs">
+                    {{ $t('message.unread') }}
+                  </UBadge>
+                  <UDropdownMenu :items="getMessageActions(message)">
+                    <UButton variant="ghost" size="xs" icon="mynaui:more-horizontal" @click.stop />
+                  </UDropdownMenu>
                 </div>
+              </div>
 
-                <!-- 第二行：内容和时间 -->
-                <div class="flex items-center justify-between">
-                  <p class="text-xs text-gray-600 dark:text-gray-300 truncate flex-1">
-                    {{ message.content }}
-                  </p>
-                  <div
-                    class="flex items-center gap-2 ml-2 text-xs text-gray-500 dark:text-gray-400"
+              <!-- 第二行：内容和时间 -->
+              <div class="flex items-center justify-between">
+                <p class="text-xs text-gray-600 dark:text-gray-300 truncate flex-1">
+                  {{ message.content }}
+                </p>
+                <div class="flex items-center gap-2 ml-2 text-xs text-gray-500 dark:text-gray-400">
+                  <UBadge
+                    v-if="message.type"
+                    :color="getMessageTypeColor(message.type)"
+                    variant="soft"
+                    size="xs"
                   >
-                    <UBadge
-                      v-if="message.type"
-                      :color="getMessageTypeColor(message.type)"
-                      variant="soft"
-                      size="xs"
-                    >
-                      {{ getMessageTypeLabel(message.type) }}
-                    </UBadge>
-                    <span class="whitespace-nowrap">
-                      {{ message.createdAt ? formatTime(message.createdAt) : '' }}
-                    </span>
-                  </div>
+                    {{ getMessageTypeLabel(message.type) }}
+                  </UBadge>
+                  <span class="whitespace-nowrap">
+                    {{ message.createdAt ? formatTime(message.createdAt) : '' }}
+                  </span>
                 </div>
               </div>
             </div>
-
-            <!-- 弹窗内容 -->
-            <template #body>
-              <div id="message-detail-description">
-                <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                  {{ message.content }}
-                </p>
-              </div>
-            </template>
-
-            <!-- 弹窗底部操作 -->
-            <template #footer>
-              <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-2">
-                  <UButton
-                    v-if="!message.isRead"
-                    @click="handleMarkAsRead(message.id || 0)"
-                    variant="soft"
-                    color="primary"
-                    :loading="markingAsRead === message.id"
-                    size="sm"
-                  >
-                    <Icon name="mynaui:check" class="w-4 h-4" />
-                    {{ $t('message.markRead') }}
-                  </UButton>
-                </div>
-                <div class="flex items-center gap-2">
-                  <UButton
-                    @click="handleDeleteMessage(message.id || 0)"
-                    variant="ghost"
-                    color="error"
-                    :loading="deleting === message.id"
-                    size="sm"
-                  >
-                    <Icon name="mynaui:trash" class="w-4 h-4" />
-                    {{ $t('message.delete') }}
-                  </UButton>
-                </div>
-              </div>
-            </template>
-          </UModal>
-        </div>
-      </TransitionGroup>
-
-      <!-- 删除确认弹窗 -->
-      <UModal v-model:open="showDeleteConfirm" :title="$t('message.deleteConfirm')">
-        <template #body>
-          <p class="text-gray-700 dark:text-gray-300">
-            {{ $t('message.confirmDelete') }}
-          </p>
-        </template>
-        <template #footer>
-          <div class="flex justify-end gap-3">
-            <UButton @click="showDeleteConfirm = false" variant="ghost">
-              {{ $t('common.cancel') }}
-            </UButton>
-            <UButton
-              @click="confirmDeleteMessage"
-              color="error"
-              :loading="deleting === messageToDelete"
-            >
-              {{ $t('common.delete') }}
-            </UButton>
           </div>
-        </template>
-      </UModal>
 
-      <!-- 没有更多数据提示 -->
-      <div
-        v-if="!hasMore && displayMessages.length > 0"
-        class="text-center py-4 text-gray-500 dark:text-gray-400"
-      >
-        {{ $t('message.noMoreMessages') }}
+          <!-- 弹窗内容 -->
+          <template #body>
+            <div id="message-detail-description">
+              <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                {{ message.content }}
+              </p>
+            </div>
+          </template>
+
+          <!-- 弹窗底部操作 -->
+          <template #footer>
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2">
+                <UButton
+                  v-if="!message.isRead"
+                  @click="handleMarkAsRead(message.id || 0)"
+                  variant="soft"
+                  color="primary"
+                  :loading="markingAsRead === message.id"
+                  size="sm"
+                >
+                  <Icon name="mynaui:check" class="w-4 h-4" />
+                  {{ $t('message.markRead') }}
+                </UButton>
+              </div>
+              <div class="flex items-center gap-2">
+                <UButton
+                  @click="handleDeleteMessage(message.id || 0)"
+                  variant="ghost"
+                  color="error"
+                  :loading="deleting === message.id"
+                  size="sm"
+                >
+                  <Icon name="mynaui:trash" class="w-4 h-4" />
+                  {{ $t('message.delete') }}
+                </UButton>
+              </div>
+            </div>
+          </template>
+        </UModal>
       </div>
+    </TransitionGroup>
 
-      <!-- Intersection Observer 观察器元素 -->
-      <div ref="observerTarget" class="h-1"></div>
+    <!-- 删除确认弹窗 -->
+    <UModal v-model:open="showDeleteConfirm" :title="$t('message.deleteConfirm')">
+      <template #body>
+        <p class="text-gray-700 dark:text-gray-300">
+          {{ $t('message.confirmDelete') }}
+        </p>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <UButton @click="showDeleteConfirm = false" variant="ghost">
+            {{ $t('common.cancel') }}
+          </UButton>
+          <UButton
+            @click="confirmDeleteMessage"
+            color="error"
+            :loading="deleting === messageToDelete"
+          >
+            {{ $t('common.delete') }}
+          </UButton>
+        </div>
+      </template>
+    </UModal>
+
+    <!-- 没有更多数据提示 -->
+    <div
+      v-if="!hasMore && displayMessages.length > 0"
+      class="text-center py-4 text-gray-500 dark:text-gray-400"
+    >
+      {{ $t('message.noMoreMessages') }}
     </div>
+
+    <!-- Intersection Observer 观察器元素 -->
+    <div ref="observerTarget" class="h-1"></div>
   </div>
 </template>
 

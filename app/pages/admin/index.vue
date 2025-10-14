@@ -239,8 +239,7 @@
 
 <script lang="ts" setup>
   definePageMeta({
-    layout: 'dashboard',
-    requiresAuth: true
+    layout: 'dashboard'
   });
 
   const { t } = useI18n();

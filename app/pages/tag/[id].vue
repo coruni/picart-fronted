@@ -35,7 +35,7 @@
     </div>
 
     <!-- 标签详情内容 -->
-    <div v-else-if="tagData?.data" class="max-w-7xl mx-auto px-4 py-8">
+    <div v-else-if="tagData?.data">
       <!-- 标签头部 -->
       <div
         class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"

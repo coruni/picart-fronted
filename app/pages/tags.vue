@@ -4,7 +4,7 @@
     <div
       class="relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"
     >
-      <div class="max-w-7xl mx-auto px-4 py-8 md:py-12 lg:py-16">
+      <div class="md:py-12 lg:py-16">
         <div class="text-center">
           <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             {{ $t('tags.title') }}
@@ -19,9 +19,9 @@
     </div>
 
     <!-- 主要内容区域 -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div>
       <!-- 搜索和筛选 -->
-      <div class="mb-8">
+      <div class="my-8">
         <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
           <!-- 搜索框 -->
           <div class="flex-1 max-w-md">

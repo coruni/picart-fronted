@@ -1,55 +1,48 @@
 <template>
-  <div>
+  <div class="w-full">
     <CommonSwiperClient />
     <ScrollToTop />
     <!-- 首页顶部广告 -->
     <Advertisement type="homepage" position="top" />
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Tab切换 -->
-      <div class="flex justify-center mb-8">
-        <UTabs
-          v-model="currentTab"
-          :items="tabs"
-          variant="pill"
-          class="w-auto"
-          :default-value="0"
-          :ui="{ trigger: 'cursor-pointer' }"
-        >
-          <template #default="{ item }">
-            <span class="hidden md:inline" v-text="item.label"></span>
-          </template>
-        </UTabs>
-      </div>
-      <!-- 瀑布流展示 -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-        <div
-          v-for="item in displayItems"
-          :key="item.id"
-          class="transform transition-transform hover:scale-105 duration-300"
-        >
-          <CommonArticleCard :data="item" />
-        </div>
-      </div>
-      <!-- 加载指示器 -->
-      <div
-        v-if="loading"
-        class="col-span-2 md:col-span-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 py-8"
+    <div class="flex justify-center my-8">
+      <UTabs
+        v-model="currentTab"
+        :items="tabs"
+        variant="pill"
+        class="w-auto"
+        :default-value="0"
+        :ui="{ trigger: 'cursor-pointer' }"
       >
-        <ArticleSkeleton v-for="i in 8" :key="i" />
-      </div>
-
-      <!-- 没有更多数据提示 -->
-      <div
-        v-else-if="!hasMore && displayItems.length > 0"
-        class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
-      >
-        {{ $t('common.loading.noMore') }}
-      </div>
-
-      <!-- Intersection Observer 观察器元素 -->
-      <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
+        <template #default="{ item }">
+          <span class="hidden md:inline" v-text="item.label"></span>
+        </template>
+      </UTabs>
     </div>
+    <!-- 瀑布流展示 -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+      <div v-for="item in displayItems" :key="item.id">
+        <CommonArticleCard :data="item" />
+      </div>
+    </div>
+    <!-- 加载指示器 -->
+    <div
+      v-if="loading"
+      class="col-span-2 md:col-span-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 py-8"
+    >
+      <ArticleSkeleton v-for="i in 10" :key="i" />
+    </div>
+
+    <!-- 没有更多数据提示 -->
+    <div
+      v-else-if="!hasMore && displayItems.length > 0"
+      class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
+    >
+      {{ $t('common.loading.noMore') }}
+    </div>
+
+    <!-- Intersection Observer 观察器元素 -->
+    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
   </div>
 </template>
 
@@ -88,7 +81,7 @@
   const currentTab = ref('all');
   const pagination = ref({
     page: 1,
-    limit: 12
+    limit: 20
   });
   const loading = ref(false);
   const hasMore = ref(true);

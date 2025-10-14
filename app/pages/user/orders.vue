@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-6">
+  <div class="w-full">
     <!-- 页面标题 -->
     <div class="mb-6">
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">

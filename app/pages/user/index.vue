@@ -1,278 +1,276 @@
 <template>
   <div class="min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
-      <div class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
-        <!-- 左侧主内容区 -->
-        <div class="flex-1">
-          <!-- 用户信息区 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-            <div
-              class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
-            >
-              <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
-                <UAvatar
-                  :src="userProfile?.data?.avatar"
-                  :alt="userProfile?.data?.nickname || userProfile?.data?.username"
-                  class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
-                  loading="lazy"
-                  format="webp"
-                  sizes="96px md:128px"
-                />
-                <div
-                  v-if="userProfile?.data?.isMember"
-                  class="absolute bottom-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
-                >
-                  <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
-                </div>
+    <div class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
+      <!-- 左侧主内容区 -->
+      <div class="flex-1">
+        <!-- 用户信息区 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+          <div
+            class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
+          >
+            <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
+              <UAvatar
+                :src="userProfile?.data?.avatar"
+                :alt="userProfile?.data?.nickname || userProfile?.data?.username"
+                class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
+                loading="lazy"
+                format="webp"
+                sizes="96px md:128px"
+              />
+              <div
+                v-if="userProfile?.data?.isMember"
+                class="absolute bottom-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
+              >
+                <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
               </div>
-              <div class="flex-1">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                  {{ userProfile?.data?.nickname || userProfile?.data?.username }}
-                </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {{ userProfile?.data?.description || $t('user.noDescription') }}
-                </p>
-                <div class="flex flex-wrap items-center gap-4 mt-3">
-                  <div class="text-center">
-                    <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.articleCount || 0 }}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ $t('user.articles') }}
-                    </div>
+            </div>
+            <div class="flex-1">
+              <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                {{ userProfile?.data?.nickname || userProfile?.data?.username }}
+              </h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                {{ userProfile?.data?.description || $t('user.noDescription') }}
+              </p>
+              <div class="flex flex-wrap items-center gap-4 mt-3">
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 dark:text-white">
+                    {{ userProfile?.data?.articleCount || 0 }}
                   </div>
-                  <div class="text-center">
-                    <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.followerCount || 0 }}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ $t('user.followers') }}
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.followingCount || 0 }}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ $t('user.following') }}
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <div class="font-semibold text-gray-900 dark:text-white">
-                      {{ userProfile?.data?.wallet.toFixed(2) || 0 }}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ $t('user.wallet') }}
-                    </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ $t('user.articles') }}
                   </div>
                 </div>
-              </div>
-              <div class="flex space-x-2">
-                <UButton
-                  @click="isEditModalOpen = true"
-                  class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
-                >
-                  {{ $t('user.editProfile') }}
-                </UButton>
-                <UButton
-                  @click="handleLogout"
-                  class="rounded-md px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
-                >
-                  {{ $t('user.logout') }}
-                </UButton>
-              </div>
-            </div>
-          </div>
-
-          <!-- 快捷导航 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-            <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">
-              {{ $t('user.quickNav') }}
-            </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <NuxtLinkLocale
-                to="/user/orders"
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              >
-                <Icon name="mynaui:cart" class="w-8 h-8 text-primary mb-2" />
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  $t('user.orders.title')
-                }}</span>
-              </NuxtLinkLocale>
-
-              <NuxtLinkLocale
-                to="/user/messages"
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors relative"
-              >
-                <Icon name="mynaui:bell" class="w-8 h-8 text-primary mb-2" />
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  $t('message.title')
-                }}</span>
-                <!-- 未读消息徽章 -->
-                <span
-                  v-if="unreadCount > 0"
-                  class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium"
-                >
-                  {{ unreadCount > 99 ? '99+' : unreadCount }}
-                </span>
-              </NuxtLinkLocale>
-
-              <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
-              >
-                <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
-                <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
-              </div>
-
-              <div
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
-              >
-                <Icon name="mynaui:cog" class="w-8 h-8 text-gray-400 mb-2" />
-                <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
-              </div>
-
-              <div
-                @click="isChangePasswordModalOpen = true"
-                class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
-              >
-                <Icon name="mynaui:lock" class="w-8 h-8 text-primary mb-2" />
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  $t('user.changePassword.title')
-                }}</span>
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 dark:text-white">
+                    {{ userProfile?.data?.followerCount || 0 }}
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ $t('user.followers') }}
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 dark:text-white">
+                    {{ userProfile?.data?.followingCount || 0 }}
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ $t('user.following') }}
+                  </div>
+                </div>
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 dark:text-white">
+                    {{ userProfile?.data?.wallet.toFixed(2) || 0 }}
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ $t('user.wallet') }}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- 用户文章 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-            <div class="flex items-center justify-between mb-4 md:mb-6">
-              <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
-                {{ $t('user.myArticles') }}
-              </h2>
-              <NuxtLinkLocale
-                to="/user/articles/create"
-                class="text-primary-500 hover:text-primary-600 text-sm md:text-base"
-              >
-                {{ $t('user.createArticle') }}
-              </NuxtLinkLocale>
-            </div>
-
-            <div
-              v-if="displayArticles.length > 0"
-              class="grid grid-cols-2 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
-            >
-              <template v-for="article in displayArticles" :key="article.id">
-                <CommonArticleCard :data="article" class="!rounded-xl" />
-              </template>
-            </div>
-            <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              {{ $t('user.noArticles') }}
-            </div>
-            <!-- 加载更多按钮 -->
-            <div
-              v-if="hasMore && displayArticles.length > 0"
-              class="col-span-2 sm:col-span-2 lg:col-span-3 flex justify-center py-4"
-            >
+            <div class="flex space-x-2">
               <UButton
-                @click="loadUserArticles"
-                :disabled="loading"
-                color="primary"
-                class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
+                @click="isEditModalOpen = true"
+                class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
               >
-                <div
-                  v-if="loading"
-                  class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
-                ></div>
-                {{ loading ? $t('common.loading.loading') : $t('common.loadMore') }}
+                {{ $t('user.editProfile') }}
               </UButton>
-            </div>
-
-            <!-- 没有更多数据提示 -->
-            <div
-              v-else-if="!hasMore && displayArticles.length > 0"
-              class="col-span-2 sm:col-span-2 lg:col-span-3 text-center py-4 text-gray-500"
-            >
-              {{ $t('common.loading.noMore') }}
+              <UButton
+                @click="handleLogout"
+                class="rounded-md px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
+              >
+                {{ $t('user.logout') }}
+              </UButton>
             </div>
           </div>
         </div>
 
-        <!-- 右侧边栏 -->
-        <div
-          class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10 sticky"
-        >
-          <!-- 会员等级 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="font-bold text-gray-900 dark:text-white text-sm md:text-base">
-                {{ $t('user.membershipLevel') }}
-              </h3>
-              <UButton
-                @click="handleRecharge"
-                size="sm"
-                color="primary"
-                class="cursor-pointer dark:text-white"
-              >
-                {{ $t('user.recharge.title') }}
-              </UButton>
-            </div>
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                userProfile?.data.isMember ? $t('user.vipMember') : $t('user.basicMember')
+        <!-- 快捷导航 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+          <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">
+            {{ $t('user.quickNav') }}
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <NuxtLinkLocale
+              to="/user/orders"
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+            >
+              <Icon name="mynaui:cart" class="w-8 h-8 text-primary mb-2" />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                $t('user.orders.title')
               }}</span>
-              <span class="text-sm font-medium text-primary-500 dark:text-white"
-                >Lv.{{ userProfile?.data?.level || 0 }}</span
+            </NuxtLinkLocale>
+
+            <NuxtLinkLocale
+              to="/user/messages"
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors relative"
+            >
+              <Icon name="mynaui:bell" class="w-8 h-8 text-primary mb-2" />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                $t('message.title')
+              }}</span>
+              <!-- 未读消息徽章 -->
+              <span
+                v-if="unreadCount > 0"
+                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-medium"
               >
+                {{ unreadCount > 99 ? '99+' : unreadCount }}
+              </span>
+            </NuxtLinkLocale>
+
+            <div
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
+            >
+              <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
+              <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
             </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div
-                class="bg-primary h-2 rounded-full"
-                :style="{ width: `${(userProfile?.data?.experience || 0) % 100}%` }"
-              ></div>
+
+            <div
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
+            >
+              <Icon name="mynaui:cog" class="w-8 h-8 text-gray-400 mb-2" />
+              <span class="text-sm font-medium text-gray-500">{{ $t('user.settings') }}</span>
             </div>
-            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-              <span>{{ userProfile?.data?.experience || 0 }} {{ $t('user.experience') }}</span>
-              <span>{{ userProfile?.data?.score || 0 }} {{ $t('user.score') }}</span>
+
+            <div
+              @click="isChangePasswordModalOpen = true"
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+            >
+              <Icon name="mynaui:lock" class="w-8 h-8 text-primary mb-2" />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                $t('user.changePassword.title')
+              }}</span>
             </div>
+          </div>
+        </div>
+
+        <!-- 用户文章 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
+              {{ $t('user.myArticles') }}
+            </h2>
+            <NuxtLinkLocale
+              to="/user/articles/create"
+              class="text-primary-500 hover:text-primary-600 text-sm md:text-base"
+            >
+              {{ $t('user.createArticle') }}
+            </NuxtLinkLocale>
           </div>
 
-          <!-- 邀请奖励 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
-              {{ $t('user.inviteRewards') }}
-            </h3>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                  $t('user.inviteCode')
-                }}</span>
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userProfile?.data?.inviteCode || $t('user.noInviteCode')
-                }}</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                  $t('user.inviteCount')
-                }}</span>
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userProfile?.data?.inviteCount || 0
-                }}</span>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-gray-700 dark:text-gray-300">{{
-                  $t('user.inviteEarnings')
-                }}</span>
-                <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                  userProfile?.data?.inviteEarnings || 0
-                }}</span>
-              </div>
-            </div>
+          <div
+            v-if="displayArticles.length > 0"
+            class="grid grid-cols-2 md:lg:grid-cols-4 gap-4 md:gap-6"
+          >
+            <template v-for="article in displayArticles" :key="article.id">
+              <CommonArticleCard :data="article" class="!rounded-xl" />
+            </template>
+          </div>
+          <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
+            {{ $t('user.noArticles') }}
+          </div>
+          <!-- 加载更多按钮 -->
+          <div
+            v-if="hasMore && displayArticles.length > 0"
+            class="col-span-2 sm:col-span-2 lg:col-span-3 flex justify-center py-4"
+          >
             <UButton
-              class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-md hover:bg-primary-600 transition-colors"
+              @click="loadUserArticles"
+              :disabled="loading"
+              color="primary"
+              class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
             >
-              {{ $t('user.copyInviteLink') }}
+              <div
+                v-if="loading"
+                class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
+              ></div>
+              {{ loading ? $t('common.loading.loading') : $t('common.loadMore') }}
             </UButton>
           </div>
+
+          <!-- 没有更多数据提示 -->
+          <div
+            v-else-if="!hasMore && displayArticles.length > 0"
+            class="col-span-2 sm:col-span-2 lg:col-span-3 text-center py-4 text-gray-500"
+          >
+            {{ $t('common.loading.noMore') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧边栏 -->
+      <div
+        class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10 sticky"
+      >
+        <!-- 会员等级 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-gray-900 dark:text-white text-sm md:text-base">
+              {{ $t('user.membershipLevel') }}
+            </h3>
+            <UButton
+              @click="handleRecharge"
+              size="sm"
+              color="primary"
+              class="cursor-pointer dark:text-white"
+            >
+              {{ $t('user.recharge.title') }}
+            </UButton>
+          </div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm text-gray-700 dark:text-gray-300">{{
+              userProfile?.data.isMember ? $t('user.vipMember') : $t('user.basicMember')
+            }}</span>
+            <span class="text-sm font-medium text-primary-500 dark:text-white"
+              >Lv.{{ userProfile?.data?.level || 0 }}</span
+            >
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div
+              class="bg-primary h-2 rounded-full"
+              :style="{ width: `${(userProfile?.data?.experience || 0) % 100}%` }"
+            ></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <span>{{ userProfile?.data?.experience || 0 }} {{ $t('user.experience') }}</span>
+            <span>{{ userProfile?.data?.score || 0 }} {{ $t('user.score') }}</span>
+          </div>
+        </div>
+
+        <!-- 邀请奖励 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+          <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
+            {{ $t('user.inviteRewards') }}
+          </h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">{{
+                $t('user.inviteCode')
+              }}</span>
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                userProfile?.data?.inviteCode || $t('user.noInviteCode')
+              }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">{{
+                $t('user.inviteCount')
+              }}</span>
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                userProfile?.data?.inviteCount || 0
+              }}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">{{
+                $t('user.inviteEarnings')
+              }}</span>
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                userProfile?.data?.inviteEarnings || 0
+              }}</span>
+            </div>
+          </div>
+          <UButton
+            class="cursor-pointer flex items-center justify-center w-full mt-4 py-2 px-4 bg-primary text-white text-sm rounded-md hover:bg-primary-600 transition-colors"
+          >
+            {{ $t('user.copyInviteLink') }}
+          </UButton>
         </div>
       </div>
     </div>
@@ -469,7 +467,6 @@
   const toast = useToast();
 
   const { t } = useI18n();
-  const router = useRouter();
   const userStore = useUserStore();
   const userInfo = userStore.currentUser;
   const localPath = useLocalePath();
@@ -479,7 +476,7 @@
 
   const pagination = ref({
     page: 1,
-    limit: 6
+    limit: 8
   });
   const loading = ref(false);
   const hasMore = ref(true);

@@ -1,4 +1,5 @@
 import { useUserStore } from '~/stores/user';
+import { defineNuxtRouteMiddleware } from '#imports';
 
 export default defineNuxtRouteMiddleware((to, from) => {
   // 只在客户端执行中间件逻辑，避免服务端渲染时状态未恢复的问题

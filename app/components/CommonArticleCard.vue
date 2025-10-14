@@ -1,20 +1,20 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
-    class="bg-white rounded-md shadow-lg overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 hover:shadow-xl hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 group border border-primary-100/50 dark:border-primary-900/30"
+    class="overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 group"
   >
-    <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative">
+    <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative rounded-md">
       <NuxtImg
         :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
         loading="lazy"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        class="w-full h-full aspect-[3/4] object-cover transition-transform duration-500 group-hover:scale-110"
       />
 
       <!-- 渐变遮罩 -->
-      <div
+      <!-- <div
         class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-      ></div>
+      ></div> -->
 
       <!-- 状态图标 - 显示非PUBLISHED状态 -->
       <div
@@ -49,17 +49,10 @@
       <div class="flex-grow flex flex-col justify-end">
         <div class="flex items-center justify-between flex-wrap">
           <div class="flex items-center space-x-4">
-            <UButton
-              variant="ghost"
-              class="cursor-pointer text-gray-500 dark:text-white/70 flex items-center gap-2 hover:text-red-400 rounded-full px-3 py-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-300 whitespace-nowrap group/like"
-              :class="article.isLiked ? 'text-red-500' : 'text-gray-500 dark:text-white/70'"
-            >
-              <Icon
-                name="mynaui:heart-solid"
-                class="transition-transform duration-300 group-hover/like:scale-110 group-hover/like:text-red-500"
-              />
-              <span class="text-sm font-medium">{{ article.likes }}</span>
-            </UButton>
+            <div class="flex items-center space-x-1">
+              <Icon name="mynaui:eye" />
+              <span class="text-sm font-medium">{{ article.views }}</span>
+            </div>
           </div>
           <div
             @click.stop="$router.push(`/author/${article.author?.id}`)"

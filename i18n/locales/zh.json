@@ -10,7 +10,11 @@
       "admin": "管理员中心",
       "message": "消息中心",
       "setting": "设置",
-      "language": "语言"
+      "language": "语言",
+      "theme": "主题",
+      "system": "跟随系统",
+      "light": "浅色",
+      "dark": "深色"
     }
   },
   "home": {

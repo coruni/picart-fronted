@@ -40,121 +40,113 @@
     </div>
 
     <!-- 筛选和排序 -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mb-8">
-        <UTabs
-          :items="tabs"
-          :default-value="0"
-          v-model="currentTab"
-          class="w-auto"
-          variant="pill"
-          :ui="{ trigger: 'cursor-pointer' }"
-        >
-        </UTabs>
-        <div class="flex items-center space-x-2">
-          <button
-            @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'"
-            class="p-2 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          >
-            <Icon :name="viewMode === 'grid' ? 'mynaui:grid' : 'mynaui:list'" class="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-
-      <!-- 文章列表 -->
-      <div
-        v-if="loading && displayItems.length === 0"
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 py-12 px-4"
+    <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 my-8">
+      <UTabs
+        :items="tabs"
+        :default-value="0"
+        v-model="currentTab"
+        class="w-auto"
+        variant="pill"
+        :ui="{ trigger: 'cursor-pointer' }"
       >
-        <ArticleSkeleton v-for="i in 8" :key="i" />
+      </UTabs>
+      <div class="flex items-center space-x-2">
+        <button
+          @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'"
+          class="p-2 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          <Icon :name="viewMode === 'grid' ? 'mynaui:grid' : 'mynaui:list'" class="w-5 h-5" />
+        </button>
       </div>
+    </div>
 
-      <div v-else-if="!loading && displayItems.length === 0" class="text-center py-12 px-4">
-        <Icon name="mynaui:file-search" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-          {{ $t('category.noArticles') }}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-          {{ $t('category.noArticlesDescription') }}
-        </p>
+    <!-- 文章列表 -->
+    <div
+      v-if="loading && displayItems.length === 0"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 py-12 px-4"
+    >
+      <ArticleSkeleton v-for="i in 8" :key="i" />
+    </div>
+
+    <div v-else-if="!loading && displayItems.length === 0" class="text-center py-12 px-4">
+      <Icon name="mynaui:file-search" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+        {{ $t('category.noArticles') }}
+      </h3>
+      <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+        {{ $t('category.noArticlesDescription') }}
+      </p>
+    </div>
+
+    <!-- 网格视图 -->
+    <div v-else-if="viewMode === 'grid'">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+        <TransitionGroup name="list" tag="div" class="contents">
+          <div v-for="item in displayItems" :key="item.id">
+            <CommonArticleCard :data="item" />
+          </div>
+        </TransitionGroup>
       </div>
+    </div>
 
-      <!-- 网格视图 -->
-      <div v-else-if="viewMode === 'grid'">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-          <TransitionGroup name="list" tag="div" class="contents">
-            <div
-              v-for="item in displayItems"
-              :key="item.id"
-              class="transform transition-all duration-300 hover:scale-105"
-            >
-              <CommonArticleCard :data="item" />
+    <!-- 列表视图 -->
+    <div v-else class="space-y-4">
+      <TransitionGroup name="list" tag="div" class="space-y-4">
+        <NuxtLinkLocale
+          v-for="item in displayItems"
+          :key="item.id"
+          :to="`/article/${item.id}`"
+          class="block bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow overflow-hidden"
+        >
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="w-full md:w-1/3 flex-shrink-0">
+              <NuxtImg
+                :src="item.cover || item.images[0]"
+                :alt="item.title"
+                class="w-full h-48 md:h-32 object-cover rounded-md"
+                loading="lazy"
+                format="webp"
+              />
             </div>
-          </TransitionGroup>
-        </div>
-      </div>
-
-      <!-- 列表视图 -->
-      <div v-else class="space-y-4">
-        <TransitionGroup name="list" tag="div" class="space-y-4">
-          <NuxtLinkLocale
-            v-for="item in displayItems"
-            :key="item.id"
-            :to="`/article/${item.id}`"
-            class="block bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow overflow-hidden"
-          >
-            <div class="flex flex-col md:flex-row gap-4">
-              <div class="w-full md:w-1/3 flex-shrink-0">
-                <NuxtImg
-                  :src="item.cover || item.images[0]"
-                  :alt="item.title"
-                  class="w-full h-48 md:h-32 object-cover rounded-md"
-                  loading="lazy"
-                  format="webp"
-                />
-              </div>
-              <div class="w-full md:w-2/3 flex-1 min-w-0">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                  {{ item.title }}
-                </h3>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                  {{ item.description }}
-                </p>
-                <div
-                  class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-500 dark:text-gray-400 gap-2 sm:gap-0"
-                >
-                  <div
-                    class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-1 sm:gap-0"
-                  >
-                    <span class="truncate">{{ item.author.nickname }}</span>
-                    <span class="truncate">{{ formatDate(item.createdAt) }}</span>
-                  </div>
-                  <div class="flex items-center space-x-2 flex-shrink-0">
-                    <Icon name="mynaui:eye" class="w-4 h-4" />
-                    <span>{{ item.views }}</span>
-                  </div>
+            <div class="w-full md:w-2/3 flex-1 min-w-0">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                {{ item.title }}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                {{ item.description }}
+              </p>
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-500 dark:text-gray-400 gap-2 sm:gap-0"
+              >
+                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-1 sm:gap-0">
+                  <span class="truncate">{{ item.author.nickname }}</span>
+                  <span class="truncate">{{ formatDate(item.createdAt) }}</span>
+                </div>
+                <div class="flex items-center space-x-2 flex-shrink-0">
+                  <Icon name="mynaui:eye" class="w-4 h-4" />
+                  <span>{{ item.views }}</span>
                 </div>
               </div>
             </div>
-          </NuxtLinkLocale>
-        </TransitionGroup>
-      </div>
-
-      <!-- 加载指示器 -->
-      <div v-if="loading && displayItems.length > 0" class="flex justify-center py-8">
-        <div
-          class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
-      </div>
-
-      <!-- 没有更多数据提示 -->
-      <div v-if="!hasMore && displayItems.length > 0" class="text-center py-4 px-4 text-gray-500">
-        {{ $t('common.loading.noMore') }}
-      </div>
-
-      <!-- Intersection Observer 观察器元素 -->
-      <div ref="observerTarget" class="h-1"></div>
+          </div>
+        </NuxtLinkLocale>
+      </TransitionGroup>
     </div>
+
+    <!-- 加载指示器 -->
+    <div v-if="loading && displayItems.length > 0" class="flex justify-center py-8">
+      <div
+        class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
+      ></div>
+    </div>
+
+    <!-- 没有更多数据提示 -->
+    <div v-if="!hasMore && displayItems.length > 0" class="text-center py-4 px-4 text-gray-500">
+      {{ $t('common.loading.noMore') }}
+    </div>
+
+    <!-- Intersection Observer 观察器元素 -->
+    <div ref="observerTarget" class="h-1"></div>
   </div>
 </template>
 
@@ -177,7 +169,7 @@
   const viewMode = ref<'grid' | 'list'>('grid');
   const pagination = ref({
     page: 1,
-    limit: 12
+    limit: 20
   });
   const hasMore = ref(true);
   const observerTarget = ref<HTMLDivElement | null>(null);

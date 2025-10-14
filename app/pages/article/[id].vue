@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+  <div>
     <Title>{{ article?.data.title }}</Title>
     <Meta name="description" :content="(article?.data.summary as string) ?? article?.data.title" />
     <Meta name="author" :content="article?.data.author.nickname" />
@@ -128,7 +128,7 @@
     </VueEasyLightbox>
     <ScrollToTop />
     <!-- 加载状态 -->
-    <div v-if="isLoading" class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+    <div v-if="isLoading">
       <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
         <!-- 左侧主内容区骨架屏 -->
         <div class="flex-1">
@@ -152,8 +152,7 @@
 
           <!-- 图片展示区骨架屏 -->
           <div class="mb-4 md:mb-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4">
-              <USkeleton class="sm:col-span-2 aspect-[16/9] rounded-md" />
+            <div class="grid grid-cols-1 md:lg:grid-cols-6 gap-2 md:gap-4">
               <USkeleton class="aspect-square rounded-md" />
               <USkeleton class="aspect-square rounded-md" />
             </div>
@@ -217,8 +216,8 @@
         </div>
 
         <!-- 右侧边栏骨架屏 -->
-        <div class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0">
-          <div class="lg:sticky top-20">
+        <div class="w-full lg:w-80 flex-shrink-0">
+          <div class="lg:sticky top-4">
             <!-- 作者信息骨架屏 -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
               <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
@@ -400,19 +399,13 @@
 
         <!-- 图片展示区 -->
         <div class="mb-4 md:mb-8" v-if="article?.data?.images && article?.data?.images.length > 0">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
             <div
               v-for="(img, index) in article?.data.images"
               :key="index"
               :class="[
                 'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-all duration-300 bg-gray-100 dark:bg-gray-800 relative',
-                // 动态宽高比：加载时使用4:3，加载完成后使用原始比例
-                !imageLoaded[index] || imageErrors[index]
-                  ? 'aspect-[4/3]'
-                  : imageAspectRatios[index] || 'aspect-[4/3]',
-                index === 0 && article?.data.images.length > 1
-                  ? 'sm:col-span-2 sm:aspect-[16/9]'
-                  : 'sm:aspect-square'
+                'aspect-[3/4]'
               ]"
               @click="openLightbox(index)"
             >
@@ -479,16 +472,16 @@
               />
 
               <!-- 图片序号标识 -->
-              <div
+              <!-- <div
                 v-if="article?.data.images.length > 1 && imageLoaded[index] && !imageErrors[index]"
                 class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center"
               >
                 <Icon name="mynaui:image" class="w-3 h-3 mr-1" />
                 {{ index + 1 }}/{{ article?.data.images.length }}
-              </div>
+              </div> -->
 
               <!-- 放大镜图标提示 -->
-              <div
+              <!-- <div
                 v-if="imageLoaded[index] && !imageErrors[index]"
                 class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20"
               >
@@ -497,7 +490,7 @@
                 >
                   <Icon name="mynaui:search" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -710,9 +703,9 @@
         </div>
       </div>
       <!-- 右侧边栏 -->
-      <div class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0">
+      <div class="w-full lg:w-80 flex-shrink-0">
         <!-- 作者信息 -->
-        <div class="lg:sticky top-20">
+        <div class="lg:sticky top-4">
           <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
             <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
               <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="relative">
