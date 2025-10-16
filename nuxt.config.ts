@@ -37,7 +37,7 @@ export default defineNuxtConfig({
 
   // SEO 配置
   site: {
-    url: 'https://www.cosv.cc',
+    url: 'https://www.example.com',
     name: 'PicArt',
     description: '图片分享社区',
     defaultLocale: 'zh',
@@ -64,9 +64,9 @@ export default defineNuxtConfig({
       '/user/forgot-password'
     ],
     sitemap: [
-      'https://www.cosv.cc/sitemap_index.xml',
-      'https://www.cosv.cc/sitemap_articles.xml',
-      'https://www.cosv.cc/sitemap_categories.xml'
+      'https://www.example.com/sitemap_index.xml',
+      'https://www.example.com/sitemap_articles.xml',
+      'https://www.example.com/sitemap_categories.xml'
     ],
     crawlDelay: 1
   },
@@ -114,8 +114,8 @@ export default defineNuxtConfig({
     // provider: 'weserv',
     // domains: ['minicdn.cosfan.cc'],
     // weserv: {
-    //   baseURL: 'https://minicdn.cosfan.cc',
-    //   weservURL: 'https://images.cosfan.cc',
+    //   baseURL: 'https://www.example.com',
+    //   weservURL: 'https://www.example.com',
     //   modifiers: {
     //     quality: 80,
     //     fit: 'cover',
@@ -332,7 +332,7 @@ export default defineNuxtConfig({
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `https://www.cosv.cc/search?q={search_term_string}`
+                urlTemplate: `https://www.example.com/search?q={search_term_string}`
               },
               'query-input': 'required name=search_term_string'
             }
