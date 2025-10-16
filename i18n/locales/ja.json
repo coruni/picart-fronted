@@ -797,7 +797,9 @@
     "description": "ユーザー名とパスワードを入力してログインしてください",
     "keywords": "ログイン, 登録, パスワードを忘れた場合",
     "byLoggingIn": "ログインすることで、当社の",
-    "privacyPolicy": "プライバシーポリシー"
+    "privacyPolicy": "プライバシーポリシー",
+    "cookieConsentRequired": "Cookie同意が必要です",
+    "cookieConsentDescription": "ログイン前に当社のCookieポリシーに同意してください。ページ下部のCookieバナーをご確認ください"
   },
   "forgotPassword": {
     "title": "パスワードを忘れた場合",
@@ -843,6 +845,8 @@
     "agreeTerms": "ユーザー契約とプライバシーポリシーを読み、同意します",
     "agreeToTerms": "以下に同意します",
     "privacyPolicy": "プライバシーポリシー",
+    "cookieConsentRequired": "Cookie同意が必要です",
+    "cookieConsentDescription": "登録前に当社のCookieポリシーに同意してください。ページ下部のCookieバナーをご確認ください",
     "register": "登録",
     "registering": "登録中...",
     "hasAccount": "すでにアカウントをお持ちの場合",

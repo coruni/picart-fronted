@@ -165,11 +165,10 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     // 检测浏览器语言
     detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
+      useCookie: false, // 禁用 Cookie，改用 localStorage 以符合 GDPR
       fallbackLocale: 'zh',
-      alwaysRedirect: true,
-      redirectOn: 'all'
+      alwaysRedirect: false,
+      redirectOn: 'root'
     },
     // 编译优化
     compilation: {

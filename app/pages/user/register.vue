@@ -242,6 +242,9 @@
   const sendingCode = ref(false);
   const countdown = ref(0);
 
+  // 获取 Cookie 同意状态
+  const { hasConsented } = useCookieConsent();
+
   // 发送验证码
   const sendVerificationCode = async () => {
     if (!registerForm.value.email) {
@@ -280,6 +283,21 @@
   };
 
   const handleRegister = async () => {
+    // 检查 Cookie 同意状态
+    if (!hasConsented.value) {
+      toast.add({
+        title: t('register.cookieConsentRequired'),
+        description: t('register.cookieConsentDescription'),
+        color: 'warning'
+      });
+      // 滚动到页面底部（Cookie Banner 的位置）
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+      return;
+    }
+
     try {
       loading.value = true;
 

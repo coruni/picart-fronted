@@ -1040,7 +1040,9 @@
     "description": "请输入您的用户名和密码登录",
     "keywords": "登录, 注册, 忘记密码",
     "byLoggingIn": "登录即表示您同意我们的",
-    "privacyPolicy": "隐私政策"
+    "privacyPolicy": "隐私政策",
+    "cookieConsentRequired": "需要同意 Cookie 政策",
+    "cookieConsentDescription": "登录前需要同意我们的 Cookie 使用政策，请查看页面底部的 Cookie 横幅"
   },
   "forgotPassword": {
     "title": "忘记密码",
@@ -1086,6 +1088,8 @@
     "agreeTerms": "我已阅读并同意用户协议和隐私政策",
     "agreeToTerms": "我已阅读并同意",
     "privacyPolicy": "隐私政策",
+    "cookieConsentRequired": "需要同意 Cookie 政策",
+    "cookieConsentDescription": "注册前需要同意我们的 Cookie 使用政策，请查看页面底部的 Cookie 横幅",
     "register": "注册",
     "registering": "注册中...",
     "hasAccount": "已有账户？",

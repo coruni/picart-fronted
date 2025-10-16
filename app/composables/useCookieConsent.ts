@@ -1,3 +1,6 @@
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { useAppStore } from '~/stores/app';
+
 export interface CookieSettings {
   necessary: boolean;
   functional: boolean;
@@ -131,6 +134,11 @@ export const useCookieConsent = () => {
       // 根据设置加载相应的脚本
       loadScriptsBasedOnSettings();
 
+      // 如果同意了必要 Cookie，初始化设备 ID
+      if (cookieSettings.value.necessary) {
+        await initializeDeviceId();
+      }
+
       // 显示成功消息
       toast.add({
         title: t('cookie.saved'),
@@ -215,6 +223,33 @@ export const useCookieConsent = () => {
     };
   };
 
+  // 初始化设备 ID（在用户同意必要 Cookie 后调用）
+  const initializeDeviceId = async () => {
+    if (!import.meta.client) return;
+
+    const deviceIdCookie = useCookie('device-id', {
+      default: () => '',
+      maxAge: 60 * 60 * 24 * 365
+    });
+
+    if (!deviceIdCookie.value && cookieSettings.value.necessary) {
+      try {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+        const deviceId = result.visitorId;
+        deviceIdCookie.value = deviceId;
+
+        const appStore = useAppStore();
+        if (appStore?.setDeviceId) {
+          appStore.setDeviceId(deviceId);
+        }
+        console.log('Device ID initialized after consent');
+      } catch (error) {
+        console.error('Failed to initialize device ID:', error);
+      }
+    }
+  };
+
   return {
     // 状态
     cookieSettings,
@@ -227,6 +262,7 @@ export const useCookieConsent = () => {
     checkCookieConsent,
     loadCookieSettings,
     isCookieAllowed,
-    resetCookieSettings
+    resetCookieSettings,
+    initializeDeviceId
   };
 };

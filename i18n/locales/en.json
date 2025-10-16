@@ -795,7 +795,9 @@
     "description": "Please enter your username and password to login",
     "keywords": "login, register, forgot password",
     "byLoggingIn": "By logging in, you agree to our",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "cookieConsentRequired": "Cookie Consent Required",
+    "cookieConsentDescription": "Please accept our Cookie policy before logging in. Check the Cookie banner at the bottom of the page"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -841,6 +843,8 @@
     "agreeTerms": "I have read and agree to the User Agreement and Privacy Policy",
     "agreeToTerms": "I have read and agree to",
     "privacyPolicy": "Privacy Policy",
+    "cookieConsentRequired": "Cookie Consent Required",
+    "cookieConsentDescription": "Please accept our Cookie policy before registering. Check the Cookie banner at the bottom of the page",
     "register": "Register",
     "registering": "Registering...",
     "hasAccount": "Already have an account?",

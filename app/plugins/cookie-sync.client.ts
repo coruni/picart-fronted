@@ -4,6 +4,10 @@ import { useAppStore } from '~/stores/app';
 export default defineNuxtPlugin(async () => {
   // 只在客户端运行
   if (import.meta.client) {
+    // 检查 Cookie 同意状态
+    const cookieConsent = useCookie('cookie-consent');
+    const cookieSettings = useCookie<{ necessary?: boolean }>('cookie-settings');
+
     // 确保cookie在客户端正确同步
     const deviceIdCookie = useCookie('device-id', {
       default: () => '',
@@ -23,8 +27,9 @@ export default defineNuxtPlugin(async () => {
       watch: true
     });
 
-    // 初始化设备ID
-    if (!deviceIdCookie.value) {
+    // 初始化设备ID - 只有在用户同意必要 Cookie 后才设置
+    // device-id 被认为是必要 Cookie，用于设备识别和安全
+    if (!deviceIdCookie.value && cookieConsent.value && cookieSettings.value?.necessary) {
       try {
         const FingerprintJS = await import('@fingerprintjs/fingerprintjs');
         const fp = await FingerprintJS.default.load();

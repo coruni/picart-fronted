@@ -107,7 +107,25 @@
   const rememberMe = ref(false);
   const loading = ref(false);
 
+  // 获取 Cookie 同意状态
+  const { hasConsented } = useCookieConsent();
+
   const handleLogin = async () => {
+    // 检查 Cookie 同意状态
+    if (!hasConsented.value) {
+      toast.add({
+        title: t('login.cookieConsentRequired'),
+        description: t('login.cookieConsentDescription'),
+        color: 'warning'
+      });
+      // 滚动到页面底部（Cookie Banner 的位置）
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+      return;
+    }
+
     try {
       loading.value = true;
 

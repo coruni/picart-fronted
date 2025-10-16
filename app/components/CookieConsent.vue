@@ -251,19 +251,25 @@
     useCookieConsent();
 
   // 响应式数据
-  const isOpen = ref(false);
   const isSaving = ref(false);
   const showSettings = ref(false);
+  const forceOpen = ref(false); // 强制打开（用于已同意用户修改设置）
 
-  // 初始化
-  onMounted(() => {
-    checkCookieConsent();
+  // 立即检查同意状态
+  checkCookieConsent();
 
-    // 如果没有同意过，延迟显示弹窗
-    if (!hasConsented.value) {
-      setTimeout(() => {
-        isOpen.value = true;
-      }, 1000);
+  // 自动控制弹窗显示 - 根据同意状态自动显示/隐藏
+  // 这样检测工具可以立即看到 banner（无延迟）
+  const isOpen = computed({
+    get: () => !hasConsented.value || forceOpen.value,
+    set: (value: boolean) => {
+      if (hasConsented.value) {
+        // 已同意用户可以关闭
+        forceOpen.value = value;
+      } else if (!value) {
+        // 未同意用户不能关闭
+        return;
+      }
     }
   });
 
@@ -272,7 +278,7 @@
     isSaving.value = true;
     try {
       await acceptAll();
-      isOpen.value = false;
+      // 弹窗会自动关闭（因为 hasConsented 变为 true）
     } finally {
       isSaving.value = false;
     }
@@ -283,7 +289,7 @@
     isSaving.value = true;
     try {
       await rejectAll();
-      isOpen.value = false;
+      // 弹窗会自动关闭（因为 hasConsented 变为 true）
     } finally {
       isSaving.value = false;
     }
@@ -294,21 +300,22 @@
     isSaving.value = true;
     try {
       await saveSettings();
-      isOpen.value = false;
       showSettings.value = false;
+      forceOpen.value = false;
+      // 弹窗会自动关闭（因为 hasConsented 变为 true）
     } finally {
       isSaving.value = false;
     }
   };
 
-  // 暴露方法供外部调用
+  // 暴露方法供外部调用（用于隐私页面的"管理 Cookie"按钮）
+  const show = () => {
+    forceOpen.value = true;
+    showSettings.value = true;
+  };
+
   defineExpose({
-    show: () => {
-      isOpen.value = true;
-    },
-    hide: () => {
-      isOpen.value = false;
-    },
+    show,
     hasConsented: readonly(hasConsented)
   });
 </script>
