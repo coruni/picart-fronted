@@ -793,7 +793,9 @@
     "loginFailed": "Login failed, please check your username and password",
     "loginFailedDescription": "Please check if username and password are correct",
     "description": "Please enter your username and password to login",
-    "keywords": "login, register, forgot password"
+    "keywords": "login, register, forgot password",
+    "byLoggingIn": "By logging in, you agree to our",
+    "privacyPolicy": "Privacy Policy"
   },
   "forgotPassword": {
     "title": "Forgot Password",
@@ -837,6 +839,8 @@
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Please enter your password again",
     "agreeTerms": "I have read and agree to the User Agreement and Privacy Policy",
+    "agreeToTerms": "I have read and agree to",
+    "privacyPolicy": "Privacy Policy",
     "register": "Register",
     "registering": "Registering...",
     "hasAccount": "Already have an account?",
@@ -1302,5 +1306,116 @@
     "noArticlesDescription": "No articles have been published under this tag yet",
     "notFound": "Tag Not Found",
     "backToTags": "Back to Tags"
+  },
+  "cookie": {
+    "title": "Cookie and Privacy Settings",
+    "description": "We use cookies to improve your browsing experience and analyze site usage",
+    "description2": "We and our third-party partners use cookies to provide services, analyze usage, and improve user experience. You can choose to accept all cookies or customize your preferences.",
+    "acceptAll": "Accept All Cookies",
+    "onlyNecessary": "Only Necessary",
+    "customSettings": "Custom Settings",
+    "saveSettings": "Save Settings",
+    "return": "Return",
+    "privacyText": "To learn more about how we use cookies, please see our",
+    "privacyLink": "Privacy Policy",
+    "saved": "Cookie settings saved",
+    "saveError": "Failed to save, please try again",
+    "cookieTypes": "Cookie Type Settings",
+    "hideSettings": "Hide Settings",
+    "necessary": {
+      "title": "Necessary Cookies",
+      "badge": "Always On",
+      "description": "These cookies are essential for the website to function properly and cannot be disabled. Includes authentication, security, and basic features."
+    },
+    "functional": {
+      "title": "Functional Cookies",
+      "badge": "Optional",
+      "description": "Enable enhanced features and personalization settings such as language preferences, theme settings, etc."
+    },
+    "analytics": {
+      "title": "Analytics Cookies",
+      "badge": "Optional",
+      "description": "Help us understand how visitors use the site so we can improve the user experience. We use analytics tools like Microsoft Clarity."
+    },
+    "marketing": {
+      "title": "Marketing Cookies",
+      "badge": "Optional",
+      "description": "Used to track visitor activity on the website for the purpose of displaying relevant and personalized ads."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "metaDescription": "Learn how we collect, use, and protect your personal information",
+    "metaKeywords": "Privacy Policy, Data Protection, Cookie Policy, Personal Information",
+    "lastUpdated": "Last Updated",
+    "introduction": {
+      "title": "Introduction",
+      "content": "Welcome to our website. We value your privacy and are committed to protecting your personal information. This privacy policy explains how we collect, use, store, and protect your information."
+    },
+    "dataCollection": {
+      "title": "Information We Collect",
+      "content": "When you use our services, we may collect the following types of information:",
+      "personalInfo": "Personal Information: such as name, email address, username, etc.",
+      "usageData": "Usage Data: such as access time, pages viewed, click behavior, etc.",
+      "cookies": "Cookies and Similar Technologies: used to improve user experience and analyze site usage",
+      "deviceInfo": "Device Information: such as IP address, browser type, operating system, etc."
+    },
+    "cookieUsage": {
+      "title": "Use of Cookies",
+      "content": "We use different types of cookies to provide and improve our services. Your cookie preferences are valid for 6 months, after which we will request your consent again:",
+      "necessary": {
+        "title": "Necessary Cookies",
+        "description": "These cookies are essential for the basic functions of the website and cannot be disabled."
+      },
+      "functional": {
+        "title": "Functional Cookies",
+        "description": "These cookies enable personalized features such as language preferences and theme settings."
+      },
+      "analytics": {
+        "title": "Analytics Cookies",
+        "description": "Help us understand how users use the website to improve service quality. We use Microsoft Clarity to analyze user behavior. Please note: Due to technical limitations, once analytics tools are loaded in the current session, they will remain active until you close your browser. Your new preferences will take effect on your next visit."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "Used to track user behavior to display relevant personalized advertisements."
+      }
+    },
+    "dataUsage": {
+      "title": "Use of Information",
+      "content": "We use the collected information for the following purposes:",
+      "provideService": "Provide, maintain, and improve our services",
+      "improveService": "Understand how users use the service to optimize experience",
+      "communicate": "Communicate with you and respond to your inquiries and requests",
+      "legalCompliance": "Comply with legal regulations and protect our legitimate interests"
+    },
+    "dataSharing": {
+      "title": "Information Sharing",
+      "content": "We do not sell your personal information. We only share information with trusted third-party service providers when necessary to help us operate our services. All third parties must comply with strict data protection standards."
+    },
+    "dataSecurity": {
+      "title": "Data Security",
+      "content": "We employ industry-standard security measures to protect your information, including encryption, access controls, and secure server storage. However, please note that no method of Internet transmission or electronic storage is 100% secure."
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "content": "Under applicable data protection laws, you have the following rights:",
+      "access": "Access and view the personal information we hold about you",
+      "rectification": "Request correction of inaccurate personal information",
+      "erasure": "Request deletion of your personal information in certain circumstances",
+      "portability": "Request to receive your data in a structured, commonly used format",
+      "objection": "Object to our processing of your personal information"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "content": "If you have any questions about this privacy policy or need to exercise your rights, please contact us:",
+      "email": "Email",
+      "address": "Address",
+      "addressValue": "Please check the website contact page"
+    },
+    "changes": {
+      "title": "Policy Changes",
+      "content": "We may update this privacy policy from time to time. Any changes will be posted on this page, and significant changes will be notified to you via email or website notification. We recommend that you check this page regularly for the latest information."
+    },
+    "manageCookies": "Manage Cookie Settings"
   }
 }

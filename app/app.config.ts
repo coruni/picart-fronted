@@ -1,5 +1,5 @@
 export default defineAppConfig({
-  apiBaseUrl: 'https://api.example.com/api/v1',
+  apiBaseUrl: 'https://api.cosfan.cc/api/v1',
   ui: {
     colors: {
       primary: 'indigo'

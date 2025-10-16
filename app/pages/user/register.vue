@@ -122,8 +122,20 @@
           />
         </UFormField>
 
-        <div class="flex items-center">
-          <UCheckbox v-model="agreeTerms" :label="$t('register.agreeTerms')" />
+        <div class="space-y-2">
+          <div class="flex items-start">
+            <UCheckbox v-model="agreeTerms" class="mt-0.5" />
+            <label class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+              {{ $t('register.agreeToTerms') }}
+              <NuxtLinkLocale
+                to="/privacy"
+                class="text-primary hover:underline font-medium"
+                target="_blank"
+              >
+                {{ $t('register.privacyPolicy') }}
+              </NuxtLinkLocale>
+            </label>
+          </div>
         </div>
 
         <div>

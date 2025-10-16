@@ -142,6 +142,8 @@
         />
       </template>
     </UDashboardPanel>
+    <!-- Cookie Consent -->
+    <CookieConsent />
   </UDashboardGroup>
 </template>
 <style scoped></style>

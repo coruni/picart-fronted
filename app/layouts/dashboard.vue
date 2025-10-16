@@ -128,6 +128,8 @@
         </div>
       </div>
     </main>
+    <!-- Cookie Consent -->
+    <CookieConsent />
   </div>
 </template>
 

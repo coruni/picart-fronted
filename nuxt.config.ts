@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineNuxtConfig({
   compatibilityDate: '2025-08-08',
   devtools: {
-    enabled: true
+    enabled: process.env.NUXT_DEVTOOLS_ENABLED !== 'false'
   },
   modules: [
     '@nuxt/eslint',
@@ -36,11 +36,12 @@ export default defineNuxtConfig({
   },
 
   // SEO 配置
+  // 使用 NUXT_SITE_* 环境变量（Nuxt SEO 模块会自动读取）
   site: {
-    url: 'https://www.example.com',
-    name: 'PicArt',
-    description: '图片分享社区',
-    defaultLocale: 'zh',
+    url: process.env.NUXT_SITE_URL || 'https://www.example.com',
+    name: process.env.NUXT_SITE_NAME || 'PicArt',
+    description: process.env.NUXT_SITE_DESCRIPTION || '图片分享社区',
+    defaultLocale: process.env.NUXT_SITE_DEFAULT_LOCALE || 'zh',
     exclude: ['/admin/**', '/user/**'],
     autoLastmod: true
   },
@@ -64,17 +65,15 @@ export default defineNuxtConfig({
       '/user/forgot-password'
     ],
     sitemap: [
-      'https://www.example.com/sitemap_index.xml',
-      'https://www.example.com/sitemap_articles.xml',
-      'https://www.example.com/sitemap_categories.xml'
-    ],
-    crawlDelay: 1
+      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_index.xml`,
+      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_articles.xml`,
+      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_categories.xml`
+    ]
   },
 
   sitemap: {
     exclude: ['/admin/**', '/user/**'],
     sitemapsPathPrefix: '/',
-    gzip: true,
     sitemaps: {
       articles: {
         include: ['/article/**'],
@@ -89,16 +88,9 @@ export default defineNuxtConfig({
     }
   },
 
-  // 统计
-  $production: {
-    scripts: {
-      registry: {
-        clarity: {
-          id: 'sw54hoqei8'
-        }
-      }
-    }
-  },
+  // Nuxt Scripts 配置
+  // Clarity 将在用户同意分析 Cookie 后通过 useCookieConsent 动态加载
+  // 所以这里不需要在 registry 中配置
 
   image: {
     screens: {
@@ -195,15 +187,23 @@ export default defineNuxtConfig({
   // 配置环境变量
   runtimeConfig: {
     // 私有配置（仅在服务端可用）
-    apiSecret: process.env.API_SECRET,
+    // 使用 NUXT_ 前缀
+    apiSecret: '',
 
     // 公共配置（客户端和服务端都可用）
+    // 使用 NUXT_PUBLIC_ 前缀
     public: {
       apiBaseUrl: '',
       appName: 'PicArt',
       appVersion: '1.0.1',
       // TinyMCE 许可证配置
-      tinymceLicenseKey: 'gpl'
+      tinymceLicenseKey: 'gpl',
+      // Nuxt Scripts 配置
+      scripts: {
+        clarity: {
+          id: ''
+        }
+      }
     }
   },
 
@@ -302,14 +302,6 @@ export default defineNuxtConfig({
     }
   },
 
-  // 字体配置 - 禁用 Google Fonts 避免网络问题
-  fonts: {
-    google: process.env.DISABLE_GOOGLE_FONTS !== 'false' ? false : true,
-    providers: {
-      google: process.env.DISABLE_GOOGLE_FONTS !== 'false' ? false : true
-    }
-  },
-
   // 基础应用配置
   app: {
     head: {
@@ -325,14 +317,14 @@ export default defineNuxtConfig({
           innerHTML: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'PicArt',
-            description: '图片分享社区',
-            url: 'https://www.cosv.cc',
+            name: process.env.NUXT_SITE_NAME || 'PicArt',
+            description: process.env.NUXT_SITE_DESCRIPTION || '图片分享社区',
+            url: process.env.NUXT_SITE_URL || 'https://www.example.com',
             potentialAction: {
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `https://www.example.com/search?q={search_term_string}`
+                urlTemplate: `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/search?q={search_term_string}`
               },
               'query-input': 'required name=search_term_string'
             }

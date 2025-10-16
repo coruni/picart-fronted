@@ -795,7 +795,9 @@
     "account": "アカウント",
     "accountPlaceholder": "電子メールまたはユーザー名",
     "description": "ユーザー名とパスワードを入力してログインしてください",
-    "keywords": "ログイン, 登録, パスワードを忘れた場合"
+    "keywords": "ログイン, 登録, パスワードを忘れた場合",
+    "byLoggingIn": "ログインすることで、当社の",
+    "privacyPolicy": "プライバシーポリシー"
   },
   "forgotPassword": {
     "title": "パスワードを忘れた場合",
@@ -839,6 +841,8 @@
     "confirmPassword": "パスワード確認",
     "confirmPasswordPlaceholder": "パスワードを再度入力してください",
     "agreeTerms": "ユーザー契約とプライバシーポリシーを読み、同意します",
+    "agreeToTerms": "以下に同意します",
+    "privacyPolicy": "プライバシーポリシー",
     "register": "登録",
     "registering": "登録中...",
     "hasAccount": "すでにアカウントをお持ちの場合",
@@ -1317,5 +1321,116 @@
     "noArticlesDescription": "このタグの下にはまだ記事が公開されていません",
     "notFound": "タグが見つかりません",
     "backToTags": "タグクラウドに戻る"
+  },
+  "cookie": {
+    "title": "Cookieとプライバシー設定",
+    "description": "Cookieを使用して閲覧体験を向上させ、サイトの利用状況を分析します",
+    "description2": "当社および第三者パートナーはCookieを使用してサービスを提供し、利用状況を分析し、ユーザー体験を向上させています。すべてのCookieを受け入れるか、お好みの設定をカスタマイズできます。",
+    "acceptAll": "すべてのCookieを受け入れる",
+    "onlyNecessary": "必要なCookieのみ",
+    "customSettings": "カスタム設定",
+    "saveSettings": "設定を保存",
+    "return": "戻る",
+    "privacyText": "Cookieの使用方法の詳細については、",
+    "privacyLink": "プライバシーポリシー",
+    "saved": "Cookie設定が保存されました",
+    "saveError": "保存に失敗しました。もう一度お試しください",
+    "cookieTypes": "Cookieタイプ設定",
+    "hideSettings": "設定を閉じる",
+    "necessary": {
+      "title": "必要なCookie",
+      "badge": "常時有効",
+      "description": "これらのCookieはウェブサイトの正常な動作に必須であり、無効にすることはできません。認証、セキュリティ、基本機能が含まれます。"
+    },
+    "functional": {
+      "title": "機能Cookie",
+      "badge": "オプション",
+      "description": "言語設定、テーマ設定などの拡張機能とパーソナライゼーション設定を有効にします。"
+    },
+    "analytics": {
+      "title": "分析Cookie",
+      "badge": "オプション",
+      "description": "訪問者がサイトをどのように使用しているかを理解し、ユーザー体験を改善するのに役立ちます。Microsoft Clarityなどの分析ツールを使用します。"
+    },
+    "marketing": {
+      "title": "マーケティングCookie",
+      "badge": "オプション",
+      "description": "関連性の高いパーソナライズされた広告を表示する目的で、ウェブサイト上の訪問者の活動を追跡するために使用されます。"
+    }
+  },
+  "privacy": {
+    "title": "プライバシーポリシー",
+    "metaDescription": "個人情報の収集、使用、保護方法について",
+    "metaKeywords": "プライバシーポリシー, データ保護, Cookieポリシー, 個人情報",
+    "lastUpdated": "最終更新",
+    "introduction": {
+      "title": "はじめに",
+      "content": "当サイトへようこそ。私たちはあなたのプライバシーを重視し、個人情報の保護に努めています。本プライバシーポリシーは、情報の収集、使用、保管、保護方法について説明します。"
+    },
+    "dataCollection": {
+      "title": "収集する情報",
+      "content": "サービスのご利用時に、以下の種類の情報を収集する場合があります：",
+      "personalInfo": "個人情報：氏名、メールアドレス、ユーザー名など",
+      "usageData": "利用データ：アクセス時刻、閲覧ページ、クリック行動など",
+      "cookies": "Cookieおよび類似技術：ユーザー体験の向上とサイト利用状況の分析",
+      "deviceInfo": "デバイス情報：IPアドレス、ブラウザタイプ、OSなど"
+    },
+    "cookieUsage": {
+      "title": "Cookieの使用",
+      "content": "サービスの提供と改善のために、異なる種類のCookieを使用します。Cookie設定は6ヶ月間有効で、その後再度同意をお願いします：",
+      "necessary": {
+        "title": "必要なCookie",
+        "description": "ウェブサイトの基本機能に不可欠で、無効にすることはできません。"
+      },
+      "functional": {
+        "title": "機能Cookie",
+        "description": "言語設定やテーマ設定などのパーソナライズ機能を有効にします。"
+      },
+      "analytics": {
+        "title": "分析Cookie",
+        "description": "ユーザーのサイト利用状況を理解し、サービス品質を向上させます。Microsoft Clarityを使用してユーザー行動を分析します。注意：技術的な制限により、分析ツールが現在のセッションでロードされると、ブラウザを閉じるまでアクティブな状態が続きます。新しい設定は次回訪問時に適用されます。"
+      },
+      "marketing": {
+        "title": "マーケティングCookie",
+        "description": "関連するパーソナライズ広告を表示するためにユーザー行動を追跡します。"
+      }
+    },
+    "dataUsage": {
+      "title": "情報の使用",
+      "content": "収集した情報は以下の目的で使用します：",
+      "provideService": "サービスの提供、維持、改善",
+      "improveService": "ユーザーのサービス利用状況を理解し、体験を最適化",
+      "communicate": "お客様との連絡、お問い合わせへの対応",
+      "legalCompliance": "法令遵守と正当な利益の保護"
+    },
+    "dataSharing": {
+      "title": "情報の共有",
+      "content": "個人情報の販売は行いません。サービス運営のために必要な場合のみ、信頼できる第三者サービスプロバイダーと情報を共有します。すべての第三者は厳格なデータ保護基準に従う必要があります。"
+    },
+    "dataSecurity": {
+      "title": "データセキュリティ",
+      "content": "暗号化、アクセス制御、安全なサーバーストレージなど、業界標準のセキュリティ対策を採用しています。ただし、インターネット送信や電子保存方法は100%安全ではないことにご留意ください。"
+    },
+    "userRights": {
+      "title": "お客様の権利",
+      "content": "適用されるデータ保護法に基づき、以下の権利があります：",
+      "access": "保有する個人情報へのアクセスと閲覧",
+      "rectification": "不正確な個人情報の訂正要求",
+      "erasure": "特定の状況における個人情報の削除要求",
+      "portability": "構造化された一般的な形式でのデータ受信要求",
+      "objection": "個人情報の処理への異議申し立て"
+    },
+    "contact": {
+      "title": "お問い合わせ",
+      "content": "本プライバシーポリシーに関するご質問や権利の行使については、以下までご連絡ください：",
+      "email": "メール",
+      "address": "住所",
+      "addressValue": "ウェブサイトのお問い合わせページをご確認ください"
+    },
+    "changes": {
+      "title": "ポリシーの変更",
+      "content": "本プライバシーポリシーは随時更新される場合があります。変更内容はこのページに掲載され、重要な変更はメールまたはウェブサイト通知でお知らせします。最新情報を確認するため、定期的にこのページをご覧になることをお勧めします。"
+    },
+    "manageCookies": "Cookie設定を管理"
   }
 }

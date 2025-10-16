@@ -56,14 +56,20 @@
         </div>
       </UForm>
 
-      <div class="mt-6 text-center">
-        <p class="text-sm text-gray-600 dark:text-gray-400">
+      <div class="mt-6 space-y-3">
+        <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
           {{ $t('login.noAccount') }}
           <NuxtLinkLocale
             to="/user/register"
             class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
           >
             {{ $t('login.register') }}
+          </NuxtLinkLocale>
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
+          {{ $t('login.byLoggingIn') }}
+          <NuxtLinkLocale to="/privacy" class="text-primary hover:underline" target="_blank">
+            {{ $t('login.privacyPolicy') }}
           </NuxtLinkLocale>
         </p>
       </div>

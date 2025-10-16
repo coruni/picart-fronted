@@ -1038,7 +1038,9 @@
     "username": "用户名",
     "usernamePlaceholder": "请输入您的用户名",
     "description": "请输入您的用户名和密码登录",
-    "keywords": "登录, 注册, 忘记密码"
+    "keywords": "登录, 注册, 忘记密码",
+    "byLoggingIn": "登录即表示您同意我们的",
+    "privacyPolicy": "隐私政策"
   },
   "forgotPassword": {
     "title": "忘记密码",
@@ -1082,6 +1084,8 @@
     "confirmPassword": "确认密码",
     "confirmPasswordPlaceholder": "请再次输入密码",
     "agreeTerms": "我已阅读并同意用户协议和隐私政策",
+    "agreeToTerms": "我已阅读并同意",
+    "privacyPolicy": "隐私政策",
     "register": "注册",
     "registering": "注册中...",
     "hasAccount": "已有账户？",
@@ -1319,5 +1323,116 @@
     "noArticlesDescription": "该标签下还没有发布任何文章",
     "notFound": "标签不存在",
     "backToTags": "返回标签云"
+  },
+  "cookie": {
+    "title": "Cookie和隐私设置",
+    "description": "我们使用Cookie来改善您的浏览体验并分析网站使用情况",
+    "description2": "我们和第三方合作伙伴使用Cookie来提供服务、分析使用情况并改善用户体验。您可以选择接受所有Cookie，或自定义您的偏好设置。",
+    "acceptAll": "接受所有Cookie",
+    "onlyNecessary": "仅必要Cookie",
+    "customSettings": "自定义设置",
+    "saveSettings": "保存设置",
+    "return": "返回",
+    "privacyText": "了解更多关于我们如何使用Cookie的信息，请查看我们的",
+    "privacyLink": "隐私政策",
+    "saved": "Cookie设置已保存",
+    "saveError": "保存失败，请重试",
+    "cookieTypes": "Cookie类型设置",
+    "hideSettings": "收起设置",
+    "necessary": {
+      "title": "必要Cookie",
+      "badge": "始终启用",
+      "description": "这些Cookie对网站正常运行是必需的，无法禁用。包括身份验证、安全和基本功能。"
+    },
+    "functional": {
+      "title": "功能Cookie",
+      "badge": "可选",
+      "description": "启用增强功能和个性化设置，如语言首选、主题设置等。"
+    },
+    "analytics": {
+      "title": "分析Cookie",
+      "badge": "可选",
+      "description": "帮助我们了解访问者如何使用网站，以便改进用户体验。我们使用 Microsoft Clarity 等分析工具。"
+    },
+    "marketing": {
+      "title": "营销Cookie",
+      "badge": "可选",
+      "description": "用于跟踪访问者在网站上的活动，目的是显示相关和个性化的广告。"
+    }
+  },
+  "privacy": {
+    "title": "隐私政策",
+    "metaDescription": "了解我们如何收集、使用和保护您的个人信息",
+    "metaKeywords": "隐私政策, 数据保护, Cookie政策, 个人信息",
+    "lastUpdated": "最后更新",
+    "introduction": {
+      "title": "简介",
+      "content": "欢迎访问我们的网站。我们重视您的隐私，并致力于保护您的个人信息。本隐私政策说明了我们如何收集、使用、存储和保护您的信息。"
+    },
+    "dataCollection": {
+      "title": "我们收集的信息",
+      "content": "在您使用我们的服务时，我们可能会收集以下类型的信息：",
+      "personalInfo": "个人信息：如姓名、邮箱地址、用户名等",
+      "usageData": "使用数据：如访问时间、浏览页面、点击行为等",
+      "cookies": "Cookie和类似技术：用于改善用户体验和分析网站使用情况",
+      "deviceInfo": "设备信息：如IP地址、浏览器类型、操作系统等"
+    },
+    "cookieUsage": {
+      "title": "Cookie的使用",
+      "content": "我们使用不同类型的Cookie来提供和改善我们的服务。您的Cookie偏好设置有效期为6个月，之后将重新请求您的同意：",
+      "necessary": {
+        "title": "必要Cookie",
+        "description": "这些Cookie对网站的基本功能至关重要，无法禁用。"
+      },
+      "functional": {
+        "title": "功能Cookie",
+        "description": "这些Cookie启用个性化功能，如语言偏好和主题设置。"
+      },
+      "analytics": {
+        "title": "分析Cookie",
+        "description": "帮助我们了解用户如何使用网站，以便改进服务质量。我们使用 Microsoft Clarity 来分析用户行为。请注意：由于技术限制，分析工具一旦在当前会话中加载，将在您关闭浏览器前保持活跃。您的新偏好设置将在下次访问时生效。"
+      },
+      "marketing": {
+        "title": "营销Cookie",
+        "description": "用于跟踪用户行为，以显示相关的个性化广告。"
+      }
+    },
+    "dataUsage": {
+      "title": "信息的使用",
+      "content": "我们使用收集的信息用于以下目的：",
+      "provideService": "提供、维护和改进我们的服务",
+      "improveService": "了解用户如何使用服务，以便优化体验",
+      "communicate": "与您沟通，回应您的询问和请求",
+      "legalCompliance": "遵守法律法规和保护我们的合法权益"
+    },
+    "dataSharing": {
+      "title": "信息共享",
+      "content": "我们不会出售您的个人信息。我们仅在必要时与可信的第三方服务提供商共享信息，以帮助我们运营服务。所有第三方都必须遵守严格的数据保护标准。"
+    },
+    "dataSecurity": {
+      "title": "数据安全",
+      "content": "我们采用行业标准的安全措施来保护您的信息，包括加密、访问控制和安全的服务器存储。但请注意，没有任何互联网传输或电子存储方法是100%安全的。"
+    },
+    "userRights": {
+      "title": "您的权利",
+      "content": "根据适用的数据保护法律，您拥有以下权利：",
+      "access": "访问和查看我们持有的关于您的个人信息",
+      "rectification": "要求更正不准确的个人信息",
+      "erasure": "在某些情况下要求删除您的个人信息",
+      "portability": "请求以结构化、常用格式接收您的数据",
+      "objection": "反对我们处理您的个人信息"
+    },
+    "contact": {
+      "title": "联系我们",
+      "content": "如果您对本隐私政策有任何疑问或需要行使您的权利，请通过以下方式联系我们：",
+      "email": "邮箱",
+      "address": "地址",
+      "addressValue": "请查看网站联系页面"
+    },
+    "changes": {
+      "title": "政策变更",
+      "content": "我们可能会不时更新本隐私政策。任何变更都会在此页面上发布，重大变更会通过邮件或网站通知告知您。建议您定期查看此页面以了解最新信息。"
+    },
+    "manageCookies": "管理Cookie设置"
   }
 }
