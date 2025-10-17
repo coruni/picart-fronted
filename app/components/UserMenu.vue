@@ -69,21 +69,21 @@
     [
       {
         label: t('header.nav.profile'),
-        icon: 'mynaui:user',
+        icon: 'i-mynaui-user',
         to: '/user'
       },
       {
         label: t('user.orders.title'),
-        icon: 'mynaui:cart',
+        icon: 'i-mynaui-cart',
         to: '/user/orders'
       },
       {
         label: t('header.nav.theme'),
-        icon: 'mynaui:sun',
+        icon: 'i-mynaui-sun',
         children: [
           {
             label: t('header.nav.light'),
-            icon: 'mynaui:sun',
+            icon: 'i-mynaui-sun',
             type: 'checkbox',
             checked: colorMode.value === 'light',
             onSelect(e: Event) {
@@ -93,7 +93,7 @@
           },
           {
             label: t('header.nav.dark'),
-            icon: 'mynaui:moon',
+            icon: 'i-mynaui-moon',
             type: 'checkbox',
             checked: colorMode.value === 'dark',
             onSelect(e: Event) {
@@ -103,7 +103,7 @@
           },
           {
             label: t('header.nav.system'),
-            icon: 'mynaui:airplay',
+            icon: 'i-mynaui-airplay',
             type: 'checkbox',
             checked: colorMode.value === 'system',
             onSelect(e: Event) {
@@ -115,7 +115,7 @@
       },
       {
         label: t('header.nav.language'),
-        icon: 'i-lucide-languages',
+        icon: 'i-mynaui-translate',
         children: availableLocales.value.map(locale => ({
           label: `${locale.flag} ${locale.name}`,
           type: 'checkbox' as const,
@@ -128,7 +128,7 @@
       },
       {
         label: t('header.nav.logout'),
-        icon: 'mynaui:logout',
+        icon: 'i-mynaui-logout',
         onSelect: handleLogout
       }
     ]
@@ -145,7 +145,7 @@
       v-bind="{
         ...user,
         label: user.name,
-        trailingIcon: 'mynaui:chevron-up-down'
+        trailingIcon: 'i-mynaui-chevron-up-down'
       }"
       color="neutral"
       variant="ghost"

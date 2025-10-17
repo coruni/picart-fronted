@@ -94,7 +94,7 @@
               placeholder: $t('form.parentCategory.searchPlaceholder')
             }"
             :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
+              icon: 'i-mynaui-search',
               label: $t('form.parentCategory.noResults'),
               description: $t('form.parentCategory.noResultsDesc')
             }"
@@ -114,7 +114,7 @@
               placeholder: $t('form.category.searchPlaceholder')
             }"
             :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
+              icon: 'i-mynaui-search',
               label: $t('form.category.noResults'),
               description: $t('form.category.noResultsDesc')
             }"
@@ -166,7 +166,7 @@
             :placeholder="$t('form.tag.placeholder')"
             :loading="isTagSearching"
             :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
+              icon: 'i-mynaui-search',
               label: $t('form.tag.noResults'),
               description: $t('form.tag.noResultsDesc')
             }"
@@ -202,7 +202,7 @@
                 variant="ghost"
                 color="error"
                 size="sm"
-                icon="mynaui:trash"
+                icon="i-mynaui-trash"
                 class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
               >
                 {{ $t('form.downloads.removeDownload') }}
@@ -266,7 +266,7 @@
             @click="addDownload"
             variant="outline"
             size="lg"
-            icon="mynaui:plus"
+            icon="i-mynaui-plus"
             class="w-full"
           >
             {{ $t('form.downloads.addDownload') }}
@@ -337,7 +337,7 @@
 
       <UButton
         type="submit"
-        icon="mynaui:save"
+        icon="i-mynaui-save"
         class="w-full cursor-pointer justify-center"
         size="lg"
         :loading="loading"

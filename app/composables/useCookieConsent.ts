@@ -15,11 +15,6 @@ export interface CookieConsentRecord {
   userAgent?: string; // 可选：用于审计
 }
 
-// Clarity 代理类型（用于 useScriptClarity 返回值）
-interface ClarityProxy {
-  clarity: (action: string, ...args: any[]) => void;
-}
-
 export const useCookieConsent = () => {
   const { t } = useI18n();
   const toast = useToast();
@@ -36,8 +31,8 @@ export const useCookieConsent = () => {
   // 检查是否已经同意过 Cookie
   const hasConsented = ref(false);
 
-  // Clarity 实例（仅在客户端且用户同意后初始化）
-  let clarityProxy: ClarityProxy | null = null;
+  // Clarity 脚本加载状态（仅在客户端且用户同意后初始化）
+  let clarityScriptLoaded = false;
 
   // 初始化
   onMounted(() => {
@@ -153,17 +148,33 @@ export const useCookieConsent = () => {
     }
   };
 
-  // 加载 Clarity 脚本（使用 Nuxt Scripts）
+  // 加载 Clarity 脚本（手动注入脚本）
   const loadClarity = () => {
-    if (import.meta.client && !clarityProxy && config.public.scripts?.clarity?.id) {
+    if (import.meta.client && !clarityScriptLoaded && config.public.scripts?.clarity?.id) {
       try {
-        // 使用 Nuxt Scripts 提供的全局组合式函数
-        const { proxy } = useScriptClarity({
-          id: config.public.scripts.clarity.id
-        });
+        const clarityId = config.public.scripts.clarity.id;
 
-        clarityProxy = proxy as ClarityProxy;
-        console.log('Clarity script loaded via Nuxt Scripts');
+        // 检查 Clarity ID 是否有效
+        if (!clarityId || clarityId === '' || clarityId === 'gpl') {
+          console.warn('Clarity ID not configured or invalid. Skipping Clarity initialization.');
+          return;
+        }
+
+        // 手动注入 Clarity 脚本
+        (function (c: any, l: any, a: string, r: string, i: string) {
+          c[a] =
+            c[a] ||
+            function () {
+              (c[a].q = c[a].q || []).push(arguments);
+            };
+          const t = l.createElement(r);
+          t.async = 1;
+          t.src = 'https://www.clarity.ms/tag/' + i;
+          const y = l.getElementsByTagName(r)[0];
+          y.parentNode.insertBefore(t, y);
+        })(window, document, 'clarity', 'script', clarityId);
+
+        clarityScriptLoaded = true;
       } catch (error) {
         console.error('Failed to load Clarity:', error);
       }
@@ -172,16 +183,12 @@ export const useCookieConsent = () => {
 
   // 根据设置加载相应的脚本
   const loadScriptsBasedOnSettings = () => {
-    // 这里可以根据 cookieSettings 的值来加载或移除相应的第三方脚本
-
     if (cookieSettings.value.analytics) {
-      // 加载分析脚本 - Microsoft Clarity（使用 Nuxt Scripts）
-      console.log('Loading analytics scripts (Clarity)');
+      // 加载分析脚本 - Microsoft Clarity
       loadClarity();
     } else {
       // 如果用户拒绝分析 Cookie
-      if (clarityProxy) {
-        console.log('User rejected analytics cookies');
+      if (clarityScriptLoaded) {
         console.warn(
           'Clarity has already been loaded. Cookie preference will apply on next visit.'
         );
@@ -190,13 +197,11 @@ export const useCookieConsent = () => {
 
     if (cookieSettings.value.marketing) {
       // 加载营销脚本
-      console.log('Loading marketing scripts');
       // Example: loadFacebookPixel()
     }
 
     if (cookieSettings.value.functional) {
       // 加载功能脚本
-      console.log('Loading functional scripts');
       // Example: loadChatWidget()
     }
   };
@@ -227,9 +232,12 @@ export const useCookieConsent = () => {
   const initializeDeviceId = async () => {
     if (!import.meta.client) return;
 
-    const deviceIdCookie = useCookie('device-id', {
-      default: () => '',
-      maxAge: 60 * 60 * 24 * 365
+    // 不设置 default，避免创建空 cookie
+    const deviceIdCookie = useCookie<string | null | undefined>('device-id', {
+      maxAge: 60 * 60 * 24 * 365,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
     });
 
     if (!deviceIdCookie.value && cookieSettings.value.necessary) {
@@ -243,7 +251,6 @@ export const useCookieConsent = () => {
         if (appStore?.setDeviceId) {
           appStore.setDeviceId(deviceId);
         }
-        console.log('Device ID initialized after consent');
       } catch (error) {
         console.error('Failed to initialize device ID:', error);
       }

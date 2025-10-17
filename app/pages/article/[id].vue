@@ -1,24 +1,5 @@
 <template>
   <div>
-    <Title>{{ article?.data.title }}</Title>
-    <Meta name="description" :content="(article?.data.summary as string) ?? article?.data.title" />
-    <Meta name="author" :content="article?.data.author.nickname" />
-    <Meta name="keywords" :content="article?.data.tags?.map(tag => tag.name).join(',')" />
-    <Meta name="robots" content="index, follow" />
-    <Meta name="og:title" :content="article?.data.title" />
-    <Meta
-      name="og:description"
-      :content="(article?.data.summary as string) ?? article?.data.title"
-    />
-    <Meta name="og:type" content="article" />
-    <Meta
-      name="og:image"
-      :content="(article?.data.cover as string) || (article?.data.images?.[0] as string)"
-    />
-    <Meta
-      name="article:author"
-      :content="article?.data.author.nickname ?? article?.data.author.username"
-    />
     <VueEasyLightbox
       :visible="lightboxVisible"
       :imgs="lightboxImages"
@@ -856,6 +837,62 @@
   const router = useRouter();
   const { t } = useI18n();
 
+  // 确保在SSR阶段等待数据加载完成
+  const {
+    data: article,
+    pending: articlePending,
+    refresh: refreshArticle,
+    error: articleError
+  } = await articleControllerFindOne({
+    composable: 'useAsyncData',
+    key: `article_${route.params.id}`,
+    path: {
+      id: String(route.params.id)
+    }
+  });
+
+  // 推荐文章也使用await确保SSR完成
+  const {
+    data: recommend,
+    pending: recommendPending,
+    error: recommendError
+  } = await articleControllerFindRecommend({
+    key: `recommend_${route.params.id}`,
+    composable: 'useLazyAsyncData',
+    path: {
+      id: String(route.params.id)
+    }
+  });
+
+  // 评论列表也使用await
+  const {
+    data: commentsData,
+    pending: commentsPending,
+    refresh: refreshComments
+  } = await commentControllerFindAll({
+    composable: 'useLazyAsyncData',
+    key: `comments_${route.params.id}`,
+    path: { id: Number(route.params.id) },
+    query: {
+      page: 1,
+      limit: 20
+    }
+  });
+
+  // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
+  useSeoMeta({
+    title: () => article.value?.data?.title || '',
+    description: () => article.value?.data?.summary || article.value?.data?.title || '',
+    author: () =>
+      article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
+    keywords: () => article.value?.data?.tags?.map(tag => tag.name).join(',') || '',
+    robots: 'index, follow',
+    ogTitle: () => article.value?.data?.title || '',
+    ogDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
+    ogImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || '',
+    ogType: 'article'
+  });
+
   // 用户状态管理
   const userStore = useUserStore();
   const userInfo = computed(() => userStore.currentUser);
@@ -1047,31 +1084,6 @@
     });
   };
 
-  const {
-    data: article,
-    pending: articlePending,
-    refresh: refreshArticle,
-    error: articleError
-  } = articleControllerFindOne({
-    composable: 'useAsyncData',
-    key: `article_${route.params.id}`,
-    path: {
-      id: String(route.params.id)
-    }
-  });
-
-  const {
-    data: recommend,
-    pending: recommendPending,
-    error: recommendError
-  } = articleControllerFindRecommend({
-    key: `recommend_${route.params.id}`,
-    composable: 'useFetch',
-    path: {
-      id: String(route.params.id)
-    }
-  });
-
   const isLoading = computed(() => articlePending.value || recommendPending.value);
   const hasError = computed(() => articleError.value || recommendError.value);
   const handleRetry = () => {
@@ -1097,21 +1109,6 @@
   const hasMoreComments = ref(true);
   const isLoadingComments = ref(false);
   const toast = useToast();
-
-  // 获取评论列表
-  const {
-    data: commentsData,
-    pending: commentsPending,
-    refresh: refreshComments
-  } = commentControllerFindAll({
-    composable: 'useFetch',
-    key: `comments_${route.params.id}`,
-    path: { id: Number(route.params.id) },
-    query: {
-      page: 1,
-      limit: 20
-    }
-  });
 
   // 监听评论数据变化
   watch(

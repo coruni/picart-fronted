@@ -156,7 +156,7 @@
             :placeholder="$t('form.tag.placeholder')"
             :loading="isTagSearching"
             :empty-state="{
-              icon: 'i-heroicons-magnifying-glass',
+              icon: 'i-mynaui-search',
               label: $t('form.tag.noResults'),
               description: $t('form.tag.noResultsDesc')
             }"
@@ -345,8 +345,7 @@
     categoryControllerFindAll,
     tagControllerFindAll,
     articleControllerFindOne,
-    articleControllerUpdate,
-    uploadControllerUploadFile
+    articleControllerUpdate
   } from '~/api';
 
   import type { FormSubmitEvent, SelectMenuItem } from '@nuxt/ui';

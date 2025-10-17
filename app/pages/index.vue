@@ -163,7 +163,7 @@
       observer = new IntersectionObserver(
         entries => {
           const target = entries[0];
-          if (target.isIntersecting && !loading.value && hasMore.value) {
+          if (target?.isIntersecting && !loading.value && hasMore.value) {
             loadArticles();
           }
         },

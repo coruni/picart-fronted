@@ -21,10 +21,7 @@
           <div
             class="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center"
           >
-            <UIcon
-              name="i-heroicons-shield-check"
-              class="w-6 h-6 text-gray-600 dark:text-gray-400"
-            />
+            <UIcon name="i-mynaui-shield-check" class="w-6 h-6 text-gray-600 dark:text-gray-400" />
           </div>
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
             {{ $t('cookie.title') }}
@@ -34,7 +31,7 @@
           v-if="hasConsented"
           variant="ghost"
           color="neutral"
-          icon="i-heroicons-x-mark"
+          icon="i-mynaui-x"
           @click="close"
           size="sm"
         />
@@ -98,7 +95,7 @@
               <div class="flex-1 space-y-1">
                 <div class="flex items-center gap-2">
                   <UIcon
-                    name="i-heroicons-shield-check"
+                    name="i-mynaui-shield-check"
                     class="w-5 h-5 text-gray-600 dark:text-gray-400"
                   />
                   <h4 class="font-medium text-gray-900 dark:text-white">
@@ -125,7 +122,7 @@
               <div class="flex-1 space-y-1">
                 <div class="flex items-center gap-2">
                   <UIcon
-                    name="i-heroicons-chart-bar"
+                    name="i-mynaui-chart-bar"
                     class="w-5 h-5 text-gray-600 dark:text-gray-400"
                   />
                   <h4 class="font-medium text-gray-900 dark:text-white">
@@ -151,7 +148,7 @@
               <div class="flex-1 space-y-1">
                 <div class="flex items-center gap-2">
                   <UIcon
-                    name="i-heroicons-megaphone"
+                    name="i-mynaui-megaphone"
                     class="w-5 h-5 text-gray-600 dark:text-gray-400"
                   />
                   <h4 class="font-medium text-gray-900 dark:text-white">
@@ -177,7 +174,7 @@
               <div class="flex-1 space-y-1">
                 <div class="flex items-center gap-2">
                   <UIcon
-                    name="i-heroicons-cog-6-tooth"
+                    name="i-mynaui-settings"
                     class="w-5 h-5 text-gray-600 dark:text-gray-400"
                   />
                   <h4 class="font-medium text-gray-900 dark:text-white">

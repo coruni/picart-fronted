@@ -24,8 +24,17 @@ export default defineNuxtConfig({
   // 性能优化
   experimental: {
     payloadExtraction: false,
-    renderJsonPayloads: true
+    renderJsonPayloads: true,
+    defaults: {
+      nuxtLink: {
+        // 在交互时预取（点击、悬停等），减少初始加载时间
+        prefetchOn: {
+          interaction: true
+        }
+      }
+    }
   },
+  // Nuxt UI 配置
   ui: {
     fonts: false
   },
@@ -48,7 +57,9 @@ export default defineNuxtConfig({
   icon: {
     serverBundle: {
       collections: ['mynaui']
-    }
+    },
+    // 只使用 mynaui 图标集合
+    collections: ['mynaui']
   },
 
   // Robots 配置
@@ -134,8 +145,9 @@ export default defineNuxtConfig({
 
   // i18n 国际化配置
   i18n: {
+    // 启用优化以提升性能
     bundle: {
-      optimizeTranslationDirective: false
+      optimizeTranslationDirective: true
     },
     locales: [
       {
@@ -178,7 +190,11 @@ export default defineNuxtConfig({
     // 路由配置
     routesNameSeparator: '___',
     // 调试模式
-    debug: false
+    debug: false,
+    // 性能优化：懒加载语言文件
+    lazy: true,
+    // 性能优化：跳过本地化路径生成
+    skipSettingLocaleOnNavigate: false
   },
 
   // 配置CSS
@@ -214,11 +230,6 @@ export default defineNuxtConfig({
 
   // 配置Nitro
   nitro: {
-    // 可以在这里配置服务端相关设置
-    routeRules: {
-      '/admin/**': { prerender: false },
-      '/user/articles/**': { prerender: false }
-    },
     // 确保cookie在SSR阶段正确传递
     experimental: {
       wasm: true
@@ -228,11 +239,215 @@ export default defineNuxtConfig({
     minify: true,
     // 跨平台兼容性配置
     preset: process.env.NITRO_PRESET || 'node_cluster',
-    logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error'
-    // prerender: {
-    //   crawlLinks: true,
-    //   routes: ['/']
-    // }
+    logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error',
+    // 静态资源缓存配置
+    publicAssets: [
+      {
+        baseURL: '/',
+        maxAge: 60 * 60 * 24 * 365 // 1年
+      }
+    ],
+    // 服务端缓存配置
+    storage: {
+      redis: {
+        driver: 'redis'
+        // Redis 连接配置（可选，如果使用 Redis）
+        // host: process.env.REDIS_HOST || 'localhost',
+        // port: parseInt(process.env.REDIS_PORT || '6379'),
+        // password: process.env.REDIS_PASSWORD
+      },
+      // 内存缓存（默认）
+      cache: {
+        driver: 'memory'
+      }
+    }
+  },
+
+  // 路由规则配置 - 混合渲染和缓存策略
+  routeRules: {
+    // ========== 全局响应头 ==========
+    // 所有路由添加安全响应头
+    '/**': {
+      headers: {
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'SAMEORIGIN',
+        'X-XSS-Protection': '1; mode=block',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+      }
+    },
+
+    // ========== 静态资源缓存 ==========
+    // 图片资源 - 长期缓存（1年）
+    '/images/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    // TinyMCE 编辑器资源 - 长期缓存
+    '/tinymce/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    // Favicon - 长期缓存
+    '/favicon.ico': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+    // Nuxt 构建资源 - 长期缓存
+    '/_nuxt/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      }
+    },
+
+    // ========== 页面渲染和缓存策略 ==========
+    // 首页 - 预渲染 + CDN 缓存
+    '/': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 文章详情页 - SSR + ISR + CDN 缓存
+    '/article/**': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 分类页面 - ISR + CDN 缓存
+    '/category/**': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 作者页面 - ISR + CDN 缓存
+    '/author/**': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 标签页面 - ISR + CDN 缓存
+    '/tag/**': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 标签列表页 - ISR + CDN 缓存
+    '/tags': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    },
+
+    // 搜索页面 - 短期缓存（5分钟）
+    '/search': {
+      ssr: true,
+      headers: {
+        'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=3600'
+      }
+    },
+
+    // 隐私政策 - 预渲染 + 长期缓存
+    '/privacy': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800'
+      }
+    },
+
+    // ========== 用户页面 ==========
+    // 用户登录/注册页面 - 客户端渲染 + 短期缓存
+    '/user/login': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'public, max-age=0, must-revalidate'
+      }
+    },
+    '/user/register': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'public, max-age=0, must-revalidate'
+      }
+    },
+    '/user/forgot-password': {
+      ssr: false,
+      headers: {
+        'Cache-Control': 'public, max-age=0, must-revalidate'
+      }
+    },
+
+    // 用户个人页面 - SSR + 完全不缓存（需要认证）
+    '/user/index': {
+      ssr: true,
+      // 禁用所有缓存
+      prerender: false,
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    },
+    '/user/articles/**': {
+      ssr: true,
+      prerender: false,
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    },
+    '/user/messages': {
+      ssr: true,
+      prerender: false,
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    },
+    '/user/orders': {
+      ssr: true,
+      prerender: false,
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    },
+
+    // ========== 管理后台 ==========
+    // 管理后台 - 客户端渲染 + 完全不缓存
+    '/admin/**': {
+      ssr: false,
+      prerender: false,
+      headers: {
+        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    },
+
+    // ========== 其他页面 ==========
+    // 维护页面 - 预渲染 + 短期缓存
+    '/maintenance': {
+      prerender: true,
+      headers: {
+        'Cache-Control': 'public, max-age=60, s-maxage=60'
+      }
+    }
   },
   future: {
     compatibilityVersion: 4
@@ -245,10 +460,18 @@ export default defineNuxtConfig({
 
   // 配置Vite
   vite: {
-    // 可以在这里配置Vite相关设置
-    experimental: {},
+    // 性能优化
+    experimental: {
+      renderBuiltUrl(filename, { hostType }) {
+        if (hostType === 'js') {
+          return { runtime: `window.__NUXT_BASE__ + ${JSON.stringify(filename)}` };
+        }
+      }
+    },
     optimizeDeps: {
-      include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : []
+      include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : [],
+      // 预构建优化
+      exclude: []
     },
     define: {
       __DEV__: process.env.NODE_ENV === 'development'
@@ -265,10 +488,12 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 1000,
       // 显示打包进度
       reportCompressedSize: true,
-      // 显示打包时间
+      // 使用 esbuild 压缩（更快）
       minify: 'esbuild',
-      // 显示详细的打包信息
+      // 生产环境不生成 sourcemap
       sourcemap: false,
+      // 启用 CSS 代码分割
+      cssCodeSplit: true,
       rollupOptions: {
         onwarn(warning, warn) {
           // 屏蔽特定的弃用警告
@@ -287,15 +512,37 @@ export default defineNuxtConfig({
           warn(warning);
         },
         output: {
-          // 手动代码分割 - 只分割安全的第三方库
-          manualChunks: {
-            // 工具库
-            'utils-vendor': ['lodash-es', 'zod'],
+          // 手动代码分割 - 优化包大小
+          manualChunks(id) {
+            // Vue 核心库
+            if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router')) {
+              return 'vue-vendor';
+            }
+            // UI 组件库
+            if (id.includes('node_modules/@nuxt/ui') || id.includes('node_modules/@headlessui')) {
+              return 'ui-vendor';
+            }
             // 编辑器相关
-            'editor-vendor': ['@tinymce/tinymce-vue'],
+            if (id.includes('node_modules/@tinymce') || id.includes('node_modules/tinymce')) {
+              return 'editor-vendor';
+            }
+            // 工具库
+            if (id.includes('node_modules/lodash') || id.includes('node_modules/zod')) {
+              return 'utils-vendor';
+            }
             // 表格组件
-            'table-vendor': ['@tanstack/vue-table']
-          }
+            if (id.includes('node_modules/@tanstack')) {
+              return 'table-vendor';
+            }
+            // 其他大型库
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+          },
+          // 优化 chunk 文件命名
+          chunkFileNames: 'js/[name]-[hash].js',
+          entryFileNames: 'js/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]'
         }
       }
     }
@@ -338,69 +585,13 @@ export default defineNuxtConfig({
     }
   },
 
-  // 服务端渲染
-  ssr: true,
-
-  webpack: {
-    extractCSS: true,
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-        maxSize: 500 * 1024, // 增加到 500KB
-        minSize: 20 * 1024, // 最小块大小 20KB
-        cacheGroups: {
-          styles: {
-            name: 'styles',
-            test: /\.(css|vue)$/,
-            chunks: 'all',
-            enforce: true,
-            priority: 30
-          },
-          // Vue 核心库
-          vue: {
-            name: 'chunk-vue',
-            test: /[\\/]node_modules[\\/](vue|vue-router|@vue)[\\/]/,
-            priority: 25,
-            chunks: 'all'
-          },
-          // UI 组件库 (排除 @nuxt 相关模块)
-          ui: {
-            name: 'chunk-ui',
-            test: /[\\/]node_modules[\\/](@headlessui|@heroicons)[\\/]/,
-            priority: 20,
-            chunks: 'all'
-          },
-          // 编辑器相关
-          editor: {
-            name: 'chunk-editor',
-            test: /[\\/]node_modules[\\/](@tinymce|tinymce)[\\/]/,
-            priority: 20,
-            chunks: 'all'
-          },
-          // 工具库
-          utils: {
-            name: 'chunk-utils',
-            test: /[\\/]node_modules[\\/](lodash|zod|@tanstack)[\\/]/,
-            priority: 15,
-            chunks: 'all'
-          },
-          // 其他第三方库
-          vendors: {
-            name: 'chunk-vendors',
-            test: /[\\/]node_modules[\\/]/,
-            priority: 10,
-            chunks: 'initial'
-          },
-          // 公共代码
-          common: {
-            name: 'chunk-common',
-            minChunks: 2,
-            priority: 5,
-            chunks: 'initial',
-            reuseExistingChunk: true
-          }
-        }
-      }
+  // Vue Router 配置
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth'
     }
-  }
+  },
+
+  // 服务端渲染
+  ssr: true
 });

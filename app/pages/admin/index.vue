@@ -21,7 +21,7 @@
           {{ $t('admin.dashboard.stats.articles') }}
         </div>
         <div class="text-sm text-green-600 dark:text-green-400 flex items-center justify-center">
-          <UIcon name="i-heroicons-arrow-trending-up" class="w-4 h-4 mr-1" />
+          <UIcon name="i-mynaui-trending-up" class="w-4 h-4 mr-1" />
           +{{ stats.articles.growth }}%
         </div>
       </div>
@@ -35,7 +35,7 @@
           {{ $t('admin.dashboard.stats.users') }}
         </div>
         <div class="text-sm text-green-600 dark:text-green-400 flex items-center justify-center">
-          <UIcon name="i-heroicons-arrow-trending-up" class="w-4 h-4 mr-1" />
+          <UIcon name="i-mynaui-trending-up" class="w-4 h-4 mr-1" />
           +{{ stats.users.growth }}%
         </div>
       </div>
@@ -49,7 +49,7 @@
           {{ $t('admin.dashboard.stats.comments') }}
         </div>
         <div class="text-sm text-green-600 dark:text-green-400 flex items-center justify-center">
-          <UIcon name="i-heroicons-arrow-trending-up" class="w-4 h-4 mr-1" />
+          <UIcon name="i-mynaui-trending-up" class="w-4 h-4 mr-1" />
           +{{ stats.comments.growth }}%
         </div>
       </div>
@@ -63,7 +63,7 @@
           {{ $t('admin.dashboard.stats.orders') }}
         </div>
         <div class="text-sm text-green-600 dark:text-green-400 flex items-center justify-center">
-          <UIcon name="i-heroicons-arrow-trending-up" class="w-4 h-4 mr-1" />
+          <UIcon name="i-mynaui-trending-up" class="w-4 h-4 mr-1" />
           +{{ stats.orders.growth }}%
         </div>
       </div>
