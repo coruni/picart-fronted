@@ -302,72 +302,6 @@ export default defineNuxtConfig({
         'Cache-Control': 'public, max-age=31536000, immutable'
       }
     },
-
-    // ========== 页面渲染和缓存策略 ==========
-    // 首页 - 预渲染 + CDN 缓存
-    '/': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 文章详情页 - SSR + ISR + CDN 缓存
-    '/article/**': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 分类页面 - ISR + CDN 缓存
-    '/category/**': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 作者页面 - ISR + CDN 缓存
-    '/author/**': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 标签页面 - ISR + CDN 缓存
-    '/tag/**': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 标签列表页 - ISR + CDN 缓存
-    '/tags': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
-      }
-    },
-
-    // 搜索页面 - 短期缓存（5分钟）
-    '/search': {
-      ssr: true,
-      headers: {
-        'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=3600'
-      }
-    },
-
-    // 隐私政策 - 预渲染 + 长期缓存
-    '/privacy': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800'
-      }
-    },
-
     // ========== 用户页面 ==========
     // 用户登录/注册页面 - 客户端渲染 + 短期缓存
     '/user/login': {
@@ -453,21 +387,8 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
-  // Pinia 配置
-  pinia: {
-    storesDirs: ['./app/stores/**']
-  },
-
   // 配置Vite
   vite: {
-    // 性能优化
-    experimental: {
-      renderBuiltUrl(filename, { hostType }) {
-        if (hostType === 'js') {
-          return { runtime: `window.__NUXT_BASE__ + ${JSON.stringify(filename)}` };
-        }
-      }
-    },
     optimizeDeps: {
       include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : [],
       // 预构建优化
@@ -513,36 +434,14 @@ export default defineNuxtConfig({
         },
         output: {
           // 手动代码分割 - 优化包大小
-          manualChunks(id) {
-            // Vue 核心库
-            if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router')) {
-              return 'vue-vendor';
-            }
-            // UI 组件库
-            if (id.includes('node_modules/@nuxt/ui') || id.includes('node_modules/@headlessui')) {
-              return 'ui-vendor';
-            }
-            // 编辑器相关
-            if (id.includes('node_modules/@tinymce') || id.includes('node_modules/tinymce')) {
-              return 'editor-vendor';
-            }
+          manualChunks: {
             // 工具库
-            if (id.includes('node_modules/lodash') || id.includes('node_modules/zod')) {
-              return 'utils-vendor';
-            }
+            'utils-vendor': ['lodash-es', 'zod'],
+            // 编辑器相关
+            'editor-vendor': ['@tinymce/tinymce-vue'],
             // 表格组件
-            if (id.includes('node_modules/@tanstack')) {
-              return 'table-vendor';
-            }
-            // 其他大型库
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-          },
-          // 优化 chunk 文件命名
-          chunkFileNames: 'js/[name]-[hash].js',
-          entryFileNames: 'js/[name]-[hash].js',
-          assetFileNames: 'assets/[name]-[hash].[ext]'
+            'table-vendor': ['@tanstack/vue-table']
+          }
         }
       }
     }
