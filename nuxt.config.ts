@@ -23,7 +23,7 @@ export default defineNuxtConfig({
 
   // 性能优化
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: true,
     renderJsonPayloads: true,
     defaults: {
       nuxtLink: {

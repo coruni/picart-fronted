@@ -1,13 +1,5 @@
 <template>
   <div class="min-h-[calc(100vh-3.5rem)]">
-    <Title>{{ tagData?.data?.name }}</Title>
-    <Meta name="description" :content="tagData?.data?.description" />
-    <Meta name="keywords" :content="tagData?.data?.name" />
-    <Meta name="robots" content="index, follow" />
-    <Meta name="og:title" :content="tagData?.data?.name" />
-    <Meta name="og:description" :content="tagData?.data?.description" />
-    <Meta name="og:type" content="website" />
-    <Meta name="og:image" :content="tagData?.data?.cover" />
     <!-- 加载状态 -->
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
       <div class="flex items-center justify-center flex-col gap-4">
@@ -298,9 +290,21 @@
     }
   });
 
-  // SSR 文章数据预取
+  // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
+  useSeoMeta({
+    title: () => tagData.value?.data?.name || '',
+    description: () => tagData.value?.data?.description || '',
+    keywords: () => tagData.value?.data?.name || '',
+    robots: 'index, follow',
+    ogTitle: () => tagData.value?.data?.name || '',
+    ogDescription: () => tagData.value?.data?.description || '',
+    ogType: 'website',
+    ogImage: () => tagData.value?.data?.cover || ''
+  });
+
+  // SSR 文章数据预取 - 使用 useLazyAsyncData 减少 payload
   const { data: initialArticlesData } = await articleControllerFindAll({
-    composable: 'useFetch',
+    composable: 'useAsyncData',
     key: `tag-articles-ssr-${tagId.value}`,
     query: {
       page: 1,

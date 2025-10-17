@@ -1,13 +1,5 @@
 <template>
   <div class="min-h-[calc(100vh-3.5rem)]">
-    <Title>{{ category?.data?.name }}</Title>
-    <Meta name="description" :content="category?.data?.description" />
-    <Meta name="keywords" :content="category?.data?.name" />
-    <Meta name="robots" content="index, follow" />
-    <Meta name="og:title" :content="category?.data?.name" />
-    <Meta name="og:description" :content="category?.data?.description" />
-    <Meta name="og:type" content="website" />
-    <Meta name="og:image" :content="category?.data?.cover" />
     <!-- 分类头部信息 -->
     <div
       class="relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"
@@ -182,6 +174,18 @@
     path: { id: categoryId.value }
   });
 
+  // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
+  useSeoMeta({
+    title: () => category.value?.data?.name || '',
+    description: () => category.value?.data?.description || '',
+    keywords: () => category.value?.data?.name || '',
+    robots: 'index, follow',
+    ogTitle: () => category.value?.data?.name || '',
+    ogDescription: () => category.value?.data?.description || '',
+    ogType: 'website',
+    ogImage: () => category.value?.data?.cover || ''
+  });
+
   // 重置数据，参考index.vue
   const resetData = () => {
     pagination.value.page = 1;
@@ -268,7 +272,7 @@
       observer = new IntersectionObserver(
         entries => {
           const target = entries[0];
-          if (target.isIntersecting && !loading.value && hasMore.value) {
+          if (target?.isIntersecting && !loading.value && hasMore.value) {
             loadArticles();
           }
         },
@@ -308,6 +312,7 @@
 
   .line-clamp-2 {
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;

@@ -803,7 +803,7 @@
     {
       label: t('admin.settings.tabs.advertisement'),
       slot: 'advertisement',
-      icon: 'mynaui:megaphone'
+      icon: 'mynaui:image'
     },
     {
       label: t('admin.settings.tabs.maintenance'),
