@@ -8,10 +8,8 @@ ignoredBuiltDependencies:
 supportedArchitectures:
   os:
   - win32
-  - darwin
-  - current
   - linux
   cpu:
   - x64
-  - arm64
+
 

@@ -36,7 +36,6 @@
     "lodash-es": "^4.17.21",
     "natural-orderby": "^5.0.0",
     "nuxt": "^4.1.3",
-    "nuxt-easy-lightbox": "^1.1.0",
     "nuxt-swiper": "2.0.1",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",

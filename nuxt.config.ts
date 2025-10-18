@@ -16,7 +16,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'nuxt-swiper',
     '@nuxt/ui',
-    'nuxt-easy-lightbox',
     '@nuxtjs/seo',
     '@nuxtjs/color-mode'
   ],
