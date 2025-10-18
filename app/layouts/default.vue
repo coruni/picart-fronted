@@ -98,12 +98,12 @@
           <h1 class="text-2xl font-bold">{{ siteConfig?.site_name }}</h1>
         </div>
       </template>
-      <template #default="{ collapsed }">
+      <template #default="slotProps">
         <UNavigationMenu
           :ui="{ link: 'py-2' }"
           orientation="vertical"
           tooltip
-          :collapsed="collapsed"
+          :collapsed="slotProps?.collapsed ?? false"
           :items="menuItems"
         />
         <UInput
@@ -115,10 +115,10 @@
           @keyup.enter="handleSearch"
         />
       </template>
-      <template #footer="{ collapsed }">
+      <template #footer="slotProps">
         <div class="flex flex-col flex-1">
           <template v-if="userStore.isLoggedIn">
-            <UserMenu :collapsed="true" />
+            <UserMenu :collapsed="slotProps?.collapsed ?? true" />
           </template>
           <template v-else>
             <UButton to="/user/login" class="w-full flex items-center justify-center" size="lg">{{

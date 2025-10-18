@@ -7,7 +7,7 @@
           <div
             class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/20 mb-4"
           >
-            <Icon name="mynaui:exclamation-triangle" class="w-8 h-8 text-red-500" />
+            <Icon name="mynaui:alert" class="w-8 h-8 text-red-500" />
           </div>
         </div>
 
