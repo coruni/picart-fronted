@@ -3,6 +3,9 @@ import type { CreateClientConfig } from './app/api/client.gen';
 import appConfig from './app/app.config';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
+// 防止重复调用logout的标志位
+let isLoggingOut = false;
+
 export const createClientConfig: CreateClientConfig = config => {
   return {
     ...config,
@@ -153,8 +156,17 @@ export const createClientConfig: CreateClientConfig = config => {
       // 只允许200和201状态码继续处理
       if (![200, 201].includes(context.response.status)) {
         if (context.response.status === 401) {
-          // 使用新的统一登出函数
-          performLogout();
+          // 防止重复调用logout
+          if (!isLoggingOut) {
+            isLoggingOut = true;
+            // 使用新的统一登出函数
+            performLogout().finally(() => {
+              // 重置标志位，延迟重置以避免短时间内多次401响应
+              setTimeout(() => {
+                isLoggingOut = false;
+              }, 2000);
+            });
+          }
           return;
         }
         const error = new Error((context.response._data as any)?.message || 'Request failed');
@@ -303,8 +315,11 @@ export async function performLogout(): Promise<void> {
     // 获取用户store
     const userStore = useUserStore();
 
-    // 调用store的登出方法
-    await userStore.clearAuth(true);
+    // 在token失效的情况下，不调用logout API，直接清理本地状态
+    // 这样可以避免因为token失效而导致logout API调用失败
+    if (import.meta.client) {
+      await userStore.clearAuth(false); // 不调用API，直接清理本地状态
+    }
   } catch (error) {
     console.error('Error during logout:', error);
     // 即使出错也要跳转到首页

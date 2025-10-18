@@ -160,8 +160,12 @@ export const useCookieConsent = () => {
           return;
         }
 
+        // 根据当前页面的协议动态生成Clarity脚本URL
+        const protocol = window.location.protocol === 'http:' ? 'http:' : 'https:';
+        const clarityUrl = `${protocol}//www.clarity.ms/tag/${clarityId}`;
+
         // 手动注入 Clarity 脚本
-        (function (c: any, l: any, a: string, r: string, i: string) {
+        (function (c: any, l: any, a: string, r: string, url: string) {
           c[a] =
             c[a] ||
             function () {
@@ -169,12 +173,13 @@ export const useCookieConsent = () => {
             };
           const t = l.createElement(r);
           t.async = 1;
-          t.src = 'https://www.clarity.ms/tag/' + i;
+          t.src = url;
           const y = l.getElementsByTagName(r)[0];
           y.parentNode.insertBefore(t, y);
-        })(window, document, 'clarity', 'script', clarityId);
+        })(window, document, 'clarity', 'script', clarityUrl);
 
         clarityScriptLoaded = true;
+        console.log('Clarity script loaded successfully:', clarityUrl);
       } catch (error) {
         console.error('Failed to load Clarity:', error);
       }
