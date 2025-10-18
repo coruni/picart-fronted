@@ -1,112 +1,13 @@
 <template>
   <div>
-    <VueEasyLightbox
-      :visible="lightboxVisible"
-      :imgs="lightboxImages"
+    <!-- 自定义灯箱组件 -->
+    <CustomLightbox
+      v-model:visible="lightboxVisible"
+      :images="lightboxImages"
       :index="lightboxIndex"
-      @hide="lightboxVisible = false"
-      @on-index-change="(oldIndex: number, newIndex: number) => (lightboxIndex = newIndex)"
-    >
-      <!-- 自定义左右导航按钮 -->
-      <template #prev-btn="{ prev }">
-        <UButton
-          @click="prev"
-          v-if="lightboxImages.length > 1"
-          variant="link"
-          class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 left-4 text-white flex items-center justify-center"
-        >
-          <Icon name="mynaui:chevron-left" />
-        </UButton>
-      </template>
-
-      <template #next-btn="{ next }">
-        <UButton
-          @click="next"
-          v-if="lightboxImages.length > 1"
-          variant="link"
-          class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 right-4 text-white flex items-center justify-center"
-        >
-          <Icon name="mynaui:chevron-right" />
-        </UButton>
-      </template>
-
-      <!-- 自定义工具栏按钮 -->
-      <template #toolbar="{ toolbarMethods }">
-        <div
-          class="absolute bottom-4 left-1/2 -translate-x-1/2 px-2 flex items-center gap-2 bg-gray-700/80 backdrop-blur-sm rounded-full shadow-lg"
-        >
-          <!-- 放大按钮 -->
-          <UButton
-            variant="link"
-            @click="toolbarMethods.zoomIn"
-            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
-            title="放大"
-          >
-            <Icon name="mynaui:plus" class="w-5 h-5" />
-          </UButton>
-
-          <!-- 缩小按钮 -->
-          <UButton
-            variant="link"
-            @click="toolbarMethods.zoomOut"
-            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
-            title="缩小"
-          >
-            <Icon name="mynaui:minus" class="w-5 h-5" />
-          </UButton>
-          <!-- 指示器 -->
-          <div class="flex items-center gap-2">
-            <span class="text-white text-sm"
-              >{{ lightboxIndex + 1 }}/{{ lightboxImages.length }}</span
-            >
-          </div>
-
-          <!-- 逆时针旋转按钮 -->
-          <UButton
-            variant="link"
-            @click="toolbarMethods.rotateLeft"
-            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
-            title="逆时针旋转"
-          >
-            <Icon name="mynaui:undo" class="w-5 h-5" />
-          </UButton>
-
-          <!-- 顺时针旋转按钮 -->
-          <UButton
-            variant="link"
-            @click="toolbarMethods.rotateRight"
-            class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
-            title="顺时针旋转"
-          >
-            <Icon name="mynaui:redo" class="w-5 h-5" />
-          </UButton>
-
-          <!-- 重置按钮 -->
-        </div>
-      </template>
-
-      <!-- 自定义关闭按钮 -->
-      <template #close-btn>
-        <UButton
-          variant="link"
-          @click="lightboxVisible = false"
-          class="font-bold backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full right-4 top-4 text-white flex items-center justify-center"
-        >
-          <Icon name="mynaui:x" size="24" />
-        </UButton>
-      </template>
-
-      <!-- // 自定义加载 -->
-      <template #loading>
-        <div class="flex items-center justify-center py-20">
-          <div class="flex items-center justify-center flex-col gap-8">
-            <div
-              class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-            ></div>
-          </div>
-        </div>
-      </template>
-    </VueEasyLightbox>
+      @close="handleLightboxClose"
+      @change="handleLightboxChange"
+    />
     <ScrollToTop />
     <!-- 加载状态 -->
     <div v-if="isLoading">
@@ -445,8 +346,8 @@
                 }"
                 loading="lazy"
                 format="webp"
-                quality="90"
-                width="1200"
+                quality="95"
+                width="1920"
                 fit="cover"
                 @load="onImageLoad(index)"
                 @error="onImageError(index)"
@@ -1032,6 +933,16 @@
       lightboxIndex.value = index;
       lightboxVisible.value = true;
     }
+  };
+
+  // 灯箱关闭事件
+  const handleLightboxClose = () => {
+    lightboxVisible.value = false;
+  };
+
+  // 灯箱切换图片事件
+  const handleLightboxChange = (index: number) => {
+    lightboxIndex.value = index;
   };
 
   // 简单的图片点击事件处理
