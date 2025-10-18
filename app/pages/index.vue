@@ -1,11 +1,14 @@
 <template>
-  <div class="w-full">
+  <main class="w-full">
     <CommonSwiperClient />
     <ScrollToTop />
     <!-- 首页顶部广告 -->
     <Advertisement type="homepage" position="top" />
 
-    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8">
+    <nav
+      class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8"
+      aria-label="Content tabs"
+    >
       <UTabs
         v-model="currentTab"
         :items="tabs"
@@ -18,10 +21,10 @@
           <span class="hidden md:inline" v-text="item.label"></span>
         </template>
       </UTabs>
-    </div>
+    </nav>
 
     <!-- 内容区域 (相对定位以便加载动画覆盖) -->
-    <div class="relative min-h-[400px]">
+    <section class="relative min-h-[400px]" aria-label="Article list">
       <!-- 加载动画 -->
       <LoadingOverlay :show="tabSwitchLoading" :message="$t('common.loading.loading')" />
 
@@ -29,10 +32,11 @@
       <div
         v-if="layoutMode === 'grid'"
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6"
+        role="list"
       >
-        <div v-for="item in allItems" :key="item.id">
+        <article v-for="item in allItems" :key="item.id" role="listitem">
           <CommonArticleCard :data="item" />
-        </div>
+        </article>
         <!-- 网格布局加载骨架屏 -->
         <template v-if="loading">
           <ArticleSkeleton v-for="i in 10" :key="`skeleton-${i}`" />
@@ -46,19 +50,21 @@
           <WaterfallArticleCard v-else :data="item as any" />
         </template>
       </WaterfallLayout>
-    </div>
+    </section>
 
     <!-- 没有更多数据提示 -->
     <div
       v-if="!hasMore && allItems.length > 0"
       class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
+      role="status"
+      aria-live="polite"
     >
       {{ $t('common.loading.noMore') }}
     </div>
 
     <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1"></div>
-  </div>
+    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1" aria-hidden="true"></div>
+  </main>
 </template>
 
 <script lang="ts" setup>

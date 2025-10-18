@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
     <template #fallback>
-      <div class="h-60 md:h-[480px] bg-gray-100 dark:bg-gray-900 relative overflow-hidden -mx-6">
+      <div class="h-60 md:h-[480px] bg-gray-100 dark:bg-gray-900 relative overflow-hidden -mx-4">
         <div class="absolute inset-0 bg-gradient-to-t from-gray-300/30 to-transparent">
           <div class="absolute bottom-10 left-10 space-y-4 w-2/3">
             <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
@@ -14,7 +14,7 @@
     <div class="relative">
       <swiper-container
         ref="swiperContainerRef"
-        class="h-60 md:h-[480px] transition-all duration-300 bg-gray-100 dark:bg-gray-900 -mx-6"
+        class="h-60 md:h-[480px] transition-all duration-300 bg-gray-100 dark:bg-gray-900 -mx-4"
         :autoplay="{ delay: 3000 }"
         :slides-per-view="1"
         :loop="safeBannersData.length > 1 ? true : false"

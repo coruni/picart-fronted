@@ -4,11 +4,11 @@
 export default defineNuxtPlugin(() => {
   if (!import.meta.client) return;
 
-  const config = useRuntimeConfig();
-  const clarityId = config.public.scripts?.clarity?.id;
+  const appConfig = useAppConfig();
+  const clarityId = appConfig.clarityId;
 
   // 检查 Clarity ID 是否有效
-  if (!clarityId || clarityId === '' || clarityId === 'gpl') {
+  if (!clarityId || clarityId === '') {
     console.warn('Clarity ID not configured or invalid. Skipping Clarity initialization.');
     return;
   }
@@ -34,8 +34,8 @@ export default defineNuxtPlugin(() => {
     }
   };
 
-  // 页面加载后检查
-  onMounted(() => {
+  // 页面加载后检查（使用 nextTick 代替 onMounted）
+  nextTick(() => {
     checkAndLoadClarity();
   });
 

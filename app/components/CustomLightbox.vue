@@ -253,8 +253,6 @@
     return props.images[currentIndex.value];
   });
 
-  console.log('currentImage', currentImage.value);
-
   // 加载状态
   const loading = ref(true);
 
@@ -297,7 +295,6 @@
         if (loadTimeout) clearTimeout(loadTimeout);
         loadTimeout = setTimeout(() => {
           if (loading.value) {
-            console.warn('图片加载超时，强制显示');
             loading.value = false;
           }
         }, 10000);
@@ -318,7 +315,6 @@
       if (loadTimeout) clearTimeout(loadTimeout);
       loadTimeout = setTimeout(() => {
         if (loading.value) {
-          console.warn('图片加载超时，强制显示');
           loading.value = false;
         }
       }, 10000);
@@ -378,7 +374,6 @@
 
   // 图片加载完成
   const handleImageLoad = () => {
-    console.log('handleImageLoad 被调用');
     if (loadTimeout) {
       clearTimeout(loadTimeout);
       loadTimeout = null;
@@ -387,13 +382,11 @@
     nextTick(() => {
       loading.value = false;
       isSwitching.value = false;
-      console.log('loading 状态已更新为 false');
     });
   };
 
   // 图片加载错误
   const handleImageError = () => {
-    console.error('handleImageError 被调用');
     if (loadTimeout) {
       clearTimeout(loadTimeout);
       loadTimeout = null;
@@ -402,7 +395,6 @@
     nextTick(() => {
       loading.value = false;
       isSwitching.value = false;
-      console.log('loading 状态已更新为 false (错误)');
     });
   };
 

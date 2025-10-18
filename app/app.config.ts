@@ -1,5 +1,7 @@
 export default defineAppConfig({
   apiBaseUrl: 'https://api.cosfan.cc/api/v1',
+  // Clarity 统计 ID
+  clarityId: 'sw54hoqei8',
   ui: {
     colors: {
       primary: 'indigo'

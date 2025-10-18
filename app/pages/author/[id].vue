@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <main class="w-full">
     <!-- 加载状态 -->
     <div v-if="isLoading" class="flex flex-col lg:flex-row gap-4 md:gap-8">
       <!-- 左侧主内容区骨架屏 -->
@@ -69,7 +69,7 @@
       <!-- 左侧主内容区 -->
       <div class="flex-1">
         <!-- 作者信息区 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <header class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
           <div
             class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
           >
@@ -142,10 +142,10 @@
               </UButton>
             </div>
           </div>
-        </div>
+        </header>
 
         <!-- 作者文章 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
           <div class="flex items-center justify-between mb-4 md:mb-6">
             <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
               {{ $t('author.articles') }}
@@ -163,14 +163,17 @@
             </div>
           </div>
 
-          <div
+          <section
             v-if="displayArticles.length > 0"
             class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+            role="list"
           >
             <template v-for="article in displayArticles" :key="article.id">
-              <CommonArticleCard :data="article" class="!rounded-xl" />
+              <article role="listitem">
+                <CommonArticleCard :data="article" class="!rounded-xl" />
+              </article>
             </template>
-          </div>
+          </section>
           <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
             {{ $t('author.noArticles') }}
           </div>
@@ -197,14 +200,16 @@
           <div
             v-else-if="!hasMore && displayArticles.length > 0"
             class="col-span-2 sm:col-span-2 lg:col-span-3 text-center py-4 text-gray-500"
+            role="status"
+            aria-live="polite"
           >
             {{ $t('common.loading.noMore') }}
           </div>
-        </div>
+        </section>
       </div>
 
       <!-- 右侧边栏 -->
-      <div
+      <aside
         class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-12 self-start z-10 sticky"
       >
         <!-- 会员等级 -->
@@ -264,9 +269,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
-  </div>
+  </main>
 </template>
 
 <script lang="ts" setup>

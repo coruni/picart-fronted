@@ -222,14 +222,14 @@ export default defineNuxtConfig({
     defaultLocale: 'zh',
     // 语言文件目录
     langDir: 'locales/',
-    // 策略
-    strategy: 'prefix_except_default',
+    // 策略 - 不使用路径前缀
+    strategy: 'no_prefix',
     // 检测浏览器语言
     detectBrowserLanguage: {
       useCookie: false, // 禁用 Cookie，改用 localStorage 以符合 GDPR
       fallbackLocale: 'zh',
-      alwaysRedirect: true,
-      redirectOn: 'all'
+      alwaysRedirect: false, // 不自动重定向
+      redirectOn: 'no prefix' // 只在没有语言前缀时检测
     },
     // 编译优化
     compilation: {
@@ -252,12 +252,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // 私有配置（仅在服务端可用）
     // 使用 NUXT_ 前缀
-    apiSecret: '',
+    apiSecret: process.env.NUXT_API_SECRET || '',
 
     // 公共配置（客户端和服务端都可用）
     // 使用 NUXT_PUBLIC_ 前缀
     public: {
-      apiBaseUrl: '',
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || '',
       appName: 'PicArt',
       appVersion: '1.0.1',
       // TinyMCE 许可证配置
@@ -265,7 +265,7 @@ export default defineNuxtConfig({
       // Nuxt Scripts 配置
       scripts: {
         clarity: {
-          id: ''
+          id: process.env.NUXT_PUBLIC_CLARITY_ID || ''
         }
       }
     }
@@ -384,36 +384,32 @@ export default defineNuxtConfig({
       // 禁用所有缓存
       prerender: false,
       headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
-        Pragma: 'no-cache',
-        Expires: '0'
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
     '/user/articles/**': {
       ssr: true,
       prerender: false,
       headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
-        Pragma: 'no-cache',
-        Expires: '0'
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
     '/user/messages': {
       ssr: true,
       prerender: false,
       headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
-        Pragma: 'no-cache',
-        Expires: '0'
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
     '/user/orders': {
       ssr: true,
       prerender: false,
       headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
-        Pragma: 'no-cache',
-        Expires: '0'
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
 
@@ -423,9 +419,8 @@ export default defineNuxtConfig({
       ssr: false,
       prerender: false,
       headers: {
-        'Cache-Control': 'private, no-cache, no-store, must-revalidate, proxy-revalidate',
-        Pragma: 'no-cache',
-        Expires: '0'
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
 
@@ -511,26 +506,6 @@ export default defineNuxtConfig({
       meta: [
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#ffffff' }
-      ],
-      script: [
-        {
-          type: 'application/ld+json',
-          innerHTML: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: process.env.NUXT_SITE_NAME || 'PicArt',
-            description: process.env.NUXT_SITE_DESCRIPTION || '图片分享社区',
-            url: process.env.NUXT_SITE_URL || 'https://www.example.com',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: {
-                '@type': 'EntryPoint',
-                urlTemplate: `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/search?q={search_term_string}`
-              },
-              'query-input': 'required name=search_term_string'
-            }
-          })
-        }
       ]
     },
     // 页面过渡动画配置 - 禁用以支持 keep-alive

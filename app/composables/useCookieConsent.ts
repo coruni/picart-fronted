@@ -39,7 +39,10 @@ export const useCookieConsent = () => {
   const checkCookieConsent = () => {
     const consent = useCookie('cookie-consent', {
       default: () => null,
-      maxAge: 60 * 60 * 24 * 365 // 1年
+      maxAge: 60 * 60 * 24 * 365, // 1年
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
     });
 
     if (!consent.value) {
@@ -54,7 +57,10 @@ export const useCookieConsent = () => {
   // 加载已保存的 Cookie 设置
   const loadCookieSettings = () => {
     const settings = useCookie('cookie-settings', {
-      default: () => cookieSettings.value
+      default: () => cookieSettings.value,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
     });
     cookieSettings.value = settings.value;
   };
@@ -95,21 +101,30 @@ export const useCookieConsent = () => {
       // 保存同意状态
       const consent = useCookie('cookie-consent', {
         default: () => null as string | null,
-        maxAge: 60 * 60 * 24 * 180 // 6个月（符合更严格的标准）
+        maxAge: 60 * 60 * 24 * 180, // 6个月（符合更严格的标准）
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        httpOnly: false
       });
       consent.value = 'accepted';
 
       // 保存具体设置
       const settings = useCookie('cookie-settings', {
         default: () => cookieSettings.value,
-        maxAge: 60 * 60 * 24 * 180 // 6个月
+        maxAge: 60 * 60 * 24 * 180, // 6个月
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        httpOnly: false
       });
       settings.value = cookieSettings.value;
 
       // 保存同意记录（用于审计）
       const consentRecordCookie = useCookie('cookie-consent-record', {
         default: () => null as CookieConsentRecord | null,
-        maxAge: 60 * 60 * 24 * 365 * 2 // 2年（符合 GDPR 审计要求）
+        maxAge: 60 * 60 * 24 * 365 * 2, // 2年（符合 GDPR 审计要求）
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        httpOnly: false
       });
       consentRecordCookie.value = consentRecord;
 
@@ -141,8 +156,16 @@ export const useCookieConsent = () => {
 
   // 重置 Cookie 设置（用于测试或重新选择）
   const resetCookieSettings = () => {
-    const consent = useCookie('cookie-consent');
-    const settings = useCookie('cookie-settings');
+    const consent = useCookie('cookie-consent', {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
+    });
+    const settings = useCookie('cookie-settings', {
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: false
+    });
 
     consent.value = null;
     settings.value = null;

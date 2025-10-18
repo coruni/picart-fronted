@@ -2,7 +2,7 @@
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
     <NuxtLayout>
-      <KeepAlive :max="10" :include="keepAliveInclude" :pageey>
+      <KeepAlive :max="10" :include="keepAliveInclude">
         <NuxtPage />
       </KeepAlive>
     </NuxtLayout>
@@ -27,6 +27,68 @@
   });
   // 提供配置
   provide('siteConfig', configs.data.value?.data);
+
+  // 全局结构化数据 (JSON-LD) - 网站信息
+  const siteConfig = configs.data.value?.data;
+  const siteUrl = process.env.NUXT_SITE_URL || 'https://www.example.com';
+
+  useHead({
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: siteConfig?.site_name || 'PicArt',
+          description: siteConfig?.site_description || '图片分享社区',
+          url: siteUrl,
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: `${siteUrl}/search?q={search_term_string}`
+            },
+            'query-input': 'required name=search_term_string'
+          }
+        })
+      },
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: siteConfig?.site_name || 'PicArt',
+          description: siteConfig?.site_description || '图片分享社区',
+          url: siteUrl,
+          logo: {
+            '@type': 'ImageObject',
+            url: siteConfig?.site_logo || '/favicon.ico'
+          },
+          sameAs: [] // 可以添加社交媒体链接
+        })
+      }
+    ]
+  });
+
+  // 控制台欢迎信息
+  if (import.meta.client) {
+    console.log(
+      '%c ____    _             _             _   \n' +
+        '%c|  _ \\  (_)   ___     / \\     _ __  | |_ \n' +
+        "%c| |_) | | |  / __|   / _ \\   | '__| | __|\n" +
+        '%c|  __/  | | | (__   / ___ \\  | |    | |_ \n' +
+        '%c|_|     |_|  \\___| /_/   \\_\\ |_|     \\__|\n' +
+        '%c                                          \n\n' +
+        '%cGitHub: https://github.com/coruni/picart-fronted',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;',
+      'color: #615fff; font-size: 14px; font-weight: bold;'
+    );
+  }
   // 提供icon
   useHead({
     link: [{ rel: 'icon', href: configs.data.value?.data?.site_favicon || '/favicon.ico' }]

@@ -4,13 +4,13 @@
       :list="items"
       row-key="id"
       :gutter="gap"
-      :has-around-gutter="true"
+      :has-around-gutter="false"
       :breakpoints="breakpoints"
       animation-effect="fadeInUp"
       :animation-duration="800"
       :animation-delay="100"
       background-color="transparent"
-      :lazyload="false"
+      lazyload
       @after-render="handleAfterRender"
     >
       <template #default="{ item }">
