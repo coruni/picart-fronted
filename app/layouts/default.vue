@@ -91,12 +91,20 @@
     >
       <template #header>
         <!-- logo -->
-        <div class="flex items-center justify-center" v-if="siteConfig?.site_logo">
+        <NuxtLinkLocale
+          to="/"
+          class="flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
+          v-if="siteConfig?.site_logo"
+        >
           <NuxtImg :src="siteConfig?.site_logo" alt="logo" class="w-12 h-12" />
-        </div>
-        <div v-else class="flex-1 items-center justify-center flex">
+        </NuxtLinkLocale>
+        <NuxtLinkLocale
+          to="/"
+          class="flex-1 items-center justify-center flex hover:opacity-80 transition-opacity cursor-pointer"
+          v-else
+        >
           <h1 class="text-2xl font-bold">{{ siteConfig?.site_name }}</h1>
-        </div>
+        </NuxtLinkLocale>
       </template>
       <template #default="slotProps">
         <UNavigationMenu

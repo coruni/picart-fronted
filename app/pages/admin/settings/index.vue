@@ -47,6 +47,19 @@
               aspect-ratio="1/1"
             />
           </UFormField>
+
+          <UFormField :label="t('admin.settings.siteLayout')" name="site_layout" class="w-full">
+            <USelect
+              v-model="config.site_layout"
+              class="w-full"
+              :items="[
+                { label: t('admin.settings.layoutGrid'), value: 'grid' },
+                { label: t('admin.settings.layoutWaterfall'), value: 'waterfall' }
+              ]"
+              option-attribute="label"
+              value-attribute="value"
+            />
+          </UFormField>
         </div>
       </template>
 
@@ -86,6 +99,21 @@
             class="w-full"
           >
             <USwitch v-model="config.article_approval_required" />
+          </UFormField>
+
+          <UFormField
+            :label="t('admin.settings.articleFreeImagesCount')"
+            name="article_free_images_count"
+            class="w-full"
+          >
+            <UInput
+              v-model="config.article_free_images_count"
+              type="number"
+              min="0"
+              step="1"
+              class="w-full"
+              @update:modelValue="value => (config.article_free_images_count = Number(value) || 0)"
+            />
           </UFormField>
         </div>
       </template>
@@ -825,6 +853,8 @@
     user_email_verification: true,
     comment_approval_required: true,
     article_approval_required: true,
+    article_free_images_count: 3,
+    site_layout: 'waterfall',
     payment_alipay_enabled: true,
     payment_wechat_enabled: true,
     payment_epay_enabled: true,

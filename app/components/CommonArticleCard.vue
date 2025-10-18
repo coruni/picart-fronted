@@ -8,6 +8,9 @@
         :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
         loading="lazy"
+        format="webp"
+        quality="85"
+        width="400"
         class="w-full h-full aspect-[3/4] object-cover transition-transform duration-500 group-hover:scale-110"
       />
 
@@ -107,7 +110,7 @@
     return article.tags.some(tag => {
       // 处理不同类型的标签数据
       if (typeof tag === 'string') {
-        return tag.toLowerCase() === 'nsfw';
+        return (tag as string)?.toLowerCase() === 'nsfw' || false;
       }
       if (typeof tag === 'object' && tag !== null) {
         const tagName = (tag as any).name || (tag as any).label || '';

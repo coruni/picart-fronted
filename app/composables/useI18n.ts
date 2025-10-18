@@ -1,5 +1,4 @@
 import { useNuxtApp } from '#app';
-import type { ComputedRef } from 'vue';
 
 export interface LocaleOption {
   code: string;

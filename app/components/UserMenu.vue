@@ -115,7 +115,7 @@
       },
       {
         label: t('header.nav.language'),
-        icon: 'i-mynaui-translate',
+        icon: 'i-mynaui-globe',
         children: availableLocales.value.map(locale => ({
           label: `${locale.flag} ${locale.name}`,
           type: 'checkbox' as const,

@@ -45,4 +45,5 @@ export interface SiteConfig {
   ad_global_position: string;
   ad_global_style: string;
   payment_balance_enabled: boolean;
+  site_layout: 'grid' | 'waterfall';
 }

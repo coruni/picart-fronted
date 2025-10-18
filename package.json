@@ -44,6 +44,7 @@
     "vue": "latest",
     "vue-i18n": "^11.1.12",
     "vue-router": "latest",
+    "vue-waterfall-plugin-next": "^2.6.9",
     "zod": "^4.1.12"
   },
   "devDependencies": {

@@ -393,29 +393,26 @@
               <!-- 骨架屏占位 -->
               <div
                 v-if="!imageLoaded[index] && !imageErrors[index]"
-                class="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300 dark:from-gray-700 dark:via-gray-600 dark:to-gray-800"
+                class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden"
               >
-                <!-- 波浪式加载动画 -->
-                <div
-                  class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 dark:via-gray-400/10 to-transparent animate-shimmer"
-                ></div>
-
-                <!-- 图片图标 -->
-                <div class="flex items-center justify-center h-full">
-                  <div class="text-center">
-                    <Icon
-                      name="mynaui:image"
-                      class="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2 animate-pulse"
-                    />
-                    <div class="text-xs text-gray-400 dark:text-gray-500">
-                      {{ $t('image.loading') }}
-                    </div>
+                <!-- 优雅的加载动画 -->
+                <div class="relative">
+                  <!-- 旋转的圆环 -->
+                  <div class="relative w-16 h-16">
+                    <div
+                      class="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"
+                    ></div>
+                    <div
+                      class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
+                      style="animation-duration: 0.8s"
+                    ></div>
                   </div>
-                </div>
 
-                <!-- 加载进度条 -->
-                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
-                  <div class="h-full bg-primary animate-pulse w-full opacity-60"></div>
+                  <!-- 中心渐变点 -->
+                  <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full animate-ping"
+                    style="animation-duration: 1.5s"
+                  ></div>
                 </div>
               </div>
 
@@ -448,6 +445,9 @@
                 }"
                 loading="lazy"
                 format="webp"
+                quality="90"
+                width="1200"
+                fit="cover"
                 @load="onImageLoad(index)"
                 @error="onImageError(index)"
               />
@@ -612,7 +612,6 @@
                 class="w-4 h-4 md:w-5 md:h-5 rounded-full mr-2 object-cover"
                 loading="lazy"
                 format="webp"
-                sizes="20px"
               />
               <span class="font-medium">{{ tag.name }}</span>
             </NuxtLinkLocale>
@@ -767,6 +766,10 @@
                     class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
                     loading="lazy"
                     format="webp"
+                    quality="85"
+                    width="200"
+                    height="200"
+                    fit="cover"
                     sizes="64px md:80px"
                   />
                 </div>
@@ -836,6 +839,10 @@
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
+
+  definePageMeta({
+    key: route => route.fullPath
+  });
 
   // 确保在SSR阶段等待数据加载完成
   const {
@@ -1417,14 +1424,28 @@
 
   // 重试加载图片
   const retryImageLoad = (index: number) => {
+    // 重置状态
     imageErrors.value[index] = false;
     imageLoaded.value[index] = false;
 
-    // 强制刷新图片
-    const img = new Image();
-    img.onload = () => onImageLoad(index);
-    img.onerror = () => onImageError(index);
-    img.src = `${article.value?.data.images?.[index]}?t=${Date.now()}`;
+    // 使用 nextTick 确保状态更新后再触发图片重新加载
+    nextTick(() => {
+      // 强制刷新图片 - 添加时间戳参数避免缓存
+      const originalSrc = article.value?.data.images?.[index];
+      if (originalSrc) {
+        // 创建新的 Image 对象来预加载
+        const img = new Image();
+        img.onload = () => {
+          // 图片加载成功后，触发 NuxtImg 重新加载
+          onImageLoad(index);
+        };
+        img.onerror = () => {
+          onImageError(index);
+        };
+        // 添加时间戳参数强制刷新
+        img.src = `${originalSrc}?t=${Date.now()}`;
+      }
+    });
   };
 
   const shouldShowDownloads = computed(() => {

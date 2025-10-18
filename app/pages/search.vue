@@ -43,22 +43,51 @@
         </p>
       </div>
 
-      <!-- 文章网格 -->
-      <div v-if="hasSearched" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6">
-        <TransitionGroup name="list" tag="div" class="contents">
-          <div
-            v-for="article in displayArticles"
-            :key="article.id"
-            class="transform transition-transform duration-300 hover:-translate-y-1"
-          >
-            <CommonArticleCard :data="article" />
-          </div>
-        </TransitionGroup>
+      <!-- 内容区域 (相对定位以便加载动画覆盖) -->
+      <div v-if="hasSearched" class="relative min-h-[400px]">
+        <!-- 加载动画 -->
+        <LoadingOverlay :show="searchLoading" :message="$t('common.loading.loading')" />
+
+        <!-- 网格布局 -->
+        <div v-if="layoutMode === 'grid'" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6">
+          <TransitionGroup name="list" tag="div" class="contents">
+            <div
+              v-for="article in allArticles"
+              :key="article.id"
+              class="transform transition-transform duration-300 hover:-translate-y-1"
+            >
+              <CommonArticleCard :data="article" />
+            </div>
+          </TransitionGroup>
+          <!-- 网格布局加载骨架屏 -->
+          <template v-if="loading">
+            <ArticleSkeleton v-for="i in 12" :key="`skeleton-${i}`" />
+          </template>
+        </div>
+
+        <!-- 瀑布流布局 -->
+        <div v-else>
+          <WaterfallLayout :items="displayArticlesWithSkeleton" :gap="16">
+            <template #default="{ item }">
+              <WaterfallSkeleton v-if="(item as any).isSkeleton" :index="(item as any).index" />
+              <WaterfallArticleCard v-else :data="item as any" />
+            </template>
+          </WaterfallLayout>
+        </div>
       </div>
 
-      <!-- 加载指示器 -->
-      <div v-if="loading" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6 py-8">
-        <ArticleSkeleton v-for="i in 12" :key="i" />
+      <!-- 初次加载指示器 -->
+      <div v-if="loading && allArticles.length === 0" class="py-8">
+        <!-- 网格布局骨架屏 -->
+        <div v-if="layoutMode === 'grid'" class="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6">
+          <ArticleSkeleton v-for="i in 12" :key="i" />
+        </div>
+        <!-- 瀑布流布局骨架屏 -->
+        <WaterfallLayout v-else :gap="16" :items="skeletonItems">
+          <template #default="{ item }">
+            <WaterfallSkeleton :index="(item as any).index" />
+          </template>
+        </WaterfallLayout>
       </div>
 
       <!-- 没有更多数据提示 -->
@@ -83,7 +112,11 @@
 
   // 搜索状态
   const searchQuery = ref('');
+  // 从 siteConfig 获取布局模式
+  const siteConfig = inject<any>('siteConfig');
+  const layoutMode = computed(() => siteConfig?.site_layout || 'waterfall');
   const loading = ref(false);
+  const searchLoading = ref(false); // 搜索时的加载状态
   const totalResults = ref(0);
   const pagination = ref({
     page: 1,
@@ -93,8 +126,21 @@
   const hasSearched = ref(false);
   const allArticles = ref<any[]>([]);
 
+  // 骨架屏占位数据
+  const skeletonItems = computed(() =>
+    Array.from({ length: 12 }, (_, i) => ({ id: `skeleton-${i}`, index: i, isSkeleton: true }))
+  );
+
   const currentQuery = computed(() => searchQuery.value);
   const displayArticles = computed(() => allArticles.value);
+
+  // 瀑布流显示项目（包括骨架屏）
+  const displayArticlesWithSkeleton = computed(() => {
+    if (layoutMode.value === 'waterfall' && loading.value && allArticles.value.length > 0) {
+      return [...allArticles.value, ...skeletonItems.value];
+    }
+    return allArticles.value;
+  });
 
   // 重置数据
   const resetData = () => {
@@ -178,11 +224,13 @@
   };
 
   // 手动搜索（重置数据后搜索）
-  const handleManualSearch = () => {
+  const handleManualSearch = async () => {
     if (searchQuery.value.trim()) {
+      searchLoading.value = true; // 显示加载动画
       resetData();
       hasSearched.value = true;
-      handleSearch();
+      await handleSearch();
+      searchLoading.value = false; // 隐藏加载动画
     }
   };
 
@@ -250,7 +298,7 @@
         entries => {
           const target = entries[0];
           if (
-            target.isIntersecting &&
+            target?.isIntersecting &&
             !loading.value &&
             hasMore.value &&
             searchQuery.value.trim() &&

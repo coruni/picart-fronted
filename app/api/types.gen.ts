@@ -1573,6 +1573,8 @@ export type ConfigControllerGetPublicResponses = {
       membership_price_6m: number;
       membership_price_12m: number;
       membership_price_lifetime: number;
+      site_layout: 'grid' | 'waterfall';
+      article_free_images_count: number;
     };
   };
 };
@@ -5851,7 +5853,7 @@ export type MessageControllerFindAllResponses = {
     data: {
       data: Array<{
         id?: number;
-        senderId?: number;
+        senderId?: unknown;
         receiverId?: number;
         content?: string;
         type?: string;
@@ -5859,27 +5861,14 @@ export type MessageControllerFindAllResponses = {
         isBroadcast?: boolean;
         title?: string;
         metadata?: {
-          [key: string]: unknown;
+          articleTitle: string;
+          commenterName: string;
+          commentContent: string;
+          notificationType: string;
         };
         createdAt?: string;
         updatedAt?: string;
-        sender?: {
-          id: number;
-          username: string;
-          nickname: string;
-          avatar: string;
-          level: number;
-          membershipLevel: number;
-          status: string;
-          createdAt: string;
-          updatedAt: string;
-          description: string;
-          followerCount: number;
-          followingCount: number;
-          lastActiveAt: unknown;
-          lastLoginAt: string;
-          gender: string;
-        };
+        sender?: unknown;
         receiver?: {
           id: number;
           username: string;
@@ -5887,6 +5876,9 @@ export type MessageControllerFindAllResponses = {
           avatar: string;
           level: number;
           membershipLevel: number;
+          membershipStatus: string;
+          membershipStartDate: string;
+          membershipEndDate: string;
           status: string;
           createdAt: string;
           updatedAt: string;

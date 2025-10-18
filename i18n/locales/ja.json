@@ -286,10 +286,14 @@
       "siteLogoPlaceholder": "サイトロゴをアップロード",
       "siteFavicon": "サイトファビコン",
       "siteFaviconPlaceholder": "サイトファビコンをアップロード",
+      "siteLayout": "サイトレイアウト",
+      "layoutGrid": "グリッドレイアウト",
+      "layoutWaterfall": "ウォーターフォールレイアウト",
       "userRegistrationEnabled": "ユーザー登録を有効にする",
       "userEmailVerification": "ユーザーメール認証",
       "commentApprovalRequired": "コメント承認が必要",
       "articleApprovalRequired": "記事承認が必要",
+      "articleFreeImagesCount": "無料画像数",
       "paymentAlipayEnabled": "Alipay支払いを有効にする",
       "paymentWechatEnabled": "WeChat支払いを有効にする",
       "paymentEpayEnabled": "Epay支払いを有効にする",
@@ -1046,6 +1050,9 @@
     "title": "検索",
     "placeholder": "画像、記事、ユーザーを検索...",
     "allCategories": "すべてのカテゴリー",
+    "meta": {
+      "description": "画像、記事、ユーザーを検索して、興味深いコンテンツを発見"
+    },
     "sort": {
       "latest": "最新",
       "popular": "人気",

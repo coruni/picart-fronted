@@ -254,10 +254,14 @@
       "siteLogoPlaceholder": "上传网站Logo",
       "siteFavicon": "网站图标",
       "siteFaviconPlaceholder": "上传网站图标",
+      "siteLayout": "网站布局",
+      "layoutGrid": "网格布局",
+      "layoutWaterfall": "瀑布流布局",
       "userRegistrationEnabled": "允许用户注册",
       "userEmailVerification": "用户邮箱验证",
       "commentApprovalRequired": "评论需要审核",
       "articleApprovalRequired": "文章需要审核",
+      "articleFreeImagesCount": "文章免费图片数量",
       "paymentAlipayEnabled": "启用支付宝支付",
       "paymentWechatEnabled": "启用微信支付",
       "paymentEpayEnabled": "启用易支付",
@@ -1135,6 +1139,9 @@
     "title": "搜索",
     "placeholder": "搜索图片、文章、用户...",
     "allCategories": "全部分类",
+    "meta": {
+      "description": "搜索图片、文章和用户，发现感兴趣的内容"
+    },
     "sort": {
       "latest": "最新发布",
       "popular": "人气推荐",

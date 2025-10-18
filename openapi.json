@@ -2450,6 +2450,16 @@
                         },
                         "membership_price_lifetime": {
                           "type": "integer"
+                        },
+                        "site_layout": {
+                          "type": "string",
+                          "enum": [
+                            "grid",
+                            "waterfall"
+                          ]
+                        },
+                        "article_free_images_count": {
+                          "type": "integer"
                         }
                       },
                       "required": [
@@ -2491,7 +2501,9 @@
                         "membership_price_3m",
                         "membership_price_6m",
                         "membership_price_12m",
-                        "membership_price_lifetime"
+                        "membership_price_lifetime",
+                        "site_layout",
+                        "article_free_images_count"
                       ]
                     }
                   },
@@ -15477,7 +15489,7 @@
                                 "type": "integer"
                               },
                               "senderId": {
-                                "type": "integer"
+                                "type": "null"
                               },
                               "receiverId": {
                                 "type": "integer"
@@ -15499,7 +15511,26 @@
                               },
                               "metadata": {
                                 "type": "object",
-                                "properties": {}
+                                "properties": {
+                                  "articleTitle": {
+                                    "type": "string"
+                                  },
+                                  "commenterName": {
+                                    "type": "string"
+                                  },
+                                  "commentContent": {
+                                    "type": "string"
+                                  },
+                                  "notificationType": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "articleTitle",
+                                  "commenterName",
+                                  "commentContent",
+                                  "notificationType"
+                                ]
                               },
                               "createdAt": {
                                 "type": "string"
@@ -15508,71 +15539,7 @@
                                 "type": "string"
                               },
                               "sender": {
-                                "type": "object",
-                                "properties": {
-                                  "id": {
-                                    "type": "integer"
-                                  },
-                                  "username": {
-                                    "type": "string"
-                                  },
-                                  "nickname": {
-                                    "type": "string"
-                                  },
-                                  "avatar": {
-                                    "type": "string"
-                                  },
-                                  "level": {
-                                    "type": "integer"
-                                  },
-                                  "membershipLevel": {
-                                    "type": "integer"
-                                  },
-                                  "status": {
-                                    "type": "string"
-                                  },
-                                  "createdAt": {
-                                    "type": "string"
-                                  },
-                                  "updatedAt": {
-                                    "type": "string"
-                                  },
-                                  "description": {
-                                    "type": "string"
-                                  },
-                                  "followerCount": {
-                                    "type": "integer"
-                                  },
-                                  "followingCount": {
-                                    "type": "integer"
-                                  },
-                                  "lastActiveAt": {
-                                    "type": "null"
-                                  },
-                                  "lastLoginAt": {
-                                    "type": "string"
-                                  },
-                                  "gender": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "id",
-                                  "username",
-                                  "nickname",
-                                  "avatar",
-                                  "level",
-                                  "membershipLevel",
-                                  "status",
-                                  "createdAt",
-                                  "updatedAt",
-                                  "description",
-                                  "followerCount",
-                                  "followingCount",
-                                  "lastActiveAt",
-                                  "lastLoginAt",
-                                  "gender"
-                                ]
+                                "type": "null"
                               },
                               "receiver": {
                                 "type": "object",
@@ -15595,6 +15562,15 @@
                                   "membershipLevel": {
                                     "type": "integer"
                                   },
+                                  "membershipStatus": {
+                                    "type": "string"
+                                  },
+                                  "membershipStartDate": {
+                                    "type": "string"
+                                  },
+                                  "membershipEndDate": {
+                                    "type": "string"
+                                  },
                                   "status": {
                                     "type": "string"
                                   },
@@ -15630,6 +15606,9 @@
                                   "avatar",
                                   "level",
                                   "membershipLevel",
+                                  "membershipStatus",
+                                  "membershipStartDate",
+                                  "membershipEndDate",
                                   "status",
                                   "createdAt",
                                   "updatedAt",

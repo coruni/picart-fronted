@@ -3,3 +3,15 @@ ignoredBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
   - sharp
+
+
+supportedArchitectures:
+  os:
+  - win32
+  - darwin
+  - current
+  - linux
+  cpu:
+  - x64
+  - arm64
+

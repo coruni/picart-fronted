@@ -5,7 +5,7 @@
     <!-- 首页顶部广告 -->
     <Advertisement type="homepage" position="top" />
 
-    <div class="flex justify-center my-8">
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8">
       <UTabs
         v-model="currentTab"
         :items="tabs"
@@ -19,23 +19,38 @@
         </template>
       </UTabs>
     </div>
-    <!-- 瀑布流展示 -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-      <div v-for="item in displayItems" :key="item.id">
-        <CommonArticleCard :data="item" />
+
+    <!-- 内容区域 (相对定位以便加载动画覆盖) -->
+    <div class="relative min-h-[400px]">
+      <!-- 加载动画 -->
+      <LoadingOverlay :show="tabSwitchLoading" :message="$t('common.loading.loading')" />
+
+      <!-- 网格布局 -->
+      <div
+        v-if="layoutMode === 'grid'"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6"
+      >
+        <div v-for="item in allItems" :key="item.id">
+          <CommonArticleCard :data="item" />
+        </div>
+        <!-- 网格布局加载骨架屏 -->
+        <template v-if="loading">
+          <ArticleSkeleton v-for="i in 10" :key="`skeleton-${i}`" />
+        </template>
       </div>
-    </div>
-    <!-- 加载指示器 -->
-    <div
-      v-if="loading"
-      class="col-span-2 md:col-span-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 py-8"
-    >
-      <ArticleSkeleton v-for="i in 10" :key="i" />
+
+      <!-- 瀑布流布局 -->
+      <WaterfallLayout v-else :items="displayItems" :gap="16">
+        <template #default="{ item }">
+          <WaterfallSkeleton v-if="(item as any).isSkeleton" :index="(item as any).index" />
+          <WaterfallArticleCard v-else :data="item as any" />
+        </template>
+      </WaterfallLayout>
     </div>
 
     <!-- 没有更多数据提示 -->
     <div
-      v-else-if="!hasMore && displayItems.length > 0"
+      v-if="!hasMore && allItems.length > 0"
       class="col-span-2 md:col-span-4 text-center py-4 text-gray-500"
     >
       {{ $t('common.loading.noMore') }}
@@ -52,6 +67,16 @@
   import type { ConfigControllerGetPublicResponse } from '~/api';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   const { t } = useI18n();
+
+  // 定义组件名称，用于 keep-alive 识别
+  defineOptions({
+    name: 'index'
+  });
+
+  // 启用 keep-alive 缓存
+  definePageMeta({
+    keepalive: true
+  });
 
   // 首页中
   const siteConfig = inject<SiteConfig>('siteConfig');
@@ -79,15 +104,23 @@
   ];
 
   const currentTab = ref('all');
+  // 从 siteConfig 获取布局模式
+  const layoutMode = computed(() => (siteConfig as any)?.site_layout || 'waterfall');
   const pagination = ref({
     page: 1,
     limit: 20
   });
   const loading = ref(false);
+  const tabSwitchLoading = ref(false); // 切换tab的加载状态
   const hasMore = ref(true);
   const allItems = ref<any[]>([]);
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
+
+  // 骨架屏占位数据
+  const skeletonItems = computed(() =>
+    Array.from({ length: 10 }, (_, i) => ({ id: `skeleton-${i}`, index: i, isSkeleton: true }))
+  );
 
   // 使用 useAsyncData 在 SSR 阶段获取首屏数据
   const { data: initialData, refresh: refreshData } = await useAsyncData(
@@ -142,7 +175,7 @@
   // 监听 tab 切换，刷新数据
   watch(currentTab, async newTab => {
     resetData();
-    loading.value = true;
+    tabSwitchLoading.value = true; // 显示全局加载动画
 
     try {
       // 重新获取数据
@@ -167,7 +200,7 @@
     } catch (error) {
       console.error('Failed to load articles:', error);
     } finally {
-      loading.value = false;
+      tabSwitchLoading.value = false; // 隐藏全局加载动画
     }
   });
 
@@ -210,8 +243,12 @@
     }
   };
 
-  // 计算显示的项目
+  // 计算显示的项目（包括加载时的骨架屏）
   const displayItems = computed(() => {
+    if (layoutMode.value === 'waterfall' && loading.value && allItems.value.length > 0) {
+      // 瀑布流模式下加载更多时，将骨架屏混入列表
+      return [...allItems.value, ...skeletonItems.value];
+    }
     return allItems.value;
   });
 

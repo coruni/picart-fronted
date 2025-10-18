@@ -104,6 +104,7 @@ export default defineNuxtConfig({
   // 所以这里不需要在 registry 中配置
 
   image: {
+    // 响应式断点配置
     screens: {
       xs: 320,
       sm: 640,
@@ -113,18 +114,67 @@ export default defineNuxtConfig({
       xxl: 1536,
       '2xl': 1536
     },
-    format: ['webp', 'jpg', 'png', 'avif']
-    // provider: 'weserv',
-    // domains: ['minicdn.cosfan.cc'],
-    // weserv: {
-    //   baseURL: 'https://www.example.com',
-    //   weservURL: 'https://www.example.com',
-    //   modifiers: {
-    //     quality: 80,
-    //     fit: 'cover',
-    //     format: 'webp'
-    //   }
-    // }
+    // 支持的图片格式（按优先级）
+    // 注意：不包含 webp，避免对已经是 webp 格式的图片进行二次优化
+    format: ['avif', 'webp'],
+    // 图片质量
+    quality: 80,
+    // 默认图片提供者（使用内置的 ipx）
+    provider: 'ipx',
+    // 允许的外部域名（如果需要优化外部图片）
+    domains: ['minicdn.cosfan.cc'],
+    // 图片加载优化配置
+    providerOptions: {
+      ipx: {
+        // 图片加载超时（毫秒）
+        timeout: 10000,
+        // 最大并发请求数
+        maxConcurrentRequests: 6,
+        // 请求重试次数
+        retry: 2,
+        // 请求重试延迟（毫秒）
+        retryDelay: 500
+      }
+    },
+    // 图片预设
+    presets: {
+      // 缩略图预设
+      thumbnail: {
+        modifiers: {
+          format: 'webp',
+          width: 200,
+          height: 200,
+          fit: 'cover',
+          quality: 80
+        }
+      },
+      // 卡片图片预设
+      card: {
+        modifiers: {
+          format: 'webp',
+          width: 400,
+          height: 400,
+          fit: 'cover',
+          quality: 80
+        }
+      },
+      // 文章封面预设
+      articleCover: {
+        modifiers: {
+          format: 'webp',
+          width: 800,
+          quality: 85
+        }
+      },
+      // 文章内容图片预设
+      articleContent: {
+        modifiers: {
+          format: 'webp',
+          width: 1200,
+          quality: 90
+        }
+      }
+    }
   },
   features: {
     inlineStyles: false
@@ -276,9 +326,15 @@ export default defineNuxtConfig({
         'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
       }
     },
-
     // ========== 静态资源缓存 ==========
-    // 图片资源 - 长期缓存（1年）
+    // Nuxt Image 优化后的图片 - 长期缓存（1年）
+    '/_ipx/**': {
+      headers: {
+        'Cache-Control': 'public, max-age=31536000, immutable, s-maxage=31536000',
+        'X-Content-Type-Options': 'nosniff'
+      }
+    },
+    // 原始图片资源 - 长期缓存（1年）
     '/images/**': {
       headers: {
         'Cache-Control': 'public, max-age=31536000, immutable'
@@ -433,14 +489,15 @@ export default defineNuxtConfig({
           warn(warning);
         },
         output: {
-          // 手动代码分割 - 优化包大小
+          // 手动代码分割 - 简化策略，避免初始化问题
           manualChunks: {
             // 工具库
             'utils-vendor': ['lodash-es', 'zod'],
             // 编辑器相关
             'editor-vendor': ['@tinymce/tinymce-vue'],
             // 表格组件
-            'table-vendor': ['@tanstack/vue-table']
+            'table-vendor': ['@tanstack/vue-table'],
+            'waterfall-vendor': ['vue-waterfall-plugin-next']
           }
         }
       }
@@ -477,11 +534,8 @@ export default defineNuxtConfig({
         }
       ]
     },
-    // 页面过渡动画配置
-    pageTransition: {
-      name: 'fade',
-      mode: 'out-in'
-    }
+    // 页面过渡动画配置 - 禁用以支持 keep-alive
+    pageTransition: false
   },
 
   // Vue Router 配置

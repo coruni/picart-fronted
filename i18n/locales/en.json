@@ -288,10 +288,14 @@
       "siteLogoPlaceholder": "Upload site logo",
       "siteFavicon": "Site Favicon",
       "siteFaviconPlaceholder": "Upload site favicon",
+      "siteLayout": "Site Layout",
+      "layoutGrid": "Grid Layout",
+      "layoutWaterfall": "Waterfall Layout",
       "userRegistrationEnabled": "User Registration Enabled",
       "userEmailVerification": "User Email Verification",
       "commentApprovalRequired": "Comment Approval Required",
       "articleApprovalRequired": "Article Approval Required",
+      "articleFreeImagesCount": "Free Images Count",
       "paymentAlipayEnabled": "Alipay Payment Enabled",
       "paymentWechatEnabled": "WeChat Payment Enabled",
       "paymentEpayEnabled": "Epay Payment Enabled",
@@ -1027,6 +1031,9 @@
     "title": "Search",
     "placeholder": "Search images, articles, users...",
     "allCategories": "All Categories",
+    "meta": {
+      "description": "Search for images, articles, and users to discover interesting content"
+    },
     "sort": {
       "latest": "Latest",
       "popular": "Popular",

@@ -9,6 +9,10 @@
           :src="siteConfig?.site_logo"
           class="w-8 h-8 rounded-full object-cover"
           :alt="siteConfig?.site_name || 'Logo'"
+          format="webp"
+          quality="90"
+          width="32"
+          height="32"
         />
         <span v-else class="text-xl font-bold text-gray-700 dark:text-white">{{
           siteConfig?.site_name || 'PicArt'

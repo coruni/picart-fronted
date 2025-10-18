@@ -11,6 +11,10 @@
           :alt="category.data.name"
           class="w-full h-full object-cover opacity-20 dark:opacity-30"
           loading="lazy"
+          format="webp"
+          quality="70"
+          width="1920"
+          fit="cover"
         />
         <div
           class="absolute inset-0 backdrop-blur-xs bg-gradient-to-br from-gray-50/10 to-gray-100/10 dark:from-gray-800/10 dark:to-gray-900/10"
@@ -32,7 +36,7 @@
     </div>
 
     <!-- 筛选和排序 -->
-    <div class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 my-8">
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8">
       <UTabs
         :items="tabs"
         :default-value="0"
@@ -42,22 +46,23 @@
         :ui="{ trigger: 'cursor-pointer' }"
       >
       </UTabs>
-      <div class="flex items-center space-x-2">
-        <button
-          @click="viewMode = viewMode === 'grid' ? 'list' : 'grid'"
-          class="p-2 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-        >
-          <Icon :name="viewMode === 'grid' ? 'mynaui:grid' : 'mynaui:list'" class="w-5 h-5" />
-        </button>
-      </div>
     </div>
 
-    <!-- 文章列表 -->
-    <div
-      v-if="loading && displayItems.length === 0"
-      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 py-12 px-4"
-    >
-      <ArticleSkeleton v-for="i in 8" :key="i" />
+    <!-- 初次加载骨架屏 -->
+    <div v-if="loading && displayItems.length === 0" class="py-12 px-4">
+      <!-- 网格布局骨架屏 -->
+      <div
+        v-if="layoutMode === 'grid'"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6"
+      >
+        <ArticleSkeleton v-for="i in 8" :key="i" />
+      </div>
+      <!-- 瀑布流布局骨架屏 -->
+      <WaterfallLayout v-else :gap="16" :items="skeletonItems">
+        <template #default="{ item }">
+          <WaterfallSkeleton :index="(item as any).index" />
+        </template>
+      </WaterfallLayout>
     </div>
 
     <div v-else-if="!loading && displayItems.length === 0" class="text-center py-12 px-4">
@@ -70,66 +75,35 @@
       </p>
     </div>
 
-    <!-- 网格视图 -->
-    <div v-else-if="viewMode === 'grid'">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-        <TransitionGroup name="list" tag="div" class="contents">
-          <div v-for="item in displayItems" :key="item.id">
-            <CommonArticleCard :data="item" />
-          </div>
-        </TransitionGroup>
+    <!-- 内容区域 (相对定位以便加载动画覆盖) -->
+    <div v-else class="relative min-h-[400px]">
+      <!-- 加载动画 -->
+      <LoadingOverlay :show="tabSwitchLoading" :message="$t('common.loading.loading')" />
+
+      <!-- 网格视图 -->
+      <div v-if="layoutMode === 'grid'">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+          <TransitionGroup name="list" tag="div" class="contents">
+            <div v-for="item in articles" :key="item.id">
+              <CommonArticleCard :data="item" />
+            </div>
+          </TransitionGroup>
+          <!-- 网格布局加载骨架屏 -->
+          <template v-if="loading">
+            <ArticleSkeleton v-for="i in 8" :key="`skeleton-${i}`" />
+          </template>
+        </div>
       </div>
-    </div>
 
-    <!-- 列表视图 -->
-    <div v-else class="space-y-4">
-      <TransitionGroup name="list" tag="div" class="space-y-4">
-        <NuxtLinkLocale
-          v-for="item in displayItems"
-          :key="item.id"
-          :to="`/article/${item.id}`"
-          class="block bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow overflow-hidden"
-        >
-          <div class="flex flex-col md:flex-row gap-4">
-            <div class="w-full md:w-1/3 flex-shrink-0">
-              <NuxtImg
-                :src="item.cover || item.images[0]"
-                :alt="item.title"
-                class="w-full h-48 md:h-32 object-cover rounded-md"
-                loading="lazy"
-                format="webp"
-              />
-            </div>
-            <div class="w-full md:w-2/3 flex-1 min-w-0">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                {{ item.title }}
-              </h3>
-              <p class="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
-                {{ item.description }}
-              </p>
-              <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-500 dark:text-gray-400 gap-2 sm:gap-0"
-              >
-                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-1 sm:gap-0">
-                  <span class="truncate">{{ item.author.nickname }}</span>
-                  <span class="truncate">{{ formatDate(item.createdAt) }}</span>
-                </div>
-                <div class="flex items-center space-x-2 flex-shrink-0">
-                  <Icon name="mynaui:eye" class="w-4 h-4" />
-                  <span>{{ item.views }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </NuxtLinkLocale>
-      </TransitionGroup>
-    </div>
-
-    <!-- 加载指示器 -->
-    <div v-if="loading && displayItems.length > 0" class="flex justify-center py-8">
-      <div
-        class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-      ></div>
+      <!-- 瀑布流视图 -->
+      <div v-else>
+        <WaterfallLayout :items="displayItemsWithSkeleton" :gap="16">
+          <template #default="{ item }">
+            <WaterfallSkeleton v-if="(item as any).isSkeleton" :index="(item as any).index" />
+            <WaterfallArticleCard v-else :data="item as any" />
+          </template>
+        </WaterfallLayout>
+      </div>
     </div>
 
     <!-- 没有更多数据提示 -->
@@ -143,8 +117,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, onUnmounted } from 'vue';
-  import { useRoute } from 'vue-router';
   import { categoryControllerFindOne, articleControllerFindAll } from '~/api';
 
   const route = useRoute();
@@ -153,12 +125,15 @@
   // 简化状态管理，参考index.vue
   const articles = ref<any[]>([]);
   const loading = ref(false);
+  const tabSwitchLoading = ref(false); // 切换tab的加载状态
   const tabs = [
     { label: t('category.latest'), value: 'latest' },
     { label: t('category.popular'), value: 'popular' }
   ];
   const currentTab = ref('latest');
-  const viewMode = ref<'grid' | 'list'>('grid');
+  // 从 siteConfig 获取布局模式
+  const siteConfig = inject<any>('siteConfig');
+  const layoutMode = computed(() => siteConfig?.site_layout || 'waterfall');
   const pagination = ref({
     page: 1,
     limit: 20
@@ -166,6 +141,19 @@
   const hasMore = ref(true);
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
+
+  // 骨架屏占位数据
+  const skeletonItems = computed(() =>
+    Array.from({ length: 8 }, (_, i) => ({ id: `skeleton-${i}`, index: i, isSkeleton: true }))
+  );
+
+  // 瀑布流显示项目（包括骨架屏）
+  const displayItemsWithSkeleton = computed(() => {
+    if (layoutMode.value === 'waterfall' && loading.value && articles.value.length > 0) {
+      return [...articles.value, ...skeletonItems.value];
+    }
+    return articles.value;
+  });
 
   // 加载分类信息
   const { data: category } = await categoryControllerFindOne({
@@ -183,7 +171,7 @@
     ogTitle: () => category.value?.data?.name || '',
     ogDescription: () => category.value?.data?.description || '',
     ogType: 'website',
-    ogImage: () => category.value?.data?.cover || ''
+    ogImage: () => category.value?.data?.cover || undefined
   });
 
   // 重置数据，参考index.vue
@@ -253,9 +241,11 @@
   // 图片错误处理
 
   // 监听状态变化
-  watch(currentTab, () => {
+  watch(currentTab, async () => {
+    tabSwitchLoading.value = true; // 显示全局加载动画
     resetData();
-    loadArticles();
+    await loadArticles();
+    tabSwitchLoading.value = false; // 隐藏全局加载动画
   });
 
   watch(categoryId, () => {
