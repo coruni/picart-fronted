@@ -889,7 +889,7 @@
     robots: 'index, follow',
     ogTitle: () => article.value?.data?.title || '',
     ogDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
-    ogImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || '',
+    ogImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || undefined,
     ogType: 'article'
   });
 

@@ -18,7 +18,6 @@ export interface CookieConsentRecord {
 export const useCookieConsent = () => {
   const { t } = useI18n();
   const toast = useToast();
-  const config = useRuntimeConfig();
 
   // Cookie 设置
   const cookieSettings = ref<CookieSettings>({
@@ -30,9 +29,6 @@ export const useCookieConsent = () => {
 
   // 检查是否已经同意过 Cookie
   const hasConsented = ref(false);
-
-  // Clarity 脚本加载状态（仅在客户端且用户同意后初始化）
-  let clarityScriptLoaded = false;
 
   // 初始化
   onMounted(() => {
@@ -61,13 +57,6 @@ export const useCookieConsent = () => {
       default: () => cookieSettings.value
     });
     cookieSettings.value = settings.value;
-
-    // 如果已经同意，立即加载相应的脚本
-    if (import.meta.client) {
-      setTimeout(() => {
-        loadScriptsBasedOnSettings();
-      }, 100);
-    }
   };
 
   // 接受所有 Cookie
@@ -126,9 +115,6 @@ export const useCookieConsent = () => {
 
       hasConsented.value = true;
 
-      // 根据设置加载相应的脚本
-      loadScriptsBasedOnSettings();
-
       // 如果同意了必要 Cookie，初始化设备 ID
       if (cookieSettings.value.necessary) {
         await initializeDeviceId();
@@ -145,69 +131,6 @@ export const useCookieConsent = () => {
         title: t('cookie.saveError'),
         color: 'error'
       });
-    }
-  };
-
-  // 加载 Clarity 脚本（手动注入脚本）
-  const loadClarity = () => {
-    if (import.meta.client && !clarityScriptLoaded && config.public.scripts?.clarity?.id) {
-      try {
-        const clarityId = config.public.scripts.clarity.id;
-
-        // 检查 Clarity ID 是否有效
-        if (!clarityId || clarityId === '' || clarityId === 'gpl') {
-          console.warn('Clarity ID not configured or invalid. Skipping Clarity initialization.');
-          return;
-        }
-
-        // 根据当前页面的协议动态生成Clarity脚本URL
-        const protocol = window.location.protocol === 'http:' ? 'http:' : 'https:';
-        const clarityUrl = `${protocol}//www.clarity.ms/tag/${clarityId}`;
-
-        // 手动注入 Clarity 脚本
-        (function (c: any, l: any, a: string, r: string, url: string) {
-          c[a] =
-            c[a] ||
-            function () {
-              (c[a].q = c[a].q || []).push(arguments);
-            };
-          const t = l.createElement(r);
-          t.async = 1;
-          t.src = url;
-          const y = l.getElementsByTagName(r)[0];
-          y.parentNode.insertBefore(t, y);
-        })(window, document, 'clarity', 'script', clarityUrl);
-
-        clarityScriptLoaded = true;
-        console.log('Clarity script loaded successfully:', clarityUrl);
-      } catch (error) {
-        console.error('Failed to load Clarity:', error);
-      }
-    }
-  };
-
-  // 根据设置加载相应的脚本
-  const loadScriptsBasedOnSettings = () => {
-    if (cookieSettings.value.analytics) {
-      // 加载分析脚本 - Microsoft Clarity
-      loadClarity();
-    } else {
-      // 如果用户拒绝分析 Cookie
-      if (clarityScriptLoaded) {
-        console.warn(
-          'Clarity has already been loaded. Cookie preference will apply on next visit.'
-        );
-      }
-    }
-
-    if (cookieSettings.value.marketing) {
-      // 加载营销脚本
-      // Example: loadFacebookPixel()
-    }
-
-    if (cookieSettings.value.functional) {
-      // 加载功能脚本
-      // Example: loadChatWidget()
     }
   };
 

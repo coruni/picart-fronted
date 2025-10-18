@@ -89,6 +89,40 @@
   const observerTarget = ref<HTMLDivElement | null>(null);
   let observer: IntersectionObserver | null = null;
 
+  // 使用 useAsyncData 在 SSR 阶段获取首屏数据
+  const { data: initialData, refresh: refreshData } = await useAsyncData(
+    `home-articles-${currentTab.value}`,
+    async () => {
+      try {
+        const response = await articleControllerFindAll({
+          composable: '$fetch',
+          query: {
+            page: 1,
+            limit: pagination.value.limit,
+            type: currentTab.value as 'all' | 'popular' | 'latest' | 'following'
+          }
+        });
+        return response.data?.data || [];
+      } catch (error) {
+        console.error('Failed to fetch initial data:', error);
+        return [];
+      }
+    },
+    {
+      server: true,
+      lazy: false
+    }
+  );
+
+  // 初始化数据
+  if (initialData.value) {
+    allItems.value = initialData.value;
+    hasMore.value = initialData.value.length === pagination.value.limit;
+    if (hasMore.value) {
+      pagination.value.page = 2; // 下次从第二页开始加载
+    }
+  }
+
   // 重置数据
   const resetData = () => {
     pagination.value.page = 1;
@@ -97,26 +131,56 @@
     loading.value = false;
   };
 
-  watch(currentTab, async () => {
+  // 重启 observer
+  const restartObserver = () => {
+    if (observer && observerTarget.value) {
+      observer.disconnect();
+      observer.observe(observerTarget.value);
+    }
+  };
+
+  // 监听 tab 切换，刷新数据
+  watch(currentTab, async newTab => {
     resetData();
-    await loadArticles();
+    loading.value = true;
+
+    try {
+      // 重新获取数据
+      const response = await articleControllerFindAll({
+        composable: '$fetch',
+        query: {
+          page: 1,
+          limit: pagination.value.limit,
+          type: newTab as 'all' | 'popular' | 'latest' | 'following'
+        }
+      });
+
+      const newData = response.data?.data || [];
+      allItems.value = newData;
+      hasMore.value = newData.length === pagination.value.limit;
+
+      if (hasMore.value) {
+        pagination.value.page = 2;
+        // 重启观察器
+        restartObserver();
+      }
+    } catch (error) {
+      console.error('Failed to load articles:', error);
+    } finally {
+      loading.value = false;
+    }
   });
 
-  // 加载文章数据
+  // 加载更多文章数据
   const loadArticles = async () => {
     // 添加额外的检查，确保不会重复触发
     if (loading.value || !hasMore.value) return;
 
     loading.value = true;
 
-    // 如果是第一页，立即清空列表以提供即时反馈
-    if (pagination.value.page === 1) {
-      allItems.value = [];
-    }
     try {
       const response = await articleControllerFindAll({
-        composable: 'useFetch',
-        key: `home-${currentTab.value}-${pagination.value.page}`,
+        composable: '$fetch',
         query: {
           page: pagination.value.page,
           limit: pagination.value.limit,
@@ -124,13 +188,8 @@
         }
       });
 
-      const newData = response.data.value?.data?.data || [];
-
-      if (pagination.value.page === 1) {
-        allItems.value = newData;
-      } else {
-        allItems.value = [...allItems.value, ...newData];
-      }
+      const newData = response.data?.data || [];
+      allItems.value = [...allItems.value, ...newData];
 
       // 检查是否还有更多数据
       hasMore.value = newData.length === pagination.value.limit;
@@ -145,12 +204,11 @@
         observer.disconnect();
       }
     } catch (error) {
+      console.error('Failed to load more articles:', error);
     } finally {
       loading.value = false;
     }
   };
-
-  loadArticles();
 
   // 计算显示的项目
   const displayItems = computed(() => {

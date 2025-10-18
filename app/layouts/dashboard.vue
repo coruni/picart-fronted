@@ -1,266 +1,138 @@
-<template>
-  <div class="min-h-screen flex relative">
-    <!-- 左侧导航栏 - 桌面端 -->
-    <DashboardSidebar
-      :sidebar-collapsed="sidebarCollapsed"
-      :menu-items="menuItems"
-      @toggle="sidebarCollapsed = !sidebarCollapsed"
-      :class="[
-        'transition-all duration-300 ease-in-out',
-        'lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:z-30',
-        'hidden lg:block',
-        sidebarCollapsed ? 'lg:w-16' : 'lg:w-64'
-      ]"
-    />
-
-    <!-- 移动端侧边栏 -->
-    <USlideover v-model:open="toggleMobileSidebar" side="left" :title="$t('admin.menu.dashboard')">
-      <template #body>
-        <nav class="flex-1 p-4 overflow-y-auto">
-          <ul class="space-y-2">
-            <li v-for="item in menuItems" :key="item.path">
-              <NuxtLinkLocale
-                :to="item.path"
-                class="flex items-center px-3 py-2 text-gray-800 rounded-md hover:bg-gray-100 dark:text-white/80 dark:hover:bg-gray-700 hover:text-primary transition-all duration-200 group"
-                active-class="bg-gray-100 text-primary dark:bg-gray-700"
-                @click="toggleMobileSidebar = false"
-              >
-                <Icon :name="item.icon" class="w-5 h-5 flex-shrink-0 mr-3" />
-                <span>{{ $t(item.text) }}</span>
-              </NuxtLinkLocale>
-            </li>
-          </ul>
-        </nav>
-      </template>
-    </USlideover>
-
-    <!-- 右侧内容区域 -->
-    <main
-      :class="[
-        'flex-1 flex flex-col min-w-0',
-        'transition-all duration-300 ease-in-out',
-        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64',
-        'ml-0'
-      ]"
-    >
-      <!-- 顶部导航栏 -->
-      <header
-        class="bg-white shadow-sm border-b border-gray-200 dark:border-gray-600 h-16 dark:bg-gray-800 flex items-center justify-between px-6"
-      >
-        <div class="flex items-center space-x-3">
-          <!-- 移动端菜单按钮 -->
-          <UButton
-            @click="toggleMobileSidebar = true"
-            variant="link"
-            color="neutral"
-            class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
-          >
-            <Icon name="mynaui:menu" class="w-5 h-5 text-gray-600 dark:text-gray-300" />
-          </UButton>
-          <h2 class="text-lg font-semibold text-gray-800 dark:text-white/80">
-            {{ $t(pageTitle) }}
-          </h2>
-        </div>
-
-        <div class="flex items-center space-x-2 sm:space-x-4">
-          <!-- 暗黑模式切换按钮 -->
-          <ColorScheme placeholder="..." tag="span">
-            <UButton
-              variant="link"
-              color="neutral"
-              @click="toggleColorMode"
-              class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              :title="$t('common.toggleTheme')"
-            >
-              <Icon
-                :name="colorMode.value === 'dark' ? 'mynaui:sun' : 'mynaui:moon'"
-                class="w-5 h-5 text-gray-600 dark:text-gray-300"
-              />
-            </UButton>
-          </ColorScheme>
-
-          <!-- 用户菜单 -->
-          <div class="group relative">
-            <UButton
-              variant="link"
-              color="neutral"
-              class="cursor-pointer flex items-center p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
-            >
-              <Icon name="mynaui:user" class="w-4 h-4 sm:w-5 sm:h-5" />
-              <Icon
-                name="mynaui:chevron-down"
-                class="w-3 h-3 sm:w-4 sm:h-4 ml-1 hidden sm:block group-hover:rotate-180 transition-transform"
-              />
-            </UButton>
-
-            <!-- 下拉菜单 -->
-            <div
-              class="absolute right-0 mt-2 w-40 sm:w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 border border-gray-100 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300"
-            >
-              <a
-                href="#"
-                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
-                >个人资料</a
-              >
-              <a
-                href="#"
-                class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
-                >账户设置</a
-              >
-              <hr class="my-1 sm:my-2 mx-1 sm:mx-2 border-gray-200 dark:border-gray-600" />
-              <button
-                @click="handleLogout"
-                class="block w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors rounded mx-1 sm:mx-2"
-              >
-                {{ $t('user.logout') }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- 页面内容 -->
-      <div class="flex-1 p-4 sm:p-6 overflow-auto flex flex-col">
-        <div
-          class="bg-white dark:bg-gray-800 rounded-md shadow-sm p-4 sm:p-6 min-h-full flex-1 flex flex-col"
-        >
-          <NuxtPage keepalive />
-        </div>
-      </div>
-    </main>
-    <!-- Cookie Consent -->
-    <CookieConsent />
-  </div>
-</template>
-
-<script setup lang="ts">
+<script lang="ts" setup>
+  import type { NavigationMenuItem } from '@nuxt/ui';
   import { confirmLogout } from '~/utils/logout';
+  import type { SiteConfig } from '~/types/site-config';
 
+  const { t } = useI18n();
   const route = useRoute();
-  const sidebarCollapsed = ref(false);
-  const toggleMobileSidebar = ref(false);
-
-  // 暗黑模式
-  const colorMode = useColorMode();
-
-  const toggleColorMode = () => {
-    colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
-  };
+  const userStore = useUserStore();
+  const siteConfig = inject<SiteConfig>('siteConfig');
 
   // 处理登出
   const handleLogout = async () => {
     await confirmLogout();
   };
 
-  // 菜单数据
-  const menuItems = [
+  // 菜单数据 - 转换为 NavigationMenuItem 格式
+  const menuItems = computed<NavigationMenuItem[]>(() => [
     {
-      path: '/admin',
-      icon: 'mynaui:brand-trello',
-      text: 'admin.menu.dashboard'
+      label: t('admin.menu.dashboard'),
+      to: '/admin',
+      icon: 'mynaui:brand-trello'
     },
     {
-      path: '/admin/articles',
-      icon: 'mynaui:box',
-      text: 'admin.menu.articles'
+      label: t('admin.menu.articles'),
+      to: '/admin/articles',
+      icon: 'mynaui:box'
     },
     {
-      path: '/admin/categories',
-      icon: 'mynaui:box',
-      text: 'admin.menu.categories'
+      label: t('admin.menu.categories'),
+      to: '/admin/categories',
+      icon: 'mynaui:box'
     },
     {
-      path: '/admin/tags',
-      icon: 'mynaui:box',
-      text: 'admin.menu.tags'
+      label: t('admin.menu.tags'),
+      to: '/admin/tags',
+      icon: 'mynaui:box'
     },
     {
-      path: '/admin/roles',
-      icon: 'mynaui:shield',
-      text: 'admin.menu.roles'
+      label: t('admin.menu.roles'),
+      to: '/admin/roles',
+      icon: 'mynaui:shield'
     },
     {
-      path: '/admin/users',
-      icon: 'mynaui:users',
-      text: 'admin.menu.users'
+      label: t('admin.menu.users'),
+      to: '/admin/users',
+      icon: 'mynaui:users'
     },
     {
-      path: '/admin/orders',
-      icon: 'mynaui:cart',
-      text: 'admin.menu.orders'
+      label: t('admin.menu.orders'),
+      to: '/admin/orders',
+      icon: 'mynaui:cart'
     },
     {
-      path: '/admin/comments',
-      icon: 'mynaui:chat',
-      text: 'admin.menu.comments'
+      label: t('admin.menu.comments'),
+      to: '/admin/comments',
+      icon: 'mynaui:chat'
     },
     {
-      path: '/admin/banners',
-      icon: 'mynaui:image',
-      text: 'admin.menu.banners'
+      label: t('admin.menu.banners'),
+      to: '/admin/banners',
+      icon: 'mynaui:image'
     },
-    // {
-    //   path: '/admin/analytics',
-    //   icon: 'mynaui:chart-line',
-    //   text: 'admin.menu.analytics'
-    // },
     {
-      path: '/admin/settings',
-      icon: 'mynaui:cog-four',
-      text: 'admin.menu.settings'
+      label: t('admin.menu.settings'),
+      to: '/admin/settings',
+      icon: 'mynaui:cog-four'
     }
-  ];
+  ]);
 
   // 根据路由动态设置页面标题
   const pageTitle = computed(() => {
-    const titleMap: Record<string, string> = menuItems.reduce(
-      (map: Record<string, string>, item) => {
-        map[item.path] = item.text;
-        return map;
-      },
-      {}
+    const currentItem = menuItems.value.find(
+      item => item.to === route.path || route.path.startsWith(item.to + '/')
     );
-    return titleMap[route.path] || '';
+    return currentItem?.label || t('admin.menu.dashboard');
   });
-
-  // 监听路由变化，自动关闭移动端菜单
-  watch(
-    () => route.path,
-    () => {
-      toggleMobileSidebar.value = false;
-    }
-  );
 </script>
 
-<style scoped>
-  /* 自定义滚动条样式 */
-  .overflow-auto::-webkit-scrollbar {
-    width: 6px;
-  }
+<template>
+  <UDashboardGroup>
+    <UDashboardSidebar
+      toggle-side="left"
+      id="dashboard"
+      :ui="{ footer: 'lg:border-t lg:border-default', root: 'w-64' }"
+    >
+      <template #header>
+        <!-- Logo -->
+        <div class="flex items-center gap-3 px-2 py-1">
+          <NuxtImg
+            v-if="siteConfig?.site_logo"
+            :src="siteConfig.site_logo"
+            alt="logo"
+            class="w-10 h-10"
+          />
+          <div class="flex-1">
+            <h1 class="text-lg font-bold truncate">{{ siteConfig?.site_name || 'Admin' }}</h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{{ t('admin.menu.dashboard') }}</p>
+          </div>
+        </div>
+      </template>
 
-  .overflow-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
+      <template #default="slotProps">
+        <UNavigationMenu
+          :ui="{ link: 'py-2' }"
+          orientation="vertical"
+          tooltip
+          :collapsed="slotProps?.collapsed ?? false"
+          :items="menuItems"
+        />
+      </template>
 
-  .overflow-auto::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-  }
+      <template #footer="slotProps">
+        <div class="flex flex-col flex-1 gap-2">
+          <UserMenu :collapsed="slotProps?.collapsed ?? false" />
+        </div>
+      </template>
+    </UDashboardSidebar>
 
-  .overflow-auto::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-  }
+    <UDashboardPanel :ui="{ body: 'p-4 sm:p-6' }">
+      <template #header>
+        <UDashboardNavbar toggle-side="left">
+          <template #left>
+            <h2 class="text-lg font-semibold">{{ pageTitle }}</h2>
+          </template>
+        </UDashboardNavbar>
+      </template>
 
-  /* 暗黑模式下的滚动条 */
-  .dark .overflow-auto::-webkit-scrollbar-track {
-    background: #374151;
-  }
+      <template #body>
+        <NuxtPage keepalive />
+      </template>
+    </UDashboardPanel>
 
-  .dark .overflow-auto::-webkit-scrollbar-thumb {
-    background: #6b7280;
-  }
+    <!-- Cookie Consent -->
+    <CookieConsent />
+  </UDashboardGroup>
+</template>
 
-  .dark .overflow-auto::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
-  }
-</style>
+<style scoped></style>

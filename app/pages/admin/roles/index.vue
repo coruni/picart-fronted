@@ -50,23 +50,25 @@
       </UButton>
     </div>
 
-    <UTable
-      ref="table"
-      v-model:pagination="pagination"
-      sticky="header"
-      :loading="roles.pending.value"
-      loading-color="primary"
-      loading-animation="carousel"
-      :data="tableData || []"
-      :columns="columns"
-      :key="tableKey"
-      :ui="{
-        root: 'min-w-full',
-        td: 'empty:p-0'
-      }"
-      class="flex-1"
-    >
-    </UTable>
+    <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
+      <UTable
+        ref="table"
+        v-model:pagination="pagination"
+        sticky="header"
+        :loading="roles.pending.value"
+        loading-color="primary"
+        loading-animation="carousel"
+        :data="tableData || []"
+        :columns="columns"
+        :key="tableKey"
+        :ui="{
+          root: 'min-w-full',
+          td: 'empty:p-0'
+        }"
+        class="h-full"
+      >
+      </UTable>
+    </div>
 
     <!-- 查看角色详情模态框 -->
     <UModal v-model="showViewModal">

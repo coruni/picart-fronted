@@ -39,7 +39,7 @@
       </UButton>
     </div>
 
-    <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+    <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
         v-model:pagination="pagination"
@@ -50,7 +50,7 @@
         :data="tableData"
         :columns="columns"
         :key="tableKey"
-        class="min-w-[600px] sm:min-w-0"
+        class="h-full"
       />
     </div>
     <div class="flex justify-center border-t border-default pt-4">

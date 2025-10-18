@@ -1,79 +1,92 @@
 import { useUserStore } from '~/stores/user';
+import { userControllerGetProfile } from '~/api';
+import type { UserControllerGetProfileResponse } from '~/api';
 
-export default defineNuxtPlugin(async () => {
-  // 确保用户状态在SSR时正确初始化
+type UserInfo = UserControllerGetProfileResponse['data'];
+
+export default defineNuxtPlugin(async nuxtApp => {
   const userStore = useUserStore();
 
-  // 在服务端，尝试从cookie恢复用户状态
-  if (import.meta.server) {
-    try {
-      const authTokenCookie = useCookie('auth-token', {
-        default: () => null,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: false
-      });
-      
-      const refreshTokenCookie = useCookie('refresh-token', {
-        default: () => null,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 90,
-        httpOnly: false
-      });
+  // 检查是否有认证token
+  const authTokenCookie = useCookie('auth-token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
 
-      // 从cookie恢复token
-      if (authTokenCookie.value && !userStore.token) {
-        userStore.setToken(authTokenCookie.value);
-      }
+  const refreshTokenCookie = useCookie('refresh-token', {
+    default: () => null,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 90,
+    httpOnly: false
+  });
 
-      if (refreshTokenCookie.value && !userStore.refreshToken) {
-        userStore.setRefreshToken(refreshTokenCookie.value);
-      }
+  // 如果有token，在服务器端和客户端都获取用户信息
+  if (authTokenCookie.value) {
+    // 恢复token到store
+    if (!userStore.token) {
+      userStore.setToken(authTokenCookie.value);
+    }
+    if (refreshTokenCookie.value && !userStore.refreshToken) {
+      userStore.setRefreshToken(refreshTokenCookie.value);
+    }
 
-      // 如果从cookie没有获取到token，尝试从请求头获取
-      if (!authTokenCookie.value) {
-        const event = useRequestEvent();
-        if (event?.node?.req?.headers?.cookie) {
-          const cookies = event.node.req.headers.cookie;
-          const cookieArray = cookies.split(';').map(cookie => cookie.trim());
-          
-          cookieArray.forEach(cookie => {
-            const [name, value] = cookie.split('=');
-            if (name && value) {
-              if (name === 'auth-token' && !userStore.token) {
-                userStore.setToken(value);
-              } else if (name === 'refresh-token' && !userStore.refreshToken) {
-                userStore.setRefreshToken(value);
-              }
-            }
+    // 使用 useAsyncData 在服务端获取用户信息，自动处理 SSR 水合
+    const { data: userInfoData, error } = await useAsyncData(
+      'user-profile',
+      async () => {
+        try {
+          const response = await userControllerGetProfile({
+            composable: '$fetch'
           });
+          return response.data as UserInfo;
+        } catch (err) {
+          console.warn('Failed to fetch user profile:', err);
+          return null;
+        }
+      },
+      {
+        // 只在有token时才获取
+        server: !!authTokenCookie.value,
+        lazy: false,
+        // 设置缓存时间
+        getCachedData: key => {
+          const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+          return data;
         }
       }
-    } catch (error) {
-      console.warn('SSR: Failed to initialize user state from cookies:', error);
+    );
+
+    // 如果成功获取用户信息，更新到store
+    if (userInfoData.value) {
+      userStore.setUserInfo(userInfoData.value);
+    } else if (error.value) {
+      // 如果获取失败（可能是token过期），清除认证状态
+      console.warn('Failed to get user profile, clearing auth state');
+      await userStore.clearAuth(false);
     }
   }
 
-  // 在客户端，如果用户已认证但用户信息为空，尝试重新获取用户信息
+  // 在客户端，如果用户已认证但没有用户信息，尝试重新获取
   if (import.meta.client) {
-    await nextTick();
-    if (userStore.isLoggedIn) {
-      try {
-        const { userControllerGetProfile } = await import('~/api');
-        const response = await userControllerGetProfile({
-          composable: '$fetch'
-        });
+    nuxtApp.hook('app:mounted', async () => {
+      if (userStore.isLoggedIn && !userStore.userInfo) {
+        try {
+          const response = await userControllerGetProfile({
+            composable: '$fetch'
+          });
 
-        if (response.data) {
-          userStore.setUserInfo(response.data);
+          if (response.data) {
+            userStore.setUserInfo(response.data);
+          }
+        } catch (error) {
+          console.warn('Client: Failed to refresh user info:', error);
+          await userStore.clearAuth(false);
         }
-      } catch (error) {
-        console.warn('Failed to refresh user info:', error);
-        // 如果获取用户信息失败，可能是token过期，清除认证状态
-        userStore.clearAuth(false);
       }
-    }
+    });
   }
 });

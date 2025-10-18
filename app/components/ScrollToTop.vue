@@ -22,7 +22,6 @@
     }
   };
   onMounted(() => {
-    console.log('onMounted');
     window.addEventListener('scroll', () => {
       handleScroll();
     });

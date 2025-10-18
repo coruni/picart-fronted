@@ -217,7 +217,7 @@
           </div>
           <div class="flex items-center justify-between mb-3">
             <span class="text-sm text-gray-700 dark:text-gray-300">{{
-              userProfile?.data.isMember ? $t('user.vipMember') : $t('user.basicMember')
+              userProfile?.data?.isMember ? $t('user.vipMember') : $t('user.basicMember')
             }}</span>
             <span class="text-sm font-medium text-primary-500 dark:text-white"
               >Lv.{{ userProfile?.data?.level || 0 }}</span
@@ -468,7 +468,7 @@
 
   const { t } = useI18n();
   const userStore = useUserStore();
-  const userInfo = userStore.currentUser;
+  const userInfo = computed(() => userStore.currentUser);
   const localPath = useLocalePath();
 
   // 消息相关数据
@@ -524,16 +524,24 @@
       path: ['confirmPassword']
     });
 
-  // 用户资料
-  const { data: userProfile, refresh: userRefresh } = await userControllerGetProfile({
-    composable: 'useAsyncData',
-    key: 'user-profile'
-  });
+  // 用户资料直接从 store 获取（已在 SSR 阶段通过插件加载）
+  const userProfile = computed(() => ({
+    data: userInfo.value
+  }));
 
-  // 处理用户资料
-  if (userProfile.value?.data) {
-    userStore.setUserInfo(userProfile.value?.data);
-  }
+  // 刷新用户资料的方法
+  const userRefresh = async () => {
+    try {
+      const response = await userControllerGetProfile({
+        composable: '$fetch'
+      });
+      if (response.data) {
+        userStore.setUserInfo(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+    }
+  };
 
   // 重置数据
   const resetData = () => {
@@ -548,7 +556,7 @@
     if (loading.value || !hasMore.value) return;
 
     // 确保用户信息已加载
-    const userId = userProfile.value?.data?.id || userInfo?.id;
+    const userId = userProfile.value?.data?.id || userInfo.value?.id;
     if (!userId) {
       return;
     }
@@ -591,19 +599,19 @@
   // 等待用户信息加载完成后再加载文章
   const loadArticlesWhenReady = async () => {
     // 如果用户信息已加载，直接加载文章
-    if (userProfile.value?.data?.id || userInfo?.id) {
+    if (userProfile.value?.data?.id || userInfo.value?.id) {
       await loadUserArticles();
     } else {
       // 如果用户信息还未加载，等待一下再尝试
       await new Promise(resolve => setTimeout(resolve, 100));
-      if (userProfile.value?.data?.id || userInfo?.id) {
+      if (userProfile.value?.data?.id || userInfo.value?.id) {
         await loadUserArticles();
       } else {
         // 如果仍然没有用户信息，可能是SSR问题，在客户端重新尝试
         if (import.meta.client) {
           // 延迟更长时间等待store状态恢复
           setTimeout(async () => {
-            if (userProfile.value?.data?.id || userInfo?.id) {
+            if (userProfile.value?.data?.id || userInfo.value?.id) {
               await loadUserArticles();
             }
           }, 500);
@@ -614,7 +622,7 @@
 
   // 监听用户信息变化，重新加载文章
   watch(
-    () => userProfile.value?.data?.id || userInfo?.id,
+    () => userProfile.value?.data?.id || userInfo.value?.id,
     async (newUserId, oldUserId) => {
       if (newUserId && newUserId !== oldUserId) {
         resetData();
@@ -644,7 +652,7 @@
 
   onMounted(() => {
     // 在客户端挂载后，如果文章为空且用户信息已加载，重新尝试加载文章
-    if (displayArticles.value.length === 0 && (userProfile.value?.data?.id || userInfo?.id)) {
+    if (displayArticles.value.length === 0 && (userProfile.value?.data?.id || userInfo.value?.id)) {
       loadArticlesWhenReady();
     } else if (displayArticles.value.length === 0) {
       // 如果文章为空且用户信息也未加载，可能是SSR问题，延迟重试
@@ -687,12 +695,12 @@
 
   // 监听模态框打开，初始化表单数据
   watch(isEditModalOpen, newValue => {
-    if (newValue && userInfo) {
+    if (newValue && userInfo.value) {
       editForm.value = {
-        username: userInfo?.username || '',
-        nickname: userInfo?.nickname || '',
-        description: (userInfo?.description as string) || '',
-        avatar: userInfo?.avatar || ''
+        username: userInfo.value?.username || '',
+        nickname: userInfo.value?.nickname || '',
+        description: (userInfo.value?.description as string) || '',
+        avatar: userInfo.value?.avatar || ''
       };
     }
   });
@@ -756,15 +764,15 @@
       await userControllerUpdate({
         composable: '$fetch',
         path: {
-          id: userInfo?.id?.toString()!
+          id: userInfo.value?.id?.toString()!
         },
         body: editForm.value
       });
 
       // 更新本地用户信息
-      if (userInfo) {
+      if (userInfo.value) {
         userStore.setUserInfo({
-          ...userInfo,
+          ...userInfo.value,
           ...editForm.value
         });
       }

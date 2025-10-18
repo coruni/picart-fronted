@@ -179,8 +179,8 @@ export default defineNuxtConfig({
     detectBrowserLanguage: {
       useCookie: false, // 禁用 Cookie，改用 localStorage 以符合 GDPR
       fallbackLocale: 'zh',
-      alwaysRedirect: false,
-      redirectOn: 'root'
+      alwaysRedirect: true,
+      redirectOn: 'all'
     },
     // 编译优化
     compilation: {

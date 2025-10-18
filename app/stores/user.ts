@@ -178,6 +178,10 @@ export const useUserStore = defineStore('user', {
   persist: {
     storage: import.meta.client
       ? piniaPluginPersistedstate.localStorage()
-      : piniaPluginPersistedstate.cookies()
+      : piniaPluginPersistedstate.cookies(),
+    // 在SSR时只持久化token，userInfo通过API获取确保数据最新
+    pick: import.meta.server
+      ? ['token', 'refreshToken', 'isAuthenticated', 'rememberedUsername']
+      : undefined
   }
 });

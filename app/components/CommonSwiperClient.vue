@@ -24,7 +24,7 @@
         }"
       >
         <swiper-slide v-for="slide in safeBannersData" :key="slide.id">
-          <div class="relative h-full cursor-pointer" @click="handleBannerClick(slide.linkUrl)">
+          <NuxtLinkLocale :to="slide.linkUrl" class="relative h-full cursor-pointer">
             <NuxtImg
               :src="slide.imageUrl"
               :alt="slide.title"
@@ -53,7 +53,7 @@
                 ></div>
               </div>
             </div>
-          </div>
+          </NuxtLinkLocale>
         </swiper-slide>
       </swiper-container>
 
