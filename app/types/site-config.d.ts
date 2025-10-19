@@ -3,6 +3,7 @@ export interface SiteConfig {
   site_subtitle: string;
   site_description: string;
   site_keywords: string;
+  site_mail: string;
   site_logo: string;
   site_favicon: string;
   user_registration_enabled: boolean;

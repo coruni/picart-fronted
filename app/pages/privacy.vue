@@ -176,8 +176,8 @@
                   <UIcon name="mynaui:envelope" class="w-5 h-5 text-gray-500" />
                   <p class="text-gray-900 dark:text-white">
                     <strong>{{ $t('privacy.contact.email') }}:</strong>
-                    <a href="mailto:admin@cosfan.cc" class="text-primary hover:underline ml-2">
-                      admin@cosfan.cc
+                    <a :href="`mailto:${siteMail}`" class="text-primary hover:underline ml-2">
+                      {{ siteMail }}
                     </a>
                   </p>
                 </div>
@@ -201,7 +201,7 @@
               >
                 <div class="flex items-start gap-3">
                   <UIcon
-                    name="mynaui:alert"
+                    name="mynaui:warning"
                     class="w-6 h-6 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0"
                   />
                   <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -235,9 +235,15 @@
 </template>
 
 <script setup lang="ts">
+  import type { SiteConfig } from '~/types/site-config';
+
   const { t } = useI18n();
   const router = useRouter();
   const cookieConsentRef = ref();
+
+  // 获取网站配置
+  const siteConfig = inject<SiteConfig>('siteConfig');
+  const siteMail = computed(() => siteConfig?.site_mail || '');
 
   // 设置页面元数据
   useHead({

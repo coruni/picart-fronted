@@ -163,7 +163,7 @@ export const useMessage = () => {
       error: 'mynaui:error',
       success: 'mynaui:check-circle',
       info: 'mynaui:info',
-      alert: 'mynaui:alert',
+      alert: 'mynaui:warning',
       reminder: 'mynaui:alarm',
       update: 'mynaui:refresh'
     };

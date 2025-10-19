@@ -284,6 +284,7 @@
       "siteSubtitle": "Site Subtitle",
       "siteDescription": "Site Description",
       "siteKeywords": "Site Keywords",
+      "siteMail": "Site Email",
       "siteLogo": "Site Logo",
       "siteLogoPlaceholder": "Upload site logo",
       "siteFavicon": "Site Favicon",
@@ -1103,7 +1104,9 @@
       "unauthorized": "Not logged in",
       "uploadFileEmpty": "Upload file is empty",
       "resourceNotFound": "Resource not found",
-      "resourceConflict": "Resource conflict"
+      "resourceConflict": "Resource conflict",
+      "followed": "Followed",
+      "tooManyRequests": "Too many requests, please try again later"
     },
     "success": {
       "verificationCodeSent": "Verification code sent",
@@ -1140,7 +1143,8 @@
       "tagUpdate": "Tag updated successfully",
       "userDelete": "User deleted successfully",
       "userUpdate": "User updated successfully",
-      "logout": "Logged out"
+      "logout": "Logged out",
+      "makeAsRead": "Make as read"
     }
   },
   "Unauthorized": "User not logged in",

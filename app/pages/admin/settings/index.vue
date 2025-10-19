@@ -18,6 +18,10 @@
             <UInput v-model="config.site_keywords" class="w-full" />
           </UFormField>
 
+          <UFormField :label="t('admin.settings.siteMail')" name="site_mail" class="w-full">
+            <UInput v-model="config.site_mail" type="email" class="w-full" />
+          </UFormField>
+
           <UFormField
             :label="t('admin.settings.siteDescription')"
             name="site_description"

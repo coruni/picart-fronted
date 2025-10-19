@@ -148,7 +148,7 @@
       <!-- 错误状态 -->
       <div v-else-if="hasError" class="flex items-center justify-center py-20">
         <div class="text-center">
-          <Icon name="mynaui:alert" class="text-red-500 text-4xl mb-4" />
+          <Icon name="mynaui:warning" class="text-red-500 text-4xl mb-4" />
           <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
           <UButton
             @click="handleRetry"
@@ -336,7 +336,7 @@
                     class="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
                   >
                     <div class="text-center text-gray-400">
-                      <Icon name="mynaui:alert" class="w-8 h-8 mx-auto mb-2" />
+                      <Icon name="mynaui:warning" class="w-8 h-8 mx-auto mb-2" />
                       <div class="text-xs">{{ $t('image.loadFailed') }}</div>
                       <button
                         @click.stop="retryImageLoad(index)"

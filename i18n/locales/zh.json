@@ -250,6 +250,7 @@
       "siteSubtitle": "网站副标题",
       "siteDescription": "网站描述",
       "siteKeywords": "网站关键词",
+      "siteMail": "网站邮箱",
       "siteLogo": "网站Logo",
       "siteLogoPlaceholder": "上传网站Logo",
       "siteFavicon": "网站图标",
@@ -517,6 +518,7 @@
       "retry": "重试",
       "title": "加载失败"
     },
+
     "remove": "删除",
     "removeAll": "删除全部",
     "replace": "替换",
@@ -1212,7 +1214,8 @@
       "uploadFileEmpty": "上传文件为空",
       "resourceNotFound": "资源不存在",
       "resourceConflict": "资源冲突",
-      "followed": "已关注"
+      "followed": "已关注",
+      "tooManyRequests": "请求过于频繁，请稍后再试"
     },
     "success": {
       "logout": "已退出",
@@ -1252,7 +1255,8 @@
       "userUpdate": "用户更新成功",
       "messageMarkAllAsRead": "消息标记全部已读成功",
       "unfollow": "取消关注",
-      "follow": "关注"
+      "follow": "关注",
+      "makeAsRead": "标记为已读"
     }
   },
   "Unauthorized": "请先登录",

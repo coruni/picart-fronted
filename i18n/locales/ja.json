@@ -282,6 +282,7 @@
       "siteSubtitle": "サイトサブタイトル",
       "siteDescription": "サイト説明",
       "siteKeywords": "サイトキーワード",
+      "siteMail": "サイトメール",
       "siteLogo": "サイトロゴ",
       "siteLogoPlaceholder": "サイトロゴをアップロード",
       "siteFavicon": "サイトファビコン",
@@ -1122,7 +1123,9 @@
       "unauthorized": "ログインしていません",
       "uploadFileEmpty": "ファイルが空です",
       "resourceNotFound": "リソースが存在しません",
-      "resourceConflict": "リソースが競合しています"
+      "resourceConflict": "リソースが競合しています",
+      "followed": "フォロー済み",
+      "tooManyRequests": "リクエストが多すぎます。後でもう一度お試しください"
     },
     "success": {
       "verificationCodeSent": "認証コードを送信しました",
@@ -1159,7 +1162,8 @@
       "tagUpdate": "タグ更新成功",
       "userDelete": "ユーザー削除成功",
       "userUpdate": "ユーザー更新成功",
-      "logout": "ログアウト"
+      "logout": "ログアウト",
+      "makeAsRead": "既読にする"
     }
   },
   "Unauthorized": "ユーザーがログインしていません",

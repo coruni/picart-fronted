@@ -23,7 +23,7 @@
     <!-- 错误状态 -->
     <div v-else-if="user.error.value" class="flex items-center justify-center py-20">
       <div class="text-center">
-        <Icon name="mynaui:alert" class="text-red-500 text-4xl mb-4" />
+        <Icon name="mynaui:warning" class="text-red-500 text-4xl mb-4" />
         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
         <UButton
           @click="user.refresh?.()"
