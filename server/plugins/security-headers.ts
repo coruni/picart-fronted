@@ -9,6 +9,9 @@ export default defineNitroPlugin(nitroApp => {
     event.node.res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     event.node.res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+    // 保持连接开启，避免过早关闭
+    event.node.res.setHeader('Connection', 'keep-alive');
+
     // 移除不必要的头
     event.node.res.removeHeader('X-Powered-By');
   });

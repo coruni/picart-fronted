@@ -29,10 +29,11 @@
               :src="slide.imageUrl"
               :alt="slide.title"
               class="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
               format="webp"
               quality="90"
               fit="cover"
+              fetchpriority="high"
             />
             <!-- 添加半透明遮罩层 -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>

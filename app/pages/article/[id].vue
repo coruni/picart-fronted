@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <div>
     <!-- 自定义灯箱组件 -->
     <CustomLightbox
       v-model:visible="lightboxVisible"
@@ -9,415 +9,180 @@
       @change="handleLightboxChange"
     />
     <ScrollToTop />
-    <!-- 加载状态 -->
-    <div v-if="isLoading">
-      <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
-        <!-- 左侧主内容区骨架屏 -->
-        <div class="flex-1">
-          <!-- 文章标题区骨架屏 -->
-          <div class="mb-4 md:mb-8">
-            <USkeleton class="h-8 md:h-10 w-3/4 mb-3 md:mb-4" />
-            <div
-              class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4"
-            >
-              <div class="flex items-center">
-                <USkeleton class="h-8 w-8 rounded-full mr-2" />
-                <USkeleton class="h-4 w-24" />
+    <article>
+      <!-- 加载状态 -->
+      <div v-if="isLoading">
+        <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
+          <!-- 左侧主内容区骨架屏 -->
+          <div class="flex-1">
+            <!-- 文章标题区骨架屏 -->
+            <div class="mb-4 md:mb-8">
+              <USkeleton class="h-8 md:h-10 w-3/4 mb-3 md:mb-4" />
+              <div
+                class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4"
+              >
+                <div class="flex items-center">
+                  <USkeleton class="h-8 w-8 rounded-full mr-2" />
+                  <USkeleton class="h-4 w-24" />
+                </div>
+                <USkeleton class="h-4 w-32" />
+                <div class="flex items-center">
+                  <USkeleton class="h-4 w-4 mr-1" />
+                  <USkeleton class="h-4 w-16" />
+                </div>
               </div>
-              <USkeleton class="h-4 w-32" />
-              <div class="flex items-center">
-                <USkeleton class="h-4 w-4 mr-1" />
-                <USkeleton class="h-4 w-16" />
+            </div>
+
+            <!-- 图片展示区骨架屏 -->
+            <div class="mb-4 md:mb-8">
+              <div class="grid grid-cols-1 md:lg:grid-cols-6 gap-2 md:gap-4">
+                <USkeleton class="aspect-square rounded-md" />
+                <USkeleton class="aspect-square rounded-md" />
               </div>
             </div>
-          </div>
 
-          <!-- 图片展示区骨架屏 -->
-          <div class="mb-4 md:mb-8">
-            <div class="grid grid-cols-1 md:lg:grid-cols-6 gap-2 md:gap-4">
-              <USkeleton class="aspect-square rounded-md" />
-              <USkeleton class="aspect-square rounded-md" />
+            <!-- 文章内容骨架屏 -->
+            <div class="mb-6 md:mb-12 space-y-4">
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-5/6" />
+              <USkeleton class="h-4 w-4/5" />
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-3/4" />
+              <USkeleton class="h-4 w-5/6" />
+              <USkeleton class="h-4 w-full" />
+              <USkeleton class="h-4 w-4/5" />
+              <USkeleton class="h-4 w-3/4" />
             </div>
-          </div>
 
-          <!-- 文章内容骨架屏 -->
-          <div class="mb-6 md:mb-12 space-y-4">
-            <USkeleton class="h-4 w-full" />
-            <USkeleton class="h-4 w-5/6" />
-            <USkeleton class="h-4 w-4/5" />
-            <USkeleton class="h-4 w-full" />
-            <USkeleton class="h-4 w-3/4" />
-            <USkeleton class="h-4 w-5/6" />
-            <USkeleton class="h-4 w-full" />
-            <USkeleton class="h-4 w-4/5" />
-            <USkeleton class="h-4 w-3/4" />
-          </div>
-
-          <!-- 标签骨架屏 -->
-          <div class="mb-6 md:mb-8">
-            <USkeleton class="h-6 w-24 mb-3 md:mb-4" />
-            <div class="flex flex-wrap gap-2 md:gap-3">
-              <USkeleton class="h-8 w-16 rounded-full" />
-              <USkeleton class="h-8 w-20 rounded-full" />
-              <USkeleton class="h-8 w-14 rounded-full" />
-              <USkeleton class="h-8 w-18 rounded-full" />
-            </div>
-          </div>
-
-          <!-- 评论区骨架屏 -->
-          <div class="mb-6 md:mb-8">
-            <USkeleton class="h-6 w-24 mb-4 md:mb-6" />
-            <!-- 评论输入框骨架屏 -->
+            <!-- 标签骨架屏 -->
             <div class="mb-6 md:mb-8">
-              <div class="flex items-start space-x-3 md:space-x-4">
-                <USkeleton class="w-8 h-8 md:w-10 md:h-10 rounded-full" />
-                <div class="flex-1">
-                  <USkeleton class="h-24 w-full rounded-md mb-2" />
-                  <div class="flex justify-end">
-                    <USkeleton class="h-8 w-20 rounded-md" />
+              <USkeleton class="h-6 w-24 mb-3 md:mb-4" />
+              <div class="flex flex-wrap gap-2 md:gap-3">
+                <USkeleton class="h-8 w-16 rounded-full" />
+                <USkeleton class="h-8 w-20 rounded-full" />
+                <USkeleton class="h-8 w-14 rounded-full" />
+                <USkeleton class="h-8 w-18 rounded-full" />
+              </div>
+            </div>
+
+            <!-- 评论区骨架屏 -->
+            <div class="mb-6 md:mb-8">
+              <USkeleton class="h-6 w-24 mb-4 md:mb-6" />
+              <!-- 评论输入框骨架屏 -->
+              <div class="mb-6 md:mb-8">
+                <div class="flex items-start space-x-3 md:space-x-4">
+                  <USkeleton class="w-8 h-8 md:w-10 md:h-10 rounded-full" />
+                  <div class="flex-1">
+                    <USkeleton class="h-24 w-full rounded-md mb-2" />
+                    <div class="flex justify-end">
+                      <USkeleton class="h-8 w-20 rounded-md" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- 评论列表骨架屏 -->
-            <div class="space-y-6">
-              <div v-for="i in 3" :key="i" class="flex space-x-3 md:space-x-4">
-                <USkeleton class="w-8 h-8 md:w-10 md:h-10 rounded-full flex-shrink-0" />
-                <div class="flex-1">
-                  <div class="flex items-center space-x-2 mb-2">
-                    <USkeleton class="h-4 w-20" />
-                    <USkeleton class="h-4 w-16" />
+              <!-- 评论列表骨架屏 -->
+              <div class="space-y-6">
+                <div v-for="i in 3" :key="i" class="flex space-x-3 md:space-x-4">
+                  <USkeleton class="w-8 h-8 md:w-10 md:h-10 rounded-full flex-shrink-0" />
+                  <div class="flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                      <USkeleton class="h-4 w-20" />
+                      <USkeleton class="h-4 w-16" />
+                    </div>
+                    <USkeleton class="h-4 w-full mb-2" />
+                    <USkeleton class="h-4 w-3/4 mb-2" />
+                    <USkeleton class="h-4 w-1/2" />
                   </div>
-                  <USkeleton class="h-4 w-full mb-2" />
-                  <USkeleton class="h-4 w-3/4 mb-2" />
-                  <USkeleton class="h-4 w-1/2" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- 右侧边栏骨架屏 -->
-        <div class="w-full lg:w-80 flex-shrink-0">
-          <div class="lg:sticky top-4">
-            <!-- 作者信息骨架屏 -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-              <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
-                <USkeleton class="w-12 h-12 md:w-16 md:h-16 rounded-full" />
-                <div class="flex-1">
-                  <USkeleton class="h-4 w-24 mb-2" />
-                  <USkeleton class="h-3 w-32" />
-                </div>
-              </div>
-              <div class="flex items-center justify-between mb-4 md:mb-6">
-                <div class="text-center">
-                  <USkeleton class="h-4 w-8 mx-auto mb-1" />
-                  <USkeleton class="h-3 w-12" />
-                </div>
-                <div class="text-center">
-                  <USkeleton class="h-4 w-8 mx-auto mb-1" />
-                  <USkeleton class="h-3 w-8" />
-                </div>
-                <div class="text-center">
-                  <USkeleton class="h-4 w-8 mx-auto mb-1" />
-                  <USkeleton class="h-3 w-16" />
-                </div>
-              </div>
-              <USkeleton class="h-10 w-full rounded-md" />
-            </div>
-
-            <!-- 相关推荐骨架屏 -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
-              <USkeleton class="h-6 w-32 mb-3 md:mb-4" />
-              <div class="space-y-3 md:space-y-4">
-                <div v-for="i in 3" :key="i" class="flex items-center space-x-3">
-                  <USkeleton class="w-16 h-16 md:w-20 md:h-20 rounded-md flex-shrink-0" />
+          <!-- 右侧边栏骨架屏 -->
+          <div class="w-full lg:w-80 flex-shrink-0">
+            <div class="lg:sticky top-4">
+              <!-- 作者信息骨架屏 -->
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+                <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
+                  <USkeleton class="w-12 h-12 md:w-16 md:h-16 rounded-full" />
                   <div class="flex-1">
-                    <USkeleton class="h-4 w-full mb-1" />
+                    <USkeleton class="h-4 w-24 mb-2" />
+                    <USkeleton class="h-3 w-32" />
+                  </div>
+                </div>
+                <div class="flex items-center justify-between mb-4 md:mb-6">
+                  <div class="text-center">
+                    <USkeleton class="h-4 w-8 mx-auto mb-1" />
+                    <USkeleton class="h-3 w-12" />
+                  </div>
+                  <div class="text-center">
+                    <USkeleton class="h-4 w-8 mx-auto mb-1" />
+                    <USkeleton class="h-3 w-8" />
+                  </div>
+                  <div class="text-center">
+                    <USkeleton class="h-4 w-8 mx-auto mb-1" />
                     <USkeleton class="h-3 w-16" />
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 错误状态 -->
-    <div v-else-if="hasError" class="flex items-center justify-center py-20">
-      <div class="text-center">
-        <Icon name="mynaui:alert" class="text-red-500 text-4xl mb-4" />
-        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
-        <UButton
-          @click="handleRetry"
-          class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
-        >
-          {{ $t('common.retry') }}
-        </UButton>
-      </div>
-    </div>
-
-    <!-- 内容区域 -->
-    <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
-      <!-- 文章内容容器 -->
-      <div class="flex flex-col lg:flex-row gap-4 md:gap-8 w-full">
-        <!-- 文章顶部广告 -->
-        <Advertisement type="article-top" />
-        <!-- 点赞悬浮按钮 - 仅在PC端显示 -->
-        <div
-          ref="likeButtonContainer"
-          class="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 transition-all duration-300 ease-in-out z-40"
-        >
-          <div
-            class="bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-3 backdrop-blur-sm"
-          >
-            <button
-              @click="handleLike"
-              :disabled="isLikeLoading"
-              class="flex flex-col items-center space-y-2 group transition-all duration-200 cursor-pointer"
-              :class="{ 'pointer-events-none': isLikeLoading }"
-            >
-              <div class="relative">
-                <Icon
-                  :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
-                  class="text-2xl cursor-pointer transition-all duration-300 transform group-hover:scale-110"
-                  :class="[
-                    article.data.isLiked
-                      ? 'text-red-500'
-                      : 'text-gray-400 group-hover:text-red-500',
-                    isLikeLoading ? 'animate-pulse' : ''
-                  ]"
-                />
-                <!-- 点赞动画效果 -->
-                <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
-                  <Icon name="mynaui:heart-solid" class="text-2xl text-red-500 animate-ping" />
-                </div>
-              </div>
-              <span
-                class="text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
-              >
-                {{ article.data.likes }}
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 左侧主内容区 -->
-        <main class="flex-1">
-          <!-- 文章标题区 -->
-          <header class="mb-4 md:mb-8">
-            <h1
-              class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 break-words"
-            >
-              {{ article?.data.title }}
-            </h1>
-            <div
-              class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
-            >
-              <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="flex items-center">
-                <div class="relative flex items-center justify-center mr-2">
-                  <UAvatar
-                    :src="article?.data.author.avatar"
-                    :alt="article?.data.author.nickname ?? article?.data.author.username"
-                    class="w-8 h-8 rounded-full object-cover"
-                    loading="lazy"
-                    format="webp"
-                    sizes="32px"
-                    placeholder
-                  />
-                  <div
-                    v-if="article?.data.author.isMember"
-                    class="absolute -bottom-1 -right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
-                  >
-                    <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
-                  </div>
-                </div>
-
-                <span>by {{ article?.data.author.nickname ?? article?.data.author.username }}</span>
-              </NuxtLinkLocale>
-              <div>{{ $t('article.publishAt') }} {{ formatDate(article?.data.createdAt) }}</div>
-              <div class="flex items-center">
-                <Icon name="mynaui:eye" class="mr-1" />
-                <span>{{ article?.data.views }} {{ $t('article.views') }}</span>
+                <USkeleton class="h-10 w-full rounded-md" />
               </div>
 
-              <!-- 作者管理按钮 -->
-              <div class="flex items-center space-x-2 flex-1">
-                <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
-                  <UButton
-                    @click="handleEdit"
-                    variant="ghost"
-                    size="sm"
-                    class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
-                  >
-                    <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
-                    <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
-                  </UButton>
-
-                  <UButton
-                    @click="handleDelete"
-                    variant="ghost"
-                    color="error"
-                    size="sm"
-                    class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
-                  >
-                    <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
-                    <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
-                  </UButton>
-                </div>
-
-                <div class="flex-1 flex justify-end items-center" v-if="shouldShowDownloads">
-                  <UButton
-                    variant="ghost"
-                    color="primary"
-                    size="sm"
-                    icon="mynaui:arrow-down"
-                    class="cursor-pointer"
-                    @click="scrollToDownloads"
-                  >
-                    {{ $t('article.scrollToDownloads') }}
-                  </UButton>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          <!-- 图片展示区 -->
-          <figure
-            class="mb-4 md:mb-8"
-            v-if="article?.data?.images && article?.data?.images.length > 0"
-          >
-            <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
-              <div
-                v-for="(img, index) in article?.data.images"
-                :key="index"
-                :class="[
-                  'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-all duration-300 bg-gray-100 dark:bg-gray-800 relative',
-                  'aspect-[3/4]'
-                ]"
-                @click="openLightbox(index)"
-              >
-                <!-- 骨架屏占位 -->
-                <div
-                  v-if="!imageLoaded[index] && !imageErrors[index]"
-                  class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden"
-                >
-                  <!-- 优雅的加载动画 -->
-                  <div class="relative">
-                    <!-- 旋转的圆环 -->
-                    <div class="relative w-16 h-16">
-                      <div
-                        class="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"
-                      ></div>
-                      <div
-                        class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
-                        style="animation-duration: 0.8s"
-                      ></div>
+              <!-- 相关推荐骨架屏 -->
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+                <USkeleton class="h-6 w-32 mb-3 md:mb-4" />
+                <div class="space-y-3 md:space-y-4">
+                  <div v-for="i in 3" :key="i" class="flex items-center space-x-3">
+                    <USkeleton class="w-16 h-16 md:w-20 md:h-20 rounded-md flex-shrink-0" />
+                    <div class="flex-1">
+                      <USkeleton class="h-4 w-full mb-1" />
+                      <USkeleton class="h-3 w-16" />
                     </div>
-
-                    <!-- 中心渐变点 -->
-                    <div
-                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full animate-ping"
-                      style="animation-duration: 1.5s"
-                    ></div>
                   </div>
                 </div>
-
-                <!-- 图片加载错误状态 -->
-                <div
-                  v-else-if="imageErrors[index]"
-                  class="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
-                >
-                  <div class="text-center text-gray-400">
-                    <Icon name="mynaui:alert" class="w-8 h-8 mx-auto mb-2" />
-                    <div class="text-xs">{{ $t('image.loadFailed') }}</div>
-                    <button
-                      @click.stop="retryImageLoad(index)"
-                      class="text-xs text-primary hover:text-primary-600 mt-1 flex items-center mx-auto"
-                    >
-                      <Icon name="mynaui:refresh" class="w-3 h-3 mr-1" />
-                      {{ $t('image.retry') }}
-                    </button>
-                  </div>
-                </div>
-
-                <!-- 实际图片 -->
-                <NuxtImg
-                  :src="img"
-                  :alt="`${article?.data.title} - 图片 ${index + 1}`"
-                  class="w-full h-full object-cover transition-all duration-500"
-                  :class="{
-                    'opacity-0': !imageLoaded[index] || imageErrors[index],
-                    'opacity-100': imageLoaded[index] && !imageErrors[index]
-                  }"
-                  loading="lazy"
-                  format="webp"
-                  quality="95"
-                  width="1920"
-                  fit="cover"
-                  @load="onImageLoad(index)"
-                  @error="onImageError(index)"
-                />
-
-                <!-- 图片序号标识 -->
-                <!-- <div
-                v-if="article?.data.images.length > 1 && imageLoaded[index] && !imageErrors[index]"
-                class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center"
-              >
-                <Icon name="mynaui:image" class="w-3 h-3 mr-1" />
-                {{ index + 1 }}/{{ article?.data.images.length }}
-              </div> -->
-
-                <!-- 放大镜图标提示 -->
-                <!-- <div
-                v-if="imageLoaded[index] && !imageErrors[index]"
-                class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20"
-              >
-                <div
-                  class="bg-white/90 flex items-center justify-center dark:bg-gray-800/90 rounded-full p-3"
-                >
-                  <Icon name="mynaui:search" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
-                </div>
-              </div> -->
               </div>
             </div>
-          </figure>
+          </div>
+        </div>
+      </div>
 
-          <!-- 文章内容 -->
-          <section v-if="shouldShowContent" class="mb-6 md:mb-12">
+      <!-- 错误状态 -->
+      <div v-else-if="hasError" class="flex items-center justify-center py-20">
+        <div class="text-center">
+          <Icon name="mynaui:alert" class="text-red-500 text-4xl mb-4" />
+          <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
+          <UButton
+            @click="handleRetry"
+            class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+          >
+            {{ $t('common.retry') }}
+          </UButton>
+        </div>
+      </div>
+
+      <!-- 内容区域 -->
+      <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
+        <!-- 文章内容容器 -->
+        <div class="flex flex-col lg:flex-row gap-4 md:gap-8 w-full">
+          <!-- 文章顶部广告 -->
+          <Advertisement type="article-top" />
+          <!-- 点赞悬浮按钮 - 仅在PC端显示 -->
+          <div
+            ref="likeButtonContainer"
+            class="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 transition-all duration-300 ease-in-out z-40"
+          >
             <div
-              ref="articleContent"
-              class="prose max-w-none whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
-              v-html="article?.data.content"
-            ></div>
-          </section>
-
-          <!-- 内容限制组件 -->
-          <ClientOnly v-else-if="restrictionType" id="restriction">
-            <ArticleContentRestriction
-              :type="restrictionType"
-              :price="article?.data.viewPrice"
-              :article-title="article?.data.title"
-              :author-id="article?.data.author.id"
-              :article-id="article?.data.id"
-              :refresh-article="refreshArticle"
-            />
-          </ClientOnly>
-
-          <!-- 移动端点赞按钮 -->
-          <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
-            <div class="flex items-center space-x-4">
+              class="bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-3 backdrop-blur-sm"
+            >
               <button
                 @click="handleLike"
                 :disabled="isLikeLoading"
-                class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
+                class="flex flex-col items-center space-y-2 group transition-all duration-200 cursor-pointer"
                 :class="{ 'pointer-events-none': isLikeLoading }"
               >
-                <div class="relative flex items-center justify-center">
+                <div class="relative">
                   <Icon
                     :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
-                    class="text-xl transition-all duration-300 transform group-hover:scale-110"
+                    class="text-2xl cursor-pointer transition-all duration-300 transform group-hover:scale-110"
                     :class="[
                       article.data.isLiked
                         ? 'text-red-500'
@@ -427,311 +192,563 @@
                   />
                   <!-- 点赞动画效果 -->
                   <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
-                    <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
+                    <Icon name="mynaui:heart-solid" class="text-2xl text-red-500 animate-ping" />
                   </div>
                 </div>
                 <span
-                  class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+                  class="text-xs font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
                 >
-                  {{ article.data.isLiked ? $t('article.liked') : $t('article.like') }} ({{
-                    article?.data.likes
-                  }})
+                  {{ article.data.likes }}
                 </span>
               </button>
             </div>
           </div>
 
-          <!-- 文章底部广告 -->
-          <Advertisement type="article-bottom" />
-
-          <!-- 下载链接展示区 -->
-          <div
-            v-if="article?.data.downloads && article.data.downloads.length > 0 && shouldShowContent"
-            class="mb-6 md:mb-8"
-            id="downloads"
-          >
-            <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
-              {{ $t('article.downloads') }}
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                v-for="(download, index) in article.data.downloads"
-                :key="index"
-                class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow"
+          <!-- 左侧主内容区 -->
+          <main class="flex-1">
+            <!-- 文章标题区 -->
+            <header class="mb-4 md:mb-8">
+              <h1
+                class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 break-words"
               >
-                <div class="flex items-center justify-between mb-3">
-                  <div class="flex items-center space-x-2">
-                    <Icon
-                      :name="getDownloadTypeIcon(download.type!)"
-                      class="w-5 h-5 text-primary"
+                {{ article?.data.title }}
+              </h1>
+              <div
+                class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 text-xs md:text-sm text-gray-600 dark:text-gray-400"
+              >
+                <NuxtLinkLocale
+                  :to="`/author/${article?.data.author.id}`"
+                  class="flex items-center"
+                >
+                  <div class="relative flex items-center justify-center mr-2">
+                    <UAvatar
+                      :src="article?.data.author.avatar"
+                      :alt="article?.data.author.nickname ?? article?.data.author.username"
+                      class="w-8 h-8 rounded-full object-cover"
+                      loading="lazy"
+                      format="webp"
+                      sizes="32px"
+                      placeholder
                     />
-                    <span class="font-medium text-gray-900 dark:text-gray-100">
-                      {{ getDownloadTypeName(download.type!) }}
-                    </span>
-                  </div>
-                  <span class="text-xs text-gray-500 dark:text-gray-400"> #{{ index + 1 }} </span>
-                </div>
-
-                <div class="space-y-2">
-                  <div v-if="download.password" class="flex items-center space-x-2">
-                    <Icon name="mynaui:lock" class="w-4 h-4 text-gray-400" />
-                    <span class="text-sm text-gray-600 dark:text-gray-400">
-                      {{ $t('article.downloadPassword') }}: {{ download.password }}
-                    </span>
+                    <div
+                      v-if="article?.data.author.isMember"
+                      class="absolute -bottom-1 -right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
+                    >
+                      <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                    </div>
                   </div>
 
-                  <div v-if="download.extractionCode" class="flex items-center space-x-2">
-                    <Icon name="mynaui:key" class="w-4 h-4 text-gray-400" />
-                    <span class="text-sm text-gray-600 dark:text-gray-400">
-                      {{ $t('article.extractionCode') }}: {{ download.extractionCode }}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="mt-3">
-                  <UButton
-                    @click="handleDownloadClick(download.url ?? '')"
-                    rel="noopener noreferrer"
-                    variant="soft"
-                    size="sm"
-                    class="w-full"
+                  <span
+                    >by {{ article?.data.author.nickname ?? article?.data.author.username }}</span
                   >
-                    <Icon name="mynaui:download" class="w-4 h-4 mr-2" />
-                    {{ $t('article.download') }}
+                </NuxtLinkLocale>
+                <div>{{ $t('article.publishAt') }} {{ formatDate(article?.data.createdAt) }}</div>
+                <div class="flex items-center">
+                  <Icon name="mynaui:eye" class="mr-1" />
+                  <span>{{ article?.data.views }} {{ $t('article.views') }}</span>
+                </div>
+
+                <!-- 作者管理按钮 -->
+                <div class="flex items-center space-x-2 flex-1">
+                  <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
+                    <UButton
+                      @click="handleEdit"
+                      variant="ghost"
+                      size="sm"
+                      class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
+                    >
+                      <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
+                      <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
+                    </UButton>
+
+                    <UButton
+                      @click="handleDelete"
+                      variant="ghost"
+                      color="error"
+                      size="sm"
+                      class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+                    >
+                      <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
+                      <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
+                    </UButton>
+                  </div>
+
+                  <div class="flex-1 flex justify-end items-center" v-if="shouldShowDownloads">
+                    <UButton
+                      variant="ghost"
+                      color="primary"
+                      size="sm"
+                      icon="mynaui:arrow-down"
+                      class="cursor-pointer"
+                      @click="scrollToDownloads"
+                    >
+                      {{ $t('article.scrollToDownloads') }}
+                    </UButton>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            <!-- 图片展示区 -->
+            <figure
+              class="mb-4 md:mb-8"
+              v-if="article?.data?.images && article?.data?.images.length > 0"
+            >
+              <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
+                <div
+                  v-for="(img, index) in article?.data.images"
+                  :key="index"
+                  :class="[
+                    'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-all duration-300 bg-gray-100 dark:bg-gray-800 relative',
+                    'aspect-[3/4]'
+                  ]"
+                  @click="openLightbox(index)"
+                >
+                  <!-- 骨架屏占位 -->
+                  <div
+                    v-if="!imageLoaded[index] && !imageErrors[index]"
+                    class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden"
+                  >
+                    <!-- 优雅的加载动画 -->
+                    <div class="relative">
+                      <!-- 旋转的圆环 -->
+                      <div class="relative w-16 h-16">
+                        <div
+                          class="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"
+                        ></div>
+                        <div
+                          class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
+                          style="animation-duration: 0.8s"
+                        ></div>
+                      </div>
+
+                      <!-- 中心渐变点 -->
+                      <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full animate-ping"
+                        style="animation-duration: 1.5s"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <!-- 图片加载错误状态 -->
+                  <div
+                    v-else-if="imageErrors[index]"
+                    class="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+                  >
+                    <div class="text-center text-gray-400">
+                      <Icon name="mynaui:alert" class="w-8 h-8 mx-auto mb-2" />
+                      <div class="text-xs">{{ $t('image.loadFailed') }}</div>
+                      <button
+                        @click.stop="retryImageLoad(index)"
+                        class="text-xs text-primary hover:text-primary-600 mt-1 flex items-center mx-auto"
+                      >
+                        <Icon name="mynaui:refresh" class="w-3 h-3 mr-1" />
+                        {{ $t('image.retry') }}
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- 实际图片 -->
+                  <NuxtImg
+                    :src="img"
+                    :alt="`${article?.data.title} - 图片 ${index + 1}`"
+                    class="w-full h-full object-cover transition-all duration-500"
+                    :class="{
+                      'opacity-0': !imageLoaded[index] || imageErrors[index],
+                      'opacity-100': imageLoaded[index] && !imageErrors[index]
+                    }"
+                    loading="lazy"
+                    format="webp"
+                    quality="95"
+                    width="1920"
+                    fit="cover"
+                    @load="onImageLoad(index)"
+                    @error="onImageError(index)"
+                  />
+
+                  <!-- 图片序号标识 -->
+                  <!-- <div
+                v-if="article?.data.images.length > 1 && imageLoaded[index] && !imageErrors[index]"
+                class="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center"
+              >
+                <Icon name="mynaui:image" class="w-3 h-3 mr-1" />
+                {{ index + 1 }}/{{ article?.data.images.length }}
+              </div> -->
+
+                  <!-- 放大镜图标提示 -->
+                  <!-- <div
+                v-if="imageLoaded[index] && !imageErrors[index]"
+                class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/20"
+              >
+                <div
+                  class="bg-white/90 flex items-center justify-center dark:bg-gray-800/90 rounded-full p-3"
+                >
+                  <Icon name="mynaui:search" class="w-6 h-6 text-gray-700 dark:text-gray-300" />
+                </div>
+              </div> -->
+                </div>
+              </div>
+            </figure>
+
+            <!-- 文章内容 -->
+            <section v-if="shouldShowContent" class="mb-6 md:mb-12">
+              <div
+                ref="articleContent"
+                class="prose max-w-none whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
+                v-html="article?.data.content"
+              ></div>
+            </section>
+
+            <!-- 内容限制组件 -->
+            <ClientOnly v-else-if="restrictionType" id="restriction">
+              <ArticleContentRestriction
+                :type="restrictionType"
+                :price="article?.data.viewPrice"
+                :article-title="article?.data.title"
+                :author-id="article?.data.author.id"
+                :article-id="article?.data.id"
+                :refresh-article="refreshArticle"
+              />
+            </ClientOnly>
+
+            <!-- 移动端点赞按钮 -->
+            <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
+              <div class="flex items-center space-x-4">
+                <button
+                  @click="handleLike"
+                  :disabled="isLikeLoading"
+                  class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
+                  :class="{ 'pointer-events-none': isLikeLoading }"
+                >
+                  <div class="relative flex items-center justify-center">
+                    <Icon
+                      :name="article.data.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
+                      class="text-xl transition-all duration-300 transform group-hover:scale-110"
+                      :class="[
+                        article.data.isLiked
+                          ? 'text-red-500'
+                          : 'text-gray-400 group-hover:text-red-500',
+                        isLikeLoading ? 'animate-pulse' : ''
+                      ]"
+                    />
+                    <!-- 点赞动画效果 -->
+                    <div v-if="isLikeLoading" class="absolute inset-0 pointer-events-none">
+                      <Icon name="mynaui:heart-solid" class="text-xl text-red-500 animate-ping" />
+                    </div>
+                  </div>
+                  <span
+                    class="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors group-hover:text-red-500"
+                  >
+                    {{ article.data.isLiked ? $t('article.liked') : $t('article.like') }} ({{
+                      article?.data.likes
+                    }})
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 文章底部广告 -->
+            <Advertisement type="article-bottom" />
+
+            <!-- 下载链接展示区 -->
+            <div
+              v-if="
+                article?.data.downloads && article.data.downloads.length > 0 && shouldShowContent
+              "
+              class="mb-6 md:mb-8"
+              id="downloads"
+            >
+              <h3
+                class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6"
+              >
+                {{ $t('article.downloads') }}
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div
+                  v-for="(download, index) in article.data.downloads"
+                  :key="index"
+                  class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow"
+                >
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-2">
+                      <Icon
+                        :name="getDownloadTypeIcon(download.type!)"
+                        class="w-5 h-5 text-primary"
+                      />
+                      <span class="font-medium text-gray-900 dark:text-gray-100">
+                        {{ getDownloadTypeName(download.type!) }}
+                      </span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-gray-400"> #{{ index + 1 }} </span>
+                  </div>
+
+                  <div class="space-y-2">
+                    <div v-if="download.password" class="flex items-center space-x-2">
+                      <Icon name="mynaui:lock" class="w-4 h-4 text-gray-400" />
+                      <span class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ $t('article.downloadPassword') }}: {{ download.password }}
+                      </span>
+                    </div>
+
+                    <div v-if="download.extractionCode" class="flex items-center space-x-2">
+                      <Icon name="mynaui:key" class="w-4 h-4 text-gray-400" />
+                      <span class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ $t('article.extractionCode') }}: {{ download.extractionCode }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="mt-3">
+                    <UButton
+                      @click="handleDownloadClick(download.url ?? '')"
+                      rel="noopener noreferrer"
+                      variant="soft"
+                      size="sm"
+                      class="w-full"
+                    >
+                      <Icon name="mynaui:download" class="w-4 h-4 mr-2" />
+                      {{ $t('article.download') }}
+                    </UButton>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 标签展示区 -->
+            <section v-if="article?.data.tags && article.data.tags.length > 0" class="mb-6 md:mb-8">
+              <h3
+                class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6"
+              >
+                {{ $t('article.tags') }}
+              </h3>
+              <div class="flex flex-wrap gap-2 md:gap-3">
+                <NuxtLinkLocale
+                  v-for="tag in article.data.tags"
+                  :key="tag.id"
+                  :to="`/search?q=${encodeURIComponent(tag.name)}`"
+                  class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm md:text-base rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 cursor-pointer"
+                >
+                  <UAvatar
+                    v-if="tag.avatar"
+                    :src="tag.avatar"
+                    :alt="tag.name"
+                    class="w-4 h-4 md:w-5 md:h-5 rounded-full mr-2 object-cover"
+                    loading="lazy"
+                    format="webp"
+                  />
+                  <span class="font-medium">{{ tag.name }}</span>
+                </NuxtLinkLocale>
+              </div>
+            </section>
+
+            <!-- 评论区 -->
+            <section class="mb-6 md:mb-8 comments-section">
+              <h3
+                class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6"
+              >
+                {{ $t('article.comments') }}
+              </h3>
+              <!-- 评论输入框 -->
+              <div class="mb-6 md:mb-8">
+                <div class="flex items-start space-x-3 md:space-x-4">
+                  <UAvatar
+                    :src="userInfo?.avatar"
+                    :alt="userInfo?.nickname ?? userInfo?.username"
+                    class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
+                    loading="lazy"
+                    format="webp"
+                    sizes="40px md:40px"
+                  />
+                  <div class="flex-1">
+                    <UForm :schema="schema" :state="state" @submit="handleSubmit">
+                      <UFormField name="commentText">
+                        <UTextarea
+                          v-model="state.commentText"
+                          class="w-full p-3 md:p-4 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
+                          placeholder="分享你的想法..."
+                        ></UTextarea>
+                      </UFormField>
+
+                      <div class="flex justify-end mt-2">
+                        <UButton
+                          type="submit"
+                          class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 whitespace-nowrap"
+                          :loading="isCommentSubmitting"
+                        >
+                          {{ $t('article.comment') }}
+                        </UButton>
+                      </div>
+                    </UForm>
+                  </div>
+                </div>
+              </div>
+              <!-- 评论列表 -->
+              <div class="space-y-6">
+                <CommentItem
+                  v-for="comment in comments"
+                  :key="comment.id"
+                  :comment="comment"
+                  :article-id="route.params.id"
+                  @comment-deleted="handleCommentDeleted"
+                  @reply-added="handleReplyAdded"
+                />
+                <div v-if="isLoadingComments" class="space-y-6 py-8">
+                  <CommentSkeleton v-for="i in 2" :key="i" />
+                </div>
+                <div v-if="hasMoreComments" class="flex justify-center py-8">
+                  <UButton
+                    @click="loadMoreComments"
+                    :loading="commentsPending"
+                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+                  >
+                    {{ $t('article.loadMoreComments') }}
                   </UButton>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- 标签展示区 -->
-          <section v-if="article?.data.tags && article.data.tags.length > 0" class="mb-6 md:mb-8">
-            <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
-              {{ $t('article.tags') }}
-            </h3>
-            <div class="flex flex-wrap gap-2 md:gap-3">
-              <NuxtLinkLocale
-                v-for="tag in article.data.tags"
-                :key="tag.id"
-                :to="`/search?q=${encodeURIComponent(tag.name)}`"
-                class="inline-flex items-center px-3 py-1.5 md:px-4 md:py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm md:text-base rounded-full hover:bg-primary-100 dark:hover:bg-primary-900 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 cursor-pointer"
-              >
-                <UAvatar
-                  v-if="tag.avatar"
-                  :src="tag.avatar"
-                  :alt="tag.name"
-                  class="w-4 h-4 md:w-5 md:h-5 rounded-full mr-2 object-cover"
-                  loading="lazy"
-                  format="webp"
-                />
-                <span class="font-medium">{{ tag.name }}</span>
-              </NuxtLinkLocale>
-            </div>
-          </section>
-
-          <!-- 评论区 -->
-          <section class="mb-6 md:mb-8 comments-section">
-            <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6">
-              {{ $t('article.comments') }}
-            </h3>
-            <!-- 评论输入框 -->
-            <div class="mb-6 md:mb-8">
-              <div class="flex items-start space-x-3 md:space-x-4">
-                <UAvatar
-                  :src="userInfo?.avatar"
-                  :alt="userInfo?.nickname ?? userInfo?.username"
-                  class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover"
-                  loading="lazy"
-                  format="webp"
-                  sizes="40px md:40px"
-                />
-                <div class="flex-1">
-                  <UForm :schema="schema" :state="state" @submit="handleSubmit">
-                    <UFormField name="commentText">
-                      <UTextarea
-                        v-model="state.commentText"
-                        class="w-full p-3 md:p-4 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
-                        placeholder="分享你的想法..."
-                      ></UTextarea>
-                    </UFormField>
-
-                    <div class="flex justify-end mt-2">
-                      <UButton
-                        type="submit"
-                        class="cursor-pointer px-3 py-1.5 md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 whitespace-nowrap"
-                        :loading="isCommentSubmitting"
-                      >
-                        {{ $t('article.comment') }}
-                      </UButton>
-                    </div>
-                  </UForm>
-                </div>
-              </div>
-            </div>
-            <!-- 评论列表 -->
-            <div class="space-y-6">
-              <CommentItem
-                v-for="comment in comments"
-                :key="comment.id"
-                :comment="comment"
-                :article-id="route.params.id"
-                @comment-deleted="handleCommentDeleted"
-                @reply-added="handleReplyAdded"
-              />
-              <div v-if="isLoadingComments" class="space-y-6 py-8">
-                <CommentSkeleton v-for="i in 2" :key="i" />
-              </div>
-              <div v-if="hasMoreComments" class="flex justify-center py-8">
-                <UButton
-                  @click="loadMoreComments"
-                  :loading="commentsPending"
-                  class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
-                >
-                  {{ $t('article.loadMoreComments') }}
-                </UButton>
-              </div>
-            </div>
-          </section>
-        </main>
-        <!-- 右侧边栏 -->
-        <aside class="w-full lg:w-80 flex-shrink-0">
-          <!-- 作者信息 -->
-          <div class="lg:sticky top-4">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
-              <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
-                <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="relative">
-                  <UAvatar
-                    :src="article?.data.author.avatar"
-                    :alt="article?.data.author.nickname ?? article?.data.author.username"
-                    class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full ring-2 ring-white"
-                    loading="lazy"
-                    format="webp"
-                    sizes="48px md:64px"
-                  />
-                  <div
-                    v-if="article?.data.author.isMember"
-                    class="absolute bottom-1 right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
-                  >
-                    <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
-                  </div>
-                </NuxtLinkLocale>
-                <div>
-                  <h4 class="font-bold text-gray-900 dark:text-gray-100 text-sm md:text-base">
-                    {{ article?.data.author.nickname ?? article?.data.author.username }}
-                  </h4>
-                  <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">
-                    {{ article?.data.author.description }}
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-center justify-between mb-4 md:mb-6 text-xs md:text-sm">
-                <div class="text-center">
-                  <div class="font-semibold text-gray-900 dark:text-gray-100">
-                    {{ article?.data.author.followerCount }}
-                  </div>
-                  <div class="text-gray-500 dark:text-gray-400">{{ $t('article.followers') }}</div>
-                </div>
-                <div class="text-center">
-                  <div class="font-semibold text-gray-900 dark:text-gray-100">
-                    {{ article?.data.likes }}
-                  </div>
-                  <div class="text-gray-500 dark:text-gray-400">{{ $t('article.likes') }}</div>
-                </div>
-                <div class="text-center">
-                  <div class="font-semibold text-gray-900 dark:text-gray-100">96%</div>
-                  <div class="text-gray-500 dark:text-gray-400">
-                    {{ $t('article.goodReviews') }}
-                  </div>
-                </div>
-              </div>
-              <UButton
-                @click="handleFollow"
-                :disabled="isFollowLoading"
-                :loading="isFollowLoading"
-                class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
-              >
-                {{
-                  article?.data.author.isFollowed
-                    ? $t('article.unfollow')
-                    : $t('article.followAuthor')
-                }}
-              </UButton>
-            </div>
-            <!-- 相关推荐 -->
-            <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
-              <h4
-                class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
-              >
-                <Icon name="mynaui:fire" class="text-orange-500 mr-2" />
-                {{ $t('article.relatedArticles') }}
-              </h4>
-              <div class="space-y-3 md:space-y-4">
-                <NuxtLinkLocale
-                  v-for="item in recommend?.data.data"
-                  :key="item.id"
-                  :to="`/article/${item.id}`"
-                  class="group cursor-pointer flex items-center space-x-3"
-                >
-                  <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md overflow-hidden">
-                    <NuxtImg
-                      :src="item.cover"
-                      :alt="item.title"
-                      class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
+            </section>
+          </main>
+          <!-- 右侧边栏 -->
+          <aside class="w-full lg:w-80 flex-shrink-0">
+            <!-- 作者信息 -->
+            <div class="lg:sticky top-4">
+              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+                <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
+                  <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="relative">
+                    <UAvatar
+                      :src="article?.data.author.avatar"
+                      :alt="article?.data.author.nickname ?? article?.data.author.username"
+                      class="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full ring-2 ring-white"
                       loading="lazy"
                       format="webp"
-                      quality="85"
-                      width="200"
-                      height="200"
-                      fit="cover"
-                      sizes="64px md:80px"
+                      sizes="48px md:64px"
                     />
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h5
-                      class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-500 transition-colors line-clamp-2 mb-1"
+                    <div
+                      v-if="article?.data.author.isMember"
+                      class="absolute bottom-1 right-1 bg-primary rounded-full flex items-center justify-center shadow-sm"
                     >
-                      {{ item.title }}
-                    </h5>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">
-                      {{ item.views }} {{ $t('article.views') }}
+                      <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
+                    </div>
+                  </NuxtLinkLocale>
+                  <div>
+                    <h4 class="font-bold text-gray-900 dark:text-gray-100 text-sm md:text-base">
+                      {{ article?.data.author.nickname ?? article?.data.author.username }}
+                    </h4>
+                    <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400">
+                      {{ article?.data.author.description }}
                     </p>
                   </div>
-                </NuxtLinkLocale>
+                </div>
+                <div class="flex items-center justify-between mb-4 md:mb-6 text-xs md:text-sm">
+                  <div class="text-center">
+                    <div class="font-semibold text-gray-900 dark:text-gray-100">
+                      {{ article?.data.author.followerCount }}
+                    </div>
+                    <div class="text-gray-500 dark:text-gray-400">
+                      {{ $t('article.followers') }}
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-gray-900 dark:text-gray-100">
+                      {{ article?.data.likes }}
+                    </div>
+                    <div class="text-gray-500 dark:text-gray-400">{{ $t('article.likes') }}</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="font-semibold text-gray-900 dark:text-gray-100">96%</div>
+                    <div class="text-gray-500 dark:text-gray-400">
+                      {{ $t('article.goodReviews') }}
+                    </div>
+                  </div>
+                </div>
+                <UButton
+                  @click="handleFollow"
+                  :disabled="isFollowLoading"
+                  :loading="isFollowLoading"
+                  class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
+                >
+                  {{
+                    article?.data.author.isFollowed
+                      ? $t('article.unfollow')
+                      : $t('article.followAuthor')
+                  }}
+                </UButton>
               </div>
-            </aside>
-          </div>
-        </aside>
+              <!-- 相关推荐 -->
+              <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+                <h4
+                  class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
+                >
+                  <Icon name="mynaui:fire" class="text-orange-500 mr-2" />
+                  {{ $t('article.relatedArticles') }}
+                </h4>
+                <div class="space-y-3 md:space-y-4">
+                  <NuxtLinkLocale
+                    v-for="item in recommend?.data.data"
+                    :key="item.id"
+                    :to="`/article/${item.id}`"
+                    class="group cursor-pointer flex items-center space-x-3"
+                  >
+                    <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md overflow-hidden">
+                      <NuxtImg
+                        :src="item.cover"
+                        :alt="item.title"
+                        class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
+                        loading="lazy"
+                        format="webp"
+                        quality="85"
+                        width="200"
+                        height="200"
+                        fit="cover"
+                        sizes="64px md:80px"
+                      />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h5
+                        class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-500 transition-colors line-clamp-2 mb-1"
+                      >
+                        {{ item.title }}
+                      </h5>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ item.views }} {{ $t('article.views') }}
+                      </p>
+                    </div>
+                  </NuxtLinkLocale>
+                </div>
+              </aside>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
-  </article>
+    </article>
 
-  <!-- 删除确认弹窗 -->
-  <UModal
-    v-model:open="showDeleteConfirm"
-    :title="$t('article.deleteConfirm.title')"
-    :ui="{ footer: 'justify-end', close: 'cursor-pointer' }"
-  >
-    <template #body>
-      <p class="text-gray-700 dark:text-gray-300">
-        {{ $t('article.deleteConfirm.message') }}
-      </p>
-    </template>
-    <template #footer>
-      <div class="flex justify-end gap-3">
-        <UButton @click="showDeleteConfirm = false" variant="ghost" class="cursor-pointer">
-          {{ $t('common.cancel') }}
-        </UButton>
-        <UButton
-          @click="confirmDeleteArticle"
-          color="error"
-          class="cursor-pointer"
-          :loading="isDeleting"
-        >
-          {{ $t('common.delete') }}
-        </UButton>
-      </div>
-    </template>
-  </UModal>
+    <!-- 删除确认弹窗 -->
+    <UModal
+      v-model:open="showDeleteConfirm"
+      :title="$t('article.deleteConfirm.title')"
+      :ui="{ footer: 'justify-end', close: 'cursor-pointer' }"
+    >
+      <template #body>
+        <p class="text-gray-700 dark:text-gray-300">
+          {{ $t('article.deleteConfirm.message') }}
+        </p>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <UButton @click="showDeleteConfirm = false" variant="ghost" class="cursor-pointer">
+            {{ $t('common.cancel') }}
+          </UButton>
+          <UButton
+            @click="confirmDeleteArticle"
+            color="error"
+            class="cursor-pointer"
+            :loading="isDeleting"
+          >
+            {{ $t('common.delete') }}
+          </UButton>
+        </div>
+      </template>
+    </UModal>
+  </div>
 </template>
 
 <script lang="ts" setup>

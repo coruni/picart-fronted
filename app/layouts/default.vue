@@ -9,8 +9,10 @@
   const localePath = useLocalePath();
 
   const userStore = useUserStore();
+
+  // 延迟加载分类数据，减少首屏请求
   const { data: categories } = categoryControllerFindAll({
-    composable: 'useFetch',
+    composable: 'useLazyAsyncData',
     key: 'categories',
     query: {
       page: 1,
@@ -141,13 +143,7 @@
         <UDashboardNavbar toggle-side="right"> </UDashboardNavbar>
       </template>
       <template #body>
-        <NuxtPage
-          :keepalive="{
-            include: ['dashboard', 'index', 'search', 'category'],
-            exclude: ['login'],
-            max: 10
-          }"
-        />
+        <slot />
       </template>
     </UDashboardPanel>
     <!-- Cookie Consent -->

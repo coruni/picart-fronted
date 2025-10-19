@@ -188,7 +188,7 @@
     loading.value = true;
     try {
       const response = await articleControllerFindAll({
-        composable: 'useFetch',
+        composable: 'useAsyncData',
         key: `category-articles-${categoryId.value}-${currentTab.value}-${pagination.value.page}`,
 
         query: {

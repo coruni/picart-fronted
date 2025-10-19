@@ -26,9 +26,9 @@ export default defineNuxtConfig({
     renderJsonPayloads: true,
     defaults: {
       nuxtLink: {
-        // 在交互时预取（点击、悬停等），减少初始加载时间
+        // 禁用自动预取，只在用户真正需要时加载
         prefetchOn: {
-          interaction: true
+          interaction: false // 不预取
         }
       }
     }
@@ -121,20 +121,22 @@ export default defineNuxtConfig({
     // 默认图片提供者（使用内置的 ipx）
     provider: 'ipx',
     // 允许的外部域名（如果需要优化外部图片）
-    domains: ['minicdn.cosfan.cc'],
+    // domains: ['minicdn.cosfan.cc'],
     // 图片加载优化配置
     providerOptions: {
       ipx: {
         // 图片加载超时（毫秒）
         timeout: 10000,
-        // 最大并发请求数
-        maxConcurrentRequests: 6,
+        // 最大并发请求数 - 减少首屏并发
+        maxConcurrentRequests: 3,
         // 请求重试次数
         retry: 2,
         // 请求重试延迟（毫秒）
         retryDelay: 500
       }
     },
+    // 图片加载策略
+    loading: 'lazy',
     // 图片预设
     presets: {
       // 缩略图预设
@@ -261,13 +263,7 @@ export default defineNuxtConfig({
       appName: 'PicArt',
       appVersion: '1.0.1',
       // TinyMCE 许可证配置
-      tinymceLicenseKey: 'gpl',
-      // Nuxt Scripts 配置
-      scripts: {
-        clarity: {
-          id: process.env.NUXT_PUBLIC_CLARITY_ID || ''
-        }
-      }
+      tinymceLicenseKey: 'gpl'
     }
   },
 
@@ -287,33 +283,60 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     minify: true,
     // 跨平台兼容性配置
-    preset: process.env.NITRO_PRESET || 'node_cluster',
+    preset: process.env.NITRO_PRESET || 'node-server',
     logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error',
+    // 性能优化
+    timing: false,
+    // 减少内存占用
+    storage: {
+      // 内存缓存（默认）
+      cache: {
+        driver: 'memory'
+      }
+    },
     // 静态资源缓存配置
     publicAssets: [
       {
         baseURL: '/',
         maxAge: 60 * 60 * 24 * 365 // 1年
       }
-    ],
-    // 服务端缓存配置
-    storage: {
-      redis: {
-        driver: 'redis'
-        // Redis 连接配置（可选，如果使用 Redis）
-        // host: process.env.REDIS_HOST || 'localhost',
-        // port: parseInt(process.env.REDIS_PORT || '6379'),
-        // password: process.env.REDIS_PASSWORD
-      },
-      // 内存缓存（默认）
-      cache: {
-        driver: 'memory'
-      }
-    }
+    ]
   },
 
   // 路由规则配置 - 混合渲染和缓存策略
   routeRules: {
+    // ========== 首页优化 ==========
+    // 首页 - 使用 ISR 缓存，避免预渲染内存溢出
+    '/': {
+      isr: 60,
+      headers: {
+        'Cache-Control': 'public, max-age=60, must-revalidate'
+      }
+    },
+    // ========== 文章页优化 ==========
+    // 文章页 - 使用 ISR 缓存，提升加载速度
+    '/article/**': {
+      isr: 300, // 5分钟更新
+      headers: {
+        'Cache-Control': 'public, max-age=300, must-revalidate'
+      }
+    },
+    // ========== 分类页优化 ==========
+    // 分类页 - 使用 ISR 缓存
+    '/category/**': {
+      isr: 600, // 10分钟更新
+      headers: {
+        'Cache-Control': 'public, max-age=600, must-revalidate'
+      }
+    },
+    // ========== 作者页优化 ==========
+    // 作者页 - 使用 ISR 缓存
+    '/author/**': {
+      isr: 600, // 10分钟更新
+      headers: {
+        'Cache-Control': 'public, max-age=600, must-revalidate'
+      }
+    },
     // ========== 全局响应头 ==========
     // 所有路由添加安全响应头
     '/**': {
@@ -440,6 +463,7 @@ export default defineNuxtConfig({
   // 配置Vite
   vite: {
     optimizeDeps: {
+      // 生产环境不预构建，减少首屏加载
       include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : [],
       // 预构建优化
       exclude: []
@@ -483,15 +507,24 @@ export default defineNuxtConfig({
           warn(warning);
         },
         output: {
-          // 手动代码分割 - 简化策略，避免初始化问题
-          manualChunks: {
+          // 手动代码分割 - 更细粒度分割，按需加载
+          manualChunks: id => {
             // 工具库
-            'utils-vendor': ['lodash-es', 'zod'],
+            if (id.includes('node_modules/lodash-es') || id.includes('node_modules/zod')) {
+              return 'utils-vendor';
+            }
             // 编辑器相关
-            'editor-vendor': ['@tinymce/tinymce-vue'],
+            if (id.includes('node_modules/@tinymce') || id.includes('node_modules/tinymce')) {
+              return 'editor-vendor';
+            }
             // 表格组件
-            'table-vendor': ['@tanstack/vue-table'],
-            'waterfall-vendor': ['vue-waterfall-plugin-next']
+            if (id.includes('node_modules/@tanstack/vue-table')) {
+              return 'table-vendor';
+            }
+            // 瀑布流组件
+            if (id.includes('node_modules/vue-waterfall-plugin-next')) {
+              return 'waterfall-vendor';
+            }
           }
         }
       }
@@ -506,17 +539,13 @@ export default defineNuxtConfig({
       meta: [
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#ffffff' }
+      ],
+      link: [
+        { rel: 'dns-prefetch', href: 'https://api.cosfan.cc' },
+        { rel: 'preconnect', href: 'https://api.cosfan.cc', crossorigin: '' }
       ]
     },
-    // 页面过渡动画配置 - 禁用以支持 keep-alive
-    pageTransition: false
-  },
-
-  // Vue Router 配置
-  router: {
-    options: {
-      scrollBehaviorType: 'smooth'
-    }
+    pageTransition: true
   },
 
   // 服务端渲染

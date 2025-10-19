@@ -2,24 +2,19 @@
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
     <NuxtLayout>
-      <KeepAlive :max="10" :include="keepAliveInclude">
-        <NuxtPage />
-      </KeepAlive>
+      <NuxtPage
+        :keepalive="{
+          include: ['index', 'category'],
+          exclude: ['article-id'],
+          max: 10
+        }"
+      />
     </NuxtLayout>
   </UApp>
 </template>
 
 <script lang="ts" setup>
   import { configControllerGetPublic } from './api';
-
-  // Keep-alive 配置，使用正则匹配多语言首页路由
-  const keepAliveInclude = ref<(string | RegExp)[]>([
-    /^index/, // 匹配所有以 index 开头的路由
-    'index', // 也包括纯 index
-    'index___zh',
-    'index___en',
-    'index___ja'
-  ]);
 
   const configs = await configControllerGetPublic({
     composable: 'useFetch',
