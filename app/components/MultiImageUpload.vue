@@ -293,7 +293,7 @@
   const props = withDefaults(defineProps<Props>(), {
     accept: 'image/*',
     maxSize: 5, // 5MB
-    maxCount: 100
+    maxCount: 999
   });
 
   const emit = defineEmits<Emits>();

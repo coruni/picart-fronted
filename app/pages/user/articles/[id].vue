@@ -60,6 +60,7 @@
               :existing-images="existingImages"
               accept="image/*"
               :max-size="5 * 1024 * 1024"
+              :max-count="999"
               :help-text="$t('form.image.help')"
               aspect-ratio="16/9"
               :selected-cover="state.cover"

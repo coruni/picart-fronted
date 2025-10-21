@@ -60,7 +60,7 @@
             v-model="state.images"
             accept="image/*"
             :max-size="5 * 1024 * 1024"
-            :max-count="10"
+            :max-count="999"
             :help-text="$t('form.image.help')"
             :selected-cover="state.cover"
             @selectCover="handleCoverSelect"
