@@ -1276,6 +1276,7 @@
     "epay": "Easy Pay",
     "epayAlipay": "Alipay",
     "epayWechat": "WeChat",
+    "epayUsdt": "USDT",
     "selectEpayType": "Easy Payタイプを選択してください",
     "insufficientBalance": "残高不足",
     "processing": "処理中...",

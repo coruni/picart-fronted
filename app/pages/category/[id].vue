@@ -10,11 +10,16 @@
           :src="category.data.cover"
           :alt="category.data.name"
           class="w-full h-full object-cover opacity-20 dark:opacity-30"
-          loading="lazy"
+          loading="eager"
+          priority
+          preload
+          fetchpriority="high"
           format="webp"
           quality="70"
           width="1920"
+          height="480"
           fit="cover"
+          sizes="100vw"
         />
         <div
           class="absolute inset-0 backdrop-blur-xs bg-gradient-to-br from-gray-50/10 to-gray-100/10 dark:from-gray-800/10 dark:to-gray-900/10"

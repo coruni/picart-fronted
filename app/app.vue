@@ -27,14 +27,25 @@
   const siteConfig = configs.data.value?.data;
   const siteUrl = process.env.NUXT_SITE_URL || 'https://www.example.com';
 
+  // 获取 runtimeConfig
+  const config = useRuntimeConfig();
+  const apiBaseUrl = config.public.apiBaseUrl;
+
   useHead({
     link: [
-      // DNS预解析
-      { rel: 'dns-prefetch', href: 'https://api.cosfan.cc' },
-      { rel: 'preconnect', href: 'https://api.cosfan.cc', crossorigin: '' },
+      ...(apiBaseUrl
+        ? [
+            { rel: 'dns-prefetch' as const, href: apiBaseUrl },
+            { rel: 'preconnect' as const, href: apiBaseUrl, crossorigin: 'anonymous' as const }
+          ]
+        : []),
       // Clarity 预连接 - 预计节省 270ms LCP
-      { rel: 'dns-prefetch', href: 'https://scripts.clarity.ms' },
-      { rel: 'preconnect', href: 'https://scripts.clarity.ms', crossorigin: '' }
+      { rel: 'dns-prefetch' as const, href: 'https://scripts.clarity.ms' },
+      {
+        rel: 'preconnect' as const,
+        href: 'https://scripts.clarity.ms',
+        crossorigin: 'anonymous' as const
+      }
       // 预加载关键字体（如果有自定义字体）
       // { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/custom.woff2', crossorigin: 'anonymous' }
     ],

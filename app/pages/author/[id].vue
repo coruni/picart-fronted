@@ -78,9 +78,10 @@
                 :src="authorInfo?.avatar"
                 :alt="authorInfo?.nickname || authorInfo?.username"
                 class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
-                loading="lazy"
+                loading="eager"
+                priority
                 format="webp"
-                sizes="96px md:128px"
+                sizes="(max-width: 640px) 96px, 128px"
               />
               <div
                 v-if="authorInfo?.isMember"

@@ -6,7 +6,7 @@
     <Advertisement type="homepage" position="top" />
 
     <nav
-      class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8"
+      class="flex flex-col sm:flex-row justify-end items-center gap-4 my-8"
       aria-label="Content tabs"
     >
       <UTabs

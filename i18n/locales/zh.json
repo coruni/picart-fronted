@@ -1274,6 +1274,7 @@
     "epay": "易支付",
     "epayAlipay": "支付宝",
     "epayWechat": "微信",
+    "epayUsdt": "USDT",
     "selectEpayType": "请选择易支付类型",
     "insufficientBalance": "余额不足",
     "processing": "处理中...",

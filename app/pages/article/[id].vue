@@ -357,11 +357,16 @@
                       'opacity-0': !imageLoaded[index] || imageErrors[index],
                       'opacity-100': imageLoaded[index] && !imageErrors[index]
                     }"
-                    loading="lazy"
+                    :loading="index === 0 ? 'eager' : 'lazy'"
+                    :priority="index === 0"
+                    :preload="index === 0"
+                    :fetchpriority="index === 0 ? 'high' : 'auto'"
                     format="webp"
                     quality="95"
                     width="1920"
+                    height="1080"
                     fit="cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px"
                     @load="onImageLoad(index)"
                     @error="onImageError(index)"
                   />
@@ -699,7 +704,7 @@
                         width="200"
                         height="200"
                         fit="cover"
-                        sizes="64px md:80px"
+                        sizes="(max-width: 640px) 150px, 200px"
                       />
                     </div>
                     <div class="flex-1 min-w-0">
