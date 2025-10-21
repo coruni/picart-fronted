@@ -33,6 +33,9 @@ export default defineNuxtConfig({
       }
     }
   },
+  features: {
+    inlineStyles: true
+  },
   // Nuxt UI 配置
   ui: {
     fonts: false
@@ -69,6 +72,8 @@ export default defineNuxtConfig({
       '/article',
       '/author',
       '/category',
+      '/tags',
+      '/tag',
       '/search',
       '/user/login',
       '/user/register',
@@ -135,8 +140,10 @@ export default defineNuxtConfig({
         retryDelay: 500
       }
     },
-    // 图片加载策略
+    // 图片加载策略（默认lazy，但首屏图片会覆盖为eager）
     loading: 'lazy',
+    // 启用图片预加载
+    preload: true,
     // 图片预设
     presets: {
       // 缩略图预设
@@ -154,9 +161,19 @@ export default defineNuxtConfig({
         modifiers: {
           format: 'webp',
           width: 400,
-          height: 400,
+          height: 533,
           fit: 'cover',
-          quality: 80
+          quality: 85
+        }
+      },
+      // 首屏卡片图片预设（高质量）
+      firstScreenCard: {
+        modifiers: {
+          format: 'webp',
+          width: 400,
+          height: 533,
+          fit: 'cover',
+          quality: 90
         }
       },
       // 文章封面预设
@@ -174,13 +191,19 @@ export default defineNuxtConfig({
           width: 1200,
           quality: 90
         }
+      },
+      // Banner图片预设
+      banner: {
+        modifiers: {
+          format: 'webp',
+          width: 1920,
+          height: 480,
+          fit: 'cover',
+          quality: 90
+        }
       }
     }
   },
-  features: {
-    inlineStyles: false
-  },
-
   // 暗黑模式配置
   colorMode: {
     preference: 'system',
@@ -308,9 +331,10 @@ export default defineNuxtConfig({
     // ========== 首页优化 ==========
     // 首页 - 使用 ISR 缓存，避免预渲染内存溢出
     '/': {
-      isr: 60,
+      isr: 30, // 缩短到30秒，保证内容新鲜度
       headers: {
-        'Cache-Control': 'public, max-age=60, must-revalidate'
+        'Cache-Control': 'public, max-age=30, s-maxage=30, must-revalidate',
+        'X-Content-Type-Options': 'nosniff'
       }
     },
     // ========== 文章页优化 ==========
@@ -383,19 +407,16 @@ export default defineNuxtConfig({
     // ========== 用户页面 ==========
     // 用户登录/注册页面 - 客户端渲染 + 短期缓存
     '/user/login': {
-      ssr: false,
       headers: {
         'Cache-Control': 'public, max-age=0, must-revalidate'
       }
     },
     '/user/register': {
-      ssr: false,
       headers: {
         'Cache-Control': 'public, max-age=0, must-revalidate'
       }
     },
     '/user/forgot-password': {
-      ssr: false,
       headers: {
         'Cache-Control': 'public, max-age=0, must-revalidate'
       }
@@ -403,7 +424,6 @@ export default defineNuxtConfig({
 
     // 用户个人页面 - SSR + 完全不缓存（需要认证）
     '/user/index': {
-      ssr: true,
       // 禁用所有缓存
       prerender: false,
       headers: {
@@ -412,7 +432,6 @@ export default defineNuxtConfig({
       }
     },
     '/user/articles/**': {
-      ssr: true,
       prerender: false,
       headers: {
         'Cache-Control': 'private, no-cache, must-revalidate',
@@ -420,7 +439,6 @@ export default defineNuxtConfig({
       }
     },
     '/user/messages': {
-      ssr: true,
       prerender: false,
       headers: {
         'Cache-Control': 'private, no-cache, must-revalidate',
@@ -428,7 +446,6 @@ export default defineNuxtConfig({
       }
     },
     '/user/orders': {
-      ssr: true,
       prerender: false,
       headers: {
         'Cache-Control': 'private, no-cache, must-revalidate',
@@ -439,7 +456,6 @@ export default defineNuxtConfig({
     // ========== 管理后台 ==========
     // 管理后台 - 客户端渲染 + 完全不缓存
     '/admin/**': {
-      ssr: false,
       prerender: false,
       headers: {
         'Cache-Control': 'private, no-cache, must-revalidate',
@@ -476,7 +492,13 @@ export default defineNuxtConfig({
       allowedHosts: true
     },
     css: {
-      devSourcemap: true
+      devSourcemap: true,
+      // CSS 压缩和优化
+      preprocessorOptions: {
+        scss: {
+          charset: false
+        }
+      }
     },
     build: {
       // 提高块大小警告限制
@@ -489,6 +511,8 @@ export default defineNuxtConfig({
       sourcemap: false,
       // 启用 CSS 代码分割
       cssCodeSplit: true,
+      // CSS 压缩
+      cssMinify: 'esbuild',
       rollupOptions: {
         onwarn(warning, warn) {
           // 屏蔽特定的弃用警告

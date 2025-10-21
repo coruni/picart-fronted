@@ -288,7 +288,7 @@ export const useTinyMCE = () => {
     statusbar: true, // 显示状态栏
 
     // 自动保存
-    autosave_ask_before_unload: true,
+    autosave_ask_before_unload: false, // 禁用 beforeunload，允许 bfcache
     autosave_interval: '30s',
     autosave_prefix: 'tinymce-autosave-{path}{query}-{id}-',
     autosave_restore_when_empty: false,

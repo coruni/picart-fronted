@@ -28,6 +28,16 @@
   const siteUrl = process.env.NUXT_SITE_URL || 'https://www.example.com';
 
   useHead({
+    link: [
+      // DNS预解析
+      { rel: 'dns-prefetch', href: 'https://api.cosfan.cc' },
+      { rel: 'preconnect', href: 'https://api.cosfan.cc', crossorigin: '' },
+      // Clarity 预连接 - 预计节省 270ms LCP
+      { rel: 'dns-prefetch', href: 'https://scripts.clarity.ms' },
+      { rel: 'preconnect', href: 'https://scripts.clarity.ms', crossorigin: '' }
+      // 预加载关键字体（如果有自定义字体）
+      // { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/custom.woff2', crossorigin: 'anonymous' }
+    ],
     script: [
       {
         type: 'application/ld+json',

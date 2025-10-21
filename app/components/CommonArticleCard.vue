@@ -7,10 +7,15 @@
       <NuxtImg
         :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
-        loading="lazy"
+        :loading="isFirstScreen ? 'eager' : 'lazy'"
+        :priority="isFirstScreen"
+        :preload="isFirstScreen"
+        :fetchpriority="isFirstScreen ? 'high' : 'auto'"
         format="webp"
         quality="85"
         width="400"
+        height="533"
+        sizes="(max-width: 640px) 200px, (max-width: 768px) 250px, (max-width: 1024px) 300px, 400px"
         class="w-full h-full aspect-[3/4] object-cover transition-transform duration-500 group-hover:scale-110"
       />
 
@@ -84,6 +89,10 @@
     data: {
       type: Object as PropType<Article>,
       default: () => ({})
+    },
+    isFirstScreen: {
+      type: Boolean,
+      default: false
     }
   });
 

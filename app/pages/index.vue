@@ -34,8 +34,8 @@
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6"
         role="list"
       >
-        <article v-for="item in allItems" :key="item.id" role="listitem">
-          <CommonArticleCard :data="item" />
+        <article v-for="(item, index) in allItems" :key="item.id" role="listitem">
+          <CommonArticleCard :data="item" :is-first-screen="index < 10" />
         </article>
         <!-- 网格布局加载骨架屏 -->
         <template v-if="loading">
@@ -45,9 +45,9 @@
 
       <!-- 瀑布流布局 -->
       <WaterfallLayout v-else :items="displayItems" :gap="16">
-        <template #default="{ item }">
+        <template #default="{ item, index }">
           <WaterfallSkeleton v-if="(item as any).isSkeleton" :index="(item as any).index" />
-          <WaterfallArticleCard v-else :data="item as any" />
+          <WaterfallArticleCard v-else :data="item as any" :is-first-screen="index < 10" />
         </template>
       </WaterfallLayout>
     </section>

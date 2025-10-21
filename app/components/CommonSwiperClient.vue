@@ -1,8 +1,51 @@
 <template>
   <ClientOnly>
+    <!-- SSR Fallback: 渲染首张Banner图片，优化LCP -->
     <template #fallback>
       <div class="h-60 md:h-[480px] bg-gray-100 dark:bg-gray-900 relative overflow-hidden -mx-4">
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-300/30 to-transparent">
+        <NuxtLinkLocale
+          v-if="firstBanner"
+          :to="firstBanner.linkUrl"
+          class="relative h-full cursor-pointer block"
+        >
+          <NuxtImg
+            :src="firstBanner.imageUrl"
+            :alt="firstBanner.title"
+            class="w-full h-full object-cover"
+            loading="eager"
+            format="webp"
+            quality="90"
+            fit="cover"
+            priority
+            preload
+            fetchpriority="high"
+            width="1920"
+            height="480"
+          />
+          <!-- 添加半透明遮罩层 -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+          <div class="absolute bottom-0 left-0 right-0 p-10">
+            <div class="transform transition-all duration-700">
+              <h2
+                class="text-4xl font-bold mb-4 text-white drop-shadow-lg bg-gradient-to-r from-pink-300 to-primary-300 bg-clip-text"
+              >
+                {{ firstBanner.title }}
+              </h2>
+              <p class="text-lg text-white/90 drop-shadow-md leading-relaxed max-w-2xl">
+                {{ firstBanner.description }}
+              </p>
+
+              <!-- 装饰性下划线 -->
+              <div
+                class="mt-4 w-20 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full shadow-lg"
+              ></div>
+            </div>
+          </div>
+        </NuxtLinkLocale>
+
+        <!-- 骨架屏占位 -->
+        <div v-else class="absolute inset-0 bg-gradient-to-t from-gray-300/30 to-transparent">
           <div class="absolute bottom-10 left-10 space-y-4 w-2/3">
             <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
             <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
@@ -11,6 +54,7 @@
       </div>
     </template>
 
+    <!-- 客户端渲染: 完整的Swiper轮播 -->
     <div class="relative">
       <swiper-container
         ref="swiperContainerRef"
@@ -33,7 +77,9 @@
               format="webp"
               quality="90"
               fit="cover"
-              fetchpriority="high"
+              priority
+              width="1920"
+              height="480"
             />
             <!-- 添加半透明遮罩层 -->
             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -73,19 +119,22 @@
   const router = useRouter();
   const { locale } = useI18n();
 
-  // 获取活动的banner数据
+  // 获取活动的banner数据 - SSR获取，确保首张图片在HTML中可见
   const {
     data: bannersData,
     pending,
     error
   } = await bannersControllerFindActive({
-    composable: 'useFetch',
-    server: false,
+    composable: 'useAsyncData',
     key: 'active-banners'
   });
 
   // 确保bannersData有默认值
   const safeBannersData = computed(() => bannersData.value?.data || []);
+
+  // 获取第一张Banner（用于SSR fallback）
+  const firstBanner = computed(() => safeBannersData.value[0] || null);
+
   // 处理banner点击事件
   const handleBannerClick = linkUrl => {
     if (linkUrl) {

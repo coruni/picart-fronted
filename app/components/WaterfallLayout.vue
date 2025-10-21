@@ -13,8 +13,8 @@
       lazyload
       @after-render="handleAfterRender"
     >
-      <template #default="{ item }">
-        <slot :item="item"></slot>
+      <template #default="{ item, index }">
+        <slot :item="item" :index="index"></slot>
       </template>
     </Waterfall>
     <template #fallback>
