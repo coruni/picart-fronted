@@ -10,6 +10,7 @@
 </template>
 <script setup lang="ts">
   const scrollToTopStatus = ref(false);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -21,14 +22,16 @@
       scrollToTopStatus.value = false;
     }
   };
+
   onMounted(() => {
-    window.addEventListener('scroll', () => {
-      handleScroll();
-    });
+    if (import.meta.client) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
   });
+
   onUnmounted(() => {
-    window.removeEventListener('scroll', () => {
-      handleScroll();
-    });
+    if (import.meta.client) {
+      window.removeEventListener('scroll', handleScroll);
+    }
   });
 </script>

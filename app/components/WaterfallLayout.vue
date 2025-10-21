@@ -20,8 +20,8 @@
     <template #fallback>
       <!-- SSR fallback: 渲染实际内容以便爬虫抓取，但对用户隐藏 -->
       <div class="sr-only" aria-hidden="true">
-        <div v-for="item in items" :key="item.id">
-          <slot :item="item"></slot>
+        <div v-for="(item, index) in items" :key="item.id">
+          <slot :item="item" :index="index"></slot>
         </div>
       </div>
     </template>

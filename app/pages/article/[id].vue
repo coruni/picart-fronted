@@ -776,10 +776,6 @@
   const router = useRouter();
   const { t } = useI18n();
 
-  definePageMeta({
-    key: route => route.fullPath
-  });
-
   // 确保在SSR阶段等待数据加载完成
   const {
     data: article,
@@ -880,6 +876,7 @@
   const userInfo = computed(() => userStore.currentUser);
   const isLoggedIn = computed(() => userStore.isLoggedIn);
   const localePath = useLocalePath();
+
   // 判断当前用户是否是文章作者
   const isAuthor = computed(() => {
     if (!isLoggedIn.value || !article.value?.data) return false;

@@ -572,7 +572,10 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://api.cosfan.cc', crossorigin: '' }
       ]
     },
-    pageTransition: true
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in'
+    }
   },
 
   // 服务端渲染

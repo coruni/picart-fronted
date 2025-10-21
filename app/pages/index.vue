@@ -46,7 +46,7 @@
       <!-- 瀑布流布局 -->
       <WaterfallLayout v-else :items="displayItems" :gap="16">
         <template #default="{ item, index }">
-          <WaterfallSkeleton v-if="(item as any).isSkeleton" :index="(item as any).index" />
+          <WaterfallSkeleton v-if="(item as any).isSkeleton" />
           <WaterfallArticleCard v-else :data="item as any" :is-first-screen="index < 10" />
         </template>
       </WaterfallLayout>
@@ -77,11 +77,6 @@
   // 定义组件名称，用于 keep-alive 识别
   defineOptions({
     name: 'index'
-  });
-
-  // 启用 keep-alive 缓存
-  definePageMeta({
-    keepalive: true
   });
 
   // 首页中
