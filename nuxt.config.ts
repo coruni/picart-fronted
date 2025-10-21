@@ -303,10 +303,12 @@ export default defineNuxtConfig({
       wasm: true
     },
     // 缓存优化
-    compressPublicAssets: true,
+    compressPublicAssets: false,
     minify: true,
     // 跨平台兼容性配置
-    preset: process.env.NITRO_PRESET || 'node-server',
+    rollupConfig: {
+      treeshake: true
+    },
     logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error',
     // 性能优化
     timing: false,
@@ -362,7 +364,7 @@ export default defineNuxtConfig({
       }
     },
     // ========== 全局响应头 ==========
-    // 所有路由添加安全响应头
+    // 所有路由添加安全响应头和压缩支持
     '/**': {
       headers: {
         'X-Content-Type-Options': 'nosniff',
@@ -514,6 +516,7 @@ export default defineNuxtConfig({
       // CSS 压缩
       cssMinify: 'esbuild',
       rollupOptions: {
+        treeshake: true,
         onwarn(warning, warn) {
           // 屏蔽特定的弃用警告
           if (
