@@ -12,7 +12,7 @@
     <article>
       <!-- 加载状态 -->
       <div v-if="isLoading">
-        <div class="flex flex-col lg:flex-row gap-4 md:gap-8">
+        <div class="flex flex-col lg:flex-row gap-3 md:gap-8">
           <!-- 左侧主内容区骨架屏 -->
           <div class="flex-1">
             <!-- 文章标题区骨架屏 -->
@@ -35,7 +35,7 @@
 
             <!-- 图片展示区骨架屏 -->
             <div class="mb-4 md:mb-8">
-              <div class="grid grid-cols-1 md:lg:grid-cols-6 gap-2 md:gap-4">
+              <div class="grid grid-cols-1 md:lg:grid-cols-6 gap-3">
                 <USkeleton class="aspect-square rounded-md" />
                 <USkeleton class="aspect-square rounded-md" />
               </div>
@@ -160,7 +160,7 @@
       </div>
 
       <!-- 内容区域 -->
-      <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-4 md:gap-8 relative">
+      <div v-else-if="article?.data" class="flex flex-col lg:flex-row gap-3 md:gap-8 relative">
         <!-- 文章内容容器 -->
         <div class="flex flex-col lg:flex-row gap-4 md:gap-8 w-full">
           <!-- 文章顶部广告 -->
@@ -294,9 +294,9 @@
               class="mb-4 md:mb-8"
               v-if="article?.data?.images && article?.data?.images.length > 0"
             >
-              <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                 <div
-                  v-for="(img, index) in article?.data.images"
+                  v-for="(img, index) in displayedImages"
                   :key="index"
                   :class="[
                     'rounded-md overflow-hidden cursor-pointer hover:opacity-90 transition-all duration-300 bg-gray-100 dark:bg-gray-800 relative',
@@ -307,28 +307,8 @@
                   <!-- 骨架屏占位 -->
                   <div
                     v-if="!imageLoaded[index] && !imageErrors[index]"
-                    class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center overflow-hidden"
-                  >
-                    <!-- 优雅的加载动画 -->
-                    <div class="relative">
-                      <!-- 旋转的圆环 -->
-                      <div class="relative w-16 h-16">
-                        <div
-                          class="absolute inset-0 rounded-full border-4 border-gray-200 dark:border-gray-700"
-                        ></div>
-                        <div
-                          class="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
-                          style="animation-duration: 0.8s"
-                        ></div>
-                      </div>
-
-                      <!-- 中心渐变点 -->
-                      <div
-                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full animate-ping"
-                        style="animation-duration: 1.5s"
-                      ></div>
-                    </div>
-                  </div>
+                    class="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse"
+                  ></div>
 
                   <!-- 图片加载错误状态 -->
                   <div
@@ -392,6 +372,19 @@
                 </div>
               </div> -->
                 </div>
+              </div>
+
+              <!-- 加载更多按钮 -->
+              <div v-if="hasMoreImages" class="flex justify-center mt-6">
+                <UButton
+                  @click="loadMoreImages"
+                  variant="outline"
+                  size="lg"
+                  icon="mynaui:image"
+                  class="cursor-pointer"
+                >
+                  {{ $t('image.loadMore', { count: remainingImagesCount }) }}
+                </UButton>
               </div>
             </figure>
 
@@ -904,6 +897,11 @@
       return true;
     }
 
+    // mixed 类型的文章不隐藏内容，只隐藏下载
+    if (data.type === 'mixed') {
+      return true;
+    }
+
     // 如果需要登录但用户未登录
     if (data.requireLogin && !isLoggedIn.value) {
       return false;
@@ -934,6 +932,11 @@
 
     // 如果用户有文章管理权限，则不受任何限制
     if (hasManagePermission.value) {
+      return null;
+    }
+
+    // mixed 类型的文章不显示内容限制组件
+    if (data.type === 'mixed') {
       return null;
     }
 
@@ -1334,6 +1337,31 @@
   const imageErrors = ref(new Array(article.value?.data?.images?.length || 0).fill(false));
   const imageAspectRatios = ref<string[]>([]);
 
+  // 图片分页相关状态
+  const imagesPerPage = 18;
+  const displayedImagesCount = ref(imagesPerPage);
+
+  // 计算显示的图片
+  const displayedImages = computed(() => {
+    return article.value?.data?.images?.slice(0, displayedImagesCount.value) || [];
+  });
+
+  // 计算是否还有更多图片
+  const hasMoreImages = computed(() => {
+    return (article.value?.data?.images?.length || 0) > displayedImagesCount.value;
+  });
+
+  // 计算剩余图片数量
+  const remainingImagesCount = computed(() => {
+    return (article.value?.data?.images?.length || 0) - displayedImagesCount.value;
+  });
+
+  // 加载更多图片
+  const loadMoreImages = () => {
+    const totalImages = article.value?.data?.images?.length || 0;
+    displayedImagesCount.value = Math.min(displayedImagesCount.value + imagesPerPage, totalImages);
+  };
+
   // 监听文章数据变化，初始化图片状态
   watch(
     () => article.value?.data?.images,
@@ -1431,11 +1459,37 @@
   };
 
   const shouldShowDownloads = computed(() => {
-    return (
-      article.value?.data.downloads &&
-      article.value.data.downloads.length > 0 &&
-      shouldShowContent.value
-    );
+    if (!article.value?.data.downloads || article.value.data.downloads.length === 0) {
+      return false;
+    }
+
+    const data = article.value.data;
+
+    // 如果用户有文章管理权限，则不受任何限制
+    if (hasManagePermission.value) {
+      return true;
+    }
+
+    // mixed 类型的文章需要根据权限控制下载链接
+    if (data.type === 'mixed') {
+      // 检查各种权限要求
+      if (data.requireLogin && !isLoggedIn.value) {
+        return false;
+      }
+      if (data.requireFollow && !data.author.isFollowed && !isAuthor.value) {
+        return false;
+      }
+      if (data.requireMembership && !isMembershipValid.value) {
+        return false;
+      }
+      if (data.requirePayment && !data.isPaid) {
+        return false;
+      }
+      return true;
+    }
+
+    // 其他类型文章使用原来的逻辑
+    return shouldShowContent.value;
   });
 
   const scrollToDownloads = async () => {

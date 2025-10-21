@@ -31,7 +31,7 @@
       <!-- 网格布局 -->
       <div
         v-if="layoutMode === 'grid'"
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6"
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"
         role="list"
       >
         <article v-for="(item, index) in allItems" :key="item.id" role="listitem">
@@ -39,7 +39,7 @@
         </article>
         <!-- 网格布局加载骨架屏 -->
         <template v-if="loading">
-          <ArticleSkeleton v-for="i in 10" :key="`skeleton-${i}`" />
+          <ArticleSkeleton v-for="i in 20" :key="`skeleton-${i}`" />
         </template>
       </div>
 

@@ -648,6 +648,7 @@
     "loading": "加载中...",
     "loadFailed": "图片加载失败",
     "retry": "重试",
+    "loadMore": "加载更多图片 ({count} 张)",
     "aspectRatio": "宽高比",
     "loadError": "加载失败"
   },

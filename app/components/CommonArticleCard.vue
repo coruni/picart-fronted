@@ -48,7 +48,7 @@
 
     <div class="p-4 sm:p-5 flex-grow flex flex-col relative overflow-hidden">
       <h2
-        class="text-sm line-clamp-2 sm:text-base md:text-lg font-medium text-gray-800 dark:text-white/90 transition-all duration-300 mb-3"
+        class="font-medium line-clamp-2 text-gray-800 dark:text-white/90 transition-all duration-300 mb-3"
       >
         {{ article.title }}
       </h2>
