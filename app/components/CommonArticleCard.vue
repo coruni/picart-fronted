@@ -1,7 +1,7 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
-    class="overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 group"
+    class="overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 group rounded-md"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative rounded-md">
       <NuxtImg
@@ -150,12 +150,3 @@
     return getStatusTextUtil(status, t);
   };
 </script>
-
-<style scoped>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>

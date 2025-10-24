@@ -96,13 +96,18 @@
               variant="link"
               color="neutral"
               @click="toggleColorMode"
-              class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 ease-in-out"
               :title="$t('common.toggleTheme')"
             >
-              <Icon
-                :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
-                class="w-5 h-5 text-gray-600 dark:text-gray-300"
-              />
+              <div class="relative w-5 h-5 flex items-center justify-center">
+                <transition name="icon-transition" mode="out-in">
+                  <Icon
+                    :key="isDarkMode ? 'sun' : 'moon'"
+                    :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+                    class="w-5 h-5 text-gray-600 dark:text-gray-300 transition-all duration-300 ease-in-out"
+                  />
+                </transition>
+              </div>
             </UButton>
           </ColorScheme>
 
@@ -325,19 +330,24 @@
                 <!-- 移动端主题切换 -->
                 <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                   <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
                       {{ $t('common.toggleTheme') || '主题' }}
                     </span>
                     <ColorScheme placeholder="..." tag="span">
                       <UButton
                         variant="ghost"
                         @click="toggleColorMode"
-                        class="w-10 h-10 flex items-center justify-center rounded-full transition-colors cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                        class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
                       >
-                        <Icon
-                          :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
-                          class="w-5 h-5 text-gray-700 dark:text-gray-300"
-                        />
+                        <div class="relative w-5 h-5 flex items-center justify-center">
+                          <transition name="icon-transition" mode="out-in">
+                            <Icon
+                              :key="isDarkMode ? 'sun' : 'moon'"
+                              :name="isDarkMode ? 'mynaui:sun' : 'mynaui:moon'"
+                              class="w-5 h-5 text-gray-700 dark:text-gray-300 transition-all duration-300 ease-in-out"
+                            />
+                          </transition>
+                        </div>
                       </UButton>
                     </ColorScheme>
                   </div>
@@ -389,6 +399,24 @@
     </div>
   </nav>
 </template>
+
+<style scoped>
+.icon-transition-enter-active,
+.icon-transition-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.icon-transition-enter-from {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.8);
+}
+
+.icon-transition-leave-to {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.8);
+}
+</style>
+
 <script lang="ts" setup>
   import type { Category } from '~/types/category';
   import type { ConfigControllerGetPublicResponse } from '~/api';

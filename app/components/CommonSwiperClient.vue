@@ -28,7 +28,7 @@
           <div class="absolute bottom-0 left-0 right-0 p-10">
             <div class="transform transition-all duration-700">
               <h2
-                class="text-4xl font-bold mb-4 text-white drop-shadow-lg bg-gradient-to-r from-pink-300 to-primary-300 bg-clip-text"
+                class="text-4xl font-bold mb-4 text-white drop-shadow-lg bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] bg-clip-text"
               >
                 {{ firstBanner.title }}
               </h2>
@@ -38,7 +38,7 @@
 
               <!-- 装饰性下划线 -->
               <div
-                class="mt-4 w-20 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full shadow-lg"
+                class="mt-4 w-20 h-1 bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] rounded-full shadow-lg"
               ></div>
             </div>
           </div>
@@ -87,7 +87,7 @@
             <div class="absolute bottom-0 left-0 right-0 p-10">
               <div class="transform transition-all duration-700 hover:translate-y-[-4px]">
                 <h2
-                  class="text-4xl font-bold mb-4 text-white drop-shadow-lg bg-gradient-to-r from-pink-300 to-primary-300 bg-clip-text"
+                  class="text-4xl font-bold mb-4 text-white drop-shadow-lg bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] bg-clip-text"
                 >
                   {{ slide.title }}
                 </h2>
@@ -97,7 +97,7 @@
 
                 <!-- 装饰性下划线 -->
                 <div
-                  class="mt-4 w-20 h-1 bg-gradient-to-r from-primary-400 to-primary-600 rounded-full shadow-lg"
+                  class="mt-4 w-20 h-1 bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] rounded-full shadow-lg"
                 ></div>
               </div>
             </div>

@@ -34,24 +34,23 @@
             <!-- 图片显示区域 -->
             <div class="relative w-full h-full flex items-center justify-center">
               <!-- 加载动画 -->
-              <div
-                v-show="loading"
-                class="absolute inset-0 flex items-center justify-center"
-                :style="{
-                  opacity: loading ? 1 : 0,
-                  transition: 'opacity 0.3s ease'
-                }"
-              >
-                <div class="relative">
-                  <div
-                    class="w-16 h-16 rounded-full border-4 border-gray-200 dark:border-gray-700"
-                  ></div>
-                  <div
-                    class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-primary animate-spin"
-                    style="animation-duration: 0.8s"
-                  ></div>
+              <Transition name="loading-fade" mode="out-in">
+                <div
+                  v-if="loading"
+                  key="loading"
+                  class="absolute inset-0 flex items-center justify-center"
+                >
+                  <div class="relative">
+                    <div
+                      class="w-16 h-16 rounded-full border-4 border-gray-200 dark:border-gray-700"
+                    ></div>
+                    <div
+                      class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-primary animate-spin"
+                      style="animation-duration: 0.8s"
+                    ></div>
+                  </div>
                 </div>
-              </div>
+              </Transition>
 
               <!-- 图片容器 -->
               <div
@@ -61,13 +60,12 @@
                 :style="{
                   transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale}) rotate(${rotation}deg)`,
                   transformOrigin: 'center center',
-                  opacity: isSwitching ? 0 : 1,
-                  transition: isDragging || isMouseDragging ? 'none' : 'opacity 0.3s ease'
+                  transition: isDragging || isMouseDragging ? 'none' : 'all 0.3s ease'
                 }"
-                @touchstart="handleTouchStart"
-                @touchmove="handleTouchMove"
-                @touchend="handleTouchEnd"
-                @touchcancel="handleTouchEnd"
+                @touchstart="handleTouchStart($event)"
+                @touchmove="handleTouchMove($event)"
+                @touchend="handleTouchEnd($event)"
+                @touchcancel="handleTouchEnd($event)"
                 @mousedown="handleMouseDown"
                 @mousemove="handleMouseMove"
                 @mouseup="handleMouseUp"
@@ -256,8 +254,8 @@
   // 加载状态
   const loading = ref(true);
 
-  // 切换状态
-  const isSwitching = ref(false);
+  // 图片预加载状态记录
+  const imagePreloaded = ref<Record<string, boolean>>({});
 
   // 缩放
   const scale = ref(1);
@@ -287,7 +285,11 @@
     newVal => {
       if (newVal) {
         currentIndex.value = props.index;
-        loading.value = true;
+        // 只有在图片未预加载时才显示加载状态
+        const currentImage = props.images[currentIndex.value];
+        if (currentImage && !imagePreloaded.value[currentImage]) {
+          loading.value = true;
+        }
         scale.value = 1;
         rotation.value = 0;
 
@@ -298,6 +300,9 @@
             loading.value = false;
           }
         }, 10000);
+
+        // 预加载相邻图片
+        preloadAdjacentImages();
       }
     }
   );
@@ -307,7 +312,11 @@
     () => props.index,
     newVal => {
       currentIndex.value = newVal;
-      loading.value = true;
+      // 只有在图片未预加载时才显示加载状态
+      const currentImage = props.images[currentIndex.value];
+      if (currentImage && !imagePreloaded.value[currentImage]) {
+        loading.value = true;
+      }
       scale.value = 1;
       rotation.value = 0;
 
@@ -318,6 +327,18 @@
           loading.value = false;
         }
       }, 10000);
+
+      // 滚动到当前缩略图
+      scrollToCurrentThumbnail();
+    }
+  );
+
+  // 监听 currentIndex 变化
+  watch(
+    () => currentIndex.value,
+    () => {
+      // 当索引变化时，预加载相邻图片
+      preloadAdjacentImages();
 
       // 滚动到当前缩略图
       scrollToCurrentThumbnail();
@@ -338,6 +359,39 @@
     });
   };
 
+  // 预加载相邻图片
+  const preloadAdjacentImages = () => {
+    // 预加载前一张和后一张图片
+    const preloadImage = (index: number) => {
+      if (index >= 0 && index < props.images.length) {
+        const imageUrl = props.images[index];
+        if (!imageUrl) return;
+
+        // 如果已经预加载过，直接返回
+        if (imagePreloaded.value[imageUrl]) {
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          // 标记图片已预加载
+          imagePreloaded.value[imageUrl] = true;
+        };
+        img.src = imageUrl;
+      }
+    };
+
+    // 预加载前一张图片
+    if (currentIndex.value > 0) {
+      preloadImage(currentIndex.value - 1);
+    }
+
+    // 预加载后一张图片
+    if (currentIndex.value < props.images.length - 1) {
+      preloadImage(currentIndex.value + 1);
+    }
+  };
+
   // 关闭
   const handleClose = () => {
     emit('update:visible', false);
@@ -347,28 +401,44 @@
   // 上一张
   const handlePrev = () => {
     if (currentIndex.value > 0) {
-      isSwitching.value = true;
-      setTimeout(() => {
-        currentIndex.value--;
+      // 重置变换状态
+      scale.value = 1;
+      rotation.value = 0;
+      offsetX.value = 0;
+      offsetY.value = 0;
+
+      // 切换索引
+      currentIndex.value--;
+
+      // 只有在图片未预加载时才显示加载状态
+      const currentImage = props.images[currentIndex.value];
+      if (currentImage && !imagePreloaded.value[currentImage]) {
         loading.value = true;
-        scale.value = 1;
-        rotation.value = 0;
-        emit('change', currentIndex.value);
-      }, 150);
+      }
+
+      emit('change', currentIndex.value);
     }
   };
 
   // 下一张
   const handleNext = () => {
     if (currentIndex.value < props.images.length - 1) {
-      isSwitching.value = true;
-      setTimeout(() => {
-        currentIndex.value++;
+      // 重置变换状态
+      scale.value = 1;
+      rotation.value = 0;
+      offsetX.value = 0;
+      offsetY.value = 0;
+
+      // 切换索引
+      currentIndex.value++;
+
+      // 只有在图片未预加载时才显示加载状态
+      const currentImage = props.images[currentIndex.value];
+      if (currentImage && !imagePreloaded.value[currentImage]) {
         loading.value = true;
-        scale.value = 1;
-        rotation.value = 0;
-        emit('change', currentIndex.value);
-      }, 150);
+      }
+
+      emit('change', currentIndex.value);
     }
   };
 
@@ -378,10 +448,14 @@
       clearTimeout(loadTimeout);
       loadTimeout = null;
     }
+    // 标记当前图片已加载
+    const currentImage = props.images[currentIndex.value];
+    if (currentImage) {
+      imagePreloaded.value[currentImage] = true;
+    }
     // 使用 nextTick 确保状态更新
     nextTick(() => {
       loading.value = false;
-      isSwitching.value = false;
     });
   };
 
@@ -391,10 +465,14 @@
       clearTimeout(loadTimeout);
       loadTimeout = null;
     }
+    // 标记当前图片已加载（即使是错误状态）
+    const currentImage = props.images[currentIndex.value];
+    if (currentImage) {
+      imagePreloaded.value[currentImage] = true;
+    }
     // 使用 nextTick 确保状态更新
     nextTick(() => {
       loading.value = false;
-      isSwitching.value = false;
     });
   };
 
@@ -429,6 +507,8 @@
   // 查看原图
   const handleViewOriginal = () => {
     showOriginal.value = !showOriginal.value;
+
+    // 对于原图，总是显示加载状态，因为可能是不同的URL
     loading.value = true;
   };
 
@@ -441,6 +521,9 @@
 
   // 触摸开始
   const handleTouchStart = (e: TouchEvent) => {
+    // 阻止默认行为
+    e.preventDefault();
+
     if (e.touches.length === 1) {
       // 单指拖动
       isDragging.value = true;
@@ -463,6 +546,9 @@
 
   // 触摸移动
   const handleTouchMove = (e: TouchEvent) => {
+    // 阻止默认行为，防止页面缩放
+    e.preventDefault();
+
     if (e.touches.length === 1 && isDragging.value) {
       // 单指拖动
       const touch = e.touches[0];
@@ -483,7 +569,12 @@
   };
 
   // 触摸结束
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e?: TouchEvent) => {
+    // 阻止默认行为
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+
     isDragging.value = false;
     lastDistance.value = 0;
   };
@@ -516,16 +607,22 @@
 
   // 缩略图点击
   const handleThumbnailClick = (index: number) => {
-    isSwitching.value = true;
-    setTimeout(() => {
-      currentIndex.value = index;
+    // 重置变换状态
+    scale.value = 1;
+    rotation.value = 0;
+    offsetX.value = 0;
+    offsetY.value = 0;
+
+    // 切换索引
+    currentIndex.value = index;
+
+    // 只有在图片未预加载时才显示加载状态
+    const currentImage = props.images[currentIndex.value];
+    if (currentImage && !imagePreloaded.value[currentImage]) {
       loading.value = true;
-      scale.value = 1;
-      rotation.value = 0;
-      offsetX.value = 0;
-      offsetY.value = 0;
-      emit('change', index);
-    }, 150);
+    }
+
+    emit('change', index);
   };
 
   // 键盘事件
@@ -595,6 +692,16 @@
 
   .lightbox-fade-enter-from,
   .lightbox-fade-leave-to {
+    opacity: 0;
+  }
+
+  .loading-fade-enter-active,
+  .loading-fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  .loading-fade-enter-from,
+  .loading-fade-leave-to {
     opacity: 0;
   }
 

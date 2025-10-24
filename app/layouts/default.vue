@@ -135,10 +135,15 @@
               t('header.nav.login')
             }}</UButton>
           </template>
+
+          <!-- 图标切换按钮 (语言和主题) -->
+          <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+            <FooterIconToggle />
+          </div>
         </div>
       </template>
     </UDashboardSidebar>
-    <UDashboardPanel :ui="{ body: 'pt-0!' }">
+    <UDashboardPanel>
       <template #header>
         <UDashboardNavbar toggle-side="right"> </UDashboardNavbar>
       </template>
