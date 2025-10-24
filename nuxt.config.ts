@@ -308,16 +308,12 @@ export default defineNuxtConfig({
   // 配置Nitro
   nitro: {
     preset: 'vercel',
-    // 确保cookie在SSR阶段正确传递
     experimental: {
-      wasm: false // 禁用 WASM 减少构建内存使用
-      // Cookie 传递配置
+      wasm: true
     },
     // 缓存优化
-    compressPublicAssets: false, // 禁用压缩减少构建内存使用
-    minify: false, // 禁用压缩减少构建内存使用
-    // 请求处理优化 - 使用中间件处理超时
-    // 跨平台兼容性配置
+    compressPublicAssets: false,
+    minify: false,
     rollupConfig: {
       treeshake: true,
       // 减少并发构建任务
