@@ -29,3 +29,4 @@ logs
 app/app.config.ts
 app/nuxt.config.ts
 pnpm-lock.yaml
+.vercel

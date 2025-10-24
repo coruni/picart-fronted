@@ -17,13 +17,21 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     '@nuxt/ui',
     '@nuxtjs/seo',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    'nuxt-vitalizer'
   ],
-
+  vitalizer: {
+    // Remove the render-blocking entry CSS
+    disableStylesheets: 'entry',
+    disablePreloadLinks: true,
+    disablePrefetchLinks: 'dynamicImports'
+  },
   // 性能优化
   experimental: {
     payloadExtraction: true,
     renderJsonPayloads: true,
+    // 优化水合
+    noVueServer: false,
     defaults: {
       nuxtLink: {
         // 禁用自动预取，只在用户真正需要时加载
@@ -273,6 +281,7 @@ export default defineNuxtConfig({
 
   // 配置CSS
   css: ['~/assets/css/main.css'],
+
   // 配置环境变量
   runtimeConfig: {
     // 私有配置（仅在服务端可用）
@@ -298,32 +307,32 @@ export default defineNuxtConfig({
 
   // 配置Nitro
   nitro: {
+    preset: 'vercel',
     // 确保cookie在SSR阶段正确传递
     experimental: {
-      wasm: true
+      wasm: false // 禁用 WASM 减少构建内存使用
+      // Cookie 传递配置
     },
     // 缓存优化
-    compressPublicAssets: false,
-    minify: true,
+    compressPublicAssets: false, // 禁用压缩减少构建内存使用
+    minify: false, // 禁用压缩减少构建内存使用
+    // 请求处理优化 - 使用中间件处理超时
     // 跨平台兼容性配置
     rollupConfig: {
-      treeshake: true
+      treeshake: true,
+      // 减少并发构建任务
+      maxParallelFileOps: 1
     },
     logLevel: process.env.NODE_ENV === 'development' ? 'warn' : 'error',
     // 性能优化
     timing: false,
-    // 减少内存占用
-    storage: {
-      // 内存缓存（默认）
-      cache: {
-        driver: 'memory'
-      }
-    },
+    // 简化存储配置，避免缓存驱动器问题
+    storage: {},
     // 静态资源缓存配置
     publicAssets: [
       {
         baseURL: '/',
-        maxAge: 60 * 60 * 24 * 365 // 1年
+        maxAge: 60 * 60 * 24 * 7 // 减少到1周
       }
     ]
   },
@@ -331,12 +340,13 @@ export default defineNuxtConfig({
   // 路由规则配置 - 混合渲染和缓存策略
   routeRules: {
     // ========== 首页优化 ==========
-    // 首页 - 使用 ISR 缓存，避免预渲染内存溢出
+    // 首页 - 使用预渲染，避免运行时压力
     '/': {
-      isr: 30, // 缩短到30秒，保证内容新鲜度
+      prerender: true,
       headers: {
-        'Cache-Control': 'public, max-age=30, s-maxage=30, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600, immutable',
+        'X-Content-Type-Options': 'nosniff',
+        Connection: 'keep-alive'
       }
     },
     // ========== 文章页优化 ==========
@@ -371,7 +381,10 @@ export default defineNuxtConfig({
         'X-Frame-Options': 'SAMEORIGIN',
         'X-XSS-Protection': '1; mode=block',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
-        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+        'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
+        // 确保 HEAD 请求支持
+        Allow: 'GET, HEAD, OPTIONS',
+        'Content-Type': 'text/html; charset=utf-8'
       }
     },
     // ========== 静态资源缓存 ==========
@@ -481,10 +494,9 @@ export default defineNuxtConfig({
   // 配置Vite
   vite: {
     optimizeDeps: {
-      // 生产环境不预构建，减少首屏加载
-      include: process.env.NODE_ENV === 'development' ? ['@vue/devtools-api'] : [],
-      // 预构建优化
-      exclude: []
+      // 构建时禁用预构建，减少内存使用
+      include: [],
+      exclude: ['@tinymce', 'tinymce', 'vue-waterfall-plugin-next']
     },
     define: {
       __DEV__: process.env.NODE_ENV === 'development'
@@ -494,7 +506,7 @@ export default defineNuxtConfig({
       allowedHosts: true
     },
     css: {
-      devSourcemap: true,
+      devSourcemap: false, // 禁用 sourcemap 减少内存使用
       // CSS 压缩和优化
       preprocessorOptions: {
         scss: {
@@ -506,17 +518,17 @@ export default defineNuxtConfig({
       // 提高块大小警告限制
       chunkSizeWarningLimit: 1000,
       // 显示打包进度
-      reportCompressedSize: true,
-      // 使用 esbuild 压缩（更快）
-      minify: 'esbuild',
-      // 生产环境不生成 sourcemap
+      reportCompressedSize: false, // 禁用压缩大小报告
+      // 使用 terser 压缩（内存友好）
+      minify: 'terser',
+      // 生产环境不生成 sourcemap（减少文件大小，提高安全性）
       sourcemap: false,
-      // 启用 CSS 代码分割
-      cssCodeSplit: true,
       // CSS 压缩
       cssMinify: 'esbuild',
+      // 减少并发构建任务
       rollupOptions: {
         treeshake: true,
+        // 简化代码分割，减少内存使用
         onwarn(warning, warn) {
           // 屏蔽特定的弃用警告
           if (
@@ -534,7 +546,6 @@ export default defineNuxtConfig({
           warn(warning);
         },
         output: {
-          // 手动代码分割 - 更细粒度分割，按需加载
           manualChunks: id => {
             // 工具库
             if (id.includes('node_modules/lodash-es') || id.includes('node_modules/zod')) {
@@ -560,16 +571,13 @@ export default defineNuxtConfig({
 
   // 基础应用配置
   app: {
+    rootId: false, // 移除默认的 __nuxt ID
     head: {
       viewport: 'width=device-width, initial-scale=1',
       charset: 'utf-8',
       meta: [
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'theme-color', content: '#ffffff' }
-      ],
-      link: [
-        { rel: 'dns-prefetch', href: 'https://api.cosfan.cc' },
-        { rel: 'preconnect', href: 'https://api.cosfan.cc', crossorigin: '' }
       ]
     },
     pageTransition: {
