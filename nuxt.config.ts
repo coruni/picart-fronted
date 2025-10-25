@@ -358,9 +358,7 @@ export default defineNuxtConfig({
         'X-XSS-Protection': '1; mode=block',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'geolocation=(), microphone=(), camera=()',
-        // 确保 HEAD 请求支持
-        Allow: 'GET, HEAD, OPTIONS',
-        'Content-Type': 'text/html; charset=utf-8'
+        Allow: 'GET, HEAD, OPTIONS'
       }
     },
     // ========== 静态资源缓存 ==========
