@@ -1,8 +1,8 @@
 <template>
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
-    <NuxtLayout name="default">
-      <NuxtPage keepalive />
+    <NuxtLayout>
+      <NuxtPage />
     </NuxtLayout>
   </UApp>
 </template>
