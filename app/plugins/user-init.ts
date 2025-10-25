@@ -34,38 +34,19 @@ export default defineNuxtPlugin(async nuxtApp => {
       userStore.setRefreshToken(refreshTokenCookie.value);
     }
 
-    // 使用 useAsyncData 在服务端获取用户信息，自动处理 SSR 水合
-    const { data: userInfoData, error } = await useAsyncData(
-      'user-profile',
-      async () => {
-        try {
-          const response = await userControllerGetProfile({
-            composable: '$fetch'
-          });
-          return response.data as UserInfo;
-        } catch (err) {
-          console.warn('Failed to fetch user profile:', err);
-          return null;
-        }
-      },
-      {
-        // 只在有token时才获取
-        server: !!authTokenCookie.value,
-        lazy: false,
-        // 设置缓存时间
-        getCachedData: key => {
-          const data = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
-          return data;
-        }
-      }
-    );
+    try {
+      // 直接调用API获取用户信息
+      const response = await userControllerGetProfile({
+        composable: 'useAsyncData'
+      });
 
-    // 如果成功获取用户信息，更新到store
-    if (userInfoData.value) {
-      userStore.setUserInfo(userInfoData.value);
-    } else if (error.value) {
+      // 如果成功获取用户信息，更新到store
+      if (response.data) {
+        userStore.setUserInfo(response.data.value?.data!);
+      }
+    } catch (error) {
+      console.warn('Failed to fetch user profile:', error);
       // 如果获取失败（可能是token过期），清除认证状态
-      console.warn('Failed to get user profile, clearing auth state');
       await userStore.clearAuth(false);
     }
   }

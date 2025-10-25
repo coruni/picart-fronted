@@ -543,6 +543,11 @@
     }
   };
 
+  // 在SSR阶段确保用户信息已加载
+  if (import.meta.server && userStore.isLoggedIn && !userStore.currentUser) {
+    await userStore.getUserInfo();
+  }
+
   // 重置数据
   const resetData = () => {
     pagination.value.page = 1;

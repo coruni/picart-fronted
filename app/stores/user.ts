@@ -62,10 +62,15 @@ export const useUserStore = defineStore('user', {
     async getUserInfo() {
       if (!this.isLoggedIn) return;
       try {
-        const { data } = await userControllerGetProfile({
-          composable: 'useFetch'
+        // 直接调用API获取用户信息
+        const response = await userControllerGetProfile({
+          composable: '$fetch'
         });
-        this.userInfo = data.value?.data!;
+        
+        // 如果成功获取用户信息，更新到store
+        if (response.data) {
+          this.userInfo = response.data;
+        }
       } catch (error) {
         // 获取失败时清空
         this.clearAuth(false);

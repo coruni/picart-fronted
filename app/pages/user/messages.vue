@@ -271,6 +271,11 @@
   } from '~/api';
   import type { MessageControllerFindAllResponse } from '~/api';
 
+  // 定义页面元数据，标识需要登录
+  definePageMeta({
+    requiresAuth: true
+  });
+
   type Message = MessageControllerFindAllResponse['data']['data'][number];
 
   const { t } = useI18n();
