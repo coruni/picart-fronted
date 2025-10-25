@@ -312,7 +312,6 @@ export default defineNuxtConfig({
 
   // 配置Nitro
   nitro: {
-    preset: 'vercel',
     experimental: {
       wasm: true
     },

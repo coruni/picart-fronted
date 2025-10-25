@@ -50,9 +50,21 @@ export default defineNuxtPlugin(() => {
     setupTinyMCE();
 
     // 监听 TinyMCE 脚本加载完成
-    const script = document.querySelector('script[src*="tinymce"]');
-    if (script) {
-      script.addEventListener('load', setupTinyMCE);
-    }
+    const checkForScript = () => {
+      const script = document.querySelector('script[src*="tinymce"]');
+      if (script) {
+        // 确保脚本已正确加载
+        if (script.hasAttribute('type')) {
+          script.setAttribute('type', 'application/javascript');
+        }
+        script.addEventListener('load', setupTinyMCE);
+      } else {
+        // 如果还没找到脚本，继续检查
+        setTimeout(checkForScript, 100);
+      }
+    };
+
+    // 开始检查脚本
+    checkForScript();
   }
 });

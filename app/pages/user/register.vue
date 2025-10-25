@@ -123,7 +123,7 @@
         </UFormField>
 
         <div class="space-y-2">
-          <div class="flex items-start">
+          <div class="flex items-center">
             <UCheckbox v-model="agreeTerms" class="mt-0.5" />
             <label class="ml-2 text-sm text-gray-600 dark:text-gray-400">
               {{ $t('register.agreeToTerms') }}
