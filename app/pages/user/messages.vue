@@ -58,12 +58,8 @@
     </div>
 
     <!-- 消息列表 -->
-    <TransitionGroup name="list" tag="div" class="space-y-3">
-      <div
-        v-for="message in displayMessages"
-        :key="message.id"
-        class="transform transition-transform hover:scale-105 duration-300"
-      >
+    <TransitionGroup name="list" tag="div" class="space-y-3 box-border overflow-hidden">
+      <div v-for="message in displayMessages" :key="message.id">
         <UModal
           :title="message.title"
           :ui="{
@@ -73,49 +69,80 @@
         >
           <!-- 触发器：消息项 -->
           <div
-            class="flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg cursor-pointer transition-colors"
+            class="message-card flex items-start gap-4 p-5 rounded-xl transition-all duration-200 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-500"
+            :class="{
+              'bg-white dark:bg-gray-800': message.isRead,
+              'bg-primary-50/50 dark:bg-primary-900/20 border-l-4 border-l-primary-500 dark:border-l-primary-400 unread-message':
+                !message.isRead
+            }"
             @click="handleMessageClick(message)"
           >
             <!-- 消息图标 -->
-            <UAvatar
-              :icon="getMessageIcon(message.type || '')"
-              :color="getMessageIconClass(message.type || '').includes('blue') ? 'blue' : 'gray'"
-              size="sm"
-            />
+            <div class="flex-shrink-0 mt-1">
+              <UAvatar
+                :icon="getMessageIcon(message.type || '')"
+                :color="getMessageTypeColor(message.type || '')"
+                size="md"
+                :class="{
+                  'ring-2 ring-blue-100 dark:ring-blue-900/50': !message.isRead
+                }"
+              />
+            </div>
 
             <!-- 消息内容 -->
             <div class="flex-1 min-w-0">
               <!-- 第一行：标题和状态 -->
-              <div class="flex items-center justify-between mb-1">
-                <h3 class="font-semibold text-gray-900 dark:text-white truncate text-base">
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <h3
+                  class="font-semibold text-gray-900 dark:text-white truncate text-base leading-tight"
+                  :class="{
+                    'text-primary-600 dark:text-primary-300': !message.isRead
+                  }"
+                >
                   {{ message.title }}
                 </h3>
-                <div class="flex items-center gap-2 ml-2">
-                  <UBadge v-if="!message.isRead" color="info" variant="soft" size="xs">
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <UBadge
+                    v-if="!message.isRead"
+                    color="primary"
+                    variant="solid"
+                    size="xs"
+                    class="px-1.5 py-0.5"
+                  >
                     {{ $t('message.unread') }}
                   </UBadge>
                   <UDropdownMenu :items="getMessageActions(message)">
-                    <UButton variant="ghost" size="xs" icon="mynaui:more-horizontal" @click.stop />
+                    <UButton
+                      variant="ghost"
+                      size="xs"
+                      icon="mynaui:more-horizontal"
+                      @click.stop
+                      class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    />
                   </UDropdownMenu>
                 </div>
               </div>
 
-              <!-- 第二行：内容和时间 -->
+              <!-- 第二行：内容摘要 -->
+              <p
+                class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2 leading-relaxed"
+                :class="{
+                  'font-medium': !message.isRead
+                }"
+              >
+                {{ message.content }}
+              </p>
+
+              <!-- 第三行：类型标签和时间 -->
               <div class="flex items-center justify-between">
-                <p class="text-xs text-gray-600 dark:text-gray-300 truncate flex-1">
-                  {{ message.content }}
-                </p>
-                <div class="flex items-center gap-2 ml-2 text-xs text-gray-500 dark:text-gray-400">
-                  <UBadge
-                    v-if="message.type"
-                    :color="getMessageTypeColor(message.type)"
-                    variant="soft"
-                    size="xs"
-                  >
+                <div class="flex items-center gap-2">
+                  <UBadge v-if="message.type" color="primary" variant="soft" size="xs">
                     {{ getMessageTypeLabel(message.type) }}
                   </UBadge>
-                  <span class="whitespace-nowrap">
-                    {{ message.createdAt ? formatTime(message.createdAt) : '' }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                  <span v-if="message.createdAt">
+                    {{ formatTime(message.createdAt) }}
                   </span>
                 </div>
               </div>
@@ -124,10 +151,44 @@
 
           <!-- 弹窗内容 -->
           <template #body>
-            <div id="message-detail-description">
-              <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                {{ message.content }}
-              </p>
+            <div id="message-detail-description" class="p-1">
+              <div class="flex items-start gap-3 mb-4">
+                <UAvatar
+                  :icon="getMessageIcon(message.type || '')"
+                  :color="getMessageTypeColor(message.type || '')"
+                  size="md"
+                />
+                <div>
+                  <h3 class="font-bold text-lg text-gray-900 dark:text-white">
+                    {{ message.title }}
+                  </h3>
+                  <div class="flex items-center gap-2 mt-1">
+                    <UBadge v-if="message.type" variant="soft" size="xs">
+                      {{ getMessageTypeLabel(message.type) }}
+                    </UBadge>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      {{ message.createdAt ? formatTime(message.createdAt) : '' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                  {{ message.content }}
+                </p>
+                <!-- 可跳转链接 -->
+                <div v-if="getMessageLinks(message).length > 0" class="mt-4">
+                  <div
+                    v-for="(link, index) in getMessageLinks(message)"
+                    :key="index"
+                    @click="handleMessageLinkClick(link.url)"
+                    class="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:underline cursor-pointer"
+                  >
+                    <Icon name="mynaui:arrow-right" class="w-4 h-4" />
+                    <span>{{ link.text }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
 
@@ -232,7 +293,7 @@
 
   // 计算属性
   const unreadCount = computed(() => messages.value.filter((msg: Message) => !msg.isRead).length);
-  const totalCount = computed(() => messages.value.length);
+  const totalCount = computed(() => initialData.value?.data?.meta?.total || messages.value.length);
 
   // 计算显示的消息列表
   const displayMessages = computed(() => {
@@ -308,22 +369,7 @@
   };
   // 获取消息类型颜色
   const getMessageTypeColor = (type: string) => {
-    const colorMap: Record<
-      string,
-      'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
-    > = {
-      system: 'neutral',
-      notification: 'info',
-      private: 'primary',
-      warning: 'warning',
-      error: 'error',
-      success: 'success',
-      info: 'info',
-      alert: 'warning',
-      reminder: 'secondary',
-      update: 'info'
-    };
-    return colorMap[type] || 'neutral';
+    return 'primary';
   };
 
   // 获取消息类型标签
@@ -365,24 +411,7 @@
 
   // 获取消息图标样式
   const getMessageIconClass = (type: string) => {
-    const classMap: Record<string, string> = {
-      system: 'bg-blue-500',
-      notification: 'bg-green-500',
-      private: 'bg-purple-500',
-      comment: 'bg-purple-500',
-      like: 'bg-red-500',
-      follow: 'bg-orange-500',
-      order: 'bg-indigo-500',
-      payment: 'bg-emerald-500',
-      warning: 'bg-yellow-500',
-      error: 'bg-red-500',
-      success: 'bg-green-500',
-      info: 'bg-blue-500',
-      alert: 'bg-orange-500',
-      reminder: 'bg-indigo-500',
-      update: 'bg-cyan-500'
-    };
-    return classMap[type] || 'bg-gray-500';
+    return 'bg-primary-500';
   };
 
   // 格式化时间
@@ -587,6 +616,45 @@
   useHead({
     title: t('message.title')
   });
+
+  // 获取消息中的可跳转链接
+  const getMessageLinks = (message: any) => {
+    const links = [];
+    
+    // 只判断metadata是否有articleId来添加文章跳转链接
+    if (message.metadata?.articleId) {
+      // 如果有articleTitle则使用，否则使用通用标题
+      const title = message.metadata.articleTitle || 
+                   t('message.link.view_article');
+      
+      links.push({
+        text: title,
+        url: `/article/${message.metadata.articleId}`
+      });
+    }
+    // 处理用户相关的链接
+    else if (message.metadata?.targetType === 'user' && message.metadata?.targetId) {
+      links.push({
+        text: message.metadata.targetTitle || t('message.link.view_user'),
+        url: `/author/${message.metadata.targetId}`
+      });
+    }
+    // 处理其他类型的目标链接
+    else if (message.metadata?.targetType === 'article' && message.metadata?.targetId) {
+      links.push({
+        text: message.metadata.targetTitle || t('message.link.view_article'),
+        url: `/article/${message.metadata.targetId}`
+      });
+    }
+    
+    return links;
+  };
+
+  // 处理消息内容中的链接跳转
+  const handleMessageLinkClick = (url: string) => {
+    // 使用Nuxt的路由跳转
+    navigateTo(url);
+  };
 </script>
 
 <style>

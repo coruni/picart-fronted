@@ -4,7 +4,7 @@ export default defineAppConfig({
   clarityId: 'sw54hoqei8',
   ui: {
     colors: {
-      primary: 'pink'
+      primary: 'indigo'
     },
     button: {
       variants: {}

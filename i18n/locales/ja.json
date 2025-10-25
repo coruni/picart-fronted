@@ -65,6 +65,14 @@
       "minutesAgo": "{minutes}分前",
       "hoursAgo": "{hours}時間前",
       "daysAgo": "{days}日前"
+    },
+    "link": {
+      "article_liked": "いいねされた記事を表示",
+      "article_commented": "コメントされた記事を表示",
+      "user_followed": "フォロワーを表示",
+      "order_created": "注文詳細を表示",
+      "payment_completed": "支払い詳細を表示",
+      "view_article": "記事を表示"
     }
   },
   "admin": {

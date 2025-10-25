@@ -69,6 +69,14 @@
       "minutesAgo": "{minutes} minutes ago",
       "hoursAgo": "{hours} hours ago",
       "daysAgo": "{days} days ago"
+    },
+    "link": {
+      "article_liked": "View liked article",
+      "article_commented": "View commented article",
+      "user_followed": "View follower",
+      "order_created": "View order details",
+      "payment_completed": "View payment details",
+      "view_article": "View article"
     }
   },
   "admin": {

@@ -338,7 +338,6 @@ export default defineNuxtConfig({
     // ========== 首页优化 ==========
     // 首页 - 使用预渲染，避免运行时压力
     '/': {
-      prerender: true,
       headers: {
         'Cache-Control': 'public, max-age=3600, s-maxage=3600, immutable',
         'X-Content-Type-Options': 'nosniff',
@@ -413,73 +412,6 @@ export default defineNuxtConfig({
     '/_nuxt/**': {
       headers: {
         'Cache-Control': 'public, max-age=31536000, immutable'
-      }
-    },
-    // ========== 用户页面 ==========
-    // 用户登录/注册页面 - 客户端渲染 + 短期缓存
-    '/user/login': {
-      headers: {
-        'Cache-Control': 'public, max-age=0, must-revalidate'
-      }
-    },
-    '/user/register': {
-      headers: {
-        'Cache-Control': 'public, max-age=0, must-revalidate'
-      }
-    },
-    '/user/forgot-password': {
-      headers: {
-        'Cache-Control': 'public, max-age=0, must-revalidate'
-      }
-    },
-
-    // 用户个人页面 - SSR + 完全不缓存（需要认证）
-    '/user/index': {
-      // 禁用所有缓存
-      prerender: false,
-      headers: {
-        'Cache-Control': 'private, no-cache, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
-      }
-    },
-    '/user/articles/**': {
-      prerender: false,
-      headers: {
-        'Cache-Control': 'private, no-cache, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
-      }
-    },
-    '/user/messages': {
-      prerender: false,
-      headers: {
-        'Cache-Control': 'private, no-cache, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
-      }
-    },
-    '/user/orders': {
-      prerender: false,
-      headers: {
-        'Cache-Control': 'private, no-cache, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
-      }
-    },
-
-    // ========== 管理后台 ==========
-    // 管理后台 - 客户端渲染 + 完全不缓存
-    '/admin/**': {
-      prerender: false,
-      headers: {
-        'Cache-Control': 'private, no-cache, must-revalidate',
-        'X-Content-Type-Options': 'nosniff'
-      }
-    },
-
-    // ========== 其他页面 ==========
-    // 维护页面 - 预渲染 + 短期缓存
-    '/maintenance': {
-      prerender: true,
-      headers: {
-        'Cache-Control': 'public, max-age=60, s-maxage=60'
       }
     }
   },
