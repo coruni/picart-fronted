@@ -597,7 +597,7 @@
       observer = new IntersectionObserver(
         entries => {
           const target = entries[0];
-          if (target.isIntersecting && !loading.value && hasMore.value) {
+          if (target?.isIntersecting && !loading.value && hasMore.value) {
             loadMessages();
           }
         },
@@ -625,13 +625,12 @@
   // 获取消息中的可跳转链接
   const getMessageLinks = (message: any) => {
     const links = [];
-    
+
     // 只判断metadata是否有articleId来添加文章跳转链接
     if (message.metadata?.articleId) {
       // 如果有articleTitle则使用，否则使用通用标题
-      const title = message.metadata.articleTitle || 
-                   t('message.link.view_article');
-      
+      const title = message.metadata.articleTitle || t('message.link.view_article');
+
       links.push({
         text: title,
         url: `/article/${message.metadata.articleId}`
@@ -651,7 +650,7 @@
         url: `/article/${message.metadata.targetId}`
       });
     }
-    
+
     return links;
   };
 
