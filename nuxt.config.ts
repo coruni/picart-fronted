@@ -18,8 +18,13 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/seo',
     '@nuxtjs/color-mode',
-    'nuxt-vitalizer'
+    'nuxt-vitalizer',
+    '@vite-pwa/nuxt',
+    '@nuxtjs/fontaine'
   ],
+  pwa: {
+    registerType: 'autoUpdate'
+  },
   vitalizer: {
     // Remove the render-blocking entry CSS
     disableStylesheets: 'entry',
