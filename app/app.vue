@@ -1,20 +1,16 @@
 <template>
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
-    <NuxtLayout>
-      <NuxtPage
-        :keepalive="{
-          include: ['index', 'category'],
-          exclude: ['article-id'],
-          max: 10
-        }"
-      />
+    <NuxtLayout name="default">
+      <NuxtPage keepalive />
     </NuxtLayout>
   </UApp>
 </template>
 
 <script lang="ts" setup>
   import { configControllerGetPublic } from './api';
+  const route = useRoute();
+  const pageKey = computed(() => route.name as string);
 
   const configs = await configControllerGetPublic({
     composable: 'useFetch',

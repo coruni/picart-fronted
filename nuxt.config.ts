@@ -344,30 +344,6 @@ export default defineNuxtConfig({
         Connection: 'keep-alive'
       }
     },
-    // ========== 文章页优化 ==========
-    // 文章页 - 使用 ISR 缓存，提升加载速度
-    '/article/**': {
-      isr: 300, // 5分钟更新
-      headers: {
-        'Cache-Control': 'public, max-age=300, must-revalidate'
-      }
-    },
-    // ========== 分类页优化 ==========
-    // 分类页 - 使用 ISR 缓存
-    '/category/**': {
-      isr: 600, // 10分钟更新
-      headers: {
-        'Cache-Control': 'public, max-age=600, must-revalidate'
-      }
-    },
-    // ========== 作者页优化 ==========
-    // 作者页 - 使用 ISR 缓存
-    '/author/**': {
-      isr: 600, // 10分钟更新
-      headers: {
-        'Cache-Control': 'public, max-age=600, must-revalidate'
-      }
-    },
     // ========== 全局响应头 ==========
     // 所有路由添加安全响应头和压缩支持
     '/**': {

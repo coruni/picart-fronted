@@ -126,7 +126,19 @@
       </template>
 
       <template #body>
-        <NuxtPage keepalive />
+        <NuxtPage
+          :keepalive="{
+            include: [
+              'admin-articles',
+              'admin-categories',
+              'admin-orders',
+              'admin-roles',
+              'admin-users',
+              'admin-tags',
+              'admin-comments'
+            ]
+          }"
+        />
       </template>
     </UDashboardPanel>
 
