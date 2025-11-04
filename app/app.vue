@@ -1,5 +1,6 @@
 <template>
   <UApp>
+    <NuxtPwaManifest />
     <NuxtLoadingIndicator color="#615fff" />
     <NuxtLayout>
       <NuxtPage keepalive />

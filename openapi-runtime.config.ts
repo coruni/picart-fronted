@@ -137,19 +137,19 @@ export const createClientConfig: CreateClientConfig = config => {
     onRequestError: context => {
       // console.error('Request Error:', context.error);
       // 500错误处理
-      if (context.response && context.response.status === 500) {
-        // console.error('Internal Server Error: Backend server encountered an error');
-        // 可以在这里添加用户通知逻辑
-        const toast = useToast();
-        const { $i18n } = useNuxtApp();
-        const t = $i18n.t;
-        toast.add({
-          title: t('error.serverError'),
-          color: 'error',
-          icon: 'mynaui:slash-circle',
-          ui: { close: 'cursor-pointer' }
-        });
-      }
+      // if (context.response && context.response.status === 500) {
+      //   // console.error('Internal Server Error: Backend server encountered an error');
+      //   // 可以在这里添加用户通知逻辑
+      //   const toast = useToast();
+      //   const { $i18n } = useNuxtApp();
+      //   const t = $i18n.t;
+      //   toast.add({
+      //     title: t('error.serverError'),
+      //     color: 'error',
+      //     icon: 'mynaui:slash-circle',
+      //     ui: { close: 'cursor-pointer' }
+      //   });
+      // }
       return context;
     },
     onResponse: context => {

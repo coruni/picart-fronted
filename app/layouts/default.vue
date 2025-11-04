@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import type { NavigationMenuItem } from '@nuxt/ui';
-  import { SpeedInsights } from '@vercel/speed-insights/nuxt';
+  // import { SpeedInsights } from '@vercel/speed-insights/nuxt';
 
   import { categoryControllerFindAll } from '~/api';
   import type { Category } from '~/types/category';
@@ -88,7 +88,6 @@
 </script>
 <template>
   <UDashboardGroup>
-    <SpeedInsights />
     <UDashboardSidebar
       toggle-side="right"
       id="default"

@@ -1,6 +1,7 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
+    target="_blank"
     class="overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 group rounded-md"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative rounded-md">
