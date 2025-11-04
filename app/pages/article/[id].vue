@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-4">
     <!-- 自定义灯箱组件 -->
     <CustomLightbox
       v-model:visible="lightboxVisible"
