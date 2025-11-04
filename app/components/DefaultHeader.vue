@@ -1,8 +1,8 @@
 <template>
   <nav
-    class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 dark:bg-gray-900/80 backdrop-blur-md"
+    class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 w-full dark:bg-gray-900/80 backdrop-blur-md"
   >
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-full">
+    <div class="container mx-auto px-4 flex items-center justify-between h-full w-full overflow-hidden">
       <NuxtLinkLocale class="flex items-center space-x-2" to="/">
         <NuxtImg
           v-if="siteConfig?.site_logo"
@@ -20,7 +20,7 @@
       </NuxtLinkLocale>
 
       <!-- 桌面端导航 -->
-      <div class="hidden md:flex items-center space-x-8">
+      <div class="hidden md:flex items-center space-x-6 flex-grow min-w-0">
         <NuxtLinkLocale to="/">{{ $t('header.nav.home') }}</NuxtLinkLocale>
         <template v-for="item in categories" :key="item.id">
           <template v-if="!item.children">
@@ -28,11 +28,12 @@
               :to="item.link || `/category/${item.id}`"
               :target="item.link ? '_blank' : '_self'"
               :no-rel="!!item.link"
+              class="flex-shrink-0"
             >
-              <span>{{ item.name }}</span>
+              <span class="whitespace-nowrap">{{ item.name }}</span>
             </NuxtLinkLocale>
           </template>
-          <div v-else class="group relative cursor-pointer flex items-center gap-1">
+          <div v-else class="group relative cursor-pointer flex items-center gap-1 flex-shrink-0">
             <NuxtLinkLocale
               v-if="item.link"
               :to="item.link"
@@ -50,7 +51,7 @@
             />
             <div
               v-if="item.children?.length"
-              class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
+              class="absolute top-full left-0 mt-2 w-48 min-w-[12rem] bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
             >
               <div class="py-1">
                 <NuxtLinkLocale
@@ -59,7 +60,7 @@
                   :target="child.link ? '_blank' : '_self'"
                   :no-rel="!!child.link"
                   :to="child.link || `/category/${child.id}`"
-                  class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary transition-colors duration-200"
+                  class="flex-shrink-0 block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary transition-colors duration-200"
                 >
                   {{ child.name }}
                 </NuxtLinkLocale>
@@ -78,7 +79,7 @@
             :placeholder="$t('header.nav.search')"
             class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-sm focus:outline-none border-none"
             @keyup.enter="handleSearch"
-          >
+          />
           <Icon
             name="mynaui:search"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
@@ -119,12 +120,12 @@
               class="w-8 h-8 rounded-full object-cover"
             />
             <div
-              class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
+              class="absolute top-full right-0 mt-2 w-48 min-w-[12rem] bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 dark:border-gray-700"
             >
               <div class="py-1">
                 <NuxtLinkLocale
                   to="/user"
-                  class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
+                  class="flex-shrink-0 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
                 >
                   <span>{{ $t('header.nav.profile') }}</span>
                 </NuxtLinkLocale>
@@ -146,7 +147,7 @@
 
                   <!-- 语言选择子菜单 -->
                   <div
-                    class="absolute top-0 w-40 bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover/language:opacity-100 group-hover/language:visible transition-all duration-300 z-50 dark:border-gray-700"
+                    class="absolute top-0 w-40 min-w-[10rem] bg-white dark:bg-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover/language:opacity-100 group-hover/language:visible transition-all duration-300 z-50 dark:border-gray-700"
                     :class="languageSubmenuPosition"
                   >
                     <div class="py-1">
@@ -277,7 +278,7 @@
                   :placeholder="$t('header.nav.search')"
                   class="w-full px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm focus:outline-none border-none"
                   @keyup.enter="handleSearch"
-                >
+                />
                 <Icon
                   name="mynaui:search"
                   class="absolute right-7 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
@@ -330,7 +331,9 @@
                 <!-- 移动端主题切换 -->
                 <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                   <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                    <span
+                      class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300"
+                    >
                       {{ $t('common.toggleTheme') || '主题' }}
                     </span>
                     <ColorScheme placeholder="..." tag="span">
@@ -577,20 +580,20 @@
 </script>
 
 <style scoped>
-.icon-transition-enter-active,
-.icon-transition-leave-active {
-  transition: all 0.3s ease-in-out;
-}
+  .icon-transition-enter-active,
+  .icon-transition-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
 
-.icon-transition-enter-from {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.8);
-}
+  .icon-transition-enter-from {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.8);
+  }
 
-.icon-transition-leave-to {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.8);
-}
+  .icon-transition-leave-to {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.8);
+  }
 </style>
 <style scoped>
   /* 移动端菜单滚动条样式 */
