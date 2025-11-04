@@ -32,7 +32,7 @@
               <span>{{ item.name }}</span>
             </NuxtLinkLocale>
           </template>
-          <div class="group relative cursor-pointer flex items-center gap-1" v-else>
+          <div v-else class="group relative cursor-pointer flex items-center gap-1">
             <NuxtLinkLocale
               v-if="item.link"
               :to="item.link"
@@ -54,10 +54,10 @@
             >
               <div class="py-1">
                 <NuxtLinkLocale
-                  :target="child.link ? '_blank' : '_self'"
-                  :no-rel="!!child.link"
                   v-for="child in item.children"
                   :key="child.id"
+                  :target="child.link ? '_blank' : '_self'"
+                  :no-rel="!!child.link"
                   :to="child.link || `/category/${child.id}`"
                   class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary transition-colors duration-200"
                 >
@@ -78,7 +78,7 @@
             :placeholder="$t('header.nav.search')"
             class="px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 text-sm focus:outline-none border-none"
             @keyup.enter="handleSearch"
-          />
+          >
           <Icon
             name="mynaui:search"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
@@ -95,9 +95,9 @@
             <UButton
               variant="link"
               color="neutral"
-              @click="toggleColorMode"
               class="cursor-pointer p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 ease-in-out"
               :title="$t('common.toggleTheme')"
+              @click="toggleColorMode"
             >
               <div class="relative w-5 h-5 flex items-center justify-center">
                 <transition name="icon-transition" mode="out-in">
@@ -130,7 +130,7 @@
                 </NuxtLinkLocale>
 
                 <!-- 语言切换选项 -->
-                <div class="relative group/language" ref="languageMenuRef">
+                <div ref="languageMenuRef" class="relative group/language">
                   <div
                     class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary flex items-center justify-between cursor-pointer"
                   >
@@ -151,12 +151,12 @@
                   >
                     <div class="py-1">
                       <UButton
-                        variant="ghost"
                         v-for="locale in availableLocales"
                         :key="locale.code"
-                        @click="handleLanguageSwitch(locale.code)"
+                        variant="ghost"
                         class="rounded-none w-full flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         :class="{ 'bg-primary/10 text-primary': locale.code === currentLocale }"
+                        @click="handleLanguageSwitch(locale.code)"
                       >
                         <span class="text-lg">{{ getLanguageFlag(locale.code) }}</span>
                         <span>{{ locale.name }}</span>
@@ -173,8 +173,8 @@
                 <UButton
                   color="error"
                   variant="link"
-                  @click="handleLogout"
                   class="block w-full cursor-pointer rounded-none text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary"
+                  @click="handleLogout"
                 >
                   <span>{{ $t('user.logout') }}</span>
                 </UButton>
@@ -184,9 +184,9 @@
         </template>
         <template v-else>
           <UButton
-            @click="handleLoginClick"
             variant="link"
             class="px-4 py-2 text-sm font-medium text-primary hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
+            @click="handleLoginClick"
           >
             {{ $t('login.login') }}
           </UButton>
@@ -195,11 +195,11 @@
 
       <!-- 移动端汉堡菜单按钮 -->
       <UButton
-        @click="toggleMobileMenu"
         variant="link"
         class="mobile-menu-container md:hidden p-1 flex items-center cursor-pointer justify-center rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary"
         :aria-expanded="isMobileMenuOpen"
         :aria-label="isMobileMenuOpen ? '关闭菜单' : '打开菜单'"
+        @click="toggleMobileMenu"
       >
         <Icon :name="isMobileMenuOpen ? 'mynaui:x' : 'mynaui:menu'" class="w-6 h-6" />
       </UButton>
@@ -277,7 +277,7 @@
                   :placeholder="$t('header.nav.search')"
                   class="w-full px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-sm focus:outline-none border-none"
                   @keyup.enter="handleSearch"
-                />
+                >
                 <Icon
                   name="mynaui:search"
                   class="absolute right-7 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
@@ -336,8 +336,8 @@
                     <ColorScheme placeholder="..." tag="span">
                       <UButton
                         variant="ghost"
-                        @click="toggleColorMode"
                         class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out cursor-pointer bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                        @click="toggleColorMode"
                       >
                         <div class="relative w-5 h-5 flex items-center justify-center">
                           <transition name="icon-transition" mode="out-in">
@@ -360,16 +360,16 @@
                   </div>
                   <div class="flex space-x-2">
                     <UButton
-                      variant="ghost"
                       v-for="locale in availableLocales"
                       :key="locale.code"
-                      @click="handleLanguageSwitch(locale.code)"
+                      variant="ghost"
                       class="w-10 h-10 flex items-center justify-center text-lg rounded-full transition-colors cursor-pointer"
                       :class="
                         locale.code === currentLocale
                           ? 'bg-primary text-white'
                           : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                       "
+                      @click="handleLanguageSwitch(locale.code)"
                     >
                       {{ locale.flag }}
                     </UButton>
@@ -377,17 +377,17 @@
                 </div>
 
                 <button
-                  @click="handleLogout"
                   class="block w-full cursor-pointer text-left px-4 py-2 text-red-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                  @click="handleLogout"
                 >
                   {{ $t('user.logout') }}
                 </button>
               </template>
               <template v-else>
                 <UButton
-                  @click="handleLoginClick"
                   variant="link"
                   class="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md cursor-pointer"
+                  @click="handleLoginClick"
                 >
                   {{ $t('login.login') }}
                 </UButton>
@@ -399,23 +399,6 @@
     </div>
   </nav>
 </template>
-
-<style scoped>
-.icon-transition-enter-active,
-.icon-transition-leave-active {
-  transition: all 0.3s ease-in-out;
-}
-
-.icon-transition-enter-from {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.8);
-}
-
-.icon-transition-leave-to {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.8);
-}
-</style>
 
 <script lang="ts" setup>
   import type { Category } from '~/types/category';
@@ -592,6 +575,23 @@
     closeMobileMenu();
   };
 </script>
+
+<style scoped>
+.icon-transition-enter-active,
+.icon-transition-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.icon-transition-enter-from {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.8);
+}
+
+.icon-transition-leave-to {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.8);
+}
+</style>
 <style scoped>
   /* 移动端菜单滚动条样式 */
   .mobile-menu-container::-webkit-scrollbar {

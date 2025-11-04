@@ -16,7 +16,7 @@ declare global {
 
 export default defineNuxtPlugin(() => {
   // 在客户端设置 TinyMCE 全局配置
-  if (process.client) {
+  if (import.meta.client) {
     const config = useRuntimeConfig();
 
     // 等待 TinyMCE 加载完成后设置配置

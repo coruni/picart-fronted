@@ -27,7 +27,7 @@
               :placeholder="$t('admin.users.searchUsername')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -38,6 +38,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="users.pending.value"
@@ -45,7 +46,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -54,8 +54,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 
@@ -153,7 +153,7 @@
         <UButton variant="outline" @click="showDetailModal = false">
           {{ $t('common.button.close') }}
         </UButton>
-        <UButton @click="navigateTo(`/admin/users/${selectedUser?.id}`)" color="primary">
+        <UButton color="primary" @click="navigateTo(`/admin/users/${selectedUser?.id}`)">
           {{ $t('common.button.edit') }}
         </UButton>
       </template>

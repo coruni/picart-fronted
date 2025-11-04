@@ -33,7 +33,7 @@
               :placeholder="$t('role.status')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full cursor-pointer">
+            <UButton color="primary" class="w-full cursor-pointer" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -45,7 +45,7 @@
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
         {{ $t('role.title') }}
       </h1>
-      <UButton icon="mynaui:plus" @click="onCreate" class="w-full sm:w-auto cursor-pointer">
+      <UButton icon="mynaui:plus" class="w-full sm:w-auto cursor-pointer" @click="onCreate">
         {{ $t('role.create') }}
       </UButton>
     </div>
@@ -53,6 +53,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="roles.pending.value"
@@ -60,14 +61,12 @@
         loading-animation="carousel"
         :data="tableData || []"
         :columns="columns"
-        :key="tableKey"
         :ui="{
           root: 'min-w-full',
           td: 'empty:p-0'
         }"
         class="h-full"
-      >
-      </UTable>
+      />
     </div>
 
     <!-- 查看角色详情模态框 -->
@@ -80,8 +79,8 @@
               icon="mynaui:x"
               color="neutral"
               variant="ghost"
-              @click="showViewModal = false"
               class="cursor-pointer"
+              @click="showViewModal = false"
             />
           </div>
         </template>
@@ -171,12 +170,12 @@
             <UButton
               color="neutral"
               variant="ghost"
-              @click="showViewModal = false"
               class="cursor-pointer"
+              @click="showViewModal = false"
             >
               {{ $t('common.button.close') }}
             </UButton>
-            <UButton color="primary" @click="onEdit(selectedRole)" class="cursor-pointer">
+            <UButton color="primary" class="cursor-pointer" @click="onEdit(selectedRole)">
               {{ $t('role.edit') }}
             </UButton>
           </div>

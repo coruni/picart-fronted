@@ -1,17 +1,11 @@
 <script lang="ts" setup>
   import type { NavigationMenuItem } from '@nuxt/ui';
-  import { confirmLogout } from '~/utils/logout';
   import type { SiteConfig } from '~/types/site-config';
 
   const { t } = useI18n();
   const route = useRoute();
-  const userStore = useUserStore();
   const siteConfig = inject<SiteConfig>('siteConfig');
 
-  // 处理登出
-  const handleLogout = async () => {
-    await confirmLogout();
-  };
 
   // 菜单数据 - 转换为 NavigationMenuItem 格式
   const menuItems = computed<NavigationMenuItem[]>(() => [
@@ -79,8 +73,8 @@
 <template>
   <UDashboardGroup>
     <UDashboardSidebar
-      toggle-side="left"
       id="dashboard"
+      toggle-side="left"
       :ui="{ footer: 'lg:border-t lg:border-default', root: 'w-64' }"
     >
       <template #header>

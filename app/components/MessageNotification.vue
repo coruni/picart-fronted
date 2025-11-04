@@ -2,11 +2,11 @@
   <div class="group relative">
     <!-- 消息通知按钮 -->
     <UButton
-      @mouseenter="handleMouseEnter"
-      @click="handleClick"
       variant="ghost"
       color="neutral"
       class="relative p-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      @mouseenter="handleMouseEnter"
+      @click="handleClick"
     >
       <Icon name="mynaui:bell" class="w-5 h-5" />
       <!-- 未读消息数量徽章 -->
@@ -33,14 +33,14 @@
         <div class="flex items-center space-x-2">
           <UButton
             v-if="unreadCount > 0"
-            @click="handleMarkAllAsRead"
             variant="ghost"
             size="sm"
             class="text-xs"
+            @click="handleMarkAllAsRead"
           >
             {{ $t('message.markAllRead') }}
           </UButton>
-          <UButton @click="refreshMessages" variant="ghost" size="sm" :loading="loading">
+          <UButton variant="ghost" size="sm" :loading="loading" @click="refreshMessages">
             <Icon v-if="!loading" name="mynaui:refresh" class="w-4 h-4" />
           </UButton>
         </div>
@@ -52,7 +52,7 @@
           <div class="flex items-center justify-center py-8">
             <div
               class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"
-            ></div>
+            />
           </div>
         </div>
 
@@ -82,19 +82,19 @@
             <div class="flex items-center space-x-2 flex-shrink-0">
               <UButton
                 v-if="!message.isRead"
-                @click.stop="handleMarkAsRead(message.id || 0)"
                 variant="ghost"
                 size="xs"
                 class="text-xs"
+                @click.stop="handleMarkAsRead(message.id || 0)"
               >
                 {{ $t('message.markRead') }}
               </UButton>
               <UButton
-                @click.stop="handleDeleteMessage(message.id || 0)"
                 variant="ghost"
                 size="xs"
                 color="error"
                 class="text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                @click.stop="handleDeleteMessage(message.id || 0)"
               >
                 <Icon name="mynaui:trash" class="w-3 h-3" />
               </UButton>
@@ -107,7 +107,7 @@
           <div class="flex items-center justify-center py-4">
             <div
               class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"
-            ></div>
+            />
             <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
               {{ $t('message.loadingMore') }}
             </span>

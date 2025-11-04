@@ -89,23 +89,23 @@
 <template>
   <UDashboardGroup>
     <UDashboardSidebar
-      toggle-side="right"
       id="default"
+      toggle-side="right"
       :ui="{ footer: 'lg:border-t lg:border-default', root: 'w-64' }"
     >
       <template #header>
         <!-- logo -->
         <NuxtLinkLocale
+          v-if="siteConfig?.site_logo"
           to="/"
           class="flex items-center justify-center hover:opacity-80 transition-opacity cursor-pointer"
-          v-if="siteConfig?.site_logo"
         >
           <NuxtImg :src="siteConfig?.site_logo" alt="logo" class="w-12 h-12" />
         </NuxtLinkLocale>
         <NuxtLinkLocale
+          v-else
           to="/"
           class="flex-1 items-center justify-center flex hover:opacity-80 transition-opacity cursor-pointer"
-          v-else
         >
           <h1 class="text-2xl font-bold">{{ siteConfig?.site_name }}</h1>
         </NuxtLinkLocale>
@@ -119,8 +119,8 @@
           :items="menuItems"
         />
         <UInput
-          icon="mynaui:search"
           v-model="searchQuery"
+          icon="mynaui:search"
           placeholder="Search..."
           class="w-full"
           clearable
@@ -147,7 +147,7 @@
     </UDashboardSidebar>
     <UDashboardPanel>
       <template #header>
-        <UDashboardNavbar toggle-side="right"> </UDashboardNavbar>
+        <UDashboardNavbar toggle-side="right"/>
       </template>
       <template #body>
         <slot />

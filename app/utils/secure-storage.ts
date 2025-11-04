@@ -1,7 +1,7 @@
 // 安全存储工具 - 确保数据只在客户端存储，绝不泄露到服务端
 
 // 安全存储接口
-interface SecureStorageItem<T = any> {
+interface SecureStorageItem<T = unknown> {
   value: T
   timestamp: number
   expire?: number
@@ -242,7 +242,7 @@ export const clearSecure = () =>
   secureStorage.clear()
 
 // 用户数据相关（使用加密存储）
-export const setUserData = (userData: any) => 
+export const setUserData = (userData: Record<string, unknown>) => 
   encryptedStorage.set('user_data', userData, 60 * 24) // 24小时过期
 
 export const getUserData = () => 
@@ -252,14 +252,14 @@ export const removeUserData = () =>
   encryptedStorage.remove('user_data')
 
 // 应用设置相关（使用普通存储）
-export const setAppSettings = (settings: any) => 
+export const setAppSettings = (settings: Record<string, unknown>) => 
   secureStorage.set('app_settings', settings)
 
 export const getAppSettings = () => 
   secureStorage.get('app_settings')
 
 // 临时数据相关（短期过期）
-export const setTempData = (key: string, data: any, minutes = 30) => 
+export const setTempData = (key: string, data: unknown, minutes = 30) => 
   secureStorage.set(`temp_${key}`, data, minutes)
 
 export const getTempData = (key: string) => 

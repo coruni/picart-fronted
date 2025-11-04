@@ -12,29 +12,29 @@
         <div
           v-if="siteConfig && siteConfig?.maintenance_message && siteConfig?.maintenance_message"
           v-html="siteConfig?.maintenance_message"
-        ></div>
+        />
       </div>
 
       <!-- 刷新按钮 -->
       <div class="flex justify-center space-x-4">
         <UButton
           class="cursor-pointer"
-          @click="refreshPage"
           variant="outline"
           size="lg"
           :loading="refreshing"
+          @click="refreshPage"
         >
           {{ t('maintenance.refresh') }}
         </UButton>
 
         <!-- 如果是管理员，显示返回管理面板按钮 -->
         <UButton
-          class="cursor-pointer"
           v-if="isAdmin"
-          @click="goToAdmin"
+          class="cursor-pointer"
           variant="solid"
           size="lg"
           color="primary"
+          @click="goToAdmin"
         >
           {{ t('maintenance.goToAdmin') }}
         </UButton>

@@ -2,7 +2,7 @@
   <ClientOnly>
     <div class="flex-1 flex flex-col w-full">
       <div class="w-full flex-1 max-w-4xl mx-auto p-4">
-        <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+        <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
           <div class="flex items-start space-x-4">
             <UFormField name="title" class="flex-1">
               <UInput
@@ -26,7 +26,7 @@
             </UFormField>
           </div>
 
-          <UFormField name="content" v-if="state.type === 'mixed'">
+          <UFormField v-if="state.type === 'mixed'" name="content">
             <div class="w-full">
               <ClientOnly>
                 <Editor
@@ -95,7 +95,7 @@
                 size="lg"
               />
             </UFormField>
-            <UFormField name="category" v-if="state.parentCategory" class="flex-1">
+            <UFormField v-if="state.parentCategory" name="category" class="flex-1">
               <USelectMenu
                 v-model="state.categoryId"
                 :items="subCategoriesOptions"
@@ -123,11 +123,11 @@
                 :search-input="{
                   placeholder: $t('form.tag.searchPlaceholder')
                 }"
-                createItem="always"
+                create-item="always"
                 :placeholder="$t('form.tag.placeholder')"
                 :loading="isTagSearching"
                 @create="onCreate"
-                @update:searchTerm="
+                @update:search-term="
                   (query: string) => {
                     tagSearchQuery = query;
                     searchTags(query);
@@ -179,9 +179,9 @@
                 </UFormField>
 
                 <UFormField
+                  v-show="state.requirePayment"
                   name="viewPrice"
                   :label="$t('form.viewPrice.name')"
-                  v-show="state.requirePayment"
                   class="flex items-center justify-between"
                 >
                   <UInput
@@ -284,8 +284,8 @@
                 type="button"
                 variant="soft"
                 icon="mynaui:plus"
-                @click="addDownload"
                 class="w-full"
+                @click="addDownload"
               >
                 {{ $t('form.downloads.addDownload') }}
               </UButton>

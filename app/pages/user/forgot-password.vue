@@ -8,7 +8,7 @@
         {{ $t('forgotPassword.title') }}
       </h1>
 
-      <UForm :schema="schema" :state="forgotForm" @submit="handleForgotPassword" class="space-y-6">
+      <UForm :schema="schema" :state="forgotForm" class="space-y-6" @submit="handleForgotPassword">
         <UFormField name="email" required :label="$t('forgotPassword.email')">
           <UInput
             v-model="forgotForm.email"
@@ -29,12 +29,12 @@
               class="flex-1"
             />
             <UButton
-              @click="sendVerificationCode"
               :disabled="!forgotForm.email || countdown > 0"
               :loading="sendingCode"
               size="xl"
               variant="outline"
               class="whitespace-nowrap"
+              @click="sendVerificationCode"
             >
               {{ countdown > 0 ? `${countdown}s` : $t('forgotPassword.sendCode') }}
             </UButton>
@@ -78,9 +78,9 @@
         <p class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('forgotPassword.rememberPassword') }}
           <UButton
-            @click="handleLoginClick"
             variant="link"
             class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 cursor-pointer"
+            @click="handleLoginClick"
           >
             {{ $t('forgotPassword.backToLogin') }}
           </UButton>

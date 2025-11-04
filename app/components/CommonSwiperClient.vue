@@ -23,7 +23,7 @@
             height="480"
           />
           <!-- 添加半透明遮罩层 -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"/>
 
           <div class="absolute bottom-0 left-0 right-0 p-10">
             <div class="transform transition-all duration-700">
@@ -39,7 +39,7 @@
               <!-- 装饰性下划线 -->
               <div
                 class="mt-4 w-20 h-1 bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] rounded-full shadow-lg"
-              ></div>
+              />
             </div>
           </div>
         </NuxtLinkLocale>
@@ -47,8 +47,8 @@
         <!-- 骨架屏占位 -->
         <div v-else class="absolute inset-0 bg-gradient-to-t from-gray-300/30 to-transparent">
           <div class="absolute bottom-10 left-10 space-y-4 w-2/3">
-            <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-            <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+            <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"/>
+            <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"/>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
               height="480"
             />
             <!-- 添加半透明遮罩层 -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"/>
 
             <div class="absolute bottom-0 left-0 right-0 p-10">
               <div class="transform transition-all duration-700 hover:translate-y-[-4px]">
@@ -98,7 +98,7 @@
                 <!-- 装饰性下划线 -->
                 <div
                   class="mt-4 w-20 h-1 bg-gradient-to-r from-[var(--ui-primary)] to-[var(--ui-primary)] rounded-full shadow-lg"
-                ></div>
+                />
               </div>
             </div>
           </NuxtLinkLocale>
@@ -108,7 +108,7 @@
       <!-- 自定义分页器 -->
       <div
         class="custom-pagination w-full flex justify-center items-center space-x-2 mt-4 absolute bottom-3 z-10"
-      ></div>
+      />
     </div>
   </ClientOnly>
 </template>

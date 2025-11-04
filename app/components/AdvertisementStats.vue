@@ -7,39 +7,39 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
             <div class="flex items-center">
               <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"/>
               </div>
               <div class="ml-3">
-                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"></div>
-                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"/>
+                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"/>
               </div>
             </div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
             <div class="flex items-center">
               <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"/>
               </div>
               <div class="ml-3">
-                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"></div>
-                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"/>
+                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"/>
               </div>
             </div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
             <div class="flex items-center">
               <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                <div class="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"/>
               </div>
               <div class="ml-3">
-                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"></div>
-                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-1"/>
+                <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"/>
               </div>
             </div>
                 </div>
     </div>
   </div>
-  </ClientOnly>
+  </template></ClientOnly>
 </template>
     
     <div class="advertisement-stats">

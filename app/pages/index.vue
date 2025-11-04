@@ -18,7 +18,7 @@
         :ui="{ trigger: 'cursor-pointer' }"
       >
         <template #default="{ item }">
-          <span class="hidden md:inline" v-text="item.label"></span>
+          <span class="hidden md:inline" v-text="item.label"/>
         </template>
       </UTabs>
     </nav>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1" aria-hidden="true"></div>
+    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1" aria-hidden="true"/>
   </main>
 </template>
 
@@ -76,7 +76,7 @@
 
   // 定义组件名称，用于 keep-alive 识别
   defineOptions({
-    name: 'index'
+    name: 'Index'
   });
 
   // 首页中

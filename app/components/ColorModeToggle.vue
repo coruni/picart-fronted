@@ -14,11 +14,11 @@
 
 <template>
   <UButton
-    @click="toggleColorMode"
     variant="ghost"
     color="neutral"
     class="w-full flex items-center justify-between px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-all duration-300 ease-in-out"
     :title="t('common.toggleTheme')"
+    @click="toggleColorMode"
   >
     <span class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
       {{ t('common.toggleTheme') || '主题' }}

@@ -1,7 +1,6 @@
 import { usePinia } from '#imports';
 import type { CreateClientConfig } from './app/api/client.gen';
 import appConfig from './app/app.config';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 // 防止重复调用logout的标志位
 let isLoggingOut = false;
@@ -54,7 +53,7 @@ export const createClientConfig: CreateClientConfig = config => {
               // 优先使用 auth-token，如果没有则使用 token
               token = authTokenCookie.value || tokenCookie.value;
             }
-          } catch (error) {
+          } catch {
             // console.warn('Failed to get info from stores/cookies:', error);
           }
         } else {
@@ -78,7 +77,7 @@ export const createClientConfig: CreateClientConfig = config => {
                 }
               });
             }
-          } catch (error) {
+          } catch {
             // console.warn('SSR: Failed to read cookies from request headers:', error);
           }
 
@@ -103,7 +102,7 @@ export const createClientConfig: CreateClientConfig = config => {
 
               // 优先使用 auth-token，如果没有则使用 token
               token = authTokenCookie.value || tokenCookie.value;
-            } catch (error) {
+            } catch {
               // console.warn('SSR: Failed to get token from useCookie:', error);
             }
           }
@@ -115,7 +114,7 @@ export const createClientConfig: CreateClientConfig = config => {
               if (userStore?.isLoggedIn && userStore.userToken) {
                 token = userStore.userToken;
               }
-            } catch (error) {
+            } catch {
               // console.warn('SSR: Failed to get token from user store:', error);
             }
           }
@@ -126,7 +125,7 @@ export const createClientConfig: CreateClientConfig = config => {
 
         // 更新请求headers
         await updateRequestHeaders(context, deviceId, token);
-      } catch (error) {
+      } catch {
         // console.error('Error in onRequest:', error);
         // 即使出错也要继续，使用默认值
         await updateRequestHeaders(context, 'unknown-device', null);
@@ -204,7 +203,7 @@ export const createClientConfig: CreateClientConfig = config => {
 
 // 辅助函数：更新请求headers
 async function updateRequestHeaders(
-  context: any,
+  context: { headers: Record<string, string> },
   deviceId: string,
   token: string | null
 ): Promise<void> {
@@ -238,7 +237,7 @@ async function updateRequestHeaders(
 }
 
 // 在用户登录时调用此函数来设置token
-export function setAuthToken(token: string, userStore?: any): void {
+export function setAuthToken(token: string, userStore?: { setToken: (token: string) => void }): void {
   // 设置到store
   if (userStore?.setToken) {
     userStore.setToken(token);
@@ -288,7 +287,7 @@ export function clearAuthToken(): void {
       localStorageKeys.forEach(key => {
         try {
           localStorage.removeItem(key);
-        } catch (error) {
+        } catch {
           console.warn(`Failed to remove localStorage key ${key}:`, error);
         }
       });
@@ -299,11 +298,11 @@ export function clearAuthToken(): void {
       sessionStorageKeys.forEach(key => {
         try {
           sessionStorage.removeItem(key);
-        } catch (error) {
+        } catch {
           console.warn(`Failed to remove sessionStorage key ${key}:`, error);
         }
       });
-    } catch (error) {
+    } catch {
       console.error('Error in clearAuthToken:', error);
     }
   }
@@ -320,7 +319,7 @@ export async function performLogout(): Promise<void> {
     if (import.meta.client) {
       await userStore.clearAuth(false); // 不调用API，直接清理本地状态
     }
-  } catch (error) {
+  } catch {
     console.error('Error during logout:', error);
     // 即使出错也要跳转到首页
     if (import.meta.client) {

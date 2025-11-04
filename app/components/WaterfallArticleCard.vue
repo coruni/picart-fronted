@@ -26,7 +26,7 @@
       <!-- 渐变遮罩 - 底部始终显示 -->
       <div
         class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-      ></div>
+      />
 
       <!-- 图片数量标签 -->
       <div
@@ -94,6 +94,12 @@
 <script lang="ts" setup>
   import type { ArticleControllerFindAllResponse } from '~/api';
   import { useUserStore } from '~/stores/user';
+
+  import {
+    getStatusIcon as getStatusIconUtil,
+    getStatusColor as getStatusColorUtil,
+    getStatusText as getStatusTextUtil
+  } from '~/utils/article-status';
 
   type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined> & {
     images: string[] | string;
@@ -172,12 +178,6 @@
         }, 0) || 0;
     return ratios[seed % ratios.length];
   };
-
-  import {
-    getStatusIcon as getStatusIconUtil,
-    getStatusColor as getStatusColorUtil,
-    getStatusText as getStatusTextUtil
-  } from '~/utils/article-status';
 
   const getStatusIcon = (status: string) => getStatusIconUtil(status);
   const getStatusColor = (status: string) => getStatusColorUtil(status);

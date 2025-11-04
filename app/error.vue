@@ -24,21 +24,21 @@
         <!-- 操作按钮 -->
         <div class="space-y-3">
           <UButton
-            @click="handleGoHome"
             color="primary"
             size="lg"
             class="w-full"
             icon="mynaui:home"
+            @click="handleGoHome"
           >
             {{ $t('error.backHome') }}
           </UButton>
 
           <UButton
-            @click="handleGoBack"
             variant="outline"
             size="lg"
             class="w-full"
             icon="mynaui:arrow-left"
+            @click="handleGoBack"
           >
             {{ $t('error.goBack') }}
           </UButton>
@@ -69,7 +69,7 @@
     }
   });
 
-  const isDev = computed(() => process.dev);
+  const isDev = computed(() => import.meta.dev);
 
   const getErrorMessage = () => {
     const statusCode = props.error?.statusCode;
@@ -91,7 +91,7 @@
   };
 
   const handleGoBack = () => {
-    if (process.client) {
+    if (import.meta.client) {
       window.history.length > 1 ? window.history.back() : navigateTo('/');
     }
   };

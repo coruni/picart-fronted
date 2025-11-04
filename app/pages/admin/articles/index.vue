@@ -32,7 +32,7 @@
               :placeholder="t('common.table.category')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -44,7 +44,7 @@
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
         {{ t('admin.menu.articles') }}
       </h1>
-      <UButton @click="onCreate()" class="w-full sm:w-auto cursor-pointer">
+      <UButton class="w-full sm:w-auto cursor-pointer" @click="onCreate()">
         {{ t('common.button.create') }}
       </UButton>
     </div>
@@ -52,6 +52,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="articles.pending.value"
@@ -59,7 +60,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -75,8 +75,8 @@
         <USelect
           :model-value="pagination.pageSize"
           :items="[10, 20, 50, 100]"
-          @update:model-value="value => handlePageSizeChange(value as number)"
           class="w-20"
+          @update:model-value="value => handlePageSizeChange(value as number)"
         />
       </div>
 
@@ -85,8 +85,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 
@@ -103,10 +103,10 @@
         {{ t('common.modal.confirmDeleteMessage') }}
       </template>
       <template #footer>
-        <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
+        <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
           {{ t('common.button.cancel') }}
         </UButton>
-        <UButton color="error" @click="confirmDelete" class="cursor-pointer">
+        <UButton color="error" class="cursor-pointer" @click="confirmDelete">
           {{ t('common.button.confirm') }}
         </UButton>
       </template>
@@ -116,8 +116,8 @@
 
 <script setup lang="ts">
   import { debounce } from 'lodash-es';
-  import type { TableColumn } from '@nuxt/ui';
-  import type { SelectMenuItem } from '@nuxt/ui';
+  import type { TableColumn, SelectMenuItem  } from '@nuxt/ui';
+  
 
   import {
     articleControllerFindAll,

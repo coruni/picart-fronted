@@ -20,7 +20,7 @@
     </div>
 
     <!-- Form -->
-    <UForm v-else :schema="schema" :state="form" @submit="onSubmit" class="space-y-6">
+    <UForm v-else :schema="schema" :state="form" class="space-y-6" @submit="onSubmit">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <UFormField :label="t('common.table.name')" name="name" required>
           <UInput
@@ -43,9 +43,9 @@
 
       <UFormField :label="t('common.table.description')" name="description" required>
         <UTextarea
+          v-model="form.description"
           class="w-full"
           size="lg"
-          v-model="form.description"
           :placeholder="t('admin.roles.descriptionPlaceholder')"
           :rows="3"
         />
@@ -65,7 +65,7 @@
 
       <!-- Action Buttons -->
       <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <UButton variant="outline" @click="$router.push('/admin/roles')" :disabled="submitting">
+        <UButton variant="outline" :disabled="submitting" @click="$router.push('/admin/roles')">
           {{ t('common.button.cancel') }}
         </UButton>
         <UButton type="submit" :loading="submitting" :disabled="!form.name.trim()">

@@ -8,7 +8,7 @@
         {{ $t('login.title') }}
       </h1>
 
-      <UForm :schema="schema" :state="loginForm" @submit="handleLogin" class="space-y-6">
+      <UForm :schema="schema" :state="loginForm" class="space-y-6" @submit="handleLogin">
         <UFormField name="account" required :label="$t('login.account')">
           <UInput
             v-model="loginForm.account"

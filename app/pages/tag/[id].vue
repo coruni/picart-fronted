@@ -5,7 +5,7 @@
       <div class="flex items-center justify-center flex-col gap-4">
         <div
           class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
+        />
         <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
       </div>
     </div>
@@ -38,7 +38,7 @@
           class="h-48 bg-cover bg-center relative"
           :style="{ backgroundImage: `url(${tagData?.data?.background})` }"
         >
-          <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+          <div class="absolute inset-0 bg-black bg-opacity-40"/>
         </div>
 
         <!-- 标签信息 -->
@@ -97,20 +97,20 @@
             <div class="flex-shrink-0">
               <UButton
                 v-if="!isFollowing"
-                @click="followTag"
                 :loading="followLoading"
                 color="primary"
                 icon="mynaui:heart"
+                @click="followTag"
               >
                 {{ $t('tag.follow') }}
               </UButton>
               <UButton
                 v-else
-                @click="unfollowTag"
                 :loading="followLoading"
                 variant="outline"
                 color="primary"
                 icon="mynaui:heart"
+                @click="unfollowTag"
               >
                 {{ $t('tag.following') }}
               </UButton>
@@ -126,14 +126,13 @@
           class="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4 mb-8"
         >
           <UTabs
+            v-model="currentTab"
             :items="tabs"
             :default-value="0"
-            v-model="currentTab"
             class="w-auto"
             variant="pill"
             :ui="{ trigger: 'cursor-pointer' }"
-          >
-          </UTabs>
+          />
         </div>
 
         <!-- 文章列表 - 加载骨架屏 -->
@@ -208,7 +207,7 @@
         </div>
 
         <!-- Intersection Observer 观察器元素 -->
-        <div ref="observerTarget" class="h-1"></div>
+        <div ref="observerTarget" class="h-1"/>
       </div>
     </div>
   </div>

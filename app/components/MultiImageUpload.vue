@@ -30,10 +30,10 @@
         <!-- 自定义左右导航按钮 -->
         <template #prev-btn="{ prev }">
           <UButton
-            @click="prev"
             v-if="imageList.length > 1"
             variant="link"
             class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 left-4 text-white flex items-center justify-center"
+            @click="prev"
           >
             <Icon name="mynaui:chevron-left" />
           </UButton>
@@ -41,10 +41,10 @@
 
         <template #next-btn="{ next }">
           <UButton
-            @click="next"
             v-if="imageList.length > 1"
             variant="link"
             class="backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full top-1/2 -translate-y-1/2 right-4 text-white flex items-center justify-center"
+            @click="next"
           >
             <Icon name="mynaui:chevron-right" />
           </UButton>
@@ -58,9 +58,9 @@
             <!-- 放大按钮 -->
             <UButton
               variant="link"
-              @click="toolbarMethods.zoomIn"
               class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
               title="放大"
+              @click="toolbarMethods.zoomIn"
             >
               <Icon name="mynaui:plus" class="w-5 h-5" />
             </UButton>
@@ -68,9 +68,9 @@
             <!-- 缩小按钮 -->
             <UButton
               variant="link"
-              @click="toolbarMethods.zoomOut"
               class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
               title="缩小"
+              @click="toolbarMethods.zoomOut"
             >
               <Icon name="mynaui:minus" class="w-5 h-5" />
             </UButton>
@@ -83,9 +83,9 @@
             <!-- 逆时针旋转按钮 -->
             <UButton
               variant="link"
-              @click="toolbarMethods.rotateLeft"
               class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
               title="逆时针旋转"
+              @click="toolbarMethods.rotateLeft"
             >
               <Icon name="mynaui:undo" class="w-5 h-5" />
             </UButton>
@@ -93,9 +93,9 @@
             <!-- 顺时针旋转按钮 -->
             <UButton
               variant="link"
-              @click="toolbarMethods.rotateRight"
               class="hover:text-black p-2 w-8 h-8 text-white rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
               title="顺时针旋转"
+              @click="toolbarMethods.rotateRight"
             >
               <Icon name="mynaui:redo" class="w-5 h-5" />
             </UButton>
@@ -106,8 +106,8 @@
         <template #close-btn>
           <UButton
             variant="link"
-            @click="lightboxVisible = false"
             class="font-bold backdrop-blur-sm hover:bg-white/80 bg-gray-700/80 cursor-pointer absolute h-8 w-8 rounded-full right-4 top-4 text-white flex items-center justify-center"
+            @click="lightboxVisible = false"
           >
             <Icon name="mynaui:x" size="24" />
           </UButton>
@@ -119,7 +119,7 @@
             <div class="flex items-center justify-center flex-col gap-8">
               <div
                 class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-              ></div>
+              />
             </div>
           </div>
         </template>
@@ -175,8 +175,8 @@
               size="xs"
               icon="mynaui:star"
               class="cursor-pointer"
-              @click.stop="selectAsCover(image)"
               :disabled="selectedCover === image"
+              @click.stop="selectAsCover(image)"
             >
               {{ selectedCover === image ? t('form.cover.selected') : t('form.cover.select') }}
             </UButton>
@@ -213,7 +213,7 @@
         multiple
         class="hidden"
         @change="handleFileSelect"
-      />
+      >
 
       <!-- 加载遮罩 -->
       <div
@@ -223,7 +223,7 @@
         <div class="text-center">
           <div
             class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"
-          ></div>
+          />
           <p class="text-sm text-gray-600 dark:text-gray-300">
             {{
               totalUploadCount > 1
@@ -237,7 +237,7 @@
               :style="{
                 width: totalUploadCount > 0 ? `${(uploadingCount / totalUploadCount) * 100}%` : '0%'
               }"
-            ></div>
+            />
           </div>
         </div>
       </div>
