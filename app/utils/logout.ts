@@ -55,6 +55,7 @@ export async function silentLogout(redirectPath: string = '/'): Promise<void> {
  * @param redirectPath 登出后重定向的路径
  */
 export async function confirmLogout(redirectPath: string = '/'): Promise<void> {
+  await forceLogout();
   return handleLogout(true, redirectPath);
 }
 

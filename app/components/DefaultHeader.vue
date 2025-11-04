@@ -3,7 +3,7 @@
     class="fixed top-0 left-0 right-0 z-50 bg-white/80 shadow-sm h-16 w-full dark:bg-gray-900/80 backdrop-blur-md"
   >
     <div class="container mx-auto px-4 flex items-center justify-between h-full w-full">
-      <NuxtLinkLocale class="flex items-center space-x-2" to="/">
+      <NuxtLinkLocale class="flex items-center space-x-2 flex-shrink-0 mr-4" to="/">
         <NuxtImg
           v-if="siteConfig?.site_logo"
           :src="siteConfig?.site_logo"

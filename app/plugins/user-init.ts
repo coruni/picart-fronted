@@ -41,8 +41,8 @@ export default defineNuxtPlugin(async nuxtApp => {
       });
 
       // 如果成功获取用户信息，更新到store
-      if (response.data) {
-        userStore.setUserInfo(response.data.value?.data!);
+      if (response.data && response.data.value) {
+        userStore.setUserInfo(response.data.value.data);
       }
     } catch (error) {
       console.warn('Failed to fetch user profile:', error);

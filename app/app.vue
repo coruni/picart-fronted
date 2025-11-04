@@ -1,8 +1,7 @@
 <template>
   <UApp>
-    <NuxtPwaManifest />
     <NuxtLoadingIndicator color="#615fff" />
-    <NuxtLayout>
+    <NuxtLayout class="min-h-screen flex flex-col">
       <NuxtPage keepalive />
     </NuxtLayout>
   </UApp>

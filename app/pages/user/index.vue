@@ -10,15 +10,15 @@
           >
             <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center">
               <UAvatar
-                :src="userProfile?.data?.avatar"
-                :alt="userProfile?.data?.nickname || userProfile?.data?.username"
+                :src="userInfo?.avatar"
+                :alt="userInfo?.nickname || userInfo?.username"
                 class="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full ring-2 ring-white"
                 loading="lazy"
                 format="webp"
                 sizes="96px md:128px"
               />
               <div
-                v-if="userProfile?.data?.isMember"
+                v-if="userInfo?.isMember"
                 class="absolute bottom-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center shadow-sm"
               >
                 <Icon name="mynaui:heart-waves" class="w-3 h-3 text-white" />
@@ -26,15 +26,15 @@
             </div>
             <div class="flex-1">
               <h1 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
-                {{ userProfile?.data?.nickname || userProfile?.data?.username }}
+                {{ userInfo?.nickname || userInfo?.username }}
               </h1>
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {{ userProfile?.data?.description || $t('user.noDescription') }}
+                {{ userInfo?.description || $t('user.noDescription') }}
               </p>
               <div class="flex flex-wrap items-center gap-4 mt-3">
                 <div class="text-center">
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {{ userProfile?.data?.articleCount || 0 }}
+                    {{ userInfo?.articleCount || 0 }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
                     {{ $t('user.articles') }}
@@ -42,7 +42,7 @@
                 </div>
                 <div class="text-center">
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {{ userProfile?.data?.followerCount || 0 }}
+                    {{ userInfo?.followerCount || 0 }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
                     {{ $t('user.followers') }}
@@ -50,7 +50,7 @@
                 </div>
                 <div class="text-center">
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {{ userProfile?.data?.followingCount || 0 }}
+                    {{ userInfo?.followingCount || 0 }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
                     {{ $t('user.following') }}
@@ -58,7 +58,7 @@
                 </div>
                 <div class="text-center">
                   <div class="font-semibold text-gray-900 dark:text-white">
-                    {{ userProfile?.data?.wallet.toFixed(2) || 0 }}
+                    {{ userInfo?.wallet.toFixed(2) || 0 }}
                   </div>
                   <div class="text-xs text-gray-500 dark:text-gray-400">
                     {{ $t('user.wallet') }}
@@ -217,21 +217,21 @@
           </div>
           <div class="flex items-center justify-between mb-3">
             <span class="text-sm text-gray-700 dark:text-gray-300">{{
-              userProfile?.data?.isMember ? $t('user.vipMember') : $t('user.basicMember')
+              userInfo?.isMember ? $t('user.vipMember') : $t('user.basicMember')
             }}</span>
             <span class="text-sm font-medium text-primary-500 dark:text-white"
-              >Lv.{{ userProfile?.data?.level || 0 }}</span
+              >Lv.{{ userInfo?.level || 0 }}</span
             >
           </div>
           <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
               class="bg-primary h-2 rounded-full"
-              :style="{ width: `${(userProfile?.data?.experience || 0) % 100}%` }"
+              :style="{ width: `${(userInfo?.experience || 0) % 100}%` }"
             />
           </div>
           <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-            <span>{{ userProfile?.data?.experience || 0 }} {{ $t('user.experience') }}</span>
-            <span>{{ userProfile?.data?.score || 0 }} {{ $t('user.score') }}</span>
+            <span>{{ userInfo?.experience || 0 }} {{ $t('user.experience') }}</span>
+            <span>{{ userInfo?.score || 0 }} {{ $t('user.score') }}</span>
           </div>
         </div>
 
@@ -246,7 +246,7 @@
                 $t('user.inviteCode')
               }}</span>
               <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                userProfile?.data?.inviteCode || $t('user.noInviteCode')
+                userInfo?.inviteCode || $t('user.noInviteCode')
               }}</span>
             </div>
             <div class="flex items-center justify-between">
@@ -254,7 +254,7 @@
                 $t('user.inviteCount')
               }}</span>
               <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                userProfile?.data?.inviteCount || 0
+                userInfo?.inviteCount || 0
               }}</span>
             </div>
             <div class="flex items-center justify-between">
@@ -262,7 +262,7 @@
                 $t('user.inviteEarnings')
               }}</span>
               <span class="text-sm font-medium text-gray-900 dark:text-white">{{
-                userProfile?.data?.inviteEarnings || 0
+                userInfo?.inviteEarnings || 0
               }}</span>
             </div>
           </div>
@@ -290,8 +290,8 @@
           <div class="flex items-center space-x-4">
             <div class="relative">
               <UAvatar
-                :src="editForm.avatar || userProfile?.data?.avatar"
-                :alt="userProfile?.data?.nickname || userProfile?.data?.username"
+                :src="editForm.avatar || userInfo?.avatar"
+                :alt="userInfo?.nickname || userInfo?.username"
                 fit="cover"
                 class="w-20 h-20 rounded-full ring-2 object-cover ring-white"
                 loading="lazy"
@@ -362,7 +362,7 @@
       accept="image/*"
       class="hidden"
       @change="handleAvatarChange"
-    >
+    />
 
     <!-- 修改密码模态框 -->
     <UModal
@@ -443,7 +443,7 @@
     <!-- 会员充值弹窗 -->
     <MembershipRechargeModal
       v-model="showPaymentModal"
-      :user-profile="userProfile?.data"
+      :user-profile="userInfo"
       @recharge-success="onPaymentSuccess"
       @recharge-failed="onPaymentFailed"
     />
@@ -454,12 +454,13 @@
   import {
     userControllerGetProfile,
     articleControllerFindArticleByAuthor,
-    userControllerUpdate, uploadControllerUploadFile 
+    userControllerUpdate,
+    uploadControllerUploadFile
   } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
   import { watch } from 'vue';
   import type { FormError } from '@nuxt/ui';
-  
+
   import { z } from 'zod';
   import { useUserStore } from '~/stores/user';
   import { confirmLogout } from '~/utils/logout';
@@ -469,7 +470,6 @@
   const { t } = useI18n();
   const userStore = useUserStore();
   const userInfo = computed(() => userStore.currentUser);
-  const localPath = useLocalePath();
 
   // 消息相关数据
   const { unreadCount } = useMessage();
@@ -524,30 +524,6 @@
       path: ['confirmPassword']
     });
 
-  // 用户资料直接从 store 获取（已在 SSR 阶段通过插件加载）
-  const userProfile = computed(() => ({
-    data: userInfo.value
-  }));
-
-  // 刷新用户资料的方法
-  const userRefresh = async () => {
-    try {
-      const response = await userControllerGetProfile({
-        composable: '$fetch'
-      });
-      if (response.data) {
-        userStore.setUserInfo(response.data);
-      }
-    } catch (error) {
-      console.error('Failed to refresh user profile:', error);
-    }
-  };
-
-  // 在SSR阶段确保用户信息已加载
-  if (import.meta.server && userStore.isLoggedIn && !userStore.currentUser) {
-    await userStore.getUserInfo();
-  }
-
   // 重置数据
   const resetData = () => {
     pagination.value.page = 1;
@@ -561,7 +537,7 @@
     if (loading.value || !hasMore.value) return;
 
     // 确保用户信息已加载
-    const userId = userProfile.value?.data?.id || userInfo.value?.id;
+    const userId = userInfo.value?.id || userInfo.value?.id;
     if (!userId) {
       return;
     }
@@ -580,7 +556,7 @@
         }
       });
 
-      const newData = response.data.value?.data?.data || [];
+      const newData = response.data.value?.data || [];
 
       if (pagination.value.page === 1) {
         allArticles.value = newData;
@@ -604,19 +580,19 @@
   // 等待用户信息加载完成后再加载文章
   const loadArticlesWhenReady = async () => {
     // 如果用户信息已加载，直接加载文章
-    if (userProfile.value?.data?.id || userInfo.value?.id) {
+    if (userInfo.value?.id || userInfo.value?.id) {
       await loadUserArticles();
     } else {
       // 如果用户信息还未加载，等待一下再尝试
       await new Promise(resolve => setTimeout(resolve, 100));
-      if (userProfile.value?.data?.id || userInfo.value?.id) {
+      if (userInfo.value?.id || userInfo.value?.id) {
         await loadUserArticles();
       } else {
         // 如果仍然没有用户信息，可能是SSR问题，在客户端重新尝试
         if (import.meta.client) {
           // 延迟更长时间等待store状态恢复
           setTimeout(async () => {
-            if (userProfile.value?.data?.id || userInfo.value?.id) {
+            if (userInfo.value?.id || userInfo.value?.id) {
               await loadUserArticles();
             }
           }, 500);
@@ -627,7 +603,7 @@
 
   // 监听用户信息变化，重新加载文章
   watch(
-    () => userProfile.value?.data?.id || userInfo.value?.id,
+    () => userInfo.value?.id || userInfo.value?.id,
     async (newUserId, oldUserId) => {
       if (newUserId && newUserId !== oldUserId) {
         resetData();
@@ -650,23 +626,10 @@
 
   // 初始加载文章
   await loadArticlesWhenReady();
+
   // 计算显示的文章
   const displayArticles = computed(() => {
     return allArticles.value;
-  });
-
-  onMounted(() => {
-    // 在客户端挂载后，如果文章为空且用户信息已加载，重新尝试加载文章
-    if (displayArticles.value.length === 0 && (userProfile.value?.data?.id || userInfo.value?.id)) {
-      loadArticlesWhenReady();
-    } else if (displayArticles.value.length === 0) {
-      // 如果文章为空且用户信息也未加载，可能是SSR问题，延迟重试
-      setTimeout(async () => {
-        if (displayArticles.value.length === 0) {
-          await loadArticlesWhenReady();
-        }
-      }, 1000);
-    }
   });
 
   // 页面元数据
@@ -792,6 +755,20 @@
       isSaving.value = false;
     }
   };
+  // 刷新用户资料的方法
+  const userRefresh = async () => {
+    try {
+      const response = await userControllerGetProfile({
+        composable: 'useAsyncData'
+      });
+      if (response.data && response.data.value) {
+        userStore.setUserInfo(response.data.value.data);
+      }
+    } catch (error) {
+      console.error('Failed to refresh user profile:', error);
+    }
+  };
+
   const siteConfig = inject<SiteConfig>('siteConfig');
 
   // 格式化日期

@@ -64,12 +64,12 @@ export const useUserStore = defineStore('user', {
       try {
         // 直接调用API获取用户信息
         const response = await userControllerGetProfile({
-          composable: '$fetch'
+          composable: 'useAsyncData'
         });
-        
+
         // 如果成功获取用户信息，更新到store
-        if (response.data) {
-          this.userInfo = response.data;
+        if (response.data && response.data.value) {
+          this.userInfo = response.data.value.data;
         }
       } catch (error) {
         // 获取失败时清空
@@ -117,6 +117,17 @@ export const useUserStore = defineStore('user', {
       try {
         // 清理所有认证相关的cookie
         const cookiesToClear = ['auth-token', 'refresh-token', 'token', 'user-session'];
+
+        const cookies = useCookie('auth-token');
+        const refreshTokenCookie = useCookie('refresh-token');
+        const tokenCookie = useCookie('token');
+        const userSessionCookie = useCookie('user-session');
+        const userCookie = useCookie('user');
+        cookies.value = null;
+        refreshTokenCookie.value = null;
+        tokenCookie.value = null;
+        userSessionCookie.value = null;
+        userCookie.value = null;
 
         cookiesToClear.forEach(cookieName => {
           // 使用多种方式确保cookie被清除
