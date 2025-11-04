@@ -1,7 +1,7 @@
 // @ts-check
-import withNuxt from '.nuxt/eslint.config.mjs';
+import { createConfigForNuxt } from '@nuxt/eslint-config/flat'
 
-export default withNuxt({
+export default createConfigForNuxt({
   // 添加自定义规则
   features: {
     typescript: true,

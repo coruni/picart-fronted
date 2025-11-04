@@ -28,7 +28,7 @@
               :placeholder="t('admin.tags.description')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -47,6 +47,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="tags.pending.value"
@@ -54,7 +55,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -69,8 +69,8 @@
         <USelect
           :model-value="pagination.pageSize"
           :items="[10, 20, 50, 100]"
-          @update:model-value="value => handlePageSizeChange(value as number)"
           class="w-20"
+          @update:model-value="value => handlePageSizeChange(value as number)"
         />
       </div>
 
@@ -79,8 +79,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 

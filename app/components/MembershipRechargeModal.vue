@@ -1,7 +1,7 @@
 <template>
   <UModal
-    :ui="{ close: 'cursor-pointer' }"
     v-model:open="isOpen"
+    :ui="{ close: 'cursor-pointer' }"
     :title="$t('user.recharge.title')"
     size="lg"
   >
@@ -53,13 +53,13 @@
             <div
               v-for="pkg in packages"
               :key="pkg.plan || pkg.duration"
-              @click="selectPackage(pkg)"
               :class="[
                 'p-4 border rounded-lg cursor-pointer transition-all',
                 (selectedPackage?.plan || selectedPackage?.duration) === (pkg.plan || pkg.duration)
                   ? 'border-primary bg-primary/5'
                   : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
               ]"
+              @click="selectPackage(pkg)"
             >
               <div class="text-center">
                 <div class="text-2xl font-bold text-gray-900 dark:text-white">
@@ -95,13 +95,13 @@
           <!-- 余额支付 -->
           <div
             v-if="true"
-            @click="selectPaymentMethod('BALANCE')"
             :class="[
               'p-4 border rounded-md cursor-pointer transition-all',
               selectedPaymentMethod === 'BALANCE'
                 ? 'border-primary bg-primary/5'
                 : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
             ]"
+            @click="selectPaymentMethod('BALANCE')"
           >
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
@@ -128,13 +128,13 @@
           <!-- 支付宝支付 -->
           <div
             v-if="siteConfig?.payment_alipay_enabled"
-            @click="selectPaymentMethod('ALIPAY')"
             :class="[
               'p-4 border rounded-md cursor-pointer transition-all',
               selectedPaymentMethod === 'ALIPAY'
                 ? 'border-primary bg-primary/5'
                 : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
             ]"
+            @click="selectPaymentMethod('ALIPAY')"
           >
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
@@ -156,13 +156,13 @@
           <!-- 微信支付 -->
           <div
             v-if="siteConfig?.payment_wechat_enabled"
-            @click="selectPaymentMethod('WECHAT')"
             :class="[
               'p-4 border rounded-md cursor-pointer transition-all',
               selectedPaymentMethod === 'WECHAT'
                 ? 'border-primary bg-primary/5'
                 : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
             ]"
+            @click="selectPaymentMethod('WECHAT')"
           >
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
@@ -190,13 +190,13 @@
               <div
                 v-for="epayType in epayTypes"
                 :key="epayType.value"
-                @click="selectEpayType(epayType.value)"
                 :class="[
                   'p-3 border rounded-md cursor-pointer text-center transition-all',
                   selectedEpayType === epayType.value
                     ? 'border-primary bg-primary/5'
                     : 'border-gray-200 dark:border-gray-700 hover:border-primary/50'
                 ]"
+                @click="selectEpayType(epayType.value)"
               >
                 <Icon :name="epayType.icon" class="w-6 h-6 text-primary mx-auto mb-1" />
                 <div class="text-xs text-gray-900 dark:text-white">{{ epayType.label }}</div>
@@ -251,15 +251,15 @@
     <template #footer>
       <div class="flex space-x-3">
         <UButton
-          @click="handleRecharge"
           :disabled="!selectedPackage || !selectedPaymentMethod || processing"
           :loading="processing"
           color="primary"
           class="flex-1 cursor-pointer"
+          @click="handleRecharge"
         >
           {{ processing ? $t('payment.processing') : $t('user.recharge.confirmRecharge') }}
         </UButton>
-        <UButton @click="closeModal" variant="outline" class="cursor-pointer">
+        <UButton variant="outline" class="cursor-pointer" @click="closeModal">
           {{ $t('common.cancel') }}
         </UButton>
       </div>

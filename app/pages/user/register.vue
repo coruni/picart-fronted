@@ -30,8 +30,8 @@
         v-else
         :schema="schema"
         :state="registerForm"
-        @submit="handleRegister"
         class="space-y-6"
+        @submit="handleRegister"
       >
         <UFormField name="username" required :label="$t('register.username')">
           <UInput
@@ -70,12 +70,12 @@
               class="flex-1"
             />
             <UButton
-              @click="sendVerificationCode"
               :disabled="!registerForm.email || countdown > 0"
               :loading="sendingCode"
               size="xl"
               variant="outline"
               class="whitespace-nowrap"
+              @click="sendVerificationCode"
             >
               {{ countdown > 0 ? `${countdown}s` : $t('register.sendCode') }}
             </UButton>
@@ -160,9 +160,9 @@
         <p class="text-sm text-gray-600 dark:text-gray-400">
           {{ $t('register.hasAccount') }}
           <UButton
-            @click="handleLoginClick"
             variant="link"
             class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 cursor-pointer"
+            @click="handleLoginClick"
           >
             {{ $t('register.login') }}
           </UButton>

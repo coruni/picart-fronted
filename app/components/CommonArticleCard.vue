@@ -1,6 +1,7 @@
 <template>
   <NuxtLinkLocale
     :to="`/article/${article.id}`"
+    target="_blank"
     class="overflow-hidden h-full flex flex-col dark:bg-gray-800 transition-all duration-300 group rounded-md"
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative rounded-md">
@@ -63,8 +64,8 @@
             </div>
           </div>
           <div
-            @click.stop="$router.push(`/author/${article.author?.id}`)"
             class="flex items-center cursor-pointer"
+            @click.stop="$router.push(`/author/${article.author?.id}`)"
           >
             <UAvatar
               :src="article.author?.avatar ?? ''"
@@ -81,6 +82,12 @@
 <script lang="ts" setup>
   import type { ArticleControllerFindAllResponse } from '~/api';
   import { useUserStore } from '~/stores/user';
+
+  import {
+    getStatusIcon as getStatusIconUtil,
+    getStatusColor as getStatusColorUtil,
+    getStatusText as getStatusTextUtil
+  } from '~/utils/article-status';
   type Article = Exclude<ArticleControllerFindAllResponse['data']['data'][0], undefined> & {
     images: string[] | string;
   };
@@ -128,12 +135,6 @@
       return false;
     });
   });
-
-  import {
-    getStatusIcon as getStatusIconUtil,
-    getStatusColor as getStatusColorUtil,
-    getStatusText as getStatusTextUtil
-  } from '~/utils/article-status';
 
   // 获取状态图标
   const getStatusIcon = (status: string) => {

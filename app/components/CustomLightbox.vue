@@ -8,8 +8,8 @@
       >
         <!-- 关闭按钮 -->
         <button
-          @click="handleClose"
           class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-gray-700/80 hover:bg-gray-600/80 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer touch-manipulation"
+          @click="handleClose"
         >
           <Icon name="mynaui:x" class="w-6 h-6" />
         </button>
@@ -25,8 +25,8 @@
             <!-- 左侧导航按钮 -->
             <button
               v-if="images.length > 1"
-              @click="handlePrev"
               class="absolute left-0 z-10 w-10 h-10 rounded-full bg-gray-700/80 hover:bg-gray-600/80 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer touch-manipulation"
+              @click="handlePrev"
             >
               <Icon name="mynaui:chevron-left" class="w-6 h-6" />
             </button>
@@ -43,11 +43,11 @@
                   <div class="relative">
                     <div
                       class="w-16 h-16 rounded-full border-4 border-gray-200 dark:border-gray-700"
-                    ></div>
+                    />
                     <div
                       class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-primary animate-spin"
                       style="animation-duration: 0.8s"
-                    ></div>
+                    />
                   </div>
                 </div>
               </Transition>
@@ -82,9 +82,9 @@
                   width="1920"
                   fit="contain"
                   loading="eager"
+                  preload
                   @load="handleImageLoad"
                   @error="handleImageError"
-                  preload
                 />
                 <img
                   v-else
@@ -94,15 +94,15 @@
                   class="max-w-[90vw] max-h-[90vh] object-contain"
                   @load="handleImageLoad"
                   @error="handleImageError"
-                />
+                >
               </div>
             </div>
 
             <!-- 右侧导航按钮 -->
             <button
               v-if="images.length > 1"
-              @click="handleNext"
               class="absolute right-0 z-10 w-10 h-10 rounded-full bg-gray-700/80 hover:bg-gray-600/80 backdrop-blur-sm text-white flex items-center justify-center transition-all duration-200 hover:scale-110 cursor-pointer touch-manipulation"
+              @click="handleNext"
             >
               <Icon name="mynaui:chevron-right" class="w-6 h-6" />
             </button>
@@ -124,12 +124,12 @@
                     if (el) thumbnailRefs[idx] = el as HTMLElement;
                   }
                 "
-                @click="handleThumbnailClick(idx)"
                 class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-110"
                 :class="{
                   'border-primary ring-2 ring-primary': idx === currentIndex,
                   'border-gray-600': idx !== currentIndex
                 }"
+                @click="handleThumbnailClick(idx)"
               >
                 <NuxtImg
                   :src="img"
@@ -152,18 +152,18 @@
         >
           <!-- 放大按钮 -->
           <button
-            @click="handleZoomIn"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             title="放大"
+            @click="handleZoomIn"
           >
             <Icon name="mynaui:plus" class="w-5 h-5" />
           </button>
 
           <!-- 缩小按钮 -->
           <button
-            @click="handleZoomOut"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             title="缩小"
+            @click="handleZoomOut"
           >
             <Icon name="mynaui:minus" class="w-5 h-5" />
           </button>
@@ -177,37 +177,37 @@
 
           <!-- 逆时针旋转按钮 -->
           <button
-            @click="handleRotateLeft"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             title="逆时针旋转"
+            @click="handleRotateLeft"
           >
             <Icon name="mynaui:undo" class="w-5 h-5" />
           </button>
 
           <!-- 顺时针旋转按钮 -->
           <button
-            @click="handleRotateRight"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             title="顺时针旋转"
+            @click="handleRotateRight"
           >
             <Icon name="mynaui:redo" class="w-5 h-5" />
           </button>
 
           <!-- 重置按钮 -->
           <button
-            @click="handleReset"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             title="重置"
+            @click="handleReset"
           >
             <Icon name="mynaui:refresh" class="w-5 h-5" />
           </button>
 
           <!-- 查看原图按钮 -->
           <button
-            @click="handleViewOriginal"
             class="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-white hover:text-black transition-colors duration-200 flex items-center justify-center cursor-pointer touch-manipulation"
             :class="{ 'bg-gray-100 text-black dark:bg-gray-700 dark:text-white': showOriginal }"
             :title="showOriginal ? '查看优化图' : '查看原图'"
+            @click="handleViewOriginal"
           >
             <Icon name="mynaui:image" class="w-5 h-5" />
           </button>

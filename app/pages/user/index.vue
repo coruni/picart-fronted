@@ -68,14 +68,14 @@
             </div>
             <div class="flex space-x-2">
               <UButton
-                @click="isEditModalOpen = true"
                 class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
+                @click="isEditModalOpen = true"
               >
                 {{ $t('user.editProfile') }}
               </UButton>
               <UButton
-                @click="handleLogout"
                 class="rounded-md px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
+                @click="handleLogout"
               >
                 {{ $t('user.logout') }}
               </UButton>
@@ -131,8 +131,8 @@
             </div>
 
             <div
-              @click="isChangePasswordModalOpen = true"
               class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+              @click="isChangePasswordModalOpen = true"
             >
               <Icon name="mynaui:lock" class="w-8 h-8 text-primary mb-2" />
               <span class="text-sm font-medium text-gray-900 dark:text-white">{{
@@ -173,15 +173,15 @@
             class="col-span-2 sm:col-span-2 lg:col-span-3 flex justify-center py-4"
           >
             <UButton
-              @click="loadUserArticles"
               :disabled="loading"
               color="primary"
               class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
+              @click="loadUserArticles"
             >
               <div
                 v-if="loading"
                 class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
-              ></div>
+              />
               {{ loading ? $t('common.loading.loading') : $t('common.loadMore') }}
             </UButton>
           </div>
@@ -207,10 +207,10 @@
               {{ $t('user.membershipLevel') }}
             </h3>
             <UButton
-              @click="handleRecharge"
               size="sm"
               color="primary"
               class="cursor-pointer dark:text-white"
+              @click="handleRecharge"
             >
               {{ $t('user.recharge.title') }}
             </UButton>
@@ -227,7 +227,7 @@
             <div
               class="bg-primary h-2 rounded-full"
               :style="{ width: `${(userProfile?.data?.experience || 0) % 100}%` }"
-            ></div>
+            />
           </div>
           <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
             <span>{{ userProfile?.data?.experience || 0 }} {{ $t('user.experience') }}</span>
@@ -275,16 +275,16 @@
       </div>
     </div>
     <UModal
-      :title="$t('user.editProfile')"
       v-model:open="isEditModalOpen"
+      :title="$t('user.editProfile')"
       :ui="{ close: 'cursor-pointer' }"
     >
       <template #body>
         <UForm
           :state="editForm"
           :validate="validateForm"
-          @submit="handleSaveProfile"
           class="space-y-4"
+          @submit="handleSaveProfile"
         >
           <!-- 头像上传 -->
           <div class="flex items-center space-x-4">
@@ -347,8 +347,8 @@
             </UButton>
             <UButton
               type="button"
-              @click="isEditModalOpen = false"
               class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              @click="isEditModalOpen = false"
             >
               {{ $t('common.cancel') }}
             </UButton>
@@ -362,20 +362,20 @@
       accept="image/*"
       class="hidden"
       @change="handleAvatarChange"
-    />
+    >
 
     <!-- 修改密码模态框 -->
     <UModal
-      :title="$t('user.changePassword.title')"
       v-model:open="isChangePasswordModalOpen"
+      :title="$t('user.changePassword.title')"
       :ui="{ close: 'cursor-pointer' }"
     >
       <template #body>
         <UForm
           :schema="changePasswordSchema"
           :state="changePasswordForm"
-          @submit="handleChangePassword"
           class="space-y-4"
+          @submit="handleChangePassword"
         >
           <!-- 当前密码 -->
           <UFormField
@@ -430,8 +430,8 @@
             </UButton>
             <UButton
               type="button"
-              @click="isChangePasswordModalOpen = false"
               class="flex-1 px-4 py-2 flex items-center cursor-pointer justify-center bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              @click="isChangePasswordModalOpen = false"
             >
               {{ $t('common.cancel') }}
             </UButton>
@@ -454,16 +454,16 @@
   import {
     userControllerGetProfile,
     articleControllerFindArticleByAuthor,
-    userControllerUpdate
+    userControllerUpdate, uploadControllerUploadFile 
   } from '~/api';
   import type { ConfigControllerGetPublicResponse } from '~/api';
-  type SiteConfig = ConfigControllerGetPublicResponse['data'];
   import { watch } from 'vue';
   import type { FormError } from '@nuxt/ui';
-  import { uploadControllerUploadFile } from '~/api';
+  
   import { z } from 'zod';
   import { useUserStore } from '~/stores/user';
   import { confirmLogout } from '~/utils/logout';
+  type SiteConfig = ConfigControllerGetPublicResponse['data'];
   const toast = useToast();
 
   const { t } = useI18n();

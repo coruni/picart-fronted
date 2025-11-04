@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-4">
     <!-- 自定义灯箱组件 -->
     <CustomLightbox
       v-model:visible="lightboxVisible"
@@ -151,8 +151,8 @@
           <Icon name="mynaui:warning" class="text-red-500 text-4xl mb-4" />
           <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
           <UButton
-            @click="handleRetry"
             class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+            @click="handleRetry"
           >
             {{ $t('common.retry') }}
           </UButton>
@@ -174,10 +174,10 @@
               class="bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 p-3 backdrop-blur-sm"
             >
               <button
-                @click="handleLike"
                 :disabled="isLikeLoading"
                 class="flex flex-col items-center space-y-2 group transition-all duration-200 cursor-pointer"
                 :class="{ 'pointer-events-none': isLikeLoading }"
+                @click="handleLike"
               >
                 <div class="relative">
                   <Icon
@@ -252,28 +252,28 @@
                 <div class="flex items-center space-x-2 flex-1">
                   <div v-if="isAuthor || hasManagePermission" class="flex items-center space-x-2">
                     <UButton
-                      @click="handleEdit"
                       variant="ghost"
                       size="sm"
                       class="flex items-center cursor-pointer text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200"
+                      @click="handleEdit"
                     >
                       <Icon name="mynaui:edit" class="w-4 h-4 mr-1" />
                       <span class="hidden sm:inline text-sm">{{ $t('article.edit') }}</span>
                     </UButton>
 
                     <UButton
-                      @click="handleDelete"
                       variant="ghost"
                       color="error"
                       size="sm"
                       class="flex items-center cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+                      @click="handleDelete"
                     >
                       <Icon name="mynaui:trash" class="w-4 h-4 mr-1" />
                       <span class="hidden sm:inline text-sm">{{ $t('article.delete') }}</span>
                     </UButton>
                   </div>
 
-                  <div class="flex-1 flex justify-end items-center" v-if="shouldShowDownloads">
+                  <div v-if="shouldShowDownloads" class="flex-1 flex justify-end items-center">
                     <UButton
                       variant="ghost"
                       color="primary"
@@ -291,8 +291,8 @@
 
             <!-- 图片展示区 -->
             <figure
-              class="mb-4 md:mb-8"
               v-if="article?.data?.images && article?.data?.images.length > 0"
+              class="mb-4 md:mb-8"
             >
               <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-6 gap-3">
                 <div
@@ -308,7 +308,7 @@
                   <div
                     v-if="!imageLoaded[index] && !imageErrors[index]"
                     class="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse"
-                  ></div>
+                  />
 
                   <!-- 图片加载错误状态 -->
                   <div
@@ -319,8 +319,8 @@
                       <Icon name="mynaui:warning" class="w-8 h-8 mx-auto mb-2" />
                       <div class="text-xs">{{ $t('image.loadFailed') }}</div>
                       <button
-                        @click.stop="retryImageLoad(index)"
                         class="text-xs text-primary hover:text-primary-600 mt-1 flex items-center mx-auto"
+                        @click.stop="retryImageLoad(index)"
                       >
                         <Icon name="mynaui:refresh" class="w-3 h-3 mr-1" />
                         {{ $t('image.retry') }}
@@ -377,11 +377,11 @@
               <!-- 加载更多按钮 -->
               <div v-if="hasMoreImages" class="flex justify-center mt-6">
                 <UButton
-                  @click="loadMoreImages"
                   variant="outline"
                   size="lg"
                   icon="mynaui:image"
                   class="cursor-pointer"
+                  @click="loadMoreImages"
                 >
                   {{ $t('image.loadMore', { count: remainingImagesCount }) }}
                 </UButton>
@@ -394,7 +394,7 @@
                 ref="articleContent"
                 class="prose max-w-none whitespace-pre-wrap text-sm md:text-base dark:prose-invert"
                 v-html="article?.data.content"
-              ></div>
+              />
             </section>
 
             <!-- 内容限制组件 -->
@@ -413,10 +413,10 @@
             <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
               <div class="flex items-center space-x-4">
                 <button
-                  @click="handleLike"
                   :disabled="isLikeLoading"
                   class="flex items-center cursor-pointer space-x-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 px-6 py-3 group transition-all duration-200"
                   :class="{ 'pointer-events-none': isLikeLoading }"
+                  @click="handleLike"
                 >
                   <div class="relative flex items-center justify-center">
                     <Icon
@@ -453,8 +453,8 @@
               v-if="
                 article?.data.downloads && article.data.downloads.length > 0 && shouldShowContent
               "
-              class="mb-6 md:mb-8"
               id="downloads"
+              class="mb-6 md:mb-8"
             >
               <h3
                 class="text-lg md:text-xl font-bold text-gray-900 dark:text-gray-100 mb-4 md:mb-6"
@@ -498,11 +498,11 @@
 
                   <div class="mt-3">
                     <UButton
-                      @click="handleDownloadClick(download.url ?? '')"
                       rel="noopener noreferrer"
                       variant="soft"
                       size="sm"
                       class="w-full"
+                      @click="handleDownloadClick(download.url ?? '')"
                     >
                       <Icon name="mynaui:download" class="w-4 h-4 mr-2" />
                       {{ $t('article.download') }}
@@ -564,7 +564,7 @@
                           v-model="state.commentText"
                           class="w-full p-3 md:p-4 rounded-md bg-gray-50 dark:bg-gray-700 border-none resize-none focus:ring-2 focus:ring-primary-500 text-gray-700 dark:text-gray-200 text-sm md:text-base"
                           placeholder="分享你的想法..."
-                        ></UTextarea>
+                        />
                       </UFormField>
 
                       <div class="flex justify-end mt-2">
@@ -595,9 +595,9 @@
                 </div>
                 <div v-if="hasMoreComments" class="flex justify-center py-8">
                   <UButton
-                    @click="loadMoreComments"
                     :loading="commentsPending"
                     class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+                    @click="loadMoreComments"
                   >
                     {{ $t('article.loadMoreComments') }}
                   </UButton>
@@ -659,10 +659,10 @@
                   </div>
                 </div>
                 <UButton
-                  @click="handleFollow"
                   :disabled="isFollowLoading"
                   :loading="isFollowLoading"
                   class="w-full py-2 md:py-2.5 cursor-pointer justify-center items-center flex bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
+                  @click="handleFollow"
                 >
                   {{
                     article?.data.author.isFollowed
@@ -732,14 +732,14 @@
       </template>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <UButton @click="showDeleteConfirm = false" variant="ghost" class="cursor-pointer">
+          <UButton variant="ghost" class="cursor-pointer" @click="showDeleteConfirm = false">
             {{ $t('common.cancel') }}
           </UButton>
           <UButton
-            @click="confirmDeleteArticle"
             color="error"
             class="cursor-pointer"
             :loading="isDeleting"
+            @click="confirmDeleteArticle"
           >
             {{ $t('common.delete') }}
           </UButton>

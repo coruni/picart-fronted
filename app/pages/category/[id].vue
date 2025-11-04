@@ -23,7 +23,7 @@
         />
         <div
           class="absolute inset-0 backdrop-blur-xs bg-gradient-to-br from-gray-50/10 to-gray-100/10 dark:from-gray-800/10 dark:to-gray-900/10"
-        ></div>
+        />
       </div>
 
       <div class="relative z-10 max-w-7xl mx-auto px-4 py-8 md:py-12 lg:py-16">
@@ -43,14 +43,13 @@
     <!-- 筛选和排序 -->
     <div class="flex flex-col sm:flex-row justify-center items-center gap-4 my-8">
       <UTabs
+        v-model="currentTab"
         :items="tabs"
         :default-value="0"
-        v-model="currentTab"
         class="w-auto"
         variant="pill"
         :ui="{ trigger: 'cursor-pointer' }"
-      >
-      </UTabs>
+      />
     </div>
 
     <!-- 初次加载骨架屏 -->
@@ -117,7 +116,7 @@
     </div>
 
     <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="h-1"></div>
+    <div ref="observerTarget" class="h-1"/>
   </div>
 </template>
 

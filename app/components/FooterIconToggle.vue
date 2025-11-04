@@ -59,12 +59,12 @@
     <!-- 主题切换按钮 -->
     <UTooltip :text="t('common.toggleTheme')" :shortcuts="['T']" :popper="{ placement: 'top' }">
       <UButton
-        @click="toggleColorMode"
         variant="ghost"
         color="neutral"
         class="w-8 h-8 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
         :title="t('common.toggleTheme')"
         square
+        @click="toggleColorMode"
       >
         <div class="relative w-5 h-5 flex items-center justify-center">
           <transition name="icon-transition" mode="out-in">

@@ -3,7 +3,7 @@
     <Title>{{ $t('admin.settings.title') }}</Title>
     <h1 class="text-2xl font-bold mb-6">{{ t('admin.settings.title') }}</h1>
 
-    <UTabs :items="tabs" class="w-full" v-model="activeTab" :ui="{ trigger: 'cursor-pointer' }">
+    <UTabs v-model="activeTab" :items="tabs" class="w-full" :ui="{ trigger: 'cursor-pointer' }">
       <template #general="{ item }">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField :label="t('admin.settings.siteName')" name="site_name" class="w-full">
@@ -116,7 +116,7 @@
               min="0"
               step="1"
               class="w-full"
-              @update:modelValue="value => (config.article_free_images_count = Number(value) || 0)"
+              @update:model-value="value => (config.article_free_images_count = Number(value) || 0)"
             />
           </UFormField>
         </div>
@@ -386,7 +386,7 @@
               max="100"
               step="0.01"
               class="w-full"
-              @update:modelValue="value => (config.commission_author_rate = Number(value) || 0)"
+              @update:model-value="value => (config.commission_author_rate = Number(value) || 0)"
             />
           </UFormField>
 
@@ -402,7 +402,7 @@
               max="100"
               step="0.01"
               class="w-full"
-              @update:modelValue="value => (config.commission_platform_rate = Number(value) || 0)"
+              @update:model-value="value => (config.commission_platform_rate = Number(value) || 0)"
             />
           </UFormField>
         </div>
@@ -442,7 +442,7 @@
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price_1m = Number(value) || 0)"
+              @update:model-value="value => (config.membership_price_1m = Number(value) || 0)"
             />
           </UFormField>
 
@@ -458,7 +458,7 @@
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price_3m = Number(value) || 0)"
+              @update:model-value="value => (config.membership_price_3m = Number(value) || 0)"
             />
           </UFormField>
 
@@ -474,7 +474,7 @@
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price_6m = Number(value) || 0)"
+              @update:model-value="value => (config.membership_price_6m = Number(value) || 0)"
             />
           </UFormField>
 
@@ -490,7 +490,7 @@
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price_12m = Number(value) || 0)"
+              @update:model-value="value => (config.membership_price_12m = Number(value) || 0)"
             />
           </UFormField>
 
@@ -506,7 +506,7 @@
               step="0.01"
               :disabled="!config.membership_enabled"
               class="w-full"
-              @update:modelValue="value => (config.membership_price_lifetime = Number(value) || 0)"
+              @update:model-value="value => (config.membership_price_lifetime = Number(value) || 0)"
             />
           </UFormField>
         </div>
@@ -581,7 +581,7 @@
                 <USwitch v-model="config.ad_article_top_enabled" />
               </UFormField>
 
-              <div></div>
+              <div/>
 
               <UFormField
                 :label="t('admin.settings.adArticleTopContent')"
@@ -618,7 +618,7 @@
                 <USwitch v-model="config.ad_article_bottom_enabled" />
               </UFormField>
 
-              <div></div>
+              <div/>
 
               <UFormField
                 :label="t('admin.settings.adArticleBottomContent')"
@@ -725,7 +725,7 @@
             <USwitch v-model="config.maintenance_mode" />
           </UFormField>
 
-          <div></div>
+          <div/>
 
           <UFormField
             :label="t('admin.settings.maintenanceMessage')"
@@ -774,7 +774,7 @@
               max="100"
               :disabled="!config.invite_code_enabled"
               class="w-full"
-              @update:modelValue="
+              @update:model-value="
                 value => (config.invite_default_commission_rate = Number(value) || 0)
               "
             />
@@ -791,7 +791,7 @@
               min="1"
               :disabled="!config.invite_code_enabled"
               class="w-full"
-              @update:modelValue="value => (config.invite_code_expire_days = Number(value) || 7)"
+              @update:model-value="value => (config.invite_code_expire_days = Number(value) || 7)"
             />
           </UFormField>
         </div>
@@ -799,7 +799,7 @@
     </UTabs>
 
     <div class="mt-8 flex justify-end">
-      <UButton @click="saveConfig" :loading="saving">
+      <UButton :loading="saving" @click="saveConfig">
         {{ t('common.save') }}
       </UButton>
     </div>

@@ -104,10 +104,10 @@ export function highlightKeywords(text: string, keywords: string | string[], cla
 }
 
 // 格式化JSON
-export function formatJSON(obj: any, indent: number = 2): string {
+export function formatJSON(obj: unknown, indent: number = 2): string {
   try {
     return JSON.stringify(obj, null, indent)
-  } catch (error) {
+  } catch {
     return String(obj)
   }
 }
@@ -116,7 +116,7 @@ export function formatJSON(obj: any, indent: number = 2): string {
 export function formatXML(xml: string): string {
   const PADDING = ' '.repeat(2)
   const reg = /(>)(<)(\/*)/g
-  let formatted = xml.replace(reg, '$1\r\n$2$3')
+  const formatted = xml.replace(reg, '$1\r\n$2$3')
   let pad = 0
   
   return formatted.split('\r\n').map(line => {
@@ -160,7 +160,7 @@ export function formatSQL(sql: string): string {
 }
 
 // 格式化代码
-export function formatCode(code: string, language: string = 'javascript'): string {
+export function formatCode(code: string, _language: string = 'javascript'): string {
   // 简单的代码格式化，实际项目中可能需要使用专门的代码格式化库
   const lines = code.split('\n')
   let indent = 0
@@ -184,7 +184,7 @@ export function formatCode(code: string, language: string = 'javascript'): strin
 }
 
 // 格式化URL参数
-export function formatURLParams(params: Record<string, any>): string {
+export function formatURLParams(params: Record<string, unknown>): string {
   return Object.entries(params)
     .filter(([_, value]) => value !== undefined && value !== null)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)

@@ -124,30 +124,30 @@
               <!-- 操作按钮 -->
               <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
                 <UButton
-                  @click="viewOrderDetail(order)"
                   size="sm"
                   variant="outline"
                   class="cursor-pointer text-center"
+                  @click="viewOrderDetail(order)"
                 >
                   {{ $t('user.orders.viewDetail') }}
                 </UButton>
 
                 <UButton
                   v-if="order.status === 'PENDING'"
-                  @click="showCancelConfirm(order)"
                   size="sm"
                   color="error"
                   class="cursor-pointer text-center"
+                  @click="showCancelConfirm(order)"
                 >
                   {{ $t('user.orders.cancel') }}
                 </UButton>
 
                 <UButton
                   v-if="order.status === 'PENDING'"
-                  @click="payOrder(order)"
                   size="sm"
                   color="primary"
                   class="cursor-pointer text-center"
+                  @click="payOrder(order)"
                 >
                   {{ $t('user.orders.pay') }}
                 </UButton>
@@ -164,9 +164,9 @@
           :key="i"
           class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 animate-pulse"
         >
-          <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
-          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+          <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"/>
+          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"/>
+          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"/>
         </div>
       </div>
 
@@ -313,19 +313,19 @@
           </div>
           <div class="flex space-x-3 pt-4">
             <UButton
-              @click="confirmCancelOrder"
               :loading="cancelling"
               color="error"
               class="flex-1 cursor-pointer text-center"
+              @click="confirmCancelOrder"
             >
               {{
                 cancelling ? $t('user.orders.cancelling') : $t('user.orders.confirmCancelButton')
               }}
             </UButton>
             <UButton
-              @click="isCancelModalOpen = false"
               variant="outline"
               class="flex-1 cursor-pointer text-center"
+              @click="isCancelModalOpen = false"
             >
               {{ $t('common.cancel') }}
             </UButton>

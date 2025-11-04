@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
     <Title>{{ state.title }}</Title>
-    <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <div class="flex items-center space-x-4">
         <UFormField name="title" class="flex-1">
           <UInput
@@ -25,13 +25,13 @@
         </UFormField>
       </div>
 
-      <UFormField name="content" v-show="state.type === 'mixed'">
+      <UFormField v-show="state.type === 'mixed'" name="content">
         <div class="w-full">
           <ClientOnly>
             <Editor
+              v-model="state.content"
               tinymce-script-src="/tinymce/tinymce.min.js"
               license_key="gpl"
-              v-model="state.content"
               :init="editorConfig"
               :placeholder="$t('form.content.placeholder')"
               class="min-h-[400px]"
@@ -63,7 +63,7 @@
             :max-count="999"
             :help-text="$t('form.image.help')"
             :selected-cover="state.cover"
-            @selectCover="handleCoverSelect"
+            @select-cover="handleCoverSelect"
           />
         </UFormField>
       </template>
@@ -96,7 +96,7 @@
             }"
           />
         </UFormField>
-        <UFormField name="category" v-show="state.parentCategory" class="flex-1">
+        <UFormField v-show="state.parentCategory" name="category" class="flex-1">
           <USelectMenu
             v-model="state.categoryId"
             :items="subCategoriesOptions"
@@ -160,9 +160,9 @@
               label: $t('form.tag.noResults'),
               description: $t('form.tag.noResultsDesc')
             }"
-            createItem="always"
+            create-item="always"
             @create="onCreate"
-            @update:searchTerm="
+            @update:search-term="
               (query: string) => {
                 tagSearchQuery = query;
                 searchTags(query);
@@ -189,12 +189,12 @@
                 {{ $t('form.downloads.name') }} #{{ index + 1 }}
               </h4>
               <UButton
-                @click="removeDownload(index)"
                 variant="ghost"
                 color="error"
                 size="sm"
                 icon="mynaui:trash"
                 class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 cursor-pointer"
+                @click="removeDownload(index)"
               >
                 {{ $t('form.downloads.removeDownload') }}
               </UButton>
@@ -254,11 +254,11 @@
           </div>
 
           <UButton
-            @click="addDownload"
             variant="outline"
             size="lg"
             icon="mynaui:plus"
             class="w-full"
+            @click="addDownload"
           >
             {{ $t('form.downloads.addDownload') }}
           </UButton>
@@ -309,9 +309,9 @@
             </UFormField>
 
             <UFormField
+              v-show="state.requirePayment"
               name="viewPrice"
               :label="$t('form.viewPrice.name')"
-              v-show="state.requirePayment"
               class="flex items-center justify-between"
             >
               <UInput

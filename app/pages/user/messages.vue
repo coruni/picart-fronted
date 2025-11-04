@@ -15,16 +15,16 @@
       <div class="flex items-center gap-2">
         <UButton
           v-if="unreadCount > 0"
-          @click="handleMarkAllAsRead"
           variant="soft"
           color="primary"
           :loading="markingAllAsRead"
           size="sm"
+          @click="handleMarkAllAsRead"
         >
           <Icon name="mynaui:check" class="w-4 h-4" />
           {{ $t('message.markAllRead') }}
         </UButton>
-        <UButton @click="refreshMessages" variant="ghost" :loading="loading" size="sm">
+        <UButton variant="ghost" :loading="loading" size="sm" @click="refreshMessages">
           <Icon v-if="!loading" name="mynaui:refresh" class="w-4 h-4" />
           {{ $t('message.refresh') }}
         </UButton>
@@ -116,8 +116,8 @@
                       variant="ghost"
                       size="xs"
                       icon="mynaui:more-horizontal"
-                      @click.stop
                       class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      @click.stop
                     />
                   </UDropdownMenu>
                 </div>
@@ -181,8 +181,8 @@
                   <div
                     v-for="(link, index) in getMessageLinks(message)"
                     :key="index"
-                    @click="handleMessageLinkClick(link.url)"
                     class="inline-flex items-center gap-1 text-primary-600 dark:text-primary-400 hover:underline cursor-pointer"
+                    @click="handleMessageLinkClick(link.url)"
                   >
                     <Icon name="mynaui:arrow-right" class="w-4 h-4" />
                     <span>{{ link.text }}</span>
@@ -198,11 +198,11 @@
               <div class="flex items-center gap-2">
                 <UButton
                   v-if="!message.isRead"
-                  @click="handleMarkAsRead(message.id || 0)"
                   variant="soft"
                   color="primary"
                   :loading="markingAsRead === message.id"
                   size="sm"
+                  @click="handleMarkAsRead(message.id || 0)"
                 >
                   <Icon name="mynaui:check" class="w-4 h-4" />
                   {{ $t('message.markRead') }}
@@ -210,11 +210,11 @@
               </div>
               <div class="flex items-center gap-2">
                 <UButton
-                  @click="handleDeleteMessage(message.id || 0)"
                   variant="ghost"
                   color="error"
                   :loading="deleting === message.id"
                   size="sm"
+                  @click="handleDeleteMessage(message.id || 0)"
                 >
                   <Icon name="mynaui:trash" class="w-4 h-4" />
                   {{ $t('message.delete') }}
@@ -235,13 +235,13 @@
       </template>
       <template #footer>
         <div class="flex justify-end gap-3">
-          <UButton @click="showDeleteConfirm = false" variant="ghost">
+          <UButton variant="ghost" @click="showDeleteConfirm = false">
             {{ $t('common.cancel') }}
           </UButton>
           <UButton
-            @click="confirmDeleteMessage"
             color="error"
             :loading="deleting === messageToDelete"
+            @click="confirmDeleteMessage"
           >
             {{ $t('common.delete') }}
           </UButton>
@@ -258,7 +258,7 @@
     </div>
 
     <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="h-1"></div>
+    <div ref="observerTarget" class="h-1"/>
   </div>
 </template>
 

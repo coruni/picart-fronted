@@ -48,7 +48,7 @@
             />
 
             <!-- 搜索按钮 -->
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -60,6 +60,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="orders.pending.value"
@@ -67,7 +68,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -78,8 +78,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 
@@ -163,12 +163,12 @@
 
 <script setup lang="ts">
   import { getPaginationRowModel } from '@tanstack/vue-table';
-  import type { TableColumn } from '@nuxt/ui';
+  import type { TableColumn, SelectItem  } from '@nuxt/ui';
   import { useI18n } from 'vue-i18n';
   import { orderControllerGetOrders } from '~/api';
   import type { Row } from '@tanstack/vue-table';
   import type { OrderControllerGetOrdersResponse } from '~/api';
-  import type { SelectItem } from '@nuxt/ui';
+  
 
   // 从API响应类型中提取订单类型
   type Order = OrderControllerGetOrdersResponse['data']['data'][0];

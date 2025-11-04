@@ -17,7 +17,7 @@
     </div>
 
     <!-- Form -->
-    <UForm :schema="schema" :state="form" @submit="onSubmit" class="space-y-6">
+    <UForm :schema="schema" :state="form" class="space-y-6" @submit="onSubmit">
       <!-- Basic Information Section -->
       <UCard>
         <template #header>
@@ -48,9 +48,9 @@
 
         <UFormField :label="t('common.table.description')" name="description">
           <UTextarea
+            v-model="form.description"
             class="w-full"
             size="lg"
-            v-model="form.description"
             :placeholder="t('admin.tags.descriptionPlaceholder')"
             :rows="3"
           />
@@ -88,7 +88,7 @@
 
       <!-- Action Buttons -->
       <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
-        <UButton variant="outline" @click="$router.push('/admin/tags')" :disabled="submitting">
+        <UButton variant="outline" :disabled="submitting" @click="$router.push('/admin/tags')">
           {{ t('common.button.cancel') }}
         </UButton>
         <UButton type="submit" :loading="submitting" :disabled="!form.name.trim()">

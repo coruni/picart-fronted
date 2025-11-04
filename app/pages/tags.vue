@@ -49,7 +49,7 @@
         <div class="flex items-center justify-center flex-col gap-4">
           <div
             class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-          ></div>
+          />
           <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
         </div>
       </div>
@@ -65,7 +65,7 @@
         <p class="text-gray-600 dark:text-gray-300 mb-4">
           {{ error }}
         </p>
-        <UButton @click="loadTags()" color="primary">
+        <UButton color="primary" @click="loadTags()">
           {{ $t('common.button.retry') }}
         </UButton>
       </div>
@@ -116,7 +116,7 @@
           <div class="flex items-center gap-2">
             <div
               class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"
-            ></div>
+            />
             <span class="text-sm text-gray-600 dark:text-gray-400">{{
               $t('common.loading.loading')
             }}</span>
@@ -129,7 +129,7 @@
         </div>
 
         <!-- Intersection Observer 观察器元素 -->
-        <div ref="observerTarget" class="h-1"></div>
+        <div ref="observerTarget" class="h-1"/>
       </div>
 
       <!-- 空状态 -->
@@ -276,7 +276,7 @@
   // 计算属性：排序后的标签数据
   const filteredTags = computed(() => {
     // 由于搜索在服务端进行，这里只需要简单的客户端排序
-    let filtered = [...allTags.value];
+    const filtered = [...allTags.value];
 
     // 客户端排序（如果需要的话）
     filtered.sort((a, b) => {

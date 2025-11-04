@@ -107,7 +107,7 @@ export const createClient = (config: Config = {}): Client => {
         : useFetch(() => buildUrl(opts), opts);
     }
 
-    const handler: any = () => executeFetchFn(opts, fetchFn);
+    const handler: () => Promise<unknown> = () => executeFetchFn(opts, fetchFn);
 
     if (composable === 'useAsyncData') {
       return key
@@ -121,7 +121,7 @@ export const createClient = (config: Config = {}): Client => {
         : useLazyAsyncData(handler, asyncDataOptions);
     }
 
-    return undefined as any;
+    return undefined as never;
   };
 
   return {

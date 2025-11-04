@@ -11,7 +11,7 @@
   >
     <!-- 空的默认插槽，因为这个弹窗是程序化显示的 -->
     <template #default>
-      <div></div>
+      <div/>
     </template>
 
     <!-- Header -->
@@ -32,8 +32,8 @@
           variant="ghost"
           color="neutral"
           icon="i-mynaui-x"
-          @click="close"
           size="sm"
+          @click="close"
         />
       </div>
     </template>
@@ -54,8 +54,8 @@
               color="primary"
               size="lg"
               class="flex-1 cursor-pointer text-center"
-              @click="handleAcceptAll"
               :loading="isSaving"
+              @click="handleAcceptAll"
             >
               <span class="text-center flex-1">
                 {{ $t('cookie.acceptAll') }}
@@ -66,8 +66,8 @@
               color="neutral"
               size="lg"
               class="flex-1 cursor-pointer text-center"
-              @click="handleRejectAll"
               :loading="isSaving"
+              @click="handleRejectAll"
             >
               <span class="text-center flex-1">
                 {{ $t('cookie.onlyNecessary') }}
@@ -200,8 +200,8 @@
               color="primary"
               size="lg"
               class="flex-1 cursor-pointer text-center"
-              @click="handleSaveSettings"
               :loading="isSaving"
+              @click="handleSaveSettings"
             >
               <span class="text-center flex-1">
                 {{ $t('cookie.saveSettings') }}

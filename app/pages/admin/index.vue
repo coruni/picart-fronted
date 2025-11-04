@@ -92,7 +92,7 @@
                     :style="{
                       height: `${(bar.value / Math.max(...visitData.map(d => d.value))) * 100}%`
                     }"
-                  ></div>
+                  />
                   <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
                     {{ bar.label }}
                   </div>

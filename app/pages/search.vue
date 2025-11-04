@@ -12,15 +12,14 @@
               class="flex-1"
               icon="mynaui:search"
               @keyup.enter="handleManualSearch"
-            >
-            </UInput>
+            />
             <UButton
-              @click="handleManualSearch"
               size="lg"
               color="primary"
               :loading="loading"
               icon="mynaui:search"
               class="truncate"
+              @click="handleManualSearch"
             >
               {{ $t('search.title') }}
             </UButton>
@@ -99,7 +98,7 @@
       </div>
 
       <!-- Intersection Observer 观察器元素 -->
-      <div ref="observerTarget" class="h-1"></div>
+      <div ref="observerTarget" class="h-1"/>
     </div>
   </div>
 </template>
@@ -239,7 +238,7 @@
   let observer: IntersectionObserver | null = null;
 
   // 监听路由参数（仅在客户端执行）
-  if (process.client) {
+  if (import.meta.client) {
     watch(
       () => useRoute().query.q,
       newQuery => {
@@ -269,7 +268,7 @@
   }, 500);
 
   // 监听搜索参数变化（使用防抖，仅在客户端执行）
-  if (process.client) {
+  if (import.meta.client) {
     watch(searchQuery, () => {
       debouncedSearch();
     });

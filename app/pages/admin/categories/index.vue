@@ -28,7 +28,7 @@
               :placeholder="t('common.table.description')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -40,7 +40,7 @@
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
         {{ t('admin.categories.title') }}
       </h1>
-      <UButton icon="mynaui:plus" @click="onCreate" class="w-full sm:w-auto cursor-pointer">
+      <UButton icon="mynaui:plus" class="w-full sm:w-auto cursor-pointer" @click="onCreate">
         {{ t('common.button.create') }}
       </UButton>
     </div>
@@ -48,6 +48,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="categories.pending.value"
@@ -56,7 +57,6 @@
         :data="tableData as any"
         :columns="columns as any"
         :get-sub-rows="(row: any) => row.children"
-        :key="tableKey"
         :ui="{
           td: 'empty:hidden',
           tr: '[&:has(td:only-child:empty)]:hidden'
@@ -76,8 +76,8 @@
         <USelect
           :model-value="pagination.pageSize"
           :items="[10, 20, 50, 100]"
-          @update:model-value="value => handlePageSizeChange(value as number)"
           class="w-20"
+          @update:model-value="value => handlePageSizeChange(value as number)"
         />
       </div>
 
@@ -86,8 +86,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 

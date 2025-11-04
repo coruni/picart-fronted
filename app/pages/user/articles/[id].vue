@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 flex flex-col w-full">
     <div class="w-full flex-1 max-w-4xl mx-auto p-4">
-      <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <div class="flex items-start space-x-4">
           <UFormField name="title" class="flex-1">
             <UInput
@@ -25,12 +25,12 @@
           </UFormField>
         </div>
 
-        <UFormField name="content" v-show="state.type === 'mixed'">
+        <UFormField v-show="state.type === 'mixed'" name="content">
           <div class="w-full">
             <ClientOnly>
               <Editor
-                tinymce-script-src="/tinymce/tinymce.min.js"
                 v-model="state.content"
+                tinymce-script-src="/tinymce/tinymce.min.js"
                 :init="editorConfig"
                 :placeholder="$t('form.content.placeholder')"
                 class="min-h-[400px]"
@@ -64,7 +64,7 @@
               :help-text="$t('form.image.help')"
               aspect-ratio="16/9"
               :selected-cover="state.cover"
-              @selectCover="handleCoverSelect"
+              @select-cover="handleCoverSelect"
             />
           </UFormField>
         </template>
@@ -97,7 +97,7 @@
               size="lg"
             />
           </UFormField>
-          <UFormField name="category" v-show="state.parentCategory" class="flex-1">
+          <UFormField v-show="state.parentCategory" name="category" class="flex-1">
             <USelectMenu
               v-model="state.categoryId"
               :items="subCategoriesOptions"
@@ -126,10 +126,10 @@
                 placeholder: $t('form.tag.searchPlaceholder')
               }"
               :placeholder="$t('form.tag.placeholder')"
-              createItem="always"
+              create-item="always"
               :loading="isTagSearching"
               @create="onCreate"
-              @update:searchTerm="
+              @update:search-term="
                 (query: string) => {
                   tagSearchQuery = query;
                   searchTags(query);
@@ -175,9 +175,9 @@
               </UFormField>
 
               <UFormField
+                v-show="state.requirePayment"
                 name="viewPrice"
                 :label="$t('form.viewPrice.name')"
-                v-show="state.requirePayment"
                 class="flex items-center justify-between"
               >
                 <UInput
@@ -277,8 +277,8 @@
               type="button"
               variant="soft"
               icon="mynaui:plus"
-              @click="addDownload"
               class="w-full"
+              @click="addDownload"
             >
               {{ $t('form.downloads.addDownload') }}
             </UButton>

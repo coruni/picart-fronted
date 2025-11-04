@@ -11,7 +11,7 @@
     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
       {{ $t('article.restrictions.loginRequired.description') }}
     </p>
-    <UButton @click="handleLogin" class="cursor-pointer text-white px-6 py-2">
+    <UButton class="cursor-pointer text-white px-6 py-2" @click="handleLogin">
       {{ $t('article.restrictions.loginRequired.loginButton') }}
     </UButton>
   </div>
@@ -29,9 +29,9 @@
       {{ $t('article.restrictions.followRequired.description') }}
     </p>
     <UButton
-      @click="handleFollow"
       :disabled="isFollowing || isFollowLoading"
       class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2"
+      @click="handleFollow"
     >
       {{
         isFollowLoading
@@ -56,8 +56,8 @@
       {{ $t('article.restrictions.membershipRequired.description') }}
     </p>
     <UButton
-      @click="handleMembership"
       class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2"
+      @click="handleMembership"
     >
       {{ $t('article.restrictions.membershipRequired.upgradeButton') }}
     </UButton>
@@ -77,9 +77,9 @@
     </p>
     <div class="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-4">¥{{ price }}</div>
     <UButton
-      @click="handlePayment"
       :disabled="isPaid || isPaymentLoading"
       class="cursor-pointer bg-primary hover:bg-primary/80 text-white px-6 py-2"
+      @click="handlePayment"
     >
       {{
         isPaymentLoading

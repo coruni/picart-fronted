@@ -23,7 +23,7 @@
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <UInput v-model="filters.title" :placeholder="t('banners.title')" class="w-full" />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -34,7 +34,7 @@
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white hidden sm:block">
         {{ t('admin.menu.banners') }}
       </h1>
-      <UButton @click="onCreate()" class="w-full sm:w-auto cursor-pointer">
+      <UButton class="w-full sm:w-auto cursor-pointer" @click="onCreate()">
         {{ t('common.button.create') }}
       </UButton>
     </div>
@@ -42,6 +42,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="banners.pending.value"
@@ -49,7 +50,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -58,8 +58,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 
@@ -76,10 +76,10 @@
         {{ t('common.modal.confirmDeleteMessage') }}
       </template>
       <template #footer>
-        <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
+        <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
           {{ t('common.button.cancel') }}
         </UButton>
-        <UButton color="error" @click="confirmDelete" class="cursor-pointer">
+        <UButton color="error" class="cursor-pointer" @click="confirmDelete">
           {{ t('common.button.confirm') }}
         </UButton>
       </template>
@@ -94,8 +94,8 @@
   import { useI18n } from 'vue-i18n';
   import { bannersControllerFindAll, bannersControllerDeleteById } from '~/api';
   import type { BannersControllerFindAllResponse } from '~/api';
-  type Banner = BannersControllerFindAllResponse['data']['data'][0];
   import type { Row } from '@tanstack/vue-table';
+  type Banner = BannersControllerFindAllResponse['data']['data'][0];
 
   const UButton = resolveComponent('UButton');
   const UDropdownMenu = resolveComponent('UDropdownMenu');

@@ -39,7 +39,7 @@
               :placeholder="t('common.table.articleId')"
               class="w-full"
             />
-            <UButton @click="handleSearch" color="primary" class="w-full">
+            <UButton color="primary" class="w-full" @click="handleSearch">
               {{ $t('common.button.search') }}
             </UButton>
           </div>
@@ -56,6 +56,7 @@
     <div class="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-1">
       <UTable
         ref="table"
+        :key="tableKey"
         v-model:pagination="pagination"
         sticky="header"
         :loading="comments.pending.value"
@@ -63,7 +64,6 @@
         loading-animation="carousel"
         :data="tableData"
         :columns="columns"
-        :key="tableKey"
         class="h-full"
       />
     </div>
@@ -73,8 +73,8 @@
         :page="currentPage"
         :items-per-page="pagination.pageSize"
         :total="totalItems"
-        @update:page="handlePageChange"
         color="neutral"
+        @update:page="handlePageChange"
       />
     </div>
 
@@ -91,10 +91,10 @@
         {{ t('common.modal.confirmDeleteMessage') }}
       </template>
       <template #footer>
-        <UButton variant="outline" @click="showDeleteModal = false" class="cursor-pointer">
+        <UButton variant="outline" class="cursor-pointer" @click="showDeleteModal = false">
           {{ t('common.button.cancel') }}
         </UButton>
-        <UButton color="error" @click="confirmDelete" class="cursor-pointer">
+        <UButton color="error" class="cursor-pointer" @click="confirmDelete">
           {{ t('common.button.confirm') }}
         </UButton>
       </template>

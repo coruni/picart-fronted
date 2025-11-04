@@ -14,14 +14,14 @@
       @after-render="handleAfterRender"
     >
       <template #default="{ item, index }">
-        <slot :item="item" :index="index"></slot>
+        <slot :item="item" :index="index"/>
       </template>
     </Waterfall>
     <template #fallback>
       <!-- SSR fallback: 渲染实际内容以便爬虫抓取，但对用户隐藏 -->
       <div class="sr-only" aria-hidden="true">
         <div v-for="(item, index) in items" :key="item.id">
-          <slot :item="item" :index="index"></slot>
+          <slot :item="item" :index="index"/>
         </div>
       </div>
     </template>

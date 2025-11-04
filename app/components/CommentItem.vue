@@ -49,10 +49,10 @@
           <div class="flex flex-wrap items-center gap-1 sm:gap-2 mt-2 ml-2">
             <UButton
               variant="link"
-              @click.stop="handleLike"
               :disabled="isLikeLoading"
               class="cursor-pointer text-gray-500 hover:text-primary-500 text-sm flex items-center space-x-1 transition-colors duration-200 min-w-0 px-1 sm:px-2"
               :class="{ 'text-primary-500': comment.isLiked }"
+              @click.stop="handleLike"
             >
               <Icon
                 :name="comment.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
@@ -63,17 +63,17 @@
             </UButton>
             <UButton
               variant="link"
-              @click.stop="toggleReply"
               class="cursor-pointer text-gray-500 hover:text-primary-500 text-sm transition-colors duration-200 min-w-0 px-1 sm:px-2"
+              @click.stop="toggleReply"
             >
               <span class="hidden sm:inline">{{ $t('article.reply') }}</span>
               <span class="sm:hidden">{{ $t('article.reply') }}</span>
             </UButton>
             <UButton
-              variant="link"
               v-if="canEdit"
-              @click.stop="toggleEdit"
+              variant="link"
               class="cursor-pointer flex items-center space-x-1 text-gray-500 hover:text-primary-500 text-sm transition-colors duration-200 min-w-0 px-1 sm:px-2"
+              @click.stop="toggleEdit"
             >
               <Icon name="mynaui:edit" class="w-4 h-4 flex-shrink-0" />
               <span class="hidden sm:inline">{{ $t('common.edit') }}</span>
@@ -114,8 +114,8 @@
                       color="error"
                       size="sm"
                       :loading="isDeleteLoading"
-                      @click="handleDelete"
                       class="text-xs"
+                      @click="handleDelete"
                     >
                       {{ $t('common.delete') }}
                     </UButton>
@@ -124,10 +124,10 @@
               </template>
             </UPopover>
             <UButton
-              variant="link"
               v-if="(comment.replyCount || 0) > 0"
-              @click.stop="openRepliesModal"
+              variant="link"
               class="cursor-pointer flex items-center space-x-1 text-gray-500 hover:text-primary-500 text-sm transition-colors duration-200 min-w-0 px-1 sm:px-2"
+              @click.stop="openRepliesModal"
             >
               <span class="hidden sm:inline"
                 >{{ comment.replyCount || 0 }} {{ $t('article.replies') }}</span
@@ -144,9 +144,9 @@
       <template #body>
         <div
           id="comment-detail-description"
+          ref="modalContent"
           class="p-4 space-y-4 max-h-96 overflow-y-auto"
           @scroll="handleScroll"
-          ref="modalContent"
         >
           <!-- 主评论内容 - 立即显示 -->
           <div>
@@ -209,7 +209,7 @@
             <div v-if="isLoadingReplies && replies.length === 0" class="flex justify-center py-4">
               <div
                 class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"
-              ></div>
+              />
             </div>
 
             <!-- 回复列表容器 -->
@@ -266,10 +266,10 @@
                   <div class="flex flex-wrap items-center gap-1 sm:gap-2 mt-2">
                     <UButton
                       variant="link"
-                      @click.stop="handleReplyLike(reply)"
                       :disabled="isLikeLoading"
                       class="cursor-pointer text-gray-500 hover:text-primary-500 text-xs flex items-center space-x-1 transition-colors duration-200 min-w-0 px-1 sm:px-2"
                       :class="{ 'text-primary-500': reply.isLiked }"
+                      @click.stop="handleReplyLike(reply)"
                     >
                       <Icon
                         :name="reply.isLiked ? 'mynaui:heart-solid' : 'mynaui:heart'"
@@ -280,17 +280,17 @@
                     </UButton>
                     <UButton
                       variant="link"
-                      @click.stop="toggleReplyToReply(reply)"
                       class="cursor-pointer text-gray-500 hover:text-primary-500 text-xs transition-colors duration-200 min-w-0 px-1 sm:px-2"
+                      @click.stop="toggleReplyToReply(reply)"
                     >
                       <span class="hidden sm:inline">{{ $t('article.reply') }}</span>
                       <span class="sm:hidden">{{ $t('article.reply') }}</span>
                     </UButton>
                     <UButton
-                      variant="link"
                       v-if="canEditReply(reply)"
-                      @click.stop="toggleEditReply(reply)"
+                      variant="link"
                       class="cursor-pointer flex items-center space-x-1 text-gray-500 hover:text-primary-500 text-xs transition-colors duration-200 min-w-0 px-1 sm:px-2"
+                      @click.stop="toggleEditReply(reply)"
                     >
                       <Icon name="mynaui:edit" class="w-3 h-3 flex-shrink-0" />
                       <span class="hidden sm:inline">{{ $t('common.edit') }}</span>
@@ -331,8 +331,8 @@
                               color="error"
                               size="sm"
                               :loading="isDeleteLoading"
-                              @click="handleDeleteReply(reply)"
                               class="text-xs cursor-pointer"
+                              @click="handleDeleteReply(reply)"
                             >
                               {{ $t('common.delete') }}
                             </UButton>
@@ -360,8 +360,8 @@
                         <UButton
                           type="button"
                           variant="ghost"
-                          @click="reply.showReplyInput = false"
                           class="text-xs cursor-pointer dark:text-white"
+                          @click="reply.showReplyInput = false"
                         >
                           {{ $t('common.cancel') }}
                         </UButton>
@@ -395,8 +395,8 @@
                         <UButton
                           type="button"
                           variant="ghost"
-                          @click="reply.showEditInput = false"
                           class="text-xs cursor-pointer dark:text-white"
+                          @click="reply.showEditInput = false"
                         >
                           {{ $t('common.cancel') }}
                         </UButton>
@@ -418,7 +418,7 @@
                 <div class="flex items-center space-x-2 text-sm text-gray-500">
                   <div
                     class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"
-                  ></div>
+                  />
                   <span>{{ $t('article.loadingMore') }}</span>
                 </div>
               </div>
@@ -442,8 +442,8 @@
           <UButton
             type="button"
             variant="ghost"
-            @click="showReplyInput = false"
             class="text-sm cursor-pointer dark:text-white"
+            @click="showReplyInput = false"
           >
             {{ $t('common.cancel') }}
           </UButton>
@@ -472,8 +472,8 @@
           <UButton
             type="button"
             variant="ghost"
-            @click="showEditInput = false"
             class="text-sm cursor-pointer dark:text-white"
+            @click="showEditInput = false"
           >
             {{ $t('common.cancel') }}
           </UButton>
@@ -497,11 +497,6 @@
   import { z } from 'zod';
   import type { CommentControllerFindAllResponse } from '~/api';
   import { useUserStore } from '~/stores/user';
-  type Comment = CommentControllerFindAllResponse['data']['data'][0] & {
-    isLiked: boolean;
-    showReplyInput?: boolean;
-    showEditInput?: boolean;
-  };
   import {
     commentControllerLike,
     commentControllerCreate,
@@ -509,6 +504,11 @@
     commentControllerRemove,
     commentControllerFindOne
   } from '~/api';
+  type Comment = CommentControllerFindAllResponse['data']['data'][0] & {
+    isLiked: boolean;
+    showReplyInput?: boolean;
+    showEditInput?: boolean;
+  };
 
   // 响应式状态 - 弹窗
   const showDetailModal = ref(false);
@@ -584,7 +584,7 @@
   // 响应式 Popover 模式
   const popoverMode = computed(() => {
     // 检测是否为移动设备
-    if (process.client) {
+    if (import.meta.client) {
       return window.innerWidth < 768 ? 'click' : 'hover';
     }
     return 'hover'; // 服务端默认使用 hover

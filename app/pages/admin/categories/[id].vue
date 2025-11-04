@@ -27,7 +27,7 @@
     </div>
 
     <!-- Form -->
-    <UForm v-else :schema="schema" :state="form" @submit="onSubmit" class="space-y-6">
+    <UForm v-else :schema="schema" :state="form" class="space-y-6" @submit="onSubmit">
       <!-- Basic Information Section -->
       <UCard>
         <template #header>
@@ -59,9 +59,9 @@
 
         <UFormField :label="t('common.table.description')" name="description">
           <UTextarea
+            v-model="form.description"
             class="w-full"
             size="lg"
-            v-model="form.description"
             :placeholder="t('admin.categories.descriptionPlaceholder')"
             :rows="3"
           />
@@ -151,8 +151,8 @@
       <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
         <UButton
           variant="outline"
-          @click="$router.push('/admin/categories')"
           :disabled="submitting"
+          @click="$router.push('/admin/categories')"
         >
           {{ t('common.button.cancel') }}
         </UButton>

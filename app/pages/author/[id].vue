@@ -58,7 +58,7 @@
         <p class="text-gray-600 dark:text-gray-400 mb-6">
           {{ $t('common.error.description') }}
         </p>
-        <UButton @click="handleRetry" color="primary">
+        <UButton color="primary" @click="handleRetry">
           {{ $t('common.error.retry') }}
         </UButton>
       </div>
@@ -127,17 +127,17 @@
             <div class="flex space-x-2">
               <UButton
                 v-if="!isFollowing"
-                @click="handleFollow"
                 :loading="followLoading"
                 class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-primary text-white text-sm md:text-base rounded-md hover:bg-primary-600 transition-colors whitespace-nowrap"
+                @click="handleFollow"
               >
                 {{ $t('author.follow') }}
               </UButton>
               <UButton
                 v-else
-                @click="handleUnfollow"
                 :loading="followLoading"
                 class="px-3 py-1.5 cursor-pointer md:px-4 md:py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm md:text-base rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
+                @click="handleUnfollow"
               >
                 {{ $t('author.unfollow') }}
               </UButton>
@@ -184,15 +184,15 @@
             class="col-span-2 sm:col-span-2 lg:col-span-3 flex justify-center py-4"
           >
             <UButton
-              @click="loadAuthorArticles"
               :disabled="loading"
               color="primary"
               class="px-6 py-2 cursor-pointer bg-primary text-white rounded-md hover:bg-primary-600 transition-colors disabled:opacity-50"
+              @click="loadAuthorArticles"
             >
               <div
                 v-if="loading"
                 class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
-              ></div>
+              />
               {{ loading ? $t('common.loading.loading') : $t('common.loadMore') }}
             </UButton>
           </div>
@@ -230,7 +230,7 @@
             <div
               class="bg-primary h-2 rounded-full"
               :style="{ width: `${(authorInfo?.experience || 0) % 100}%` }"
-            ></div>
+            />
           </div>
           <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
             <span>{{ authorInfo?.experience || 0 }} {{ $t('author.experience') }}</span>

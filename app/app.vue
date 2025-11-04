@@ -1,5 +1,6 @@
 <template>
   <UApp>
+    <NuxtPwaManifest />
     <NuxtLoadingIndicator color="#615fff" />
     <NuxtLayout>
       <NuxtPage keepalive />
@@ -10,7 +11,7 @@
 <script lang="ts" setup>
   import { configControllerGetPublic } from './api';
   const route = useRoute();
-  const pageKey = computed(() => route.name as string);
+  const _pageKey = computed(() => route.name as string);
 
   const configs = await configControllerGetPublic({
     composable: 'useFetch',

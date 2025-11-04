@@ -8,8 +8,8 @@
         <!-- 标题 -->
         <UFormField :label="t('banners.title')" name="title" class="md:col-span-2">
           <UInput
-            class="w-full"
             v-model="state.title"
+            class="w-full"
             :placeholder="t('banners.titlePlaceholder')"
           />
         </UFormField>
@@ -17,8 +17,8 @@
         <!-- 描述 -->
         <UFormField :label="t('banners.description')" name="description" class="md:col-span-2">
           <UTextarea
-            class="w-full"
             v-model="state.description"
+            class="w-full"
             :placeholder="t('banners.descriptionPlaceholder')"
           />
         </UFormField>
@@ -39,22 +39,22 @@
         <!-- 链接 -->
         <UFormField :label="t('banners.link')" name="linkUrl" class="md:col-span-2">
           <UInput
-            class="w-full"
             v-model="state.linkUrl"
+            class="w-full"
             :placeholder="t('banners.linkPlaceholder')"
           />
         </UFormField>
 
         <!-- 排序 -->
         <UFormField :label="t('banners.sortOrder')" name="sortOrder">
-          <UInput class="w-full" :min="0" v-model.number="state.sortOrder" type="number" />
+          <UInput v-model.number="state.sortOrder" class="w-full" :min="0" type="number" />
         </UFormField>
 
         <!-- 状态 -->
         <UFormField :label="t('banners.status')" name="status">
           <USelect
-            class="w-full"
             v-model="state.status"
+            class="w-full"
             :items="[
               { label: t('common.status.active'), value: 'active' },
               { label: t('common.status.inactive'), value: 'inactive' }
@@ -67,7 +67,7 @@
 
       <!-- 提交按钮 -->
       <div class="flex justify-end space-x-4 mt-8">
-        <UButton variant="outline" @click="router.back()" class="cursor-pointer">
+        <UButton variant="outline" class="cursor-pointer" @click="router.back()">
           {{ t('common.button.cancel') }}
         </UButton>
         <UButton type="submit" :loading="loading" class="cursor-pointer">

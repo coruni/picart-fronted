@@ -9,7 +9,7 @@
         <!-- 旋转加载器 -->
         <div
           class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"
-        ></div>
+        />
 
         <!-- 加载文字 -->
         <p v-if="message" class="text-sm text-gray-600 dark:text-gray-400 animate-pulse">

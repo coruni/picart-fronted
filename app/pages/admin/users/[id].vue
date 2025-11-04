@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">{{ $t('admin.users.editUser') }}</h1>
       <div class="flex items-center space-x-2">
-        <UButton @click="navigateTo('/admin/users')" variant="outline" icon="mynaui:arrow-left">
+        <UButton variant="outline" icon="mynaui:arrow-left" @click="navigateTo('/admin/users')">
           {{ $t('common.button.back') }}
         </UButton>
       </div>
@@ -15,7 +15,7 @@
       <div class="flex items-center justify-center flex-col gap-8">
         <div
           class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"
-        ></div>
+        />
         <p class="text-gray-600 dark:text-gray-400">{{ $t('common.loading.loading') }}</p>
       </div>
     </div>
@@ -26,8 +26,8 @@
         <Icon name="mynaui:warning" class="text-red-500 text-4xl mb-4" />
         <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
         <UButton
-          @click="user.refresh?.()"
           class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
+          @click="user.refresh?.()"
         >
           {{ $t('common.retry') }}
         </UButton>
@@ -43,7 +43,7 @@
             <h3 class="text-lg font-semibold">{{ $t('admin.users.basicInfo') }}</h3>
           </template>
 
-          <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-4">
+          <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <UFormField :label="$t('admin.users.username')" name="username">
                 <UInput v-model="state.username" class="w-full" />
@@ -92,8 +92,8 @@
           <UForm
             :schema="membershipSchema"
             :state="membershipState"
-            @submit="onSubmit"
             class="space-y-4"
+            @submit="onSubmit"
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <UFormField :label="$t('admin.users.membershipLevel')" name="membershipLevel">
@@ -138,7 +138,7 @@
             <h3 class="text-lg font-semibold">{{ $t('admin.users.banInfo') }}</h3>
           </template>
 
-          <UForm :schema="banSchema" :state="banState" @submit="onSubmit" class="space-y-4">
+          <UForm :schema="banSchema" :state="banState" class="space-y-4" @submit="onSubmit">
             <UFormField :label="$t('admin.users.banReason')" name="banReason">
               <UTextarea v-model="banState.banReason" class="w-full" :rows="3" />
             </UFormField>
@@ -151,7 +151,7 @@
 
         <!-- 保存按钮 -->
         <div class="flex justify-end">
-          <UButton @click="saveUser" color="primary" icon="mynaui:save" :loading="saving" size="lg">
+          <UButton color="primary" icon="mynaui:save" :loading="saving" size="lg" @click="saveUser">
             {{ $t('common.button.save') }}
           </UButton>
         </div>
