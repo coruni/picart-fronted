@@ -6,7 +6,6 @@
   const route = useRoute();
   const siteConfig = inject<SiteConfig>('siteConfig');
 
-
   // 菜单数据 - 转换为 NavigationMenuItem 格式
   const menuItems = computed<NavigationMenuItem[]>(() => [
     {
@@ -71,74 +70,78 @@
 </script>
 
 <template>
-  <UDashboardGroup>
-    <UDashboardSidebar
-      id="dashboard"
-      toggle-side="left"
-      :ui="{ footer: 'lg:border-t lg:border-default', root: 'w-64' }"
-    >
-      <template #header>
-        <!-- Logo -->
-        <div class="flex items-center gap-3 px-2 py-1">
-          <NuxtImg
-            v-if="siteConfig?.site_logo"
-            :src="siteConfig.site_logo"
-            alt="logo"
-            class="w-10 h-10"
-          />
-          <div class="flex-1">
-            <h1 class="text-lg font-bold truncate">{{ siteConfig?.site_name || 'Admin' }}</h1>
-            <p class="text-xs text-gray-500 dark:text-gray-400">{{ t('admin.menu.dashboard') }}</p>
+  <div>
+    <UDashboardGroup>
+      <UDashboardSidebar
+        id="dashboard"
+        toggle-side="left"
+        :ui="{ footer: 'lg:border-t lg:border-default', root: 'w-64' }"
+      >
+        <template #header>
+          <!-- Logo -->
+          <div class="flex items-center gap-3 px-2 py-1">
+            <NuxtImg
+              v-if="siteConfig?.site_logo"
+              :src="siteConfig.site_logo"
+              alt="logo"
+              class="w-10 h-10"
+            />
+            <div class="flex-1">
+              <h1 class="text-lg font-bold truncate">{{ siteConfig?.site_name || 'Admin' }}</h1>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                {{ t('admin.menu.dashboard') }}
+              </p>
+            </div>
           </div>
-        </div>
-      </template>
+        </template>
 
-      <template #default="slotProps">
-        <UNavigationMenu
-          :ui="{ link: 'py-2' }"
-          orientation="vertical"
-          tooltip
-          :collapsed="slotProps?.collapsed ?? false"
-          :items="menuItems"
-        />
-      </template>
+        <template #default="slotProps">
+          <UNavigationMenu
+            :ui="{ link: 'py-2' }"
+            orientation="vertical"
+            tooltip
+            :collapsed="slotProps?.collapsed ?? false"
+            :items="menuItems"
+          />
+        </template>
 
-      <template #footer="slotProps">
-        <div class="flex flex-col flex-1 gap-2">
-          <UserMenu :collapsed="slotProps?.collapsed ?? false" />
-        </div>
-      </template>
-    </UDashboardSidebar>
+        <template #footer="slotProps">
+          <div class="flex flex-col flex-1 gap-2">
+            <UserMenu :collapsed="slotProps?.collapsed ?? false" />
+          </div>
+        </template>
+      </UDashboardSidebar>
 
-    <UDashboardPanel :ui="{ body: 'p-4 sm:p-6' }">
-      <template #header>
-        <UDashboardNavbar toggle-side="left">
-          <template #left>
-            <h2 class="text-lg font-semibold">{{ pageTitle }}</h2>
-          </template>
-        </UDashboardNavbar>
-      </template>
+      <UDashboardPanel :ui="{ body: 'p-4 sm:p-6' }">
+        <template #header>
+          <UDashboardNavbar toggle-side="left">
+            <template #left>
+              <h2 class="text-lg font-semibold">{{ pageTitle }}</h2>
+            </template>
+          </UDashboardNavbar>
+        </template>
 
-      <template #body>
-        <NuxtPage
-          :keepalive="{
-            include: [
-              'admin-articles',
-              'admin-categories',
-              'admin-orders',
-              'admin-roles',
-              'admin-users',
-              'admin-tags',
-              'admin-comments'
-            ]
-          }"
-        />
-      </template>
-    </UDashboardPanel>
+        <template #body>
+          <NuxtPage
+            :keepalive="{
+              include: [
+                'admin-articles',
+                'admin-categories',
+                'admin-orders',
+                'admin-roles',
+                'admin-users',
+                'admin-tags',
+                'admin-comments'
+              ]
+            }"
+          />
+        </template>
+      </UDashboardPanel>
 
-    <!-- Cookie Consent -->
-    <CookieConsent />
-  </UDashboardGroup>
+      <!-- Cookie Consent -->
+      <CookieConsent />
+    </UDashboardGroup>
+  </div>
 </template>
 
 <style scoped></style>
