@@ -764,12 +764,13 @@
   } from '~/api';
   import type { CommentControllerFindAllResponse } from '~/api';
   import type { FormSubmitEvent } from '@nuxt/ui';
+  import type { SiteConfig } from '~/types/site-config';
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
 
-  // 在 setup 函数顶部获取 appConfig，避免在回调函数中调用
-  const appConfig = useAppConfig();
+  // 在 setup 函数顶部获取 siteConfig，避免在回调函数中调用
+  const siteConfig = inject<SiteConfig>('siteConfig');
 
   // 确保在SSR阶段等待数据加载完成
   const {
@@ -817,8 +818,13 @@
   const generateSeoKeywords = () => {
     if (!article.value?.data) return '';
 
-    const articleKeywords = appConfig.seo?.articlePageKeywords || '';
-    const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+    const articleKeywords = siteConfig?.seo_article_page_keywords || '';
+    const longTailKeywords = siteConfig?.seo_long_tail_keywords
+      ? siteConfig.seo_long_tail_keywords
+          .split(',')
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
 
     // 文章标签数组
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
@@ -905,7 +911,12 @@
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
 
     // 从app.config中获取长尾关键词配置
-    const longTailKeywords = appConfig.seo?.longTailKeywords;
+    const longTailKeywords = siteConfig?.seo_long_tail_keywords
+      ? siteConfig.seo_long_tail_keywords
+          .split(',')
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
 
     // 为每个标签拼接相关的长尾关键词，创建组合词
     const combinedKeywords: string[] = [];
@@ -989,7 +1000,12 @@
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
 
     // 获取长尾关键词配置
-    const longTailKeywords = appConfig.seo?.longTailKeywords;
+    const longTailKeywords = siteConfig?.seo_long_tail_keywords
+      ? siteConfig.seo_long_tail_keywords
+          .split(',')
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
 
     // 为每个标签拼接相关的长尾关键词，创建组合词
     const combinedKeywords: string[] = [];
@@ -1052,7 +1068,12 @@
     description: () => {
       if (!article.value?.data) return '';
 
-      const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+      const longTailKeywords = siteConfig?.seo_long_tail_keywords
+        ? siteConfig.seo_long_tail_keywords
+            .split(',')
+            .map((k: string) => k.trim())
+            .filter(Boolean)
+        : [];
       const author =
         article.value.data.author?.nickname || article.value.data.author?.username || '';
       const imageCount = article.value.data.images?.length || 0;
@@ -1082,7 +1103,12 @@
       const title = article.value?.data?.title || '';
       const author =
         article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
-      const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+      const longTailKeywords = siteConfig?.seo_long_tail_keywords
+        ? siteConfig.seo_long_tail_keywords
+            .split(',')
+            .map((k: string) => k.trim())
+            .filter(Boolean)
+        : [];
       const selectedKeywords = longTailKeywords.slice(0, 1);
       return `${title} - ${author}的${selectedKeywords[0]}原创作品，高清图片集`;
     },

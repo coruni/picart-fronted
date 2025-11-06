@@ -47,4 +47,8 @@ export interface SiteConfig {
   ad_global_style: string;
   payment_balance_enabled: boolean;
   site_layout: 'grid' | 'waterfall';
+  seo_long_tail_keywords: string;
+  seo_home_keywords: string;
+  seo_author_page_keywords: string;
+  seo_article_page_keywords: string;
 }
