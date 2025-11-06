@@ -1063,12 +1063,7 @@
 
   // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
   useSeoMeta({
-    title: () => {
-      const title = article.value?.data?.title || '';
-      const author =
-        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
-      return title ? `${title} - ${author}的作品` : title;
-    },
+    title: () => article.value?.data?.title,
     description: () => {
       if (!article.value?.data) return '';
 
