@@ -850,10 +850,9 @@
         const coreKeyword = longTail
           .split('')
           .filter(
-            char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
+            char => char.trim().length > 0 && !/[，。！？、；：""''（）【】《》〈〉]/.test(char) // 过滤掉标点符号
           )
-          .join('')
-          .substring(0, 4); // 最多4个字
+          .join('');
 
         if (coreKeyword) {
           combinedKeywords.push(`${tag}${coreKeyword}`);
@@ -877,9 +876,7 @@
       ...tags, // 原始标签
       ...combinedKeywords, // 标签+长尾词组合
       articleKeywords, // 文章页通用关键词
-      ...selectedOriginalLongTailKeywords, // 原始长尾关键词
-      article.value.data.images && article.value.data.images.length > 0 ? '高清图片' : '',
-      '作品分享'
+      ...selectedOriginalLongTailKeywords // 原始长尾关键词
     ].filter(Boolean);
 
     // 去重并限制关键词数量（Google建议10-15个，Bing类似）
@@ -908,18 +905,7 @@
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
 
     // 从app.config中获取长尾关键词配置
-    const longTailKeywords = appConfig.seo?.longTailKeywords || [
-      'COSPLAY图片大全',
-      '动漫COS写真',
-      '角色扮演美图',
-      'COSPLAY摄影作品',
-      '二次元COS图片',
-      'COS正片欣赏',
-      'COS外景摄影',
-      'COSPLAY高清图集',
-      '动漫角色COS照',
-      'COSPLAY作品展示'
-    ];
+    const longTailKeywords = appConfig.seo?.longTailKeywords;
 
     // 为每个标签拼接相关的长尾关键词，创建组合词
     const combinedKeywords: string[] = [];
@@ -948,11 +934,9 @@
           // 提取长尾词的核心部分进行拼接
           const coreKeyword = longTail
             .split(' ')
-            .filter(
-              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
-            )
+            .filter(word => word.trim().length > 0) // 保留所有有意义的词汇
             .join('')
-            .substring(0, 4); // 最多4个字
+            .substring(0, 8); // 最多8个字符，包含中英文
 
           if (coreKeyword) {
             combinedKeywords.push(`${tag}${coreKeyword}`);
@@ -1005,14 +989,7 @@
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
 
     // 获取长尾关键词配置
-    const longTailKeywords = appConfig.seo?.longTailKeywords || [
-      '高清图片下载',
-      '免费图片素材',
-      '摄影技巧分享',
-      '创意设计灵感',
-      '图片社交平台',
-      '唯美图片欣赏'
-    ];
+    const longTailKeywords = appConfig.seo?.longTailKeywords;
 
     // 为每个标签拼接相关的长尾关键词，创建组合词
     const combinedKeywords: string[] = [];
@@ -1038,11 +1015,9 @@
           // 提取长尾词的核心部分进行拼接
           const coreKeyword = longTail
             .split(' ')
-            .filter(
-              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
-            )
+            .filter(word => word.trim().length > 0) // 保留所有有意义的词汇
             .join('')
-            .substring(0, 4); // 最多4个字
+            .substring(0, 8); // 最多8个字符，包含中英文
 
           if (coreKeyword) {
             combinedKeywords.push(`${tag}${coreKeyword}`);
@@ -1209,14 +1184,7 @@
           dateModified: article.value?.data?.updatedAt || article.value?.data?.createdAt || '',
           inLanguage: 'zh-CN',
           isAccessibleForFree: !article.value?.data?.requirePayment,
-          keywords: [
-            article.value?.data?.tags?.map(tag => tag.name).join(',') || '',
-            '高清图片',
-            '原创设计',
-            '艺术作品',
-            '视觉创意',
-            '图片素材'
-          ]
+          keywords: [article.value?.data?.tags?.map(tag => tag.name).join(',') || '']
             .filter(Boolean)
             .join(',')
         })

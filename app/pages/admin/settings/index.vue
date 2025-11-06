@@ -581,7 +581,7 @@
                 <USwitch v-model="config.ad_article_top_enabled" />
               </UFormField>
 
-              <div/>
+              <div />
 
               <UFormField
                 :label="t('admin.settings.adArticleTopContent')"
@@ -618,7 +618,7 @@
                 <USwitch v-model="config.ad_article_bottom_enabled" />
               </UFormField>
 
-              <div/>
+              <div />
 
               <UFormField
                 :label="t('admin.settings.adArticleBottomContent')"
@@ -725,7 +725,7 @@
             <USwitch v-model="config.maintenance_mode" />
           </UFormField>
 
-          <div/>
+          <div />
 
           <UFormField
             :label="t('admin.settings.maintenanceMessage')"
@@ -806,7 +806,10 @@
 
             <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <div class="flex items-start space-x-3">
-                <Icon name="mynaui:info-circle" class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                <Icon
+                  name="mynaui:info-circle"
+                  class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
+                />
                 <div class="text-sm text-blue-700 dark:text-blue-300">
                   <p class="font-medium mb-1">{{ t('admin.settings.seoTipsTitle') }}</p>
                   <ul class="space-y-1 list-disc list-inside">
@@ -931,17 +934,17 @@
   ]);
 
   // 配置数据
-  const config = ref<Record<string, any>>({
+  const config = ref<Record<string, string | boolean | number>>({
     site_name: '',
     site_subtitle: '',
     site_description: '',
     site_keywords: '',
 
     // SEO 长尾关键词配置
-    seo_long_tail_keywords: '高清图片下载,免费图片素材,摄影技巧分享,创意设计灵感,图片社交平台,唯美图片欣赏',
-    seo_home_keywords: '图片社区,摄影作品,设计灵感,高清图片,创意分享',
-    seo_author_page_keywords: '摄影师,设计师,艺术家,创作者,作品展示',
-    seo_article_page_keywords: '摄影教程,设计文章,创作心得,图片故事,技巧分享',
+    seo_long_tail_keywords: '',
+    seo_home_keywords: '',
+    seo_author_page_keywords: '',
+    seo_article_page_keywords: '',
     site_logo: '',
     site_favicon: '',
     user_registration_enabled: true,
