@@ -160,6 +160,28 @@
     return userStore.userInfo.id === props.authorId;
   });
 
+  // 检查会员状态
+  const isMember = computed(() => {
+    if (!userStore.isLoggedIn || !userStore.userInfo) {
+      return false;
+    }
+
+    // 获取最新的用户信息
+    const userInfo = userStore.userInfo;
+    
+    // 检查会员状态，优先使用服务端返回的isMember字段
+    if (userInfo.isMember) {
+      return true;
+    }
+    
+    // 兜底计算：会员等级大于0且状态为活跃且未过期
+    return (
+      userInfo.membershipLevel > 0 &&
+      userInfo.membershipStatus === 'ACTIVE' &&
+      (new Date(userInfo.membershipEndDate) > new Date() || userInfo.membershipEndDate === null)
+    );
+  });
+
   // 确保在客户端才执行交互逻辑
   const isClient = ref(false);
   onMounted(() => {

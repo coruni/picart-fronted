@@ -1317,16 +1317,22 @@
   const isMembershipValid = computed(() => {
     if (!isLoggedIn.value) return false;
 
+    // 确保使用最新的用户信息
     const userInfo = userStore.userInfo;
     if (!userInfo) return false;
 
-    // 兜底计算
+    // 优先使用服务端返回的isMember字段
+    if (userInfo.isMember) {
+      return true;
+    }
+
+    // 兜底计算：会员等级大于0且状态为活跃且未过期
     const isMember =
       userInfo.membershipLevel > 0 &&
       userInfo.membershipStatus === 'ACTIVE' &&
       (new Date(userInfo.membershipEndDate) > new Date() || userInfo.membershipEndDate === null);
 
-    return userInfo.isMember || isMember;
+    return isMember;
   });
 
   // 点赞相关状态
