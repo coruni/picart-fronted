@@ -750,7 +750,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, computed, watch, nextTick, onMounted } from 'vue';
   import zod from 'zod';
   import { useUserStore } from '~/stores/user';
   import {
@@ -768,6 +767,9 @@
   const route = useRoute();
   const router = useRouter();
   const { t } = useI18n();
+
+  // 在 setup 函数顶部获取 appConfig，避免在回调函数中调用
+  const appConfig = useAppConfig();
 
   // 确保在SSR阶段等待数据加载完成
   const {
@@ -815,9 +817,7 @@
   const generateSeoKeywords = () => {
     if (!article.value?.data) return '';
 
-    const appConfig = useAppConfig();
-    const articleKeywords =
-      appConfig.seo?.articlePageKeywords || '摄影教程,设计文章,创作心得,图片故事,技巧分享';
+    const articleKeywords = appConfig.seo?.articlePageKeywords || '';
     const longTailKeywords = appConfig.seo?.longTailKeywords || [];
 
     // 文章标签数组
@@ -879,7 +879,7 @@
       articleKeywords, // 文章页通用关键词
       ...selectedOriginalLongTailKeywords, // 原始长尾关键词
       article.value.data.images && article.value.data.images.length > 0 ? '高清图片' : '',
-      '原创作品'
+      '作品分享'
     ].filter(Boolean);
 
     // 去重并限制关键词数量（Google建议10-15个，Bing类似）
@@ -899,6 +899,173 @@
     return prioritizedKeywords.join(',');
   };
 
+  // 生成SEO优化的图片alt文本 - 基于标签与长尾词拼接
+  const generateImageAltText = (index: number, totalImages: number): string => {
+    if (!article.value?.data) return '';
+
+    const title = article.value.data.title || '';
+    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+
+    // 从app.config中获取长尾关键词配置
+    const longTailKeywords = appConfig.seo?.longTailKeywords || [
+      'COSPLAY图片大全',
+      '动漫COS写真',
+      '角色扮演美图',
+      'COSPLAY摄影作品',
+      '二次元COS图片',
+      'COS正片欣赏',
+      'COS外景摄影',
+      'COSPLAY高清图集',
+      '动漫角色COS照',
+      'COSPLAY作品展示'
+    ];
+
+    // 为每个标签拼接相关的长尾关键词，创建组合词
+    const combinedKeywords: string[] = [];
+
+    // 取前2个标签进行拼接
+    const mainTags = tags.slice(0, 2);
+    mainTags.forEach(tag => {
+      // 为每个标签找到1-2个最相关的长尾关键词
+      const relatedLongTailKeywords = longTailKeywords
+        .filter(keyword => {
+          const keywordLower = keyword.toLowerCase();
+          // 检查关键词是否与标签相关（前2个字符匹配）
+          return (
+            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            // 检查关键词是否与标题相关
+            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            // 检查标签是否与关键词相关
+            keywordLower.includes(tag.substring(0, 2))
+          );
+        })
+        .slice(0, 2);
+
+      // 生成组合关键词
+      if (relatedLongTailKeywords.length > 0) {
+        relatedLongTailKeywords.forEach(longTail => {
+          // 提取长尾词的核心部分进行拼接
+          const coreKeyword = longTail
+            .split(' ')
+            .filter(
+              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
+            )
+            .join('')
+            .substring(0, 4); // 最多4个字
+
+          if (coreKeyword) {
+            combinedKeywords.push(`${tag}${coreKeyword}`);
+          }
+        });
+      }
+    });
+
+    // 如果没有组合词，使用前2个通用长尾关键词
+    const selectedKeywords =
+      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
+
+    // 图片位置描述
+    const positionKeywords = ['精美图片', '高清图片', '原创图片', '视觉作品', '摄影作品'];
+    const positionKeyword = positionKeywords[index % positionKeywords.length];
+
+    // 根据图片数量和位置生成描述
+    let positionDescription = '';
+    if (totalImages === 1) {
+      positionDescription = `完整${positionKeyword}展示`;
+    } else if (index === 0) {
+      positionDescription = `主图${positionKeyword}预览`;
+    } else if (index === totalImages - 1) {
+      positionDescription = `结尾${positionKeyword}分享`;
+    } else {
+      positionDescription = `精选${positionKeyword}欣赏`;
+    }
+
+    // 构建SEO友好的alt文本结构
+    const altTextComponents = [
+      title, // 核心标题
+      author, // 作者信息
+      positionDescription, // 位置和类型描述
+      ...selectedKeywords, // 标签+长尾词组合
+      `第${index + 1}张图片`,
+      `共${totalImages}张作品集`
+    ];
+
+    return altTextComponents.filter(Boolean).join(' - ');
+  };
+
+  // 生成图片SEO描述 - 基于标签与长尾词拼接
+  const generateImageSeoDescription = (index: number, totalImages: number): string => {
+    if (!article.value?.data) return '';
+
+    const title = article.value.data.title || '';
+    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
+    const views = article.value.data.views || 0;
+    const likes = article.value.data.likes || 0;
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+
+    // 获取长尾关键词配置
+    const longTailKeywords = appConfig.seo?.longTailKeywords || [
+      '高清图片下载',
+      '免费图片素材',
+      '摄影技巧分享',
+      '创意设计灵感',
+      '图片社交平台',
+      '唯美图片欣赏'
+    ];
+
+    // 为每个标签拼接相关的长尾关键词，创建组合词
+    const combinedKeywords: string[] = [];
+
+    // 取前2个标签进行拼接
+    const mainTags = tags.slice(0, 2);
+    mainTags.forEach(tag => {
+      // 为每个标签找到1-2个最相关的长尾关键词
+      const relatedLongTailKeywords = longTailKeywords
+        .filter(keyword => {
+          const keywordLower = keyword.toLowerCase();
+          return (
+            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            keywordLower.includes(tag.substring(0, 2))
+          );
+        })
+        .slice(0, 2);
+
+      // 生成组合关键词
+      if (relatedLongTailKeywords.length > 0) {
+        relatedLongTailKeywords.forEach(longTail => {
+          // 提取长尾词的核心部分进行拼接
+          const coreKeyword = longTail
+            .split(' ')
+            .filter(
+              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
+            )
+            .join('')
+            .substring(0, 4); // 最多4个字
+
+          if (coreKeyword) {
+            combinedKeywords.push(`${tag}${coreKeyword}`);
+          }
+        });
+      }
+    });
+
+    // 如果没有组合词，选择原始长尾关键词
+    const selectedKeywords =
+      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
+
+    // 图片质量描述词汇
+    const qualityTerms = ['高清', '原创', '精美', '优质', '独家'];
+    const qualityTerm = qualityTerms[index % qualityTerms.length];
+
+    // 位置描述
+    const positionTerms = ['精选', '特色', '推荐', '热门', '新锐'];
+    const positionTerm = positionTerms[index % positionTerms.length];
+
+    return `${title} - ${author}创作的${qualityTerm}图片作品，第${index + 1}张${positionTerm}内容，共${totalImages}张高质量图片集合。获得${likes}次点赞，${views}次浏览，包含${selectedKeywords.join('、')}等优质视觉艺术内容分享。`;
+  };
+
   // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
   useSeoMeta({
     title: () => {
@@ -910,7 +1077,6 @@
     description: () => {
       if (!article.value?.data) return '';
 
-      const appConfig = useAppConfig();
       const longTailKeywords = appConfig.seo?.longTailKeywords || [];
       const author =
         article.value.data.author?.nickname || article.value.data.author?.username || '';
@@ -921,7 +1087,7 @@
       // 选择相关长尾关键词用于描述
       const selectedKeywords = longTailKeywords.slice(0, 2);
 
-      return `${article.value.data.title} - ${author}原创作品，包含${imageCount}张高清图片。获得${likes}次点赞，${views}次浏览。${selectedKeywords.join('、')}等优质内容分享平台。`;
+      return `${article.value.data.title} - ${author}作品，包含${imageCount}张高清图片。获得${likes}次点赞，${views}次浏览。${selectedKeywords.join('、')}等优质内容分享平台。`;
     },
     author: () =>
       article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
@@ -941,7 +1107,6 @@
       const title = article.value?.data?.title || '';
       const author =
         article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
-      const appConfig = useAppConfig();
       const longTailKeywords = appConfig.seo?.longTailKeywords || [];
       const selectedKeywords = longTailKeywords.slice(0, 1);
       return `${title} - ${author}的${selectedKeywords[0]}原创作品，高清图片集`;
@@ -1183,6 +1348,7 @@
   const lightboxVisible = ref(false);
   const lightboxIndex = ref(0);
   const lightboxImages = computed(() => {
+    // 确保始终返回数组，避免undefined
     const articleImages = article.value?.data?.images || [];
     const htmlImages: string[] = [];
 
@@ -1191,8 +1357,9 @@
       htmlImages.push(...Array.from(images).map(img => img.src));
     }
 
-    // 合并去重
-    return [...new Set([...articleImages, ...htmlImages])];
+    // 合并去重，确保返回数组类型
+    const mergedImages = [...new Set([...articleImages, ...htmlImages])];
+    return Array.isArray(mergedImages) ? mergedImages : [];
   });
   const articleContent = ref<HTMLElement | null>(null);
 
@@ -1239,7 +1406,7 @@
       img.addEventListener('click', () => {
         // 获取所有图片URL
         const htmlImages = Array.from(images).map(img => img.src);
-        const articleImages = [...lightboxImages.value];
+        const articleImages = Array.isArray(lightboxImages.value) ? [...lightboxImages.value] : [];
 
         // 合并去重
         const uniqueImages = [...new Set([...articleImages, ...htmlImages])];
@@ -1489,163 +1656,6 @@
     }
   };
 
-  // 生成SEO优化的图片alt文本 - 基于标签与长尾词拼接
-  const generateImageAltText = (index: number, totalImages: number): string => {
-    if (!article.value?.data) return '';
-
-    const title = article.value.data.title || '';
-    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
-    const tags = article.value.data.tags?.map(tag => tag.name) || [];
-
-    // 从app.config中获取长尾关键词配置
-    const appConfig = useAppConfig();
-    const longTailKeywords = appConfig.seo?.longTailKeywords || [
-      '高清图片下载',
-      '免费图片素材',
-      '摄影技巧分享',
-      '创意设计灵感',
-      '图片社交平台',
-      '唯美图片欣赏'
-    ];
-
-    // 为每个标签拼接相关的长尾关键词，创建组合词
-    const combinedKeywords: string[] = [];
-
-    // 取前2个标签进行拼接
-    const mainTags = tags.slice(0, 2);
-    mainTags.forEach(tag => {
-      // 为每个标签找到1-2个最相关的长尾关键词
-      const relatedLongTailKeywords = longTailKeywords
-        .filter(keyword => {
-          const keywordLower = keyword.toLowerCase();
-          // 检查关键词是否与标签相关（前2个字符匹配）
-          return (
-            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
-            // 检查关键词是否与标题相关
-            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
-            // 检查标签是否与关键词相关
-            keywordLower.includes(tag.substring(0, 2))
-          );
-        })
-        .slice(0, 2);
-
-      // 生成组合关键词
-      if (relatedLongTailKeywords.length > 0) {
-        relatedLongTailKeywords.forEach(longTail => {
-          // 提取长尾词的核心部分进行拼接
-          const coreKeyword = longTail
-            .split('')
-            .filter(
-              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
-            )
-            .join('')
-            .substring(0, 4); // 最多4个字
-
-          if (coreKeyword) {
-            combinedKeywords.push(`${tag}${coreKeyword}`);
-          }
-        });
-      }
-    });
-
-    // 如果没有组合词，使用前2个通用长尾关键词
-    const selectedKeywords =
-      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
-
-    // 图片位置描述
-    const positionKeywords = ['精美图片', '高清图片', '原创图片', '视觉作品', '摄影作品'];
-    const positionKeyword = positionKeywords[index % positionKeywords.length];
-
-    // 根据图片数量和位置生成描述
-    let positionDescription = '';
-    if (totalImages === 1) {
-      positionDescription = `完整${positionKeyword}展示`;
-    } else if (index === 0) {
-      positionDescription = `主图${positionKeyword}预览`;
-    } else if (index === totalImages - 1) {
-      positionDescription = `结尾${positionKeyword}分享`;
-    } else {
-      positionDescription = `精选${positionKeyword}欣赏`;
-    }
-
-    // 构建SEO友好的alt文本结构
-    const altTextComponents = [
-      title, // 核心标题
-      author, // 作者信息
-      positionDescription, // 位置和类型描述
-      ...selectedKeywords, // 标签+长尾词组合
-      `第${index + 1}张图片`,
-      `共${totalImages}张作品集`
-    ];
-
-    return altTextComponents.filter(Boolean).join(' - ');
-  };
-
-  // 生成图片SEO描述 - 基于标签与长尾词拼接
-  const generateImageSeoDescription = (index: number, totalImages: number): string => {
-    if (!article.value?.data) return '';
-
-    const title = article.value.data.title || '';
-    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
-    const views = article.value.data.views || 0;
-    const likes = article.value.data.likes || 0;
-    const tags = article.value.data.tags?.map(tag => tag.name) || [];
-
-    // 获取长尾关键词配置
-    const appConfig = useAppConfig();
-    const longTailKeywords = appConfig.seo?.longTailKeywords || [
-      '高清图片下载',
-      '免费图片素材',
-      '摄影技巧分享',
-      '创意设计灵感',
-      '图片社交平台',
-      '唯美图片欣赏'
-    ];
-
-    // 生成标签与长尾词的组合关键词
-    const combinedKeywords: string[] = [];
-
-    // 取前2个标签进行组合
-    const mainTags = tags.slice(0, 2);
-    mainTags.forEach(tag => {
-      const relatedLongTailKeywords = longTailKeywords
-        .filter(keyword => {
-          const keywordLower = keyword.toLowerCase();
-          return (
-            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
-            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
-            keywordLower.includes(tag.substring(0, 2))
-          );
-        })
-        .slice(0, 1); // 描述中每个标签只用1个组合词
-
-      relatedLongTailKeywords.forEach(longTail => {
-        const coreKeyword = longTail
-          .split('')
-          .filter(char => /[\u4e00-\u9fa5]/.test(char))
-          .join('')
-          .substring(0, 4);
-
-        if (coreKeyword) {
-          combinedKeywords.push(`${tag}${coreKeyword}`);
-        }
-      });
-    });
-
-    // 如果没有组合词，选择原始长尾关键词
-    const selectedKeywords =
-      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
-
-    // 图片质量描述词汇
-    const qualityTerms = ['高清', '原创', '精美', '优质', '独家'];
-    const qualityTerm = qualityTerms[index % qualityTerms.length];
-
-    // 位置描述
-    const positionTerms = ['精选', '特色', '推荐', '热门', '新锐'];
-    const positionTerm = positionTerms[index % positionTerms.length];
-
-    return `${title} - ${author}创作的${qualityTerm}图片作品，第${index + 1}张${positionTerm}内容，共${totalImages}张高质量图片集合。获得${likes}次点赞，${views}次浏览，包含${selectedKeywords.join('、')}等优质视觉艺术内容分享。`;
-  };
   const getDownloadTypeIcon = (type: string) => {
     const iconMap: Record<string, string> = {
       baidu: 'mynaui:cloud',
