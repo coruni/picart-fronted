@@ -850,8 +850,12 @@
         })
         .slice(0, 2); // 每个标签最多2个长尾词
 
+      // 若没有匹配到，使用前2个长尾词作为兜底
+      const candidates =
+        relatedLongTailKeywords.length > 0 ? relatedLongTailKeywords : longTailKeywords.slice(0, 2);
+
       // 生成组合词（如：刀剑神域cosplay, 刀剑神域高清图片）
-      relatedLongTailKeywords.forEach(longTail => {
+      candidates.forEach(longTail => {
         // 提取长尾词的核心部分
         const coreKeyword = longTail
           .split('')
