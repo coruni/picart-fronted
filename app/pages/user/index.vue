@@ -462,14 +462,20 @@
   import type { FormError } from '@nuxt/ui';
 
   import { z } from 'zod';
-  import { useUserStore } from '~/stores/user';
   import { confirmLogout } from '~/utils/logout';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   const toast = useToast();
 
   const { t } = useI18n();
-  const userStore = useUserStore();
-  const userInfo = computed(() => userStore.currentUser);
+
+  // 使用SSR获取用户信息
+  const { data: userProfile, refresh: refreshUserProfile } = await userControllerGetProfile({
+    composable: 'useAsyncData',
+    key: 'user_profile'
+  });
+
+  // 使用computed获取用户信息
+  const userInfo = computed(() => userProfile.value?.data || null);
 
   // 消息相关数据
   const { unreadCount } = useMessage();
@@ -556,7 +562,7 @@
         }
       });
 
-      const newData = response.data.value?.data || [];
+      const newData = response.data.value?.data.data || [];
 
       if (pagination.value.page === 1) {
         allArticles.value = newData;
@@ -571,7 +577,6 @@
       if (hasMore.value) {
         pagination.value.page++;
       }
-    } catch (error) {
     } finally {
       loading.value = false;
     }
@@ -615,7 +620,7 @@
 
   // 监听用户认证状态变化
   watch(
-    () => userStore.isAuthenticated,
+    () => !!userInfo.value,
     async isAuthenticated => {
       if (isAuthenticated && displayArticles.value.length === 0) {
         await loadArticlesWhenReady();
@@ -654,7 +659,7 @@
   };
 
   // 表单验证函数
-  const validateForm = (state: any): FormError[] => {
+  const validateForm = (state): FormError[] => {
     const errors = [];
     if (!state.username) errors.push({ name: 'username', message: '用户名不能为空' });
     if (!state.nickname) errors.push({ name: 'nickname', message: '昵称不能为空' });
@@ -732,49 +737,19 @@
       await userControllerUpdate({
         composable: '$fetch',
         path: {
-          id: userInfo.value?.id?.toString()!
+          id: String(userInfo.value?.id)
         },
         body: editForm.value
       });
-
-      // 更新本地用户信息
-      if (userInfo.value) {
-        userStore.setUserInfo({
-          ...userInfo.value,
-          ...editForm.value
-        });
-      }
 
       // 关闭模态框
       isEditModalOpen.value = false;
 
       // 刷新用户资料
-      userRefresh();
-    } catch (error) {
+      await refreshUserProfile();
     } finally {
       isSaving.value = false;
     }
-  };
-  // 刷新用户资料的方法
-  const userRefresh = async () => {
-    try {
-      const response = await userControllerGetProfile({
-        composable: 'useAsyncData'
-      });
-      if (response.data && response.data.value) {
-        userStore.setUserInfo(response.data.value.data);
-      }
-    } catch (error) {
-      console.error('Failed to refresh user profile:', error);
-    }
-  };
-
-  const siteConfig = inject<SiteConfig>('siteConfig');
-
-  // 格式化日期
-  const formatDate = (dateString: string | null | undefined) => {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('zh-CN');
   };
 
   // 处理充值
@@ -783,11 +758,11 @@
   };
 
   // 支付成功回调
-  const onPaymentSuccess = (orderId: number) => {
+  const onPaymentSuccess = async (orderId: number) => {
     showPaymentModal.value = false;
 
     // 刷新用户资料
-    userRefresh();
+    await refreshUserProfile();
   };
 
   // 支付失败回调
@@ -819,8 +794,6 @@
         newPassword: '',
         confirmPassword: ''
       };
-    } catch (error: any) {
-      console.error('修改密码失败:', error);
     } finally {
       changingPassword.value = false;
     }

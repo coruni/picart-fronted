@@ -1573,8 +1573,13 @@ export type ConfigControllerGetPublicResponses = {
       membership_price_6m: number;
       membership_price_12m: number;
       membership_price_lifetime: number;
-      site_layout: 'grid' | 'waterfall';
+      site_layout: string;
       article_free_images_count: number;
+      site_mail: string;
+      seo_long_tail_keywords: string;
+      seo_home_keywords: string;
+      seo_author_page_keywords: string;
+      seo_article_page_keywords: string;
     };
   };
 };

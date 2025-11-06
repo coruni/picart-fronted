@@ -108,22 +108,12 @@
   const loading = ref(false);
 
   // 获取 Cookie 同意状态
-  const { hasConsented } = useCookieConsent();
+  const { hasConsented, acceptAll } = useCookieConsent();
 
   const handleLogin = async () => {
-    // 检查 Cookie 同意状态
+    // 检查 Cookie 同意状态，如果未同意则自动同意（登录即表示同意隐私政策）
     if (!hasConsented.value) {
-      toast.add({
-        title: t('login.cookieConsentRequired'),
-        description: t('login.cookieConsentDescription'),
-        color: 'warning'
-      });
-      // 滚动到页面底部（Cookie Banner 的位置）
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
-      return;
+      await acceptAll();
     }
 
     try {

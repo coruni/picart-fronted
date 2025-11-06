@@ -331,22 +331,22 @@
                   <!-- 实际图片 -->
                   <NuxtImg
                     :src="img"
-                    :alt="`${article?.data.title} - 图片 ${index + 1}`"
+                    :alt="generateImageAltText(index, article?.data?.images?.length || 0)"
+                    :title="generateImageSeoDescription(index, article?.data?.images?.length || 0)"
+                    :data-index="index"
                     class="w-full h-full object-cover transition-all duration-500"
                     :class="{
                       'opacity-0': !imageLoaded[index] || imageErrors[index],
                       'opacity-100': imageLoaded[index] && !imageErrors[index]
                     }"
-                    :loading="index === 0 ? 'eager' : 'lazy'"
+                    :loading="getImageLoadingStrategy(index)"
                     :priority="index === 0"
-                    :preload="index === 0"
-                    :fetchpriority="index === 0 ? 'high' : 'auto'"
+                    :preload="shouldPreloadImage(index)"
+                    :fetchpriority="getFetchPriority(index)"
                     format="webp"
-                    quality="95"
-                    width="1920"
-                    height="1080"
+                    :quality="getImageQuality(index)"
                     fit="cover"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px"
+                    :sizes="getImageSizes(index)"
                     @load="onImageLoad(index)"
                     @error="onImageError(index)"
                   />
@@ -811,19 +811,185 @@
     }
   });
 
+  // 生成SEO关键词 - 基于标签与长尾词拼接组合
+  const generateSeoKeywords = () => {
+    if (!article.value?.data) return '';
+
+    const appConfig = useAppConfig();
+    const articleKeywords =
+      appConfig.seo?.articlePageKeywords || '摄影教程,设计文章,创作心得,图片故事,技巧分享';
+    const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+
+    // 文章标签数组
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+
+    // 文章标题关键词
+    const titleKeywords = article.value.data.title || '';
+
+    // 生成标签与长尾词的组合关键词
+    const combinedKeywords: string[] = [];
+
+    // 取前2-3个标签与长尾关键词组合
+    const mainTags = tags.slice(0, 3);
+    mainTags.forEach(tag => {
+      // 为每个标签找到最相关的长尾关键词
+      const relatedLongTailKeywords = longTailKeywords
+        .filter(keyword => {
+          const keywordLower = keyword.toLowerCase();
+          return (
+            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            titleKeywords.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            keywordLower.includes(tag.substring(0, 2))
+          );
+        })
+        .slice(0, 2); // 每个标签最多2个长尾词
+
+      // 生成组合词（如：刀剑神域cosplay, 刀剑神域高清图片）
+      relatedLongTailKeywords.forEach(longTail => {
+        // 提取长尾词的核心部分
+        const coreKeyword = longTail
+          .split('')
+          .filter(
+            char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
+          )
+          .join('')
+          .substring(0, 4); // 最多4个字
+
+        if (coreKeyword) {
+          combinedKeywords.push(`${tag}${coreKeyword}`);
+        }
+      });
+    });
+
+    // 选择原始长尾关键词（限制数量）
+    const selectedOriginalLongTailKeywords = longTailKeywords
+      .filter(keyword => {
+        const keywordLower = keyword.toLowerCase();
+        return (
+          titleKeywords.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+          tags.some(tag => tag.toLowerCase().includes(keywordLower.substring(0, 2)))
+        );
+      })
+      .slice(0, 2);
+
+    // 组合所有关键词，控制总数在搜索引擎限制内
+    const allKeywords = [
+      ...tags, // 原始标签
+      ...combinedKeywords, // 标签+长尾词组合
+      articleKeywords, // 文章页通用关键词
+      ...selectedOriginalLongTailKeywords, // 原始长尾关键词
+      article.value.data.images && article.value.data.images.length > 0 ? '高清图片' : '',
+      '原创作品'
+    ].filter(Boolean);
+
+    // 去重并限制关键词数量（Google建议10-15个，Bing类似）
+    const uniqueKeywords = [...new Set(allKeywords)];
+    // 优先保留最重要的关键词
+    const prioritizedKeywords = uniqueKeywords
+      .sort((a, b) => {
+        // 标签和组合词优先级最高
+        const aIsTagOrCombined = tags.includes(a) || combinedKeywords.includes(a);
+        const bIsTagOrCombined = tags.includes(b) || combinedKeywords.includes(b);
+        if (aIsTagOrCombined && !bIsTagOrCombined) return -1;
+        if (!aIsTagOrCombined && bIsTagOrCombined) return 1;
+        return 0;
+      })
+      .slice(0, 14); // 控制在14个以内
+
+    return prioritizedKeywords.join(',');
+  };
+
   // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
   useSeoMeta({
-    title: () => article.value?.data?.title || '',
-    description: () => article.value?.data?.summary || article.value?.data?.title || '',
+    title: () => {
+      const title = article.value?.data?.title || '';
+      const author =
+        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
+      return title ? `${title} - ${author}的作品` : title;
+    },
+    description: () => {
+      if (!article.value?.data) return '';
+
+      const appConfig = useAppConfig();
+      const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+      const author =
+        article.value.data.author?.nickname || article.value.data.author?.username || '';
+      const imageCount = article.value.data.images?.length || 0;
+      const likes = article.value.data.likes || 0;
+      const views = article.value.data.views || 0;
+
+      // 选择相关长尾关键词用于描述
+      const selectedKeywords = longTailKeywords.slice(0, 2);
+
+      return `${article.value.data.title} - ${author}原创作品，包含${imageCount}张高清图片。获得${likes}次点赞，${views}次浏览。${selectedKeywords.join('、')}等优质内容分享平台。`;
+    },
     author: () =>
       article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
-    keywords: () => article.value?.data?.tags?.map(tag => tag.name).join(',') || '',
+    keywords: generateSeoKeywords,
     robots: 'index, follow',
-    ogTitle: () => article.value?.data?.title || '',
+    ogTitle: () => {
+      const title = article.value?.data?.title || '';
+      const author =
+        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
+      return `${title} - ${author}原创作品`;
+    },
     ogDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
     ogImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || undefined,
-    ogType: 'article'
+    ogImageWidth: () => 1200,
+    ogImageHeight: () => 630,
+    ogImageAlt: () => {
+      const title = article.value?.data?.title || '';
+      const author =
+        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
+      const appConfig = useAppConfig();
+      const longTailKeywords = appConfig.seo?.longTailKeywords || [];
+      const selectedKeywords = longTailKeywords.slice(0, 1);
+      return `${title} - ${author}的${selectedKeywords[0]}原创作品，高清图片集`;
+    },
+    ogType: 'article',
+    twitterCard: 'summary_large_image',
+    twitterTitle: () => {
+      const title = article.value?.data?.title || '';
+      const author =
+        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
+      return `${title} - ${author}原创作品`;
+    },
+    twitterDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
+    twitterImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || undefined,
+    twitterImageAlt: () => {
+      const title = article.value?.data?.title || '';
+      const author =
+        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
+      return `${title} - ${author}的原创作品，高清图片集`;
+    }
   });
+
+  // 生成图片结构化数据
+  const generateImageStructuredData = () => {
+    if (!article.value?.data) return null;
+
+    const images = article.value.data.images || [];
+    const authorName =
+      article.value.data.author?.nickname || article.value.data.author?.username || '';
+
+    // 为每个图片创建ImageObject
+    const imageObjects = images.map((image, index) => ({
+      '@type': 'ImageObject',
+      url: image,
+      name: generateImageAltText(index, images.length),
+      description: generateImageSeoDescription(index, images.length),
+      author: {
+        '@type': 'Person',
+        name: authorName
+      },
+      uploadDate: article.value?.data?.createdAt || '',
+      thumbnailUrl: image,
+      representativeOfPage: index === 0,
+      caption: generateImageAltText(index, images.length)
+    }));
+
+    return imageObjects;
+  };
 
   // 结构化数据 (JSON-LD) - 提升 SEO
   useHead({
@@ -835,9 +1001,7 @@
           '@type': 'Article',
           headline: article.value?.data?.title || '',
           description: article.value?.data?.summary || article.value?.data?.title || '',
-          image: article.value?.data?.cover
-            ? [article.value.data.cover]
-            : article.value?.data?.images || [],
+          image: generateImageStructuredData(),
           datePublished: article.value?.data?.createdAt || '',
           dateModified: article.value?.data?.updatedAt || article.value?.data?.createdAt || '',
           author: {
@@ -859,6 +1023,37 @@
             '@id': `${route.fullPath}`
           },
           keywords: article.value?.data?.tags?.map(tag => tag.name).join(',') || ''
+        })
+      },
+      // 添加图片集合的结构化数据
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'ImageGallery',
+          name: article.value?.data?.title || '图片集合',
+          description: article.value?.data?.summary || article.value?.data?.title || '',
+          image: generateImageStructuredData(),
+          author: {
+            '@type': 'Person',
+            name:
+              article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
+            url: `/author/${article.value?.data?.author?.id}`
+          },
+          dateCreated: article.value?.data?.createdAt || '',
+          dateModified: article.value?.data?.updatedAt || article.value?.data?.createdAt || '',
+          inLanguage: 'zh-CN',
+          isAccessibleForFree: !article.value?.data?.requirePayment,
+          keywords: [
+            article.value?.data?.tags?.map(tag => tag.name).join(',') || '',
+            '高清图片',
+            '原创设计',
+            '艺术作品',
+            '视觉创意',
+            '图片素材'
+          ]
+            .filter(Boolean)
+            .join(',')
         })
       }
     ]
@@ -1092,11 +1287,7 @@
 
   // 评论相关状态
   const isCommentSubmitting = ref(false);
-  const comments = ref<
-    (CommentControllerFindAllResponse['data']['data'][0] & {
-      isLiked: boolean;
-    })[]
-  >([]);
+  const comments = ref<CommentControllerFindAllResponse['data']['data'][number][]>([]);
   const commentsPage = ref(1);
   const hasMoreComments = ref(true);
   const isLoadingComments = ref(false);
@@ -1193,8 +1384,7 @@
 
       // 刷新文章数据以更新关注状态
       await refreshArticle();
-    } catch (error: any) {
-      console.error('关注操作失败:', error);
+    } catch (error) {
       // 显示错误提示
       toast.add({
         title: error?.data?.message || t('article.followError'),
@@ -1252,10 +1442,11 @@
       });
 
       // 正确处理响应数据
-      const responseData = response as any;
-      if (responseData?.data?.data) {
-        comments.value = [...comments.value, ...responseData.data.data];
-        hasMoreComments.value = responseData.data.meta.page < responseData.data.meta.totalPages;
+      const responseData = response;
+      if (responseData?.data?.value?.data) {
+        comments.value = [...comments.value, ...responseData.data.value.data.data];
+        hasMoreComments.value =
+          responseData.data.value.data.meta.page < responseData.data.value.data.meta.totalPages;
         commentsPage.value = nextPage;
       }
     } catch (error) {
@@ -1298,7 +1489,163 @@
     }
   };
 
-  // 获取下载类型图标
+  // 生成SEO优化的图片alt文本 - 基于标签与长尾词拼接
+  const generateImageAltText = (index: number, totalImages: number): string => {
+    if (!article.value?.data) return '';
+
+    const title = article.value.data.title || '';
+    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+
+    // 从app.config中获取长尾关键词配置
+    const appConfig = useAppConfig();
+    const longTailKeywords = appConfig.seo?.longTailKeywords || [
+      '高清图片下载',
+      '免费图片素材',
+      '摄影技巧分享',
+      '创意设计灵感',
+      '图片社交平台',
+      '唯美图片欣赏'
+    ];
+
+    // 为每个标签拼接相关的长尾关键词，创建组合词
+    const combinedKeywords: string[] = [];
+
+    // 取前2个标签进行拼接
+    const mainTags = tags.slice(0, 2);
+    mainTags.forEach(tag => {
+      // 为每个标签找到1-2个最相关的长尾关键词
+      const relatedLongTailKeywords = longTailKeywords
+        .filter(keyword => {
+          const keywordLower = keyword.toLowerCase();
+          // 检查关键词是否与标签相关（前2个字符匹配）
+          return (
+            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            // 检查关键词是否与标题相关
+            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            // 检查标签是否与关键词相关
+            keywordLower.includes(tag.substring(0, 2))
+          );
+        })
+        .slice(0, 2);
+
+      // 生成组合关键词
+      if (relatedLongTailKeywords.length > 0) {
+        relatedLongTailKeywords.forEach(longTail => {
+          // 提取长尾词的核心部分进行拼接
+          const coreKeyword = longTail
+            .split('')
+            .filter(
+              char => /[\u4e00-\u9fa5]/.test(char) // 只保留中文字符
+            )
+            .join('')
+            .substring(0, 4); // 最多4个字
+
+          if (coreKeyword) {
+            combinedKeywords.push(`${tag}${coreKeyword}`);
+          }
+        });
+      }
+    });
+
+    // 如果没有组合词，使用前2个通用长尾关键词
+    const selectedKeywords =
+      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
+
+    // 图片位置描述
+    const positionKeywords = ['精美图片', '高清图片', '原创图片', '视觉作品', '摄影作品'];
+    const positionKeyword = positionKeywords[index % positionKeywords.length];
+
+    // 根据图片数量和位置生成描述
+    let positionDescription = '';
+    if (totalImages === 1) {
+      positionDescription = `完整${positionKeyword}展示`;
+    } else if (index === 0) {
+      positionDescription = `主图${positionKeyword}预览`;
+    } else if (index === totalImages - 1) {
+      positionDescription = `结尾${positionKeyword}分享`;
+    } else {
+      positionDescription = `精选${positionKeyword}欣赏`;
+    }
+
+    // 构建SEO友好的alt文本结构
+    const altTextComponents = [
+      title, // 核心标题
+      author, // 作者信息
+      positionDescription, // 位置和类型描述
+      ...selectedKeywords, // 标签+长尾词组合
+      `第${index + 1}张图片`,
+      `共${totalImages}张作品集`
+    ];
+
+    return altTextComponents.filter(Boolean).join(' - ');
+  };
+
+  // 生成图片SEO描述 - 基于标签与长尾词拼接
+  const generateImageSeoDescription = (index: number, totalImages: number): string => {
+    if (!article.value?.data) return '';
+
+    const title = article.value.data.title || '';
+    const author = article.value.data.author?.nickname || article.value.data.author?.username || '';
+    const views = article.value.data.views || 0;
+    const likes = article.value.data.likes || 0;
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+
+    // 获取长尾关键词配置
+    const appConfig = useAppConfig();
+    const longTailKeywords = appConfig.seo?.longTailKeywords || [
+      '高清图片下载',
+      '免费图片素材',
+      '摄影技巧分享',
+      '创意设计灵感',
+      '图片社交平台',
+      '唯美图片欣赏'
+    ];
+
+    // 生成标签与长尾词的组合关键词
+    const combinedKeywords: string[] = [];
+
+    // 取前2个标签进行组合
+    const mainTags = tags.slice(0, 2);
+    mainTags.forEach(tag => {
+      const relatedLongTailKeywords = longTailKeywords
+        .filter(keyword => {
+          const keywordLower = keyword.toLowerCase();
+          return (
+            tag.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            title.toLowerCase().includes(keywordLower.substring(0, 2)) ||
+            keywordLower.includes(tag.substring(0, 2))
+          );
+        })
+        .slice(0, 1); // 描述中每个标签只用1个组合词
+
+      relatedLongTailKeywords.forEach(longTail => {
+        const coreKeyword = longTail
+          .split('')
+          .filter(char => /[\u4e00-\u9fa5]/.test(char))
+          .join('')
+          .substring(0, 4);
+
+        if (coreKeyword) {
+          combinedKeywords.push(`${tag}${coreKeyword}`);
+        }
+      });
+    });
+
+    // 如果没有组合词，选择原始长尾关键词
+    const selectedKeywords =
+      combinedKeywords.length > 0 ? combinedKeywords : longTailKeywords.slice(0, 2);
+
+    // 图片质量描述词汇
+    const qualityTerms = ['高清', '原创', '精美', '优质', '独家'];
+    const qualityTerm = qualityTerms[index % qualityTerms.length];
+
+    // 位置描述
+    const positionTerms = ['精选', '特色', '推荐', '热门', '新锐'];
+    const positionTerm = positionTerms[index % positionTerms.length];
+
+    return `${title} - ${author}创作的${qualityTerm}图片作品，第${index + 1}张${positionTerm}内容，共${totalImages}张高质量图片集合。获得${likes}次点赞，${views}次浏览，包含${selectedKeywords.join('、')}等优质视觉艺术内容分享。`;
+  };
   const getDownloadTypeIcon = (type: string) => {
     const iconMap: Record<string, string> = {
       baidu: 'mynaui:cloud',
@@ -1456,6 +1803,45 @@
         img.src = `${originalSrc}?t=${Date.now()}`;
       }
     });
+  };
+
+  // 图片加载策略优化
+  const getImageLoadingStrategy = (index: number) => {
+    if (index === 0) return 'eager';
+    if (index < 6) return 'lazy';
+    return 'lazy';
+  };
+
+  // 图片预加载策略
+  const shouldPreloadImage = (index: number) => {
+    // 只预加载前3张图片
+    return index === 0 || index === 1 || index === 2;
+  };
+
+  // 获取优先级
+  const getFetchPriority = (index: number) => {
+    if (index === 0) return 'high';
+    if (index < 4) return 'auto';
+    return 'low';
+  };
+
+  // 动态图片质量优化
+  const getImageQuality = (index: number) => {
+    if (index === 0) return 95; // 第一张图片最高质量
+    if (index < 6) return 85; // 前6张高质量
+    if (index < 12) return 75; // 中等质量
+    return 65; // 其余图片降低质量提升性能
+  };
+
+  // 响应式图片尺寸
+  const getImageSizes = (index: number) => {
+    const baseSize = '(max-width: 640px) 100vw, (max-width: 1024px) 800px, 1200px';
+
+    if (index === 0) {
+      return '(max-width: 640px) 100vw, (max-width: 1024px) 900px, 1500px';
+    }
+
+    return baseSize;
   };
 
   const shouldShowDownloads = computed(() => {

@@ -741,6 +741,86 @@
         </div>
       </template>
 
+      <template #seo="{ item }">
+        <div class="space-y-6">
+          <UCard>
+            <template #header>
+              <h3 class="text-lg font-semibold">{{ t('admin.settings.seoConfig') }}</h3>
+              <p class="text-sm text-gray-500">{{ t('admin.settings.seoConfigDescription') }}</p>
+            </template>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormField
+                :label="t('admin.settings.longTailKeywords')"
+                name="seo_long_tail_keywords"
+                class="md:col-span-2"
+                :help-text="t('admin.settings.longTailKeywordsPlaceholder')"
+              >
+                <UTextarea
+                  v-model="config.seo_long_tail_keywords"
+                  :rows="4"
+                  class="w-full"
+                  :placeholder="t('admin.settings.longTailKeywordsExample')"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.homePageKeywords')"
+                name="seo_home_keywords"
+                class="md:col-span-2"
+                :help-text="t('admin.settings.homePageKeywordsPlaceholder')"
+              >
+                <UInput
+                  v-model="config.seo_home_keywords"
+                  class="w-full"
+                  :placeholder="t('admin.settings.homePageKeywordsExample')"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.authorPageKeywords')"
+                name="seo_author_page_keywords"
+                class="md:col-span-2"
+                :help-text="t('admin.settings.authorPageKeywordsPlaceholder')"
+              >
+                <UInput
+                  v-model="config.seo_author_page_keywords"
+                  class="w-full"
+                  :placeholder="t('admin.settings.authorPageKeywordsExample')"
+                />
+              </UFormField>
+
+              <UFormField
+                :label="t('admin.settings.articlePageKeywords')"
+                name="seo_article_page_keywords"
+                class="md:col-span-2"
+                :help-text="t('admin.settings.articlePageKeywordsPlaceholder')"
+              >
+                <UInput
+                  v-model="config.seo_article_page_keywords"
+                  class="w-full"
+                  :placeholder="t('admin.settings.articlePageKeywordsExample')"
+                />
+              </UFormField>
+            </div>
+
+            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div class="flex items-start space-x-3">
+                <Icon name="mynaui:info-circle" class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                <div class="text-sm text-blue-700 dark:text-blue-300">
+                  <p class="font-medium mb-1">{{ t('admin.settings.seoTipsTitle') }}</p>
+                  <ul class="space-y-1 list-disc list-inside">
+                    <li>{{ t('admin.settings.seoTip1') }}</li>
+                    <li>{{ t('admin.settings.seoTip2') }}</li>
+                    <li>{{ t('admin.settings.seoTip3') }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </UCard>
+        </div>
+      </template>
+
       <template #invite="{ item }">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <UFormField
@@ -838,6 +918,11 @@
       icon: 'mynaui:image'
     },
     {
+      label: t('admin.settings.tabs.seo'),
+      slot: 'seo',
+      icon: 'mynaui:search'
+    },
+    {
       label: t('admin.settings.tabs.maintenance'),
       slot: 'maintenance',
       icon: 'mynaui:wrench'
@@ -851,6 +936,12 @@
     site_subtitle: '',
     site_description: '',
     site_keywords: '',
+
+    // SEO 长尾关键词配置
+    seo_long_tail_keywords: '高清图片下载,免费图片素材,摄影技巧分享,创意设计灵感,图片社交平台,唯美图片欣赏',
+    seo_home_keywords: '图片社区,摄影作品,设计灵感,高清图片,创意分享',
+    seo_author_page_keywords: '摄影师,设计师,艺术家,创作者,作品展示',
+    seo_article_page_keywords: '摄影教程,设计文章,创作心得,图片故事,技巧分享',
     site_logo: '',
     site_favicon: '',
     user_registration_enabled: true,

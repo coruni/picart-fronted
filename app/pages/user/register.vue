@@ -243,7 +243,7 @@
   const countdown = ref(0);
 
   // 获取 Cookie 同意状态
-  const { hasConsented } = useCookieConsent();
+  const { hasConsented, acceptAll } = useCookieConsent();
 
   // 发送验证码
   const sendVerificationCode = async () => {
@@ -283,19 +283,9 @@
   };
 
   const handleRegister = async () => {
-    // 检查 Cookie 同意状态
-    if (!hasConsented.value) {
-      toast.add({
-        title: t('register.cookieConsentRequired'),
-        description: t('register.cookieConsentDescription'),
-        color: 'warning'
-      });
-      // 滚动到页面底部（Cookie Banner 的位置）
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
-      return;
+    // 用户勾选了同意条款，自动接受cookie协议
+    if (agreeTerms.value && !hasConsented.value) {
+      await acceptAll();
     }
 
     try {

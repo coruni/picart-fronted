@@ -27,10 +27,10 @@ export const useCookieConsent = () => {
     marketing: false
   });
 
-  // 检查是否已经同意过 Cookie
+  // 检查是否已经同意过 Cookie - 直接从cookie读取，避免状态不同步
   const hasConsented = ref(false);
 
-  // 初始化
+  // 在客户端挂载时检查并加载设置
   onMounted(() => {
     checkCookieConsent();
   });
@@ -45,11 +45,11 @@ export const useCookieConsent = () => {
       httpOnly: false
     });
 
-    if (!consent.value) {
-      hasConsented.value = false;
-    } else {
-      hasConsented.value = true;
-      // 加载已保存的设置
+    // 设置同意状态
+    hasConsented.value = !!consent.value;
+
+    // 如果已同意，加载已保存的设置
+    if (consent.value) {
       loadCookieSettings();
     }
   };
@@ -128,18 +128,13 @@ export const useCookieConsent = () => {
       });
       consentRecordCookie.value = consentRecord;
 
+      // 设置同意状态
       hasConsented.value = true;
 
       // 如果同意了必要 Cookie，初始化设备 ID
       if (cookieSettings.value.necessary) {
         await initializeDeviceId();
       }
-
-      // 显示成功消息
-      toast.add({
-        title: t('cookie.saved'),
-        color: 'primary'
-      });
     } catch (error) {
       console.error('Failed to save cookie settings:', error);
       toast.add({
@@ -170,6 +165,7 @@ export const useCookieConsent = () => {
     consent.value = null;
     settings.value = null;
 
+    // 设置同意状态
     hasConsented.value = false;
     cookieSettings.value = {
       necessary: true,

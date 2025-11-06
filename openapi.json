@@ -2452,14 +2452,25 @@
                           "type": "integer"
                         },
                         "site_layout": {
-                          "type": "string",
-                          "enum": [
-                            "grid",
-                            "waterfall"
-                          ]
+                          "type": "string"
                         },
                         "article_free_images_count": {
                           "type": "integer"
+                        },
+                        "site_mail": {
+                          "type": "string"
+                        },
+                        "seo_long_tail_keywords": {
+                          "type": "string"
+                        },
+                        "seo_home_keywords": {
+                          "type": "string"
+                        },
+                        "seo_author_page_keywords": {
+                          "type": "string"
+                        },
+                        "seo_article_page_keywords": {
+                          "type": "string"
                         }
                       },
                       "required": [
@@ -2503,7 +2514,12 @@
                         "membership_price_12m",
                         "membership_price_lifetime",
                         "site_layout",
-                        "article_free_images_count"
+                        "article_free_images_count",
+                        "site_mail",
+                        "seo_long_tail_keywords",
+                        "seo_home_keywords",
+                        "seo_author_page_keywords",
+                        "seo_article_page_keywords"
                       ]
                     }
                   },

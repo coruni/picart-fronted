@@ -252,9 +252,6 @@
   const showSettings = ref(false);
   const forceOpen = ref(false); // 强制打开（用于已同意用户修改设置）
 
-  // 立即检查同意状态
-  checkCookieConsent();
-
   // 自动控制弹窗显示 - 根据同意状态自动显示/隐藏
   // 这样检测工具可以立即看到 banner（无延迟）
   const isOpen = computed({
@@ -313,6 +310,6 @@
 
   defineExpose({
     show,
-    hasConsented: readonly(hasConsented)
+    hasConsented
   });
 </script>
