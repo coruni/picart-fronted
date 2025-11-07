@@ -90,8 +90,8 @@ export default defineNuxtConfig({
     ],
     sitemap: [
       `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_index.xml`,
-      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_articles.xml`,
-      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/sitemap_categories.xml`
+      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/articles.xml`,
+      `${process.env.NUXT_SITE_URL || 'https://www.example.com'}/categories.xml`
     ]
   },
 
