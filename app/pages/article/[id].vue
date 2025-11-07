@@ -854,7 +854,7 @@
       const candidates =
         relatedLongTailKeywords.length > 0 ? relatedLongTailKeywords : longTailKeywords.slice(0, 2);
 
-      // 生成组合词（如：刀剑神域cosplay, 刀剑神域高清图片）
+      // 生成组合词（如：刀剑神域 cosplay, 刀剑神域 高清图片）
       candidates.forEach(longTail => {
         // 提取长尾词的核心部分
         const coreKeyword = longTail
@@ -865,7 +865,7 @@
           .join('');
 
         if (coreKeyword) {
-          combinedKeywords.push(`${tag}${coreKeyword}`);
+          combinedKeywords.push(`${tag} ${coreKeyword}`); // 添加空格
         }
       });
     });
@@ -950,11 +950,9 @@
           const coreKeyword = longTail
             .split(' ')
             .filter(word => word.trim().length > 0) // 保留所有有意义的词汇
-            .join('')
-            .substring(0, 8); // 最多8个字符，包含中英文
-
+            .join('');
           if (coreKeyword) {
-            combinedKeywords.push(`${tag}${coreKeyword}`);
+            combinedKeywords.push(`${tag} ${coreKeyword}`); // 添加空格
           }
         });
       }
@@ -1040,7 +1038,7 @@
             .substring(0, 8); // 最多8个字符，包含中英文
 
           if (coreKeyword) {
-            combinedKeywords.push(`${tag}${coreKeyword}`);
+            combinedKeywords.push(`${tag} ${coreKeyword}`); // 添加空格
           }
         });
       }

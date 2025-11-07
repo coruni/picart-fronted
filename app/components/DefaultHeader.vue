@@ -14,9 +14,9 @@
           width="32"
           height="32"
         />
-        <span v-else class="text-xl font-bold text-gray-700 dark:text-white">{{
-          siteConfig?.site_name || 'PicArt'
-        }}</span>
+        <h1 v-else class="text-xl font-bold text-gray-700 dark:text-white">
+          {{ siteConfig?.site_name || '' }}
+        </h1>
       </NuxtLinkLocale>
 
       <!-- 桌面端导航 -->
