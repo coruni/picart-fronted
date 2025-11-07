@@ -37,6 +37,7 @@ export default defineNuxtPlugin(async nuxtApp => {
     try {
       // 直接调用API获取用户信息
       const response = await userControllerGetProfile({
+        key: `user-profile-${Date.now()}`,
         composable: 'useAsyncData'
       });
 
