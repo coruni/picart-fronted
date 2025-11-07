@@ -59,12 +59,14 @@ export const useUserStore = defineStore('user', {
       this.refreshToken = refreshToken;
     },
 
-    async getUserInfo() {
+    async getUserInfo(forceRefresh: boolean = false) {
       if (!this.isLoggedIn) return;
       try {
         // 直接调用API获取用户信息
         const response = await userControllerGetProfile({
-          composable: 'useAsyncData'
+          composable: 'useAsyncData',
+          // 如果是强制刷新，添加时间戳参数避免缓存
+          ...(forceRefresh && { key: `user-profile-${Date.now()}` })
         });
 
         // 如果成功获取用户信息，更新到store

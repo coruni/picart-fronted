@@ -1061,12 +1061,7 @@
 
   // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
   useSeoMeta({
-    title: () => {
-      const title = article.value?.data?.title || '';
-      const author =
-        article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
-      return title ? `${title} - ${author}的作品` : title;
-    },
+    title: () => article.value?.data?.title,
     description: () => {
       if (!article.value?.data) return '';
 
@@ -1320,16 +1315,22 @@
   const isMembershipValid = computed(() => {
     if (!isLoggedIn.value) return false;
 
+    // 确保使用最新的用户信息
     const userInfo = userStore.userInfo;
     if (!userInfo) return false;
 
-    // 兜底计算
+    // 优先使用服务端返回的isMember字段
+    if (userInfo.isMember) {
+      return true;
+    }
+
+    // 兜底计算：会员等级大于0且状态为活跃且未过期
     const isMember =
       userInfo.membershipLevel > 0 &&
       userInfo.membershipStatus === 'ACTIVE' &&
       (new Date(userInfo.membershipEndDate) > new Date() || userInfo.membershipEndDate === null);
 
-    return userInfo.isMember || isMember;
+    return isMember;
   });
 
   // 点赞相关状态

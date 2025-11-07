@@ -468,6 +468,9 @@
 
   const { t } = useI18n();
 
+  // 获取userStore实例
+  const userStore = useUserStore();
+
   // 使用SSR获取用户信息
   const { data: userProfile, refresh: refreshUserProfile } = await userControllerGetProfile({
     composable: 'useAsyncData',
@@ -763,6 +766,18 @@
 
     // 刷新用户资料
     await refreshUserProfile();
+    
+    // 强制更新用户信息，确保会员状态同步
+    await userStore.getUserInfo(true);
+    
+    // 触发全局刷新，确保所有组件获取最新用户状态
+    await nextTick();
+    
+    // 显示充值成功提示
+    toast.add({
+      title: '会员充值成功',
+      color: 'success'
+    });
   };
 
   // 支付失败回调
