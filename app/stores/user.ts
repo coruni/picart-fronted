@@ -64,9 +64,9 @@ export const useUserStore = defineStore('user', {
       try {
         // 直接调用API获取用户信息
         const response = await userControllerGetProfile({
-          composable: 'useAsyncData',
+          cache: 'no-cache',
+          composable: 'useAsyncData'
           // 如果是强制刷新，添加时间戳参数避免缓存
-          ...(forceRefresh && { key: `user-profile-${Date.now()}` })
         });
 
         // 如果成功获取用户信息，更新到store
