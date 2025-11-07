@@ -1,13 +1,13 @@
 export default defineEventHandler(async event => {
   try {
-    // 设置请求超时处理
+    // 统一设置请求超时处理为15秒
     const timeout = setTimeout(() => {
       if (!event.node.res.headersSent) {
         console.warn('Request timeout, closing connection');
         event.node.res.statusCode = 504;
         event.node.res.end('Gateway Timeout');
       }
-    }, 30000); // 30秒超时
+    }, 15000); // 15秒超时
 
     // 监听连接关闭
     event.node.req.on('close', () => {
@@ -32,11 +32,11 @@ export default defineEventHandler(async event => {
 
     // 设置响应头
     setHeader(event, 'Connection', 'keep-alive');
-    setHeader(event, 'Keep-Alive', 'timeout=8, max=30');
+    setHeader(event, 'Keep-Alive', 'timeout=15, max=30');
     setHeader(event, 'X-Request-ID', Date.now().toString());
 
-    // 设置请求超时
-    event.node.req.setTimeout(8000, () => {
+    // 统一设置请求超时为15秒，避免冲突
+    event.node.req.setTimeout(15000, () => {
       if (!event.node.res.headersSent) {
         event.node.res.statusCode = 408;
         event.node.res.end('Request Timeout');
