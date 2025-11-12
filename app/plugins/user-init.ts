@@ -37,7 +37,9 @@ export default defineNuxtPlugin(async nuxtApp => {
     try {
       // 直接调用API获取用户信息
       const response = await userControllerGetProfile({
-        composable: 'useAsyncData'
+        key: `user-profile-${Date.now()}`,
+        composable: 'useAsyncData',
+        cache: 'no-cache'
       });
 
       // 如果成功获取用户信息，更新到store
