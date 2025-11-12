@@ -912,8 +912,8 @@
     // 优先使用summary 否则就content 但是去掉html标签和特殊html符号
     description: () =>
       (article.value?.data?.summary ||
-        article.value?.data.content
-          .slice(0, 150)
+        article.value?.data?.content
+          ?.slice(0, 150)
           .replace(/[\\n\\r]/g, '')
           .replace(/<[^>]+>/g, '')) ??
       '',

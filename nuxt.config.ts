@@ -446,26 +446,6 @@ export default defineNuxtConfig({
           }
           // 显示其他警告
           warn(warning);
-        },
-        output: {
-          manualChunks: id => {
-            // 工具库
-            if (id.includes('node_modules/lodash-es') || id.includes('node_modules/zod')) {
-              return 'utils-vendor';
-            }
-            // 编辑器相关
-            if (id.includes('node_modules/@tinymce') || id.includes('node_modules/tinymce')) {
-              return 'editor-vendor';
-            }
-            // 表格组件
-            if (id.includes('node_modules/@tanstack/vue-table')) {
-              return 'table-vendor';
-            }
-            // 瀑布流组件
-            if (id.includes('node_modules/vue-waterfall-plugin-next')) {
-              return 'waterfall-vendor';
-            }
-          }
         }
       }
     }
