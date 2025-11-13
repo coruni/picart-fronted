@@ -914,7 +914,12 @@
       if (article.value?.data?.summary) {
         return article.value.data.summary;
       }
-
+      if (!article.value?.data?.content?.startsWith('article.')) {
+        return article.value?.data?.content
+          ?.slice(0, 150)
+          .replace(/[\\n\\r]/g, '')
+          .replace(/<[^>]+>/g, '');
+      }
       return article.value?.data?.title || '';
     },
     author: () =>
