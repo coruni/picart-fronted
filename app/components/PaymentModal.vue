@@ -297,7 +297,8 @@
     // Safari检测逻辑：排除Chrome、Firefox、Edge，并且包含safari
     const safariTest = /safari/.test(userAgent) && !isChrome && !isFirefox && !isEdge;
 
-    return safariTest || (
+    return (
+      safariTest ||
       /constructor/i.test(window.HTMLElement) ||
       (function (p) {
         return p.toString() === '[object SafariRemoteNotification]';
@@ -307,49 +308,40 @@
 
   // 兼容Safari的支付页面打开方法
   const openPaymentUrlSafely = (paymentUrl: string) => {
-    // 创建一个临时链接元素
-    const link = document.createElement('a');
-    link.href = paymentUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-
-    // 添加必要的属性以提高兼容性
-    link.style.display = 'none';
-    document.body.appendChild(link);
-
     try {
       if (isSafari()) {
-        // 对于Safari，使用更兼容的方法
-        const event = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-          ctrlKey: false,
-          shiftKey: false,
-          altKey: false,
-          metaKey: false
-        });
-
-        // 设置一个短暂延迟以确保用户手势仍然有效
-        setTimeout(() => {
-          link.dispatchEvent(event);
-          // 清理DOM
-          document.body.removeChild(link);
-        }, 50);
-      } else {
-        // 其他浏览器可以使用window.open
-        const newWindow = window.open(paymentUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
-        if (!newWindow) {
-          throw new Error('弹窗被阻止');
+        // 对于Safari，使用先打开空白标签页再导航的方法
+        const newWindow = window.open('', '_blank', 'noopener,noreferrer');
+        if (newWindow) {
+          // 成功打开空白标签页，然后导航到支付URL
+          newWindow.location.href = paymentUrl;
+          // 聚焦
+          newWindow.focus();
+        } else {
+          // 如果连空白标签页都无法打开，尝试点击事件方法
+          const event = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+            ctrlKey: false,
+            shiftKey: false,
+            altKey: false,
+            metaKey: false
+          });
         }
-        document.body.removeChild(link);
+      } else {
+        // 其他浏览器可以直接使用window.open
+        window.open(paymentUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
       }
     } catch (error) {
-      // 清理DOM
-      if (document.body.contains(link)) {
-        document.body.removeChild(link);
-      }
-      throw error;
+      // 创建一个临时链接元素作为备选方案
+      const link = document.createElement('a');
+      link.href = paymentUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
     }
   };
 
@@ -422,30 +414,9 @@
             // 使用兼容Safari的方法打开支付链接
             try {
               openPaymentUrlSafely(paymentResult.paymentUrl);
-              toast.add({
-                title: t('payment.redirectToPayment'),
-                color: 'info'
-              });
             } catch (error) {
               // 如果弹窗被阻止，提供备选方案
               console.warn('弹窗被阻止，尝试直接导航');
-              toast.add({
-                title: t('payment.popupBlocked'),
-                description: t('payment.popupBlockedDesc'),
-                color: 'warning',
-                timeout: 5000
-              });
-
-              // 将支付链接存储到剪贴板或临时变量
-              if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(paymentResult.paymentUrl);
-                toast.add({
-                  title: t('payment.linkCopied'),
-                  description: t('payment.linkCopiedDesc'),
-                  color: 'success'
-                });
-              }
-
               // 提供手动打开的备选方案
               setTimeout(() => {
                 if (confirm(t('payment.openManuallyConfirm'))) {
