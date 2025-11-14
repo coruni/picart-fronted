@@ -402,7 +402,12 @@
       "createOrderFailed": "Create order failed",
       "articlePaymentSuccess": "Payment successful, you can now view the article content",
       "networkError": "Network error",
-      "unknownError": "Unknown error"
+      "unknownError": "Unknown error",
+      "popupBlocked": "Popup blocked",
+      "popupBlockedDesc": "The browser blocked the payment window from opening. Please check your browser settings or click the link below",
+      "linkCopied": "Link copied",
+      "linkCopiedDesc": "The payment link has been copied to your clipboard. You can open it manually",
+      "openManuallyConfirm": "Would you like to navigate to the payment page directly?"
     },
     "adPositionTop": {
       "adPositionBottom": "Bottom",

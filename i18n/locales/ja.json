@@ -400,7 +400,12 @@
       "createOrderFailed": "注文作成に失敗しました",
       "articlePaymentSuccess": "支払いが成功しました。記事の内容を確認できます",
       "networkError": "ネットワークエラー",
-      "unknownError": "不明なエラー"
+      "unknownError": "不明なエラー",
+      "popupBlocked": "ポップアップがブロックされました",
+      "popupBlockedDesc": "ブラウザが支払いウィンドウの開くことをブロックしました。ブラウザ設定を確認するか、下のリンクをクリックしてください",
+      "linkCopied": "リンクがコピーされました",
+      "linkCopiedDesc": "支払いリンクがクリップボードにコピーされました。手動で開くことができます",
+      "openManuallyConfirm": "支払いページに直接移動しますか？"
     },
     "adPositionTop": {
       "adPositionBottom": "下部",

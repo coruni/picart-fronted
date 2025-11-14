@@ -287,6 +287,72 @@
     selectedEpayType.value = null;
   };
 
+  // 检测是否在Safari浏览器中
+  const isSafari = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isChrome = /chrome/.test(userAgent) && /google inc/.test(navigator.vendor.toLowerCase());
+    const isFirefox = /firefox/.test(userAgent);
+    const isEdge = /edg/.test(userAgent);
+
+    // Safari检测逻辑：排除Chrome、Firefox、Edge，并且包含safari
+    const safariTest = /safari/.test(userAgent) && !isChrome && !isFirefox && !isEdge;
+
+    return safariTest || (
+      /constructor/i.test(window.HTMLElement) ||
+      (function (p) {
+        return p.toString() === '[object SafariRemoteNotification]';
+      })(!window['safari'] || (typeof safari !== 'undefined' && window.safari?.pushNotification))
+    );
+  };
+
+  // 兼容Safari的支付页面打开方法
+  const openPaymentUrlSafely = (paymentUrl: string) => {
+    // 创建一个临时链接元素
+    const link = document.createElement('a');
+    link.href = paymentUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+
+    // 添加必要的属性以提高兼容性
+    link.style.display = 'none';
+    document.body.appendChild(link);
+
+    try {
+      if (isSafari()) {
+        // 对于Safari，使用更兼容的方法
+        const event = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+          ctrlKey: false,
+          shiftKey: false,
+          altKey: false,
+          metaKey: false
+        });
+
+        // 设置一个短暂延迟以确保用户手势仍然有效
+        setTimeout(() => {
+          link.dispatchEvent(event);
+          // 清理DOM
+          document.body.removeChild(link);
+        }, 50);
+      } else {
+        // 其他浏览器可以使用window.open
+        const newWindow = window.open(paymentUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
+        if (!newWindow) {
+          throw new Error('弹窗被阻止');
+        }
+        document.body.removeChild(link);
+      }
+    } catch (error) {
+      // 清理DOM
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+      throw error;
+    }
+  };
+
   // 处理支付
   const handlePayment = async () => {
     if (!props.orderInfo || !selectedPaymentMethod.value) {
@@ -353,11 +419,40 @@
         } else {
           // 第三方支付，跳转到支付页面
           if (paymentResult.paymentUrl) {
-            window.open(paymentResult.paymentUrl, '_blank');
-            toast.add({
-              title: t('payment.redirectToPayment'),
-              color: 'info'
-            });
+            // 使用兼容Safari的方法打开支付链接
+            try {
+              openPaymentUrlSafely(paymentResult.paymentUrl);
+              toast.add({
+                title: t('payment.redirectToPayment'),
+                color: 'info'
+              });
+            } catch (error) {
+              // 如果弹窗被阻止，提供备选方案
+              console.warn('弹窗被阻止，尝试直接导航');
+              toast.add({
+                title: t('payment.popupBlocked'),
+                description: t('payment.popupBlockedDesc'),
+                color: 'warning',
+                timeout: 5000
+              });
+
+              // 将支付链接存储到剪贴板或临时变量
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(paymentResult.paymentUrl);
+                toast.add({
+                  title: t('payment.linkCopied'),
+                  description: t('payment.linkCopiedDesc'),
+                  color: 'success'
+                });
+              }
+
+              // 提供手动打开的备选方案
+              setTimeout(() => {
+                if (confirm(t('payment.openManuallyConfirm'))) {
+                  window.location.href = paymentResult.paymentUrl;
+                }
+              }, 1000);
+            }
           }
         }
       }
