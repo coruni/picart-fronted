@@ -914,9 +914,9 @@
       if (article.value?.data?.summary) {
         return article.value.data.summary;
       }
-      if (article.value?.data?.content) {
-        return article.value.data.content
-          .slice(0, 150)
+      if (!article.value?.data?.content?.startsWith('aticle.') && article.value?.data?.content) {
+        return article.value?.data?.content
+          ?.slice(0, 150)
           .replace(/[\\n\\r]/g, '')
           .replace(/<[^>]+>/g, '');
       }
