@@ -910,18 +910,7 @@
   useSeoMeta({
     title: () => article.value?.data?.title,
     // 优先使用summary 否则就content 但是去掉html标签和特殊html符号
-    description: () => {
-      if (article.value?.data?.summary) {
-        return article.value.data.summary;
-      }
-      if (!article.value?.data?.content?.startsWith('aticle.') && article.value?.data?.content) {
-        return article.value?.data?.content
-          ?.slice(0, 150)
-          .replace(/[\\n\\r]/g, '')
-          .replace(/<[^>]+>/g, '');
-      }
-      return article.value?.data?.title || '';
-    },
+    description: () => article.value?.data?.summary || article.value?.data?.title || '',
     author: () =>
       article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
     keywords: generateSeoKeywords,
