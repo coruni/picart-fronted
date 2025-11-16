@@ -9,7 +9,7 @@
     </div>
 
     <!-- 隐藏的文件输入 -->
-    <input ref="fileInput" type="file" :accept="accept" class="hidden" @change="handleFileSelect" >
+    <input ref="fileInput" type="file" :accept="accept" class="hidden" @change="handleFileSelect" />
 
     <!-- 图片预览区域 -->
     <div v-if="modelValue && modelValue.trim()" class="space-y-3">
@@ -180,7 +180,7 @@
           />
           <p class="text-sm text-gray-600 dark:text-gray-300">{{ t('image.uploading') }}</p>
           <div class="w-24 h-1 bg-gray-200 rounded-full mt-2 overflow-hidden">
-            <div class="h-full bg-primary rounded-full animate-pulse"/>
+            <div class="h-full bg-primary rounded-full animate-pulse" />
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@
 
     <!-- 错误提示 -->
     <div v-if="error" class="text-red-500 text-sm flex items-center">
-      <UIcon name="mynaui:warning" class="w-4 h-4 mr-1" />
+      <UIcon name="mynaui:danger-triangle" class="w-4 h-4 mr-1" />
       {{ error }}
     </div>
 

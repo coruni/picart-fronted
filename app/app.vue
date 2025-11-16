@@ -2,7 +2,7 @@
   <UApp>
     <NuxtLoadingIndicator color="#615fff" />
     <NuxtLayout class="min-h-screen flex flex-col">
-      <NuxtPage keepalive />
+      <NuxtPage />
     </NuxtLayout>
   </UApp>
 </template>

@@ -5,7 +5,7 @@
       <!-- 左侧主内容区骨架屏 -->
       <div class="flex-1">
         <!-- 作者信息区骨架屏 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div
             class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
           >
@@ -33,7 +33,7 @@
       <!-- 右侧边栏骨架屏 -->
       <div class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0">
         <div class="lg:sticky top-12">
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+          <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
             <USkeleton class="h-6 w-32 mb-3 md:mb-4" />
             <div class="space-y-3 md:space-y-4">
               <div v-for="i in 3" :key="i" class="flex items-center space-x-3">
@@ -69,7 +69,7 @@
       <!-- 左侧主内容区 -->
       <div class="flex-1">
         <!-- 作者信息区 -->
-        <header class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <header class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div
             class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
           >
@@ -146,7 +146,7 @@
         </header>
 
         <!-- 作者文章 -->
-        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <section class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div class="flex items-center justify-between mb-4 md:mb-6">
             <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
               {{ $t('author.articles') }}
@@ -214,7 +214,7 @@
         class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-12 self-start z-10 sticky"
       >
         <!-- 会员等级 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
             {{ $t('author.membershipLevel') }}
           </h3>
@@ -239,7 +239,7 @@
         </div>
 
         <!-- 统计信息 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6">
           <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
             {{ $t('author.statistics') }}
           </h3>
@@ -280,6 +280,7 @@
   import {
     userControllerFindOne,
     articleControllerFindArticleByAuthor,
+    articleControllerGetArticleLiked,
     userControllerFollow,
     userControllerUnfollow
   } from '~/api';

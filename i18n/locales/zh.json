@@ -526,7 +526,6 @@
       "retry": "重试",
       "title": "加载失败"
     },
-
     "remove": "删除",
     "removeAll": "删除全部",
     "replace": "替换",
@@ -696,6 +695,11 @@
     "enterDescription": "输入简介",
     "quickNav": "快捷导航",
     "favorites": "我的收藏",
+    "likedArticles": "用户点赞文章",
+    "likedArticlesDescription": "查看您收藏的所有文章",
+    "noLikedArticles": "暂无收藏文章",
+    "startLikingArticles": "快去收藏您喜欢的文章吧",
+    "exploreArticles": "浏览文章",
     "settings": "设置",
     "profileSaved": "资料保存成功",
     "saveProfileFailed": "资料保存失败",

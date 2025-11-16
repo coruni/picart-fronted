@@ -906,6 +906,14 @@
     "enterNickname": "Enter nickname",
     "description": "Description",
     "enterDescription": "Enter description",
+    "quickNav": "Quick navigation",
+    "favorites": "My Collection",
+    "likedArticles": "User Liked Article",
+    "likedArticlesDescription": "View all your favorite articles",
+    "noLikedArticles": "No liked articles yet",
+    "startLikingArticles": "Start liking articles you love",
+    "exploreArticles": "Explore Articles",
+    "settings": "set up",
     "changePassword": {
       "title": "Change Password",
       "currentPassword": "Current Password",
@@ -968,9 +976,7 @@
       "type": {},
       "all": "All"
     },
-    "favorites": "My Collection",
     "profileSaved": "Data is saved successfully",
-    "quickNav": "Quick navigation",
     "recharge": {
       "alipay": "Alipay",
       "balance": "Balance payment",
@@ -1010,8 +1016,7 @@
       "walletBalance": "Wallet balance",
       "wechat": "WeChat Payment"
     },
-    "saveProfileFailed": "Failed to save data",
-    "settings": "set up"
+    "saveProfileFailed": "Failed to save data"
   },
   "author": {
     "title": "Author Profile",

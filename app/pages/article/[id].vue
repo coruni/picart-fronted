@@ -148,7 +148,7 @@
       <!-- 错误状态 -->
       <div v-else-if="hasError" class="flex items-center justify-center py-20">
         <div class="text-center">
-          <Icon name="mynaui:warning" class="text-red-500 text-4xl mb-4" />
+          <Icon name="mynaui:danger-triangle" class="text-red-500 text-4xl mb-4" />
           <p class="text-gray-600 dark:text-gray-400 mb-4">{{ $t('common.error.title') }}</p>
           <UButton
             class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-600 transition-colors"
@@ -316,7 +316,7 @@
                     class="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
                   >
                     <div class="text-center text-gray-400">
-                      <Icon name="mynaui:warning" class="w-8 h-8 mx-auto mb-2" />
+                      <Icon name="mynaui:danger-triangle" class="w-8 h-8 mx-auto mb-2" />
                       <div class="text-xs">{{ $t('image.loadFailed') }}</div>
                       <button
                         class="text-xs text-primary hover:text-primary-600 mt-1 flex items-center mx-auto"
@@ -398,17 +398,15 @@
             </section>
 
             <!-- 内容限制组件 -->
-            <ClientOnly v-else-if="restrictionType" id="restriction">
-              <ArticleContentRestriction
-                :type="restrictionType"
-                :price="article?.data.viewPrice"
-                :article-title="article?.data.title"
-                :author-id="article?.data.author.id"
-                :article-id="article?.data.id"
-                :refresh-article="refreshArticle"
-              />
-            </ClientOnly>
-
+            <ArticleContentRestriction
+              v-else-if="restrictionType"
+              :type="restrictionType"
+              :price="article?.data.viewPrice"
+              :article-title="article?.data.title"
+              :author-id="article?.data.author.id"
+              :article-id="article?.data.id"
+              :refresh-article="refreshArticle"
+            />
             <!-- 移动端点赞按钮 -->
             <div class="lg:hidden flex items-center justify-center mb-6 md:mb-8">
               <div class="flex items-center space-x-4">
@@ -609,7 +607,7 @@
           <aside class="w-full lg:w-80 flex-shrink-0">
             <!-- 作者信息 -->
             <div class="lg:sticky top-4">
-              <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+              <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
                 <div class="flex items-center space-x-3 md:space-x-4 mb-4 md:mb-6">
                   <NuxtLinkLocale :to="`/author/${article?.data.author.id}`" class="relative">
                     <UAvatar
@@ -672,7 +670,7 @@
                 </UButton>
               </div>
               <!-- 相关推荐 -->
-              <aside class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+              <aside class="bg-white dark:bg-gray-800 p-4 md:p-6">
                 <h4
                   class="font-bold text-gray-900 dark:text-gray-100 mb-3 md:mb-4 flex items-center text-sm md:text-base"
                 >

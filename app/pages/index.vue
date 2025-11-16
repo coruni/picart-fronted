@@ -6,7 +6,7 @@
     <Advertisement type="homepage" position="top" />
 
     <nav
-      class="flex flex-col sm:flex-row justify-end items-center gap-4 my-8"
+      class="flex flex-col sm:flex-row justify-end items-end gap-4 my-4"
       aria-label="Content tabs"
     >
       <UTabs
@@ -18,7 +18,7 @@
         :ui="{ trigger: 'cursor-pointer' }"
       >
         <template #default="{ item }">
-          <span class="hidden md:inline" v-text="item.label"/>
+          <span class="hidden md:inline" v-text="item.label" />
         </template>
       </UTabs>
     </nav>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Intersection Observer 观察器元素 -->
-    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1" aria-hidden="true"/>
+    <div ref="observerTarget" class="col-span-2 md:col-span-4 h-1" aria-hidden="true" />
   </main>
 </template>
 

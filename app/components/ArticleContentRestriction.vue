@@ -2,7 +2,7 @@
   <!-- 登录限制 -->
   <div
     v-if="type === 'login'"
-    class="bg-gradient-to-br from-blue-50/50 to-blue-100/50 dark:from-blue-900/10 dark:to-blue-800/10 rounded-xl p-6 text-center my-8 border border-blue-200/50 dark:border-blue-800/30"
+    class="bg-gradient-to-br from-blue-50/50 to-blue-100/50 dark:from-blue-900/10 dark:to-blue-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:lock" class="text-3xl text-primary mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -19,9 +19,9 @@
   <!-- 关注限制 -->
   <div
     v-else-if="type === 'follow' && !isAuthor"
-    class="bg-gradient-to-br from-pink-50/50 to-pink-100/50 dark:from-pink-900/10 dark:to-pink-800/10 rounded-xl p-6 text-center my-8 border border-pink-200/50 dark:border-pink-800/30"
+    class="bg-gradient-to-br from-pink-50/50 to-pink-100/50 rounded-xl p-6 text-center my-8"
   >
-    <Icon name="mynaui:heart" class="text-3xl text-pink-600 dark:text-pink-400 mb-3" />
+    <Icon name="mynaui:heart" class="text-3xl text-pink-600 mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
       {{ $t('article.restrictions.followRequired.title') }}
     </h3>
@@ -46,7 +46,7 @@
   <!-- 会员限制 -->
   <div
     v-else-if="type === 'membership'"
-    class="bg-gradient-to-br from-purple-50/50 to-purple-100/50 dark:from-purple-900/10 dark:to-purple-800/10 rounded-xl p-6 text-center my-8 border border-purple-200/50 dark:border-purple-800/30"
+    class="bg-gradient-to-br from-purple-50/50 to-purple-100/50 dark:from-purple-900/10 dark:to-purple-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:heart-waves" class="text-3xl text-purple-600 dark:text-purple-400 mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -66,7 +66,7 @@
   <!-- 付费限制 -->
   <div
     v-else-if="type === 'payment'"
-    class="bg-gradient-to-br from-amber-50/50 to-amber-100/50 dark:from-amber-900/10 dark:to-amber-800/10 rounded-xl p-6 text-center my-8 border border-amber-200/50 dark:border-amber-800/30"
+    class="bg-gradient-to-br from-amber-50/50 to-amber-100/50 dark:from-amber-900/10 dark:to-amber-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:diamond" class="text-3xl text-amber-600 dark:text-amber-400 mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -94,7 +94,7 @@
   <!-- 内容受限 -->
   <div
     v-else-if="type === 'restricted'"
-    class="bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-700/50 rounded-xl p-6 text-center my-8 border border-gray-200/50 dark:border-gray-600/50"
+    class="bg-gradient-to-br from-gray-50/50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-700/50 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:shield-exclamation" class="text-3xl text-gray-500 dark:text-gray-400 mb-3" />
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -168,12 +168,12 @@
 
     // 获取最新的用户信息
     const userInfo = userStore.userInfo;
-    
+
     // 检查会员状态，优先使用服务端返回的isMember字段
     if (userInfo.isMember) {
       return true;
     }
-    
+
     // 兜底计算：会员等级大于0且状态为活跃且未过期
     return (
       userInfo.membershipLevel > 0 &&

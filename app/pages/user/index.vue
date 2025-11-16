@@ -4,7 +4,7 @@
       <!-- 左侧主内容区 -->
       <div class="flex-1">
         <!-- 用户信息区 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div
             class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6"
           >
@@ -84,7 +84,7 @@
         </div>
 
         <!-- 快捷导航 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4">
             {{ $t('user.quickNav') }}
           </h2>
@@ -116,12 +116,15 @@
               </span>
             </NuxtLinkLocale>
 
-            <div
-              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
+            <NuxtLinkLocale
+              to="/user/liked"
+              class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
             >
-              <Icon name="mynaui:heart" class="w-8 h-8 text-gray-400 mb-2" />
-              <span class="text-sm font-medium text-gray-500">{{ $t('user.favorites') }}</span>
-            </div>
+              <Icon name="mynaui:heart" class="w-8 h-8 text-primary mb-2" />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">{{
+                $t('user.favorites')
+              }}</span>
+            </NuxtLinkLocale>
 
             <div
               class="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-md opacity-50"
@@ -143,7 +146,7 @@
         </div>
 
         <!-- 用户文章 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div class="flex items-center justify-between mb-4 md:mb-6">
             <h2 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
               {{ $t('user.myArticles') }}
@@ -201,7 +204,7 @@
         class="w-full lg:w-80 flex-shrink-0 mt-6 lg:mt-0 lg:sticky lg:top-16 self-start z-10 sticky"
       >
         <!-- 会员等级 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 mb-4 md:mb-6">
           <div class="flex items-center justify-between mb-3">
             <h3 class="font-bold text-gray-900 dark:text-white text-sm md:text-base">
               {{ $t('user.membershipLevel') }}
@@ -236,7 +239,7 @@
         </div>
 
         <!-- 邀请奖励 -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6">
+        <div class="bg-white dark:bg-gray-800 p-4 md:p-6">
           <h3 class="font-bold text-gray-900 dark:text-white mb-3 md:mb-4 text-sm md:text-base">
             {{ $t('user.inviteRewards') }}
           </h3>
@@ -766,13 +769,13 @@
 
     // 刷新用户资料
     await refreshUserProfile();
-    
+
     // 强制更新用户信息，确保会员状态同步
     await userStore.getUserInfo(true);
-    
+
     // 触发全局刷新，确保所有组件获取最新用户状态
     await nextTick();
-    
+
     // 显示充值成功提示
     toast.add({
       title: '会员充值成功',

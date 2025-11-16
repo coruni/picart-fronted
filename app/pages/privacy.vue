@@ -201,7 +201,7 @@
               >
                 <div class="flex items-start gap-3">
                   <UIcon
-                    name="mynaui:warning"
+                    name="mynaui:danger-triangle"
                     class="w-6 h-6 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0"
                   />
                   <p class="text-gray-700 dark:text-gray-300 leading-relaxed">

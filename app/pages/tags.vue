@@ -57,7 +57,7 @@
       <!-- 错误状态 -->
       <div v-else-if="error && allTags.length === 0" class="text-center py-12">
         <div class="text-red-500 mb-4">
-          <Icon name="mynaui:warning" class="w-12 h-12 mx-auto" />
+          <Icon name="mynaui:danger-triangle" class="w-12 h-12 mx-auto" />
         </div>
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
           {{ $t('tags.loadError') }}
@@ -129,7 +129,7 @@
         </div>
 
         <!-- Intersection Observer 观察器元素 -->
-        <div ref="observerTarget" class="h-1"/>
+        <div ref="observerTarget" class="h-1" />
       </div>
 
       <!-- 空状态 -->

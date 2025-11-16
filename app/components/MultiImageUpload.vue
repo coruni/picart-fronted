@@ -213,7 +213,7 @@
         multiple
         class="hidden"
         @change="handleFileSelect"
-      >
+      />
 
       <!-- 加载遮罩 -->
       <div
@@ -261,7 +261,7 @@
 
     <!-- 错误提示 -->
     <div v-if="error" class="text-red-500 text-sm flex items-center">
-      <UIcon name="mynaui:warning" class="w-4 h-4 mr-1" />
+      <UIcon name="mynaui:danger-triangle" class="w-4 h-4 mr-1" />
       {{ error }}
     </div>
 

@@ -13,7 +13,7 @@
     <!-- 错误状态 -->
     <div v-else-if="error" class="flex flex-col items-center justify-center min-h-screen">
       <div class="text-red-500 mb-4">
-        <Icon name="mynaui:warning" class="w-12 h-12" />
+        <Icon name="mynaui:danger-triangle" class="w-12 h-12" />
       </div>
       <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
         {{ $t('tag.notFound') }}
@@ -38,7 +38,7 @@
           class="h-48 bg-cover bg-center relative"
           :style="{ backgroundImage: `url(${tagData?.data?.background})` }"
         >
-          <div class="absolute inset-0 bg-black bg-opacity-40"/>
+          <div class="absolute inset-0 bg-black bg-opacity-40" />
         </div>
 
         <!-- 标签信息 -->
@@ -207,7 +207,7 @@
         </div>
 
         <!-- Intersection Observer 观察器元素 -->
-        <div ref="observerTarget" class="h-1"/>
+        <div ref="observerTarget" class="h-1" />
       </div>
     </div>
   </div>

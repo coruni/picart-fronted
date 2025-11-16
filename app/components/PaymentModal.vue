@@ -401,11 +401,6 @@
 
         // 根据支付方式处理不同的响应
         if (selectedPaymentMethod.value === 'BALANCE') {
-          // 余额支付直接成功
-          toast.add({
-            title: t('payment.balancePaymentSuccess'),
-            color: 'primary'
-          });
           emit('payment-success', props.orderInfo.orderId);
           closeModal();
         } else {

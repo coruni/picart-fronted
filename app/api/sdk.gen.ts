@@ -24,8 +24,8 @@ import type {
   RoleControllerGetActiveRolesData,
   RoleControllerGetActiveRolesResponse,
   RoleControllerAssignPermissionsData,
-  RoleControllerToggleStatusData,
   RoleControllerCopyRoleData,
+  RoleControllerToggleStatusData,
   ConfigControllerFindAllData,
   ConfigControllerFindAllResponse,
   ConfigControllerUpdateAllData,
@@ -93,6 +93,8 @@ import type {
   ArticleControllerFindPublishedIdsData,
   ArticleControllerFindPublishedIdsResponse,
   ArticleControllerLikeData,
+  ArticleControllerGetArticleLikedData,
+  ArticleControllerGetArticleLikedResponse,
   CommentControllerFindAllData,
   CommentControllerFindAllResponse,
   CommentControllerRemoveData,
@@ -408,6 +410,20 @@ export const roleControllerAssignPermissions = <
 };
 
 /**
+ * 复制角色
+ */
+export const roleControllerCopyRole = <TComposable extends Composable, DefaultT = undefined>(
+  options: Options<TComposable, RoleControllerCopyRoleData, unknown, DefaultT>
+) => {
+  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
+    {
+      url: '/role/{id}/copy',
+      ...options
+    }
+  );
+};
+
+/**
  * 启用/禁用角色
  */
 export const roleControllerToggleStatus = <TComposable extends Composable, DefaultT = undefined>(
@@ -422,20 +438,6 @@ export const roleControllerToggleStatus = <TComposable extends Composable, Defau
     url: '/role/{id}/status',
     ...options
   });
-};
-
-/**
- * 复制角色
- */
-export const roleControllerCopyRole = <TComposable extends Composable, DefaultT = undefined>(
-  options: Options<TComposable, RoleControllerCopyRoleData, unknown, DefaultT>
-) => {
-  return (options.client ?? _heyApiClient).post<TComposable, unknown | DefaultT, unknown, DefaultT>(
-    {
-      url: '/role/{id}/copy',
-      ...options
-    }
-  );
 };
 
 /**
@@ -1381,6 +1383,32 @@ export const articleControllerLike = <TComposable extends Composable, DefaultT =
       }
     }
   );
+};
+
+/**
+ * 获取点赞文章
+ */
+export const articleControllerGetArticleLiked = <
+  TComposable extends Composable,
+  DefaultT extends
+    ArticleControllerGetArticleLikedResponse = ArticleControllerGetArticleLikedResponse
+>(
+  options: Options<
+    TComposable,
+    ArticleControllerGetArticleLikedData,
+    ArticleControllerGetArticleLikedResponse,
+    DefaultT
+  >
+) => {
+  return (options.client ?? _heyApiClient).get<
+    TComposable,
+    ArticleControllerGetArticleLikedResponse | DefaultT,
+    unknown,
+    DefaultT
+  >({
+    url: '/article/liked',
+    ...options
+  });
 };
 
 /**

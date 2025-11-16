@@ -159,11 +159,11 @@ export const useMessage = () => {
       follow: 'mynaui:user-plus',
       order: 'mynaui:shopping-cart',
       payment: 'mynaui:credit-card',
-      warning: 'mynaui:warning',
+      warning: 'mynaui:danger-triangle',
       error: 'mynaui:error',
       success: 'mynaui:check-circle',
       info: 'mynaui:info',
-      alert: 'mynaui:warning',
+      alert: 'mynaui:danger-triangle',
       reminder: 'mynaui:alarm',
       update: 'mynaui:refresh'
     };

@@ -1049,28 +1049,6 @@ export type RoleControllerAssignPermissionsResponses = {
   200: unknown;
 };
 
-export type RoleControllerToggleStatusData = {
-  body?: never;
-  headers?: {
-    Authorization?: string;
-    'Device-Id'?: string;
-    'Device-Name'?: string;
-    'Device-Type'?: string;
-  };
-  path: {
-    id: string;
-  };
-  query?: never;
-  url: '/role/{id}/status';
-};
-
-export type RoleControllerToggleStatusResponses = {
-  /**
-   * 状态更新成功
-   */
-  200: unknown;
-};
-
 export type RoleControllerCopyRoleData = {
   body?: never;
   headers?: {
@@ -1089,6 +1067,28 @@ export type RoleControllerCopyRoleData = {
 export type RoleControllerCopyRoleResponses = {
   /**
    * 复制成功
+   */
+  200: unknown;
+};
+
+export type RoleControllerToggleStatusData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path: {
+    id: string;
+  };
+  query?: never;
+  url: '/role/{id}/status';
+};
+
+export type RoleControllerToggleStatusResponses = {
+  /**
+   * 状态更新成功
    */
   200: unknown;
 };
@@ -3535,6 +3535,132 @@ export type ArticleControllerLikeResponses = {
    */
   200: unknown;
 };
+
+export type ArticleControllerGetArticleLikedData = {
+  body?: never;
+  headers?: {
+    Authorization?: string;
+    'Device-Id'?: string;
+    'Device-Name'?: string;
+    'Device-Type'?: string;
+  };
+  path?: never;
+  query?: {
+    page?: number;
+    limit?: number;
+  };
+  url: '/article/liked';
+};
+
+export type ArticleControllerGetArticleLikedResponses = {
+  200: {
+    code: number;
+    message: string;
+    data: {
+      data: Array<{
+        id: number;
+        title: string;
+        requireLogin: boolean;
+        requireFollow: boolean;
+        requirePayment: boolean;
+        requireMembership: boolean;
+        listRequireLogin: boolean;
+        viewPrice: string;
+        type: string;
+        content: string | null;
+        images: Array<string>;
+        sort: number;
+        summary: unknown;
+        views: number;
+        likes: number;
+        status: string;
+        cover: string;
+        authorId: number;
+        author: {
+          id: number;
+          username: string;
+          nickname: string;
+          avatar: string;
+          level: number;
+          membershipLevel: number;
+          membershipStatus: string;
+          membershipStartDate: string | null;
+          membershipEndDate: unknown;
+          status: string;
+          createdAt: string;
+          updatedAt: string;
+          description: string;
+          followerCount: number;
+          followingCount: number;
+          lastActiveAt: unknown;
+          lastLoginAt: string;
+          gender: string;
+          isMember: boolean;
+          isFollowed: boolean;
+        };
+        category: {
+          id: number;
+          name: string;
+          description: string;
+          parentId: number;
+          link: string;
+          parent: {
+            id: number;
+            name: string;
+            description: string;
+            parentId: unknown;
+            link: string;
+            avatar: string;
+            background: string | null;
+            cover: string;
+            sort: number;
+            status: string;
+            articleCount: number;
+            followCount: number;
+            createdAt: string;
+            updatedAt: string;
+          };
+          avatar: string;
+          background: string | null;
+          cover: string;
+          sort: number;
+          status: string;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        tags: Array<{
+          id: number;
+          name: string;
+          description: string | null;
+          avatar: string;
+          background: string | null;
+          cover: string | null;
+          sort: number;
+          articleCount: number;
+          followCount: number;
+          createdAt: string;
+          updatedAt: string;
+        }>;
+        downloadCount: number;
+        createdAt: string;
+        updatedAt: string;
+        isLiked: boolean;
+        isPaid: boolean;
+      }>;
+      meta: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  };
+};
+
+export type ArticleControllerGetArticleLikedResponse =
+  ArticleControllerGetArticleLikedResponses[keyof ArticleControllerGetArticleLikedResponses];
 
 export type CommentControllerFindAllData = {
   body?: never;

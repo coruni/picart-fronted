@@ -6,6 +6,7 @@
   >
     <div class="aspect-[3/4] overflow-hidden cursor-pointer flex-shrink-0 relative rounded-md">
       <NuxtImg
+        v-if="article.cover || article.images?.[0]"
         :src="article.cover ?? article.images?.[0] ?? ''"
         :alt="article.title"
         :loading="isFirstScreen ? 'eager' : 'lazy'"
@@ -19,6 +20,10 @@
         sizes="(max-width: 640px) 200px, (max-width: 768px) 250px, (max-width: 1024px) 300px, 400px"
         class="w-full h-full aspect-[3/4] object-cover transition-transform duration-500 group-hover:scale-110"
       />
+      <div
+        v-else
+        class="absolute inset-0 bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
+      ></div>
 
       <!-- 渐变遮罩 -->
       <!-- <div
