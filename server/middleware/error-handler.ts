@@ -3,11 +3,10 @@ export default defineEventHandler(async event => {
     // 统一设置请求超时处理为15秒
     const timeout = setTimeout(() => {
       if (!event.node.res.headersSent) {
-        console.warn('Request timeout, closing connection');
         event.node.res.statusCode = 504;
         event.node.res.end('Gateway Timeout');
       }
-    }, 15000); // 15秒超时
+    }, 60000); // 60秒超时
 
     // 监听连接关闭
     event.node.req.on('close', () => {
