@@ -473,10 +473,6 @@
 
     try {
       await navigator.clipboard.writeText(paymentUrl.value);
-      toast.add({
-        title: t('payment.linkCopied'),
-        color: 'success'
-      });
     } catch (error) {
       // 如果剪贴板API失败，使用传统方法
       const textArea = document.createElement('textarea');
@@ -589,10 +585,6 @@
           // 第三方支付，显示支付链接给用户
           if (paymentResult.paymentUrl) {
             paymentUrl.value = paymentResult.paymentUrl;
-            toast.add({
-              title: t('payment.linkGenerated'),
-              color: 'success'
-            });
           }
         }
       }
