@@ -65,12 +65,24 @@
 
   // 计算属性
   const isAdmin = computed(() => {
-    return (
-      userStore.userInfo?.roles?.some(
-        role =>
-          role.name === 'admin' || role.name === 'super-admin' || role.name === 'administrator'
-      ) || false
-    );
+    // 检查用户是否登录且有管理员权限
+    if (!userStore.isLoggedIn) {
+      return false;
+    }
+
+    // 如果用户信息已加载，直接检查权限
+    if (userStore.userInfo) {
+      return (
+        userStore.userInfo?.roles?.some(
+          role =>
+            role.name === 'admin' || role.name === 'super-admin' || role.name === 'administrator'
+        ) || false
+      );
+    }
+
+    // 如果用户信息还未加载，返回false（不在模板中显示管理员按钮）
+    // 用户信息加载完成后，如果用户是管理员，按钮会自动显示
+    return false;
   });
 
   // 刷新页面
@@ -82,7 +94,7 @@
         window.location.reload();
       }, 1000);
     } catch (error) {
-      console.error('刷新失败:', error);
+      // 刷新失败时静默处理
     } finally {
       refreshing.value = false;
     }

@@ -10,126 +10,28 @@ export const createClientConfig: CreateClientConfig = config => {
     ...config,
     baseURL: config?.baseURL || appConfig.apiBaseUrl,
     onRequest: async context => {
-      try {
-        // 从 store 获取设备ID，从 cookie 获取 token
-        let deviceId = 'unknown-device';
-        let token: string | null = null;
+      // 在请求头中设置设备ID和token
+      const deviceIdCookie = useCookie('device-id', {
+        default: () => null,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 365,
+        httpOnly: false,
+        watch: true
+      });
 
-        // 客户端：从 store 和 cookie 获取信息
-        if (import.meta.client) {
-          try {
-            const pinia = usePinia();
-            const userStore = useUserStore(pinia);
-            const appStore = useAppStore(pinia);
+      // 直接从cookie获取token
+      const tokenCookie = useCookie('auth-token', {
+        default: () => null,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: false,
+        watch: true
+      });
 
-            // 从 store 获取设备ID
-            if (appStore?.deviceId && appStore.deviceId !== 'unknown') {
-              deviceId = appStore.deviceId;
-            }
-
-            // 从 store 获取 token（优先）
-            if (userStore?.isLoggedIn && userStore.userToken) {
-              token = userStore.userToken;
-            } else {
-              // 如果 store 中没有，则从 cookie 获取
-              const authTokenCookie = useCookie('auth-token', {
-                default: () => null,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7,
-                httpOnly: false,
-                watch: true
-              });
-
-              const tokenCookie = useCookie('token', {
-                default: () => null,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7,
-                httpOnly: false,
-                watch: true
-              });
-
-              // 优先使用 auth-token，如果没有则使用 token
-              token = authTokenCookie.value || tokenCookie.value;
-            }
-          } catch {
-            // console.warn('Failed to get info from stores/cookies:', error);
-          }
-        } else {
-          // SSR阶段：尝试从请求头获取cookie
-          try {
-            const event = useRequestEvent();
-            if (event?.node?.req?.headers?.cookie) {
-              const cookies = event.node.req.headers.cookie;
-              // console.log('SSR: Reading cookies from request headers:', cookies);
-
-              // 解析cookie字符串
-              const cookieArray = cookies.split(';').map(cookie => cookie.trim());
-              cookieArray.forEach(cookie => {
-                const [name, value] = cookie.split('=');
-                if (name && value) {
-                  if (name === 'device-id') {
-                    deviceId = value;
-                  } else if (name === 'auth-token' || name === 'token') {
-                    if (!token) token = value; // 优先使用 auth-token
-                  }
-                }
-              });
-            }
-          } catch {
-            // console.warn('SSR: Failed to read cookies from request headers:', error);
-          }
-
-          // SSR阶段：如果从cookie没有获取到token，尝试从useCookie获取
-          if (!token) {
-            try {
-              const authTokenCookie = useCookie('auth-token', {
-                default: () => null,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7,
-                httpOnly: false
-              });
-
-              const tokenCookie = useCookie('token', {
-                default: () => null,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 7,
-                httpOnly: false
-              });
-
-              // 优先使用 auth-token，如果没有则使用 token
-              token = authTokenCookie.value || tokenCookie.value;
-            } catch {
-              // console.warn('SSR: Failed to get token from useCookie:', error);
-            }
-          }
-
-          // SSR阶段：如果仍然没有token，尝试从用户store获取
-          if (!token) {
-            try {
-              const userStore = useUserStore();
-              if (userStore?.isLoggedIn && userStore.userToken) {
-                token = userStore.userToken;
-              }
-            } catch {
-              // console.warn('SSR: Failed to get token from user store:', error);
-            }
-          }
-        }
-
-        // 调试日志
-        // console.log('onRequest - deviceId:', deviceId, 'token:', token ? '***' : null);
-
-        // 更新请求headers
-        await updateRequestHeaders(context, deviceId, token);
-      } catch {
-        // console.error('Error in onRequest:', error);
-        // 即使出错也要继续，使用默认值
-        await updateRequestHeaders(context, 'unknown-device', null);
-      }
+      // 更新请求头
+      await updateRequestHeaders(context, deviceIdCookie.value || '', tokenCookie.value || null);
 
       return context;
     },
@@ -151,14 +53,15 @@ export const createClientConfig: CreateClientConfig = config => {
       // }
       return context;
     },
-    onResponse: context => {
+    onResponse: async context => {
       // 只允许200和201状态码继续处理
       if (![200, 201].includes(context.response.status)) {
         if (context.response.status === 401) {
           // 防止重复调用logout
           if (!isLoggingOut) {
             isLoggingOut = true;
-            // 使用新的统一登出函数
+
+            // token失效时直接删除token，不需要刷新
             performLogout().finally(() => {
               // 重置标志位，延迟重置以避免短时间内多次401响应
               setTimeout(() => {
@@ -237,13 +140,8 @@ async function updateRequestHeaders(
 }
 
 // 在用户登录时调用此函数来设置token
-export function setAuthToken(token: string, userStore?: { setToken: (token: string) => void }): void {
-  // 设置到store
-  if (userStore?.setToken) {
-    userStore.setToken(token);
-  }
-
-  // 设置到cookie（通过插件处理）
+export function setAuthToken(token: string): void {
+  // 只设置到cookie（token不在本地store存储）
   if (import.meta.client) {
     const authTokenCookie = useCookie('auth-token', {
       default: () => '',
@@ -308,7 +206,7 @@ export function clearAuthToken(): void {
   }
 }
 
-// 新的统一登出函数
+// 统一登出函数
 export async function performLogout(): Promise<void> {
   try {
     // 获取用户store

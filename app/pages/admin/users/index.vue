@@ -383,7 +383,7 @@
       });
       users.refresh?.();
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      // 删除用户失败时静默处理
     } finally {
       showDeleteModal.value = false;
       currentUserId.value = null;

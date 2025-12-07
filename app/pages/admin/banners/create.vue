@@ -161,8 +161,7 @@
       // 手动触发表单重新验证以清除图片必填错误
       await nextTick();
     } catch (error: any) {
-      // 处理上传错误
-      console.error('Failed to upload image:', error);
+      // 处理上传错误：图片上传失败时静默处理
 
       // 重置文件选择（保留原有表单数据）
       file.value = null;

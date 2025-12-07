@@ -32,7 +32,7 @@ export const useMessageCount = () => {
       }
     } catch (err) {
       error.value = err instanceof Error ? err.message : '获取未读消息数量失败';
-      console.error('获取未读消息数量失败:', err);
+      // 获取未读消息数量失败时静默处理
     } finally {
       loading.value = false;
     }

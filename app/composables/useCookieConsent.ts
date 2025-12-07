@@ -136,7 +136,7 @@ export const useCookieConsent = () => {
         await initializeDeviceId();
       }
     } catch (error) {
-      console.error('Failed to save cookie settings:', error);
+      // 保存 Cookie 设置失败时静默处理
       toast.add({
         title: t('cookie.saveError'),
         color: 'error'
@@ -199,7 +199,7 @@ export const useCookieConsent = () => {
           appStore.setDeviceId(deviceId);
         }
       } catch (error) {
-        console.error('Failed to initialize device ID:', error);
+        // 初始化设备ID失败时静默处理
       }
     }
   };

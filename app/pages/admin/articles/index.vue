@@ -330,7 +330,7 @@
       });
       articles.refresh?.();
     } catch (error) {
-      console.error('Failed to delete article:', error);
+      // 删除文章失败时静默处理
     } finally {
       showDeleteModal.value = false;
       currentArticleId.value = null;

@@ -405,7 +405,13 @@
       "popupBlockedDesc": "ブラウザが支払いウィンドウの開くことをブロックしました。ブラウザ設定を確認するか、下のリンクをクリックしてください",
       "linkCopied": "リンクがコピーされました",
       "linkCopiedDesc": "支払いリンクがクリップボードにコピーされました。手動で開くことができます",
-      "openManuallyConfirm": "支払いページに直接移動しますか？"
+      "openManuallyConfirm": "支払いページに直接移動しますか？",
+      "paymentLink": "支払いリンク",
+      "copyLink": "リンクをコピー",
+      "clickToPay": "上記のリンクをクリックして支払いを完了してください",
+      "linkGenerated": "支払いリンクが生成されました",
+      "copyFailed": "コピーに失敗しました",
+      "goToPayment": "支払いへ進む"
     },
     "adPositionTop": {
       "adPositionBottom": "下部",

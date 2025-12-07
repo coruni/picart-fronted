@@ -63,7 +63,7 @@ export const useMessage = () => {
       }
     } catch (err) {
       error.value = err instanceof Error ? err.message : '获取消息失败';
-      console.error('获取消息失败:', err);
+      // 获取消息失败时静默处理
     } finally {
       loading.value = false;
     }
@@ -87,7 +87,7 @@ export const useMessage = () => {
       // 更新本地状态
       message.isRead = true;
     } catch (err) {
-      console.error('标记已读失败:', err);
+      // 标记已读失败时静默处理
       throw err;
     }
   };
@@ -113,7 +113,7 @@ export const useMessage = () => {
         msg.isRead = true;
       });
     } catch (err) {
-      console.error('标记全部已读失败:', err);
+      // 标记全部已读失败时静默处理
       throw err;
     }
   };
@@ -132,7 +132,7 @@ export const useMessage = () => {
         messages.value.splice(index, 1);
       }
     } catch (err) {
-      console.error('删除消息失败:', err);
+      // 删除消息失败时静默处理
       throw err;
     }
   };

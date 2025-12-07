@@ -47,7 +47,42 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             return navigateToLoginWithNavigateTo(to.fullPath);
           }
 
-          // 如果用户已登录，检查是否为管理员
+          // 用户已登录，但用户信息可能还在加载中
+          // 对于维护模式下的管理页面，我们也采用延迟权限检查策略
+          if (!userStore.userInfo) {
+            // 设置一个短暂延迟，等待用户信息加载
+            const checkAdminPermission = () => {
+              if (userStore.userInfo) {
+                const isAdmin = userStore.userInfo?.roles?.some(
+                  role =>
+                    role.name === 'admin' ||
+                    role.name === 'super-admin' ||
+                    role.name === 'administrator'
+                );
+
+                if (!isAdmin) {
+                  // 不是管理员，重定向到维护页面
+                  return navigateTo('/maintenance');
+                }
+
+                return;
+              }
+
+              // 如果等待后仍然没有用户信息，再次检查登录状态
+              if (!userStore.isLoggedIn) {
+                return navigateToLoginWithNavigateTo(to.fullPath);
+              }
+
+              // 继续等待用户信息加载（最多等待3秒）
+              setTimeout(checkAdminPermission, 100);
+            };
+
+            // 开始权限检查
+            checkAdminPermission();
+            return;
+          }
+
+          // 用户信息已加载，直接检查权限
           const isAdmin = userStore.userInfo?.roles?.some(
             role =>
               role.name === 'admin' || role.name === 'super-admin' || role.name === 'administrator'
@@ -68,7 +103,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
       }
     } catch (error) {
-      console.error('检查维护模式失败:', error);
       // 如果检查失败，为了安全起见，不启用维护模式
       const appStore = useAppStore();
       appStore.setMaintenanceMode(false);

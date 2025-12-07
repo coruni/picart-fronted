@@ -241,7 +241,7 @@ export const useTinyMCE = () => {
           throw new Error('上传失败');
         }
       } catch (error) {
-        console.error('图片上传失败:', error);
+        // 图片上传失败时静默处理
         throw error;
       }
     },

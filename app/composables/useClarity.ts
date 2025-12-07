@@ -28,7 +28,7 @@ export const useClarity = () => {
       try {
         clarity('identify', customId, customSessionId, customPageId, friendlyName);
       } catch (error) {
-        console.error('Failed to identify user in Clarity:', error);
+        // Clarity用户识别失败时静默处理
       }
     }
   };
@@ -40,7 +40,7 @@ export const useClarity = () => {
       try {
         clarity('set', key, value);
       } catch (error) {
-        console.error('Failed to set Clarity tag:', error);
+        // 设置Clarity标签失败时静默处理
       }
     }
   };
@@ -52,7 +52,7 @@ export const useClarity = () => {
       try {
         clarity('upgrade', reason);
       } catch (error) {
-        console.error('Failed to upgrade Clarity session:', error);
+        // Clarity升级会话失败时静默处理
       }
     }
   };
@@ -64,7 +64,7 @@ export const useClarity = () => {
       try {
         clarity('event', eventName);
       } catch (error) {
-        console.error('Failed to trigger Clarity event:', error);
+        // Clarity触发事件失败时静默处理
       }
     }
   };

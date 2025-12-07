@@ -812,28 +812,90 @@
     }
   });
 
-  // 生成SEO关键词 - 简化版本，避免关键词堆砌
+  // 智能生成SEO描述 - 从文章内容中提取有价值信息
+  const generateSeoDescription = () => {
+    if (!article.value?.data) return '';
+
+    const title = article.value.data.title || '';
+    const summary = article.value.data.summary || '';
+    const content = article.value.data.content || '';
+    const tags = article.value.data.tags?.map(tag => tag.name) || [];
+    const views = article.value.data.views || 0;
+    const likes = article.value.data.likes || 0;
+
+    // 优先使用提供的摘要
+    if (summary && summary.trim()) {
+      // 清理HTML标签并限制长度
+      const cleanSummary = summary
+        .replace(/<[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (cleanSummary.length > 120) {
+        return cleanSummary.substring(0, 120) + '...';
+      }
+      return cleanSummary;
+    }
+
+    // 如果没有摘要，从内容中提取
+    if (content) {
+      // 提取纯文本内容（前200字符）
+      const cleanContent = content
+        .replace(/<[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (cleanContent.length > 120) {
+        return cleanContent.substring(0, 120) + '...';
+      }
+      return cleanContent;
+    }
+
+    // 如果都没有，使用标题加标签
+    if (tags.length > 0) {
+      const mainTags = tags.slice(0, 3).join('、');
+      return `${title} - 包含${mainTags}等标签的原创图片作品`;
+    }
+
+    return title;
+  };
+
+  // 优化SEO关键词生成 - 避免堆砌，增加相关性
   const generateSeoKeywords = () => {
     if (!article.value?.data) return '';
 
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
+    const title = article.value.data.title || '';
 
-    // 直接使用文章标签和标题作为主要关键词
-    const primaryKeywords = tags.filter(Boolean);
+    // 从标题中提取关键词（去除标点符号）
+    const titleKeywords = title
+      .replace(/[，。！？；：""''（）【】《》]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 1 && word.length < 10)
+      .slice(0, 3);
 
-    // 添加少量相关的长尾关键词（最多2个）
+    // 主要标签（去重）
+    const primaryKeywords = [...new Set(tags.filter(Boolean))].slice(0, 5);
+
+    // 添加图片相关的长尾关键词
+    const imageKeywords = ['高清图片', '原创作品', '图片集'];
+
+    // 从配置获取长尾关键词（更精准的）
     const longTailKeywords = siteConfig?.seo_long_tail_keywords
       ? siteConfig.seo_long_tail_keywords
           .split(',')
           .map((k: string) => k.trim())
           .filter(Boolean)
-          .slice(0, 2) // 只取前2个
+          .slice(0, 3)
       : [];
 
-    // 组合关键词，控制总数在合理范围内
-    const allKeywords = [...primaryKeywords, ...longTailKeywords].filter(Boolean);
+    // 组合所有关键词（控制在10个以内）
+    const allKeywords = [
+      ...titleKeywords,
+      ...primaryKeywords,
+      ...imageKeywords,
+      ...longTailKeywords
+    ].filter(Boolean);
 
-    // 去重并限制关键词数量（控制在8个以内）
+    // 去重并限制数量
     const uniqueKeywords = [...new Set(allKeywords)].slice(0, 10);
 
     return uniqueKeywords.join(',');
@@ -872,7 +934,7 @@
     return altTextComponents.filter(Boolean).join(' - ');
   };
 
-  // 生成图片SEO描述 - 简化版本，避免关键词堆砌
+  // 优化图片SEO描述生成 - 更智能、更简洁
   const generateImageSeoDescription = (index: number, totalImages: number): string => {
     if (!article.value?.data) return '';
 
@@ -880,6 +942,10 @@
     const views = article.value.data.views || 0;
     const likes = article.value.data.likes || 0;
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
+    const createdAt = article.value.data.createdAt || '';
+
+    // 使用智能描述生成作为基础
+    const baseDescription = generateSeoDescription();
 
     // 选择主要标签（最多2个）
     const mainTags = tags.slice(0, 2).filter(Boolean);
@@ -888,27 +954,40 @@
     const qualityTerms = ['高清', '原创', '精美'];
     const qualityTerm = qualityTerms[index % qualityTerms.length];
 
-    // 构建简洁的描述
-    let description = `${title} - ${qualityTerm}图片作品，第${index + 1}张，共${totalImages}张图片集合。`;
-
-    // 添加互动数据
-    if (likes > 0 || views > 0) {
-      description += `获得${likes}次点赞，${views}次浏览。`;
+    // 根据图片数量调整描述
+    let imageDescription = '';
+    if (totalImages === 1) {
+      imageDescription = `${title} - ${qualityTerm}图片作品`;
+    } else {
+      imageDescription = `${title} - ${qualityTerm}图片作品（第${index + 1}张，共${totalImages}张）`;
     }
 
-    // 添加标签信息（如果有的话）
+    // 添加标签信息（简洁版）
     if (mainTags.length > 0) {
-      description += `标签：${mainTags.join('、')}。`;
+      imageDescription += `，包含${mainTags.join('、')}等标签`;
     }
 
-    return description;
+    // 添加互动数据（如果有显著数据）
+    if (likes > 100 || views > 1000) {
+      imageDescription += `，受到${likes}次点赞和${views}次浏览`;
+    }
+
+    // 如果基础描述不太长，可以组合使用
+    if (baseDescription.length > 0 && baseDescription !== title) {
+      // 取基础描述的前50字符作为补充
+      const shortBase =
+        baseDescription.length > 50 ? baseDescription.substring(0, 50) + '...' : baseDescription;
+      imageDescription += `。${shortBase}`;
+    }
+
+    return imageDescription;
   };
 
   // SEO Meta 标签 - 使用 useSeoMeta 确保 SSR 正确渲染
   useSeoMeta({
     title: () => article.value?.data?.title,
-    // 优先使用summary 否则就content 但是去掉html标签和特殊html符号
-    description: () => article.value?.data?.summary || article.value?.data?.title || '',
+    // 智能生成SEO描述，从多个来源提取最有价值的内容
+    description: generateSeoDescription,
     author: () =>
       article.value?.data?.author?.nickname || article.value?.data?.author?.username || '',
     keywords: generateSeoKeywords,
@@ -919,7 +998,7 @@
         article.value?.data?.author?.nickname || article.value?.data?.author?.username || '';
       return `${title} - ${author}原创作品`;
     },
-    ogDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
+    ogDescription: generateSeoDescription,
     ogImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || undefined,
     ogImageWidth: () => 1200,
     ogImageHeight: () => 630,
@@ -942,7 +1021,7 @@
       const title = article.value?.data?.title || '';
       return title;
     },
-    twitterDescription: () => article.value?.data?.summary || article.value?.data?.title || '',
+    twitterDescription: generateSeoDescription,
     twitterImage: () => article.value?.data?.cover || article.value?.data?.images?.[0] || undefined,
     twitterImageAlt: () => {
       const title = article.value?.data?.title || '';
@@ -986,7 +1065,7 @@
           '@context': 'https://schema.org',
           '@type': 'Article',
           headline: article.value?.data?.title || '',
-          description: article.value?.data?.summary || article.value?.data?.title || '',
+          description: generateSeoDescription(),
           image: generateImageStructuredData(),
           datePublished: article.value?.data?.createdAt || '',
           dateModified: article.value?.data?.updatedAt || article.value?.data?.createdAt || '',
@@ -1047,12 +1126,20 @@
   // 判断当前用户是否是文章作者
   const isAuthor = computed(() => {
     if (!isLoggedIn.value || !article.value?.data) return false;
-    return userStore.userInfo?.id === article.value.data.author.id;
+    // 确保用户信息存在且有id字段
+    return userStore.userInfo?.id && userStore.userInfo.id === article.value.data.author.id;
   });
 
   // 检查用户是否有文章管理权限
   const hasManagePermission = computed(() => {
-    const userRoles = userStore.currentUser?.roles || [];
+    if (!isLoggedIn.value) return false;
+
+    // 如果用户信息还未加载完成，返回false
+    if (!userStore.userInfo) return false;
+
+    // 确保用户信息存在且有roles字段
+    const userRoles = userStore.userInfo?.roles || [];
+    if (!Array.isArray(userRoles)) return false;
 
     // 检查用户角色中是否有article:manage权限
     return userRoles.some(role =>
@@ -1139,7 +1226,7 @@
     if (!isLoggedIn.value) return false;
 
     // 确保使用最新的用户信息
-    const userInfo = userStore.userInfo;
+    const userInfo = userStore.userInfo || userStore.currentUser;
     if (!userInfo) return false;
 
     // 优先使用服务端返回的isMember字段

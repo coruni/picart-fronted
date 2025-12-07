@@ -407,7 +407,13 @@
       "popupBlockedDesc": "The browser blocked the payment window from opening. Please check your browser settings or click the link below",
       "linkCopied": "Link copied",
       "linkCopiedDesc": "The payment link has been copied to your clipboard. You can open it manually",
-      "openManuallyConfirm": "Would you like to navigate to the payment page directly?"
+      "openManuallyConfirm": "Would you like to navigate to the payment page directly?",
+      "paymentLink": "Payment Link",
+      "copyLink": "Copy Link",
+      "clickToPay": "Please click the link above to complete payment",
+      "linkGenerated": "Payment link generated",
+      "copyFailed": "Copy failed",
+      "goToPayment": "Go to Payment"
     },
     "adPositionTop": {
       "adPositionBottom": "Bottom",
@@ -1289,7 +1295,8 @@
     "createOrderFailed": "Create order failed",
     "articlePaymentSuccess": "Payment successful, you can now view the article content",
     "networkError": "Network error",
-    "unknownError": "Unknown error"
+    "unknownError": "Unknown error",
+    "goToPayment": "Go to pay"
   },
   "status": {
     "active": "Active",

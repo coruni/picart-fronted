@@ -161,7 +161,7 @@
         }
       }, 1000);
     } catch (error: any) {
-      console.error('发送验证码失败:', error);
+      // 发送验证码失败时静默处理
     } finally {
       sendingCode.value = false;
     }

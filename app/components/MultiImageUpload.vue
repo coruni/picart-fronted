@@ -438,7 +438,7 @@
         throw new Error('Upload failed');
       }
     } catch (err: any) {
-      console.error('Upload error:', err);
+      // 图片上传失败时静默处理
       error.value = t('image.uploadError');
 
       toast.add({

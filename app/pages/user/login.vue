@@ -137,20 +137,8 @@
         });
         authToken.value = data.token;
 
-        // 如果有refresh token，设置到cookie
-        if (data.refreshToken) {
-          const refreshToken = useCookie('refresh-token', {
-            default: () => '',
-            expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            httpOnly: false
-          });
-          refreshToken.value = data.refreshToken;
-        }
-
-        // 登录用户并保存用户信息到store
-        userStore.login(data.token, data.refreshToken, data as any);
+        // 登录用户并保存用户信息到store（token已在cookie中）
+        userStore.login(data.data as any);
 
         // 处理"记住我"功能
         if (rememberMe.value) {
@@ -158,6 +146,17 @@
         } else {
           userStore.clearRememberedUsername();
         }
+
+        // 登录成功后主动获取最新的用户信息（防止数据不同步）
+        try {
+          await userStore.getUserInfo(true);
+        } catch (error) {
+          // 登录后刷新用户信息失败时静默处理
+          // 即使获取用户信息失败，也继续跳转流程
+        }
+
+        // 等待短暂时间确保状态更新完成
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // 跳转处理 - 安全检查重定向路径
         const redirectPath = route.query.redirect as string;

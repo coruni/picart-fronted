@@ -51,7 +51,7 @@ export default defineNuxtPlugin(async () => {
             appStore.setDeviceId(deviceId);
           }
         } catch (error) {
-          console.warn('Failed to generate fingerprint, using fallback:', error);
+          // 生成设备指纹失败时使用备用方案
           const fallbackId = 'device-' + Math.random().toString(36).slice(2, 10);
           deviceIdCookie.value = fallbackId;
 
@@ -97,7 +97,7 @@ export default defineNuxtPlugin(async () => {
             appStore.setDeviceId(deviceId);
           }
         } catch (error) {
-          console.warn('Failed to generate fingerprint after consent:', error);
+          // 同意后生成设备指纹失败时使用备用方案
           const fallbackId = 'device-' + Math.random().toString(36).slice(2, 10);
           deviceIdCookie.value = fallbackId;
 
@@ -140,14 +140,12 @@ export default defineNuxtPlugin(async () => {
       { immediate: true }
     );
 
+    // 监听token cookie变化，不需要同步到store（基于cookie的认证）
     watch(
       authTokenCookie,
       newValue => {
         if (newValue) {
-          const userStore = useUserStore();
-          if (userStore?.setToken) {
-            userStore.setToken(newValue);
-          }
+          // Token cookie 更新
         }
       },
       { immediate: true }
@@ -158,7 +156,6 @@ export default defineNuxtPlugin(async () => {
     await nextTick();
     setTimeout(() => {
       const appStore = useAppStore();
-      const userStore = useUserStore();
 
       // 同步设备ID（仅在用户同意必要 Cookie 后）
       if (
@@ -170,10 +167,7 @@ export default defineNuxtPlugin(async () => {
         appStore.setDeviceId(deviceIdCookie.value);
       }
 
-      // 同步token
-      if (authTokenCookie.value && userStore?.setToken) {
-        userStore.setToken(authTokenCookie.value);
-      }
+      // token通过cookie自动管理，不需要同步到store
     }, 100);
   }
 });

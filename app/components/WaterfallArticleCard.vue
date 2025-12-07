@@ -138,7 +138,11 @@
   // 检查用户是否有文章管理权限
   const hasManagePermission = computed(() => {
     const userStore = useUserStore();
-    const userRoles = userStore.currentUser?.roles || [];
+    
+    // 如果用户信息还未加载完成，返回false
+    if (!userStore.userInfo) return false;
+    
+    const userRoles = userStore.userInfo?.roles || [];
     return userRoles.some(role =>
       role.permissions?.some(permission => permission.name === 'article:manage')
     );

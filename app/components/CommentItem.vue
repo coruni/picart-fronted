@@ -602,10 +602,18 @@
   const canDelete = computed(() => {
     if (!isLoggedIn.value || !currentUser.value) return false;
     const isOwner = currentUser.value.id === props.comment.author?.id;
-    const isAdmin = Array.isArray((currentUser.value as any).roles)
-      ? (currentUser.value as any).roles.some((r: any) => r?.name === 'admin')
-      : false;
-    return isOwner || isAdmin;
+
+    // 检查是否为管理员
+    if (userStore.userInfo) {
+      const userRoles = userStore.userInfo?.roles || [];
+      const isAdmin = Array.isArray(userRoles)
+        ? userRoles.some((r: any) => r?.name === 'admin')
+        : false;
+      return isOwner || isAdmin;
+    }
+
+    // 如果用户信息还未加载完成，只允许作者删除
+    return isOwner;
   });
 
   // 方法
@@ -937,10 +945,18 @@
   const canDeleteReply = (reply: Comment) => {
     if (!isLoggedIn.value || !currentUser.value) return false;
     const isOwner = currentUser.value.id === reply.author?.id;
-    const isAdmin = Array.isArray((currentUser.value as any).roles)
-      ? (currentUser.value as any).roles.some((r: any) => r?.name === 'admin')
-      : false;
-    return isOwner || isAdmin;
+
+    // 检查是否为管理员
+    if (userStore.userInfo) {
+      const userRoles = userStore.userInfo?.roles || [];
+      const isAdmin = Array.isArray(userRoles)
+        ? userRoles.some((r: any) => r?.name === 'admin')
+        : false;
+      return isOwner || isAdmin;
+    }
+
+    // 如果用户信息还未加载完成，只允许作者删除
+    return isOwner;
   };
 
   const handleReplyToReplySubmit = async (

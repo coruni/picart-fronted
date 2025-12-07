@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
 
   // 检查 Clarity ID 是否有效
   if (!clarityId || clarityId === '' || clarityId.length < 10) {
-    console.warn('Clarity ID not configured or invalid. Skipping Clarity initialization.');
+    // Clarity ID 未配置或无效，跳过初始化
     return;
   }
 
@@ -16,7 +16,7 @@ export default defineNuxtPlugin(() => {
   const loadClarityScript = () => {
     // 检查是否已经加载
     if (window.clarity) {
-      console.log('Clarity already loaded');
+      // Clarity 已经加载
       return;
     }
 
@@ -33,12 +33,12 @@ export default defineNuxtPlugin(() => {
 
     // 错误处理
     script.onerror = error => {
-      console.error('Failed to load Clarity script:', error);
+      // 加载 Clarity 脚本失败时静默处理
     };
 
     // 成功加载
     script.onload = () => {
-      console.log('Clarity script loaded successfully');
+      // Clarity 脚本加载成功
     };
 
     // 添加到页面
@@ -51,7 +51,6 @@ export default defineNuxtPlugin(() => {
 
     if (cookieSettings.value && (cookieSettings.value as any).analytics) {
       // 用户同意了分析 cookie，加载 Clarity
-      console.log('Loading Clarity...');
       loadClarityScript();
     }
   };

@@ -315,8 +315,30 @@
       });
 
       if (data.token) {
+        // 设置token到cookie
+        const authToken = useCookie('auth-token', {
+          default: () => '',
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          httpOnly: false
+        });
+        authToken.value = data.token;
+
         // 注册成功后直接登录并跳转到用户主页
-        userStore.login(data.token, data.refreshToken, data as any);
+        userStore.login(data.data as any);
+
+        // 注册成功后主动获取最新的用户信息（防止数据不同步）
+        try {
+          await userStore.getUserInfo(true);
+        } catch (error) {
+          console.warn('Failed to refresh user info after register:', error);
+          // 即使获取用户信息失败，也继续跳转流程
+        }
+
+        // 等待短暂时间确保状态更新完成
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         router.push(localePath('/user'));
       }
     } catch (error: any) {

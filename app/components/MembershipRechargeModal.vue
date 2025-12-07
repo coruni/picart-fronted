@@ -251,6 +251,7 @@
     <template #footer>
       <div class="flex space-x-3">
         <UButton
+          v-if="!paymentUrl"
           :disabled="!selectedPackage || !selectedPaymentMethod || processing"
           :loading="processing"
           color="primary"
@@ -259,7 +260,12 @@
         >
           {{ processing ? $t('payment.processing') : $t('user.recharge.confirmRecharge') }}
         </UButton>
-        <UButton variant="outline" class="cursor-pointer" @click="closeModal">
+        <UButton v-else color="warning" class="flex-1 cursor-pointer">
+          <NuxtLink :to="paymentUrl" target="_blank" rel="noopener noreferrer">
+            {{ $t('payment.goToPayment') }}
+          </NuxtLink>
+        </UButton>
+        <UButton variant="outline" class="cursor-pointer" @click="closeModal" v-if="!paymentUrl">
           {{ $t('common.cancel') }}
         </UButton>
       </div>
@@ -301,6 +307,7 @@
   const selectedPaymentMethod = ref<'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY' | null>(null);
   const selectedEpayType = ref<'alipay' | 'wxpay' | 'usdt' | null>(null);
   const processing = ref(false);
+  const paymentUrl = ref<string>('');
 
   // 套餐选项
   interface Package {
@@ -457,6 +464,52 @@
     selectedPackage.value = null;
     selectedPaymentMethod.value = null;
     selectedEpayType.value = null;
+    paymentUrl.value = '';
+  };
+
+  // 复制支付链接
+  const copyPaymentUrl = async () => {
+    if (!paymentUrl.value) return;
+
+    try {
+      await navigator.clipboard.writeText(paymentUrl.value);
+      toast.add({
+        title: t('payment.linkCopied'),
+        color: 'success'
+      });
+    } catch (error) {
+      // 如果剪贴板API失败，使用传统方法
+      const textArea = document.createElement('textarea');
+      textArea.value = paymentUrl.value;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        toast.add({
+          title: t('payment.linkCopied'),
+          color: 'success'
+        });
+      } catch (err) {
+        toast.add({
+          title: t('payment.copyFailed'),
+          color: 'error'
+        });
+      }
+
+      document.body.removeChild(textArea);
+    }
+  };
+
+  // 去支付
+  const goToPayment = () => {
+    if (paymentUrl.value) {
+      window.open(paymentUrl.value, '_blank', 'noopener,noreferrer');
+    }
   };
 
   // 处理充值
@@ -524,11 +577,27 @@
         body: paymentData
       });
 
-      if (paymentResponse.data.data.paymentUrl) {
-        window.open(paymentResponse.data.data.paymentUrl, '_blank');
+      // 处理支付响应
+      if (paymentResponse.data.data) {
+        const paymentResult = paymentResponse.data.data;
+
+        // 根据支付方式处理不同的响应
+        if (selectedPaymentMethod.value === 'BALANCE') {
+          emit('recharge-success', order.id);
+          closeModal();
+        } else {
+          // 第三方支付，显示支付链接给用户
+          if (paymentResult.paymentUrl) {
+            paymentUrl.value = paymentResult.paymentUrl;
+            toast.add({
+              title: t('payment.linkGenerated'),
+              color: 'success'
+            });
+          }
+        }
       }
     } catch (error: any) {
-      console.error(t('payment.paymentFailed'), error);
+      // 充值失败时静默处理
       emit('recharge-failed', error?.message || t('payment.failed'));
     } finally {
       processing.value = false;
@@ -541,6 +610,7 @@
       selectedPackage.value = null;
       selectedPaymentMethod.value = null;
       selectedEpayType.value = null;
+      paymentUrl.value = '';
     }
   });
 </script>

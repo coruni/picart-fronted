@@ -164,9 +164,9 @@
           :key="i"
           class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 animate-pulse"
         >
-          <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"/>
-          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"/>
-          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"/>
+          <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4" />
+          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
+          <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
         </div>
       </div>
 
@@ -571,7 +571,6 @@
         pagination.value.page++;
       }
     } catch (error) {
-      console.error('加载订单失败:', error);
     } finally {
       loading.value = false;
     }
@@ -628,7 +627,6 @@
       resetData();
       loadOrders();
     } catch (error: any) {
-      console.error('取消订单失败:', error);
     } finally {
       cancelling.value = false;
     }
@@ -649,7 +647,6 @@
       const userStore = useUserStore();
       userWallet.value = userStore.userInfo?.wallet || 0;
     } catch (error) {
-      console.error('获取用户钱包信息失败:', error);
       userWallet.value = 0;
     }
 

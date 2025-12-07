@@ -39,7 +39,7 @@ export default defineNuxtPlugin(() => {
         // 设置默认语言
         window.tinymce.settings.language = 'zh';
 
-        console.log('TinyMCE GPL license configured');
+        // TinyMCE GPL许可证配置完成
       } else {
         // 如果 TinyMCE 还没加载，等待一下再试
         setTimeout(setupTinyMCE, 100);

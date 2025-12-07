@@ -32,7 +32,7 @@ export default defineNuxtPlugin({
       try {
         await Promise.all(srcs.map(src => preloadImage(src)));
       } catch (error) {
-        console.warn('图片预加载失败:', error);
+        // 图片预加载失败时静默处理
       }
     };
 

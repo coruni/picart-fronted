@@ -33,7 +33,7 @@ export async function handleLogout(
       await navigateTo(redirectPath, { replace: true });
     }
   } catch (error) {
-    console.error('Error during logout:', error);
+    // 登出失败时静默处理
 
     // 即使出错也要跳转到首页
     if (import.meta.client) {
@@ -67,7 +67,7 @@ export async function forceLogout(): Promise<void> {
     const userStore = useUserStore();
     await userStore.clearAuth(false); // 不调用API，直接清理本地状态
   } catch (error) {
-    console.error('Error during force logout:', error);
+    // 强制登出失败时静默处理
     if (import.meta.client) {
       await navigateTo('/', { replace: true });
     }

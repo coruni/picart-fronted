@@ -461,7 +461,7 @@
         }
       }
     } catch (error) {
-      console.error('Failed to load article:', error);
+      // 加载文章详情失败时静默处理
     }
   }
 
@@ -541,7 +541,7 @@
           }
         }
       } catch (error) {
-        console.error('Failed to load article:', error);
+        // 加载文章详情失败时静默处理
       }
     }
   };
@@ -585,7 +585,7 @@
 
       router.push(localePath('/admin/articles'));
     } catch (error) {
-      console.error('Failed to update article:', error);
+      // 更新文章失败时静默处理
       toast.add({
         title: t('common.message.updateFailed'),
         color: 'error'
@@ -715,7 +715,7 @@
       // 转换为数组
       tagsOptions.value = Array.from(uniqueTags.values());
     } catch (error) {
-      console.error('搜索标签失败:', error);
+      // 搜索标签失败时静默处理
     } finally {
       isTagSearching.value = false;
     }
@@ -762,7 +762,7 @@
                 tagsOptions.value.push(...newTags);
               }
             } catch (error) {
-              console.error('Failed to load article tags:', error);
+              // 加载文章标签失败时静默处理
             }
           })();
         }

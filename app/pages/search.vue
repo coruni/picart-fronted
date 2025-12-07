@@ -209,7 +209,7 @@
         pagination.value.page++;
       }
     } catch (error) {
-      console.error('搜索失败:', error);
+      // 搜索失败时静默处理
     } finally {
       loading.value = false;
     }

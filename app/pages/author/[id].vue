@@ -329,7 +329,7 @@
 
   // 检查关注状态
   const checkFollowStatus = async () => {
-    if (!userStore.isAuthenticated) return;
+    if (!userStore.isLoggedIn) return;
 
     try {
       // 这里需要根据实际的API来检查关注状态

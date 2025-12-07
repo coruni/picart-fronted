@@ -151,7 +151,7 @@
       // 返回列表页
       router.push('/admin/banners');
     } catch (error) {
-      console.error('Failed to update banner:', error);
+      // 更新轮播图失败时静默处理
     } finally {
       loading.value = false;
     }

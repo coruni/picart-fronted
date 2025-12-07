@@ -538,7 +538,7 @@
 
       router.push('/admin/articles');
     } catch (error) {
-      console.error('Failed to create article:', error);
+      // 创建文章失败时静默处理
     } finally {
       loading.value = false;
     }
@@ -672,7 +672,7 @@
       // 转换为数组
       tagsOptions.value = Array.from(uniqueTags.values());
     } catch (error) {
-      console.error('搜索标签失败:', error);
+      // 搜索标签失败时静默处理
     } finally {
       isTagSearching.value = false;
     }
@@ -697,7 +697,7 @@
 
       tagsOptions.value = initialTags;
     } catch (error) {
-      console.error('初始化标签失败:', error);
+      // 初始化标签失败时静默处理
     }
   };
 

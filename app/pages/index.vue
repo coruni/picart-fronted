@@ -138,7 +138,7 @@
         });
         return response.data?.data || [];
       } catch (error) {
-        console.error('Failed to fetch initial data:', error);
+        // 获取初始数据失败时静默处理
         return [];
       }
     },
@@ -199,7 +199,7 @@
         restartObserver();
       }
     } catch (error) {
-      console.error('Failed to load articles:', error);
+      // 加载文章失败时静默处理
     } finally {
       tabSwitchLoading.value = false; // 隐藏全局加载动画
     }
@@ -238,7 +238,7 @@
         observer.disconnect();
       }
     } catch (error) {
-      console.error('Failed to load more articles:', error);
+      // 加载更多文章失败时静默处理
     } finally {
       loading.value = false;
     }

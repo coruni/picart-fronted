@@ -257,7 +257,7 @@
       });
       banners.refresh?.();
     } catch (error) {
-      console.error('Failed to delete banner:', error);
+      // 删除轮播图失败时静默处理
     } finally {
       showDeleteModal.value = false;
       currentBannerId.value = null;

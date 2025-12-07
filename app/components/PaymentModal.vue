@@ -155,6 +155,37 @@
             <span class="text-lg font-bold text-primary">¥{{ orderInfo?.amount || 0 }}</span>
           </div>
         </div>
+
+        <!-- 支付链接显示区域 -->
+        <div
+          v-if="paymentUrl"
+          class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4"
+        >
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
+              {{ $t('payment.paymentLink') }}
+            </span>
+            <UButton
+              size="xs"
+              variant="ghost"
+              :icon="'heroicons:clipboard-document'"
+              @click="copyPaymentUrl"
+            >
+              {{ $t('payment.copyLink') }}
+            </UButton>
+          </div>
+          <a
+            :href="paymentUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block bg-white dark:bg-gray-800 rounded border p-3 break-all text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 font-mono transition-colors underline decoration-2 underline-offset-2"
+          >
+            {{ paymentUrl }}
+          </a>
+          <div class="mt-3 text-xs text-blue-700 dark:text-blue-300">
+            {{ $t('payment.clickToPay') }}
+          </div>
+        </div>
       </div>
     </template>
 
@@ -216,6 +247,7 @@
   const selectedPaymentMethod = ref<'ALIPAY' | 'WECHAT' | 'BALANCE' | 'EPAY' | null>(null);
   const selectedEpayType = ref<'alipay' | 'wxpay' | null>(null);
   const processing = ref(false);
+  const paymentUrl = ref<string>('');
 
   // 易支付类型选项
   const epayTypes = computed(() => [
@@ -285,63 +317,44 @@
     isOpen.value = false;
     selectedPaymentMethod.value = null;
     selectedEpayType.value = null;
+    paymentUrl.value = '';
   };
 
-  // 检测是否在Safari浏览器中
-  const isSafari = () => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isChrome = /chrome/.test(userAgent) && /google inc/.test(navigator.vendor.toLowerCase());
-    const isFirefox = /firefox/.test(userAgent);
-    const isEdge = /edg/.test(userAgent);
+  // 复制支付链接
+  const copyPaymentUrl = async () => {
+    if (!paymentUrl.value) return;
 
-    // Safari检测逻辑：排除Chrome、Firefox、Edge，并且包含safari
-    const safariTest = /safari/.test(userAgent) && !isChrome && !isFirefox && !isEdge;
-
-    return (
-      safariTest ||
-      /constructor/i.test(window.HTMLElement) ||
-      (function (p) {
-        return p.toString() === '[object SafariRemoteNotification]';
-      })(!window['safari'] || (typeof safari !== 'undefined' && window.safari?.pushNotification))
-    );
-  };
-
-  // 兼容Safari的支付页面打开方法
-  const openPaymentUrlSafely = (paymentUrl: string) => {
     try {
-      if (isSafari()) {
-        // 对于Safari，使用先打开空白标签页再导航的方法
-        const newWindow = window.open('', '_blank', 'noopener,noreferrer');
-        if (newWindow) {
-          // 成功打开空白标签页，然后导航到支付URL
-          newWindow.location.href = paymentUrl;
-          // 聚焦
-          newWindow.focus();
-        } else {
-          // 如果连空白标签页都无法打开，尝试点击事件方法
-          const event = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true,
-            ctrlKey: false,
-            shiftKey: false,
-            altKey: false,
-            metaKey: false
-          });
-        }
-      } else {
-        // 其他浏览器可以直接使用window.open
-        window.open(paymentUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
-      }
+      await navigator.clipboard.writeText(paymentUrl.value);
+      toast.add({
+        title: t('payment.linkCopied'),
+        color: 'success'
+      });
     } catch (error) {
-      // 创建一个临时链接元素作为备选方案
-      const link = document.createElement('a');
-      link.href = paymentUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
+      // 如果剪贴板API失败，使用传统方法
+      const textArea = document.createElement('textarea');
+      textArea.value = paymentUrl.value;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand('copy');
+        toast.add({
+          title: t('payment.linkCopied'),
+          color: 'success'
+        });
+      } catch (err) {
+        toast.add({
+          title: t('payment.copyFailed'),
+          color: 'error'
+        });
+      }
+
+      document.body.removeChild(textArea);
     }
   };
 
@@ -404,26 +417,18 @@
           emit('payment-success', props.orderInfo.orderId);
           closeModal();
         } else {
-          // 第三方支付，跳转到支付页面
+          // 第三方支付，显示支付链接给用户
           if (paymentResult.paymentUrl) {
-            // 使用兼容Safari的方法打开支付链接
-            try {
-              openPaymentUrlSafely(paymentResult.paymentUrl);
-            } catch (error) {
-              // 如果弹窗被阻止，提供备选方案
-              console.warn('弹窗被阻止，尝试直接导航');
-              // 提供手动打开的备选方案
-              setTimeout(() => {
-                if (confirm(t('payment.openManuallyConfirm'))) {
-                  window.location.href = paymentResult.paymentUrl;
-                }
-              }, 1000);
-            }
+            paymentUrl.value = paymentResult.paymentUrl;
+            toast.add({
+              title: t('payment.linkGenerated'),
+              color: 'success'
+            });
           }
         }
       }
     } catch (error: any) {
-      console.error(t('payment.paymentFailed'), error);
+      // 支付失败时静默处理
       emit('payment-failed', error?.message || t('payment.failed'));
     } finally {
       processing.value = false;
@@ -435,6 +440,7 @@
     if (!newValue) {
       selectedPaymentMethod.value = null;
       selectedEpayType.value = null;
+      paymentUrl.value = '';
     }
   });
 </script>

@@ -368,7 +368,14 @@
       "createOrderFailed": "创建订单失败",
       "articlePaymentSuccess": "支付成功，现在可以查看文章内容",
       "networkError": "网络错误",
-      "unknownError": "未知错误"
+      "unknownError": "未知错误",
+      "paymentLink": "支付链接",
+      "copyLink": "复制链接",
+      "clickToPay": "请点击上方链接完成支付",
+      "linkGenerated": "支付链接已生成",
+      "linkCopied": "链接已复制",
+      "copyFailed": "复制失败",
+      "goToPayment": "去支付"
     },
     "users": {
       "searchAndFilter": "搜索和筛选",
@@ -1306,7 +1313,8 @@
     "popupBlockedDesc": "浏览器阻止了支付窗口的打开，请检查浏览器设置或点击下方链接",
     "linkCopied": "链接已复制",
     "linkCopiedDesc": "支付链接已复制到剪贴板，您可以手动打开",
-    "openManuallyConfirm": "是否直接跳转到支付页面？"
+    "openManuallyConfirm": "是否直接跳转到支付页面？",
+    "goToPayment": "链接已就绪，前往支付"
   },
   "status": {
     "active": "启用",

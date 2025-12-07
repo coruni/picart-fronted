@@ -385,7 +385,6 @@
         });
       }
     } catch (error: any) {
-      console.error('Failed to upload image:', error);
       displayFile.value = null;
       toast.add({
         title: t('common.message.uploadFailed'),
@@ -450,7 +449,6 @@
         });
       }
     } catch (error: any) {
-      console.error('Failed to upload cover:', error);
       coverFile.value = null;
       toast.add({
         title: t('common.message.uploadFailed'),
@@ -510,7 +508,6 @@
 
       router.push('/admin/categories');
     } catch (error: any) {
-      console.error('Failed to update category:', error);
       toast.add({
         title: t('common.message.updateFailed'),
         description: error.message,

@@ -91,7 +91,7 @@
   const userStore = useUserStore();
 
   // 检查用户是否已登录
-  if (!userStore.isAuthenticated) {
+  if (!userStore.isLoggedIn) {
     await navigateTo('/user/login');
   }
 
