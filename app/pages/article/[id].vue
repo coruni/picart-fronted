@@ -399,8 +399,17 @@
 
             <!-- 内容限制组件 -->
             <ArticleContentRestriction
-              v-else-if="restrictionType"
-              :type="restrictionType"
+              v-else-if="
+                article?.data.requireLogin ||
+                article?.data.requireFollow ||
+                article?.data.requireMembership ||
+                article?.data.requirePayment
+              "
+              :require-login="article?.data.requireLogin"
+              :require-follow="article?.data.requireFollow"
+              :require-membership="article?.data.requireMembership"
+              :require-payment="article?.data.requirePayment"
+              :is-following-author="article?.data.author.isFollowed"
               :price="article?.data.viewPrice"
               :article-title="article?.data.title"
               :author-id="article?.data.author.id"
@@ -820,8 +829,6 @@
     const summary = article.value.data.summary || '';
     const content = article.value.data.content || '';
     const tags = article.value.data.tags?.map(tag => tag.name) || [];
-    const views = article.value.data.views || 0;
-    const likes = article.value.data.likes || 0;
 
     // 优先使用提供的摘要
     if (summary && summary.trim()) {
@@ -837,7 +844,7 @@
     }
 
     // 如果没有摘要，从内容中提取
-    if (content) {
+    if (content && !content.includes('article.')) {
       // 提取纯文本内容（前200字符）
       const cleanContent = content
         .replace(/<[^>]*>/g, '')
@@ -1201,7 +1208,7 @@
       return null;
     }
 
-    // 按优先级检查限制条件
+    // 按优先级检查限制条件 - 使用新的布尔标志
     if (data.requireLogin && !isLoggedIn.value) {
       return 'login';
     }

@@ -1,7 +1,7 @@
 <template>
   <!-- 登录限制 -->
   <div
-    v-if="type === 'login'"
+    v-if="requireLogin && !isLoggedIn"
     class="bg-gradient-to-br from-blue-50/50 to-blue-100/50 dark:from-blue-900/10 dark:to-blue-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:lock" class="text-3xl text-primary mb-3" />
@@ -18,7 +18,7 @@
 
   <!-- 关注限制 -->
   <div
-    v-else-if="type === 'follow' && !isAuthor"
+    v-else-if="requireFollow && !isAuthor && !isFollowingAuthor"
     class="bg-gradient-to-br from-pink-50/50 to-pink-100/50 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:heart" class="text-3xl text-pink-600 mb-3" />
@@ -45,7 +45,7 @@
 
   <!-- 会员限制 -->
   <div
-    v-else-if="type === 'membership'"
+    v-else-if="requireMembership && !isMember"
     class="bg-gradient-to-br from-purple-50/50 to-purple-100/50 dark:from-purple-900/10 dark:to-purple-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:heart-waves" class="text-3xl text-purple-600 dark:text-purple-400 mb-3" />
@@ -65,7 +65,7 @@
 
   <!-- 付费限制 -->
   <div
-    v-else-if="type === 'payment'"
+    v-else-if="requirePayment && !isPaid"
     class="bg-gradient-to-br from-amber-50/50 to-amber-100/50 dark:from-amber-900/10 dark:to-amber-800/10 rounded-xl p-6 text-center my-8"
   >
     <Icon name="mynaui:diamond" class="text-3xl text-amber-600 dark:text-amber-400 mb-3" />
@@ -122,7 +122,12 @@
   import { useUserStore } from '~/stores/user';
   type SiteConfig = ConfigControllerGetPublicResponse['data'];
   interface Props {
-    type: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
+    type?: 'login' | 'follow' | 'membership' | 'payment' | 'restricted';
+    requireLogin?: boolean;
+    requireFollow?: boolean;
+    requireMembership?: boolean;
+    requirePayment?: boolean;
+    isFollowingAuthor?: boolean;
     price?: string | number;
     articleTitle?: string;
     authorId?: number;
@@ -153,12 +158,16 @@
   const currentOrder = ref<any>(null);
 
   // 计算属性
+  const isLoggedIn = computed(() => userStore.isLoggedIn);
+
   const isAuthor = computed(() => {
     if (!userStore.isLoggedIn || !userStore.userInfo || !props.authorId) {
       return false;
     }
     return userStore.userInfo.id === props.authorId;
   });
+
+  const isFollowingAuthor = computed(() => props.isFollowingAuthor || false);
 
   // 检查会员状态
   const isMember = computed(() => {
